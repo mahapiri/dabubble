@@ -1,1 +1,23 @@
-<p>workspace-menu works!</p>
+<mat-drawer-container class="container" autosize>
+    <mat-drawer #drawer class="sidenav" mode="side">
+        <div>
+            Workspace Name
+        </div>
+        <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+            <mat-expansion-panel-header>
+                <mat-panel-title> Self aware panel </mat-panel-title>
+                <mat-panel-description>
+                    Currently I am {{panelOpenState() ? 'open' : 'closed'}}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>I'm visible because I am open</p>
+        </mat-expansion-panel>
+    </mat-drawer>
+
+    <div class="sidenav-content">
+        <button type="button" mat-button (click)="drawer.toggle()">
+            Toggle sidena
+        </button>
+    </div>
+
+</mat-drawer-container>
