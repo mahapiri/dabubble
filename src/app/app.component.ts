@@ -4,6 +4,7 @@ import { RouterOutlet } from '@angular/router';
 import { WorkspaceMenuComponent } from './shared/workspace-menu/workspace-menu.component';
 import { ChannelComponent } from './main-board/channel/channel.component';
 import { MatIconRegistry } from '@angular/material/icon';
+import { SignUpComponent } from './login/sign-up/sign-up.component';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,7 @@ import { MatIconRegistry } from '@angular/material/icon';
     CommonModule,
     RouterOutlet,
     WorkspaceMenuComponent,
-    ChannelComponent,
+    ChannelComponent, SignUpComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
