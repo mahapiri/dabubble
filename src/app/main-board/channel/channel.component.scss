@@ -18,11 +18,27 @@ mat-card {
 mat-card-header {
   padding: 0;
   height: 96px;
+  //@include boxshadow();
 
-  @include boxshadow();
-
-  .header-content {
+  .channel-info {
+    display: flex;
+    align-items: center;
     padding: 16px 16px 0;
+  }
+
+  .channel-drop-down-btn {
+    width: auto;
+    height: 45px;
+    font-family: "Nunito", Roboto, sans-serif;
+    font-size: 24px;
+    color: var(--black);
+    font-weight: 700;
+    border-radius: 100px;
+
+    &:hover {
+      background-color: var(--bg-color);
+      color: var(--purple-3);
+    }
   }
 }
 
