@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { WorkspaceMenuComponent } from './shared/workspace-menu/workspace-menu.component';
 import { ChannelComponent } from './main-board/channel/channel.component';
+import { MatIconRegistry } from '@angular/material/icon';
 
 @Component({
   selector: 'app-root',
@@ -18,4 +19,10 @@ import { ChannelComponent } from './main-board/channel/channel.component';
 })
 export class AppComponent {
   title = 'dabubble';
+
+  constructor(private matIconReg: MatIconRegistry) {}
+
+  ngOnInit(): void {
+    this.matIconReg.setDefaultFontSetClass('material-symbols-rounded');
+  }
 }
