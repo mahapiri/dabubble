@@ -3,11 +3,28 @@
   <mat-card appearance="outlined">
     <mat-card-header>
       <div class="channel-info">
-        <button class="channel-drop-down-btn">
+        <button class="channel-btn">
           <mat-icon class="icon tag">tag</mat-icon>
           <span>Channel Name</span>
           <mat-icon class="icon arrow">keyboard_arrow_down</mat-icon>
         </button>
+        <div class="members-container">
+          <button class="channel-btn">
+            <div class="img-container">
+              <img
+                src="./../../../assets/img/character1.png"
+                alt="member1"
+              /><img
+                src="./../../../assets/img/character2.png"
+                alt="member2"
+              /><img src="./../../../assets/img/character3.png" alt="member3" />
+            </div>
+            <span class="number-mambers">3</span>
+          </button>
+          <button class="add-member-btn" mat-mini-fab>
+            <mat-icon>person_add</mat-icon>
+          </button>
+        </div>
       </div>
     </mat-card-header>
 
