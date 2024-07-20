@@ -29,15 +29,37 @@ mat-card-header {
   .channel-drop-down-btn {
     width: auto;
     height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
     font-family: "Nunito", Roboto, sans-serif;
     font-size: 24px;
     color: var(--black);
     font-weight: 700;
     border-radius: 100px;
+    padding: 6px, 10px, 6px, 10px;
+    border: none;
+    background-color: white;
 
     &:hover {
       background-color: var(--bg-color);
       color: var(--purple-3);
+    }
+
+    .icon {
+      height: 100%;
+      width: auto;
+    }
+
+    .tag {
+      font-size: 32px;
+      padding: 5px;
+    }
+
+    .arrow {
+      font-size: 30px;
+      padding: 7px;
     }
   }
 }
