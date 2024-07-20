@@ -40,7 +40,8 @@ input {
     padding-left: 86px;
     border-radius: 50px;
     cursor: pointer;
-    &:hover{
+
+    &:hover {
         outline: 1px solid var(--gray);
     }
 }
@@ -87,8 +88,6 @@ input[type="checkbox"] {
         background-color: var(--bg-color) !important;
     }
 
-
-
     .icon {
         font-size: 30px;
         height: auto;
@@ -97,7 +96,5 @@ input[type="checkbox"] {
         &:hover {
             color: var(--purple-3);
         }
-
     }
-
 }
