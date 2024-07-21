@@ -44,6 +44,7 @@ mat-card-header {
     padding: 6px 10px 6px 10px;
     border: none;
     background-color: white;
+    cursor: pointer;
 
     &:hover {
       background-color: var(--bg-color);
@@ -96,14 +97,14 @@ mat-card-header {
     }
   }
 
-  .number-mambers {
+  .number-members {
+    font-weight: 600;
     font-size: 20px;
   }
 }
 
 mat-card-content {
-  padding-top: 16px;
-  padding-bottom: 16px;
+  padding: 16px 0 16px 0;
   flex: 1;
 }
 
@@ -200,13 +201,26 @@ mat-card-footer {
 
   mat-list-item {
     height: fit-content;
-    padding: 16px;
-    margin-top: 16px;
+    padding: 24px;
+    margin-top: 32px;
+
+    &:hover {
+      background-color: var(--bg-color);
+
+      .text-bubble {
+        background-color: var(--white);
+      }
+
+      .last-answer {
+        color: var(--black);
+      }
+    }
   }
 }
 
 .divider-container {
   position: relative;
+  padding: 0 16px 0 16px;
 
   mat-divider {
     border-top-color: var(--lines);
@@ -235,14 +249,6 @@ mat-card-footer {
   gap: 24px;
   cursor: pointer;
 
-  &:hover {
-    background-color: var(--bg-color);
-
-    .text-bubble {
-      background-color: var(--white);
-    }
-  }
-
   .message-details {
     display: flex;
     flex-direction: column;
@@ -266,11 +272,20 @@ mat-card-footer {
     color: var(--black);
     font-size: 18px;
     font-weight: 700;
+
+    &:hover {
+      color: var(--purple-1);
+    }
   }
 
   .total-answers {
     color: var(--purple-3);
     font-size: 18px;
+
+    &:hover {
+      color: var(--purple-1);
+      font-weight: 700;
+    }
   }
 
   .time,
@@ -284,5 +299,6 @@ mat-card-footer {
     padding: 15px;
     border-radius: 0 30px 30px 30px;
     background-color: var(--bg-color);
+    color: var(--black);
   }
 }
