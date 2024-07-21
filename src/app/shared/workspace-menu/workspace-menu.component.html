@@ -1,23 +1,129 @@
-<mat-drawer-container class="container" autosize>
+<section>
     <mat-drawer #drawer class="sidenav" mode="side">
-        <div>
-            Workspace Name
+        <div class="workspace-content">
+            <div class="workspace-title">
+                <img src="../assets/img/workspace-logo.png" alt="Workspace Logo">
+                <h2>Devspace</h2>
+            </div>
+            <div class="workspace-img" (click)="newMessage()">
+                <mat-icon class="message-icon" [class.bold-message]="clickedMessage">edit_square</mat-icon>
+            </div>
         </div>
-        <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
-            <mat-expansion-panel-header>
-                <mat-panel-title> Self aware panel </mat-panel-title>
-                <mat-panel-description>
-                    Currently I am {{panelOpenState() ? 'open' : 'closed'}}
-                </mat-panel-description>
-            </mat-expansion-panel-header>
-            <p>I'm visible because I am open</p>
-        </mat-expansion-panel>
+        <div class="gap-25">
+            <div>
+                <div class="channels-content">
+                    <div class="channels-section">
+                        <div class="channels-header" (click)="openChannels()">
+                            @if(!openChannel) {
+                            <mat-icon>arrow_drop_down</mat-icon>
+                            }
+                            @else {
+                            <mat-icon>arrow_right</mat-icon>
+                            }
+
+                            <div class="channels-title">
+                                <mat-icon>workspaces</mat-icon>
+                                <h2>Channels</h2>
+                            </div>
+                        </div>
+                        <div class="add-div" (click)="createChannel()">
+                            <mat-icon class="add-icon" [class.bold-add]="clickedChannel">add</mat-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="channel-undersection" [class.d-none]="openChannel">
+                <div>
+                    <div class="channels-content">
+                        <div class="channels-section">
+                            <div class="channels-header subtitle-header">
+                                <div class="channels-title subtitle-title">
+                                    <mat-icon class="channel-icon">tag</mat-icon>
+                                    <h3>Entwicklerteam</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="channels-content">
+                        <div class="channels-section">
+                            <div class="channels-header subtitle-header">
+                                <div class="channels-title subtitle-title">
+                                    <mat-icon class="channel-icon">tag</mat-icon>
+                                    <h3>Office-team</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="channels-content">
+                        <div class="channels-section">
+                            <div class="channels-header subtitle-header">
+                                <div class="channels-title subtitle-title add-channel">
+                                    <mat-icon>add_circle</mat-icon>
+                                    <h3>Channel hinzufügen</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="gap-25">
+            <div>
+                <div class="channels-content">
+                    <div class="channels-section">
+                        <div class="channels-header" (click)="openDirectMessages()">
+                            @if(!openDm) {
+                            <mat-icon>arrow_drop_down</mat-icon>
+                            }
+                            @else {
+                            <mat-icon>arrow_right</mat-icon>
+                            }
+
+                            <div class="channels-title">
+                                <mat-icon>account_circle</mat-icon>
+                                <h2>Direktnachrichten</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="channel-undersection" [class.d-none]="openDm">
+                <div class="profil-section">
+                    <div class="channels-content" *ngFor="let profile of user; let i = index">
+                        <div class="channels-section">
+                            <div class="channels-header subtitle-header">
+                                <div class="channels-title subtitle-title profile-border" (click)="clickedProfile(i)" [attr.id]="'profile-' + i">
+                                    <div class="profile-content">
+                                        <img src="{{ profile.img }}" alt="Character" class="profile-icon">
+                                        <div class="status-icon" ngClass="{{ profile.status }}"></div>
+                                    </div>
+
+                                    <h3>{{ profile.name }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </mat-drawer>
-
-    <div class="sidenav-content">
-        <button type="button" mat-button (click)="drawer.toggle()">
-            Toggle sidena
-        </button>
+    <div class="navigation-bar" [class]="open ? 'close' : 'open'" (click)="toggle()" (mouseenter)="hoverTrue()"
+        (mouseleave)="hoverFalse()">
+        <div class="navigation-bar-content">
+            @if (!open) {
+            <p>Workspace-Menü öffnen</p>
+            <div class="navigation-bar-img">
+                <mat-icon class="panel-icon">left_panel_open</mat-icon>
+            </div>
+            }
+            @else {
+            <p>Workspace-Menü schließen</p>
+            <div class="navigation-bar-img">
+                <mat-icon class="panel-icon">right_panel_open</mat-icon>
+            </div>
+            }
+        </div>
     </div>
-
-</mat-drawer-container>
+</section>
