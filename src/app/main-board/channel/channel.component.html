@@ -29,7 +29,33 @@
     </mat-card-header>
 
     <mat-card-content>
-      <div class="main-chat">Chat Content</div>
+      <div class="main-chat">
+        <mat-list>
+          <div class="divider-container">
+            <mat-divider> </mat-divider>
+            <div class="message-date">Heute</div>
+          </div>
+          <mat-list-item>
+            <div class="message-container">
+              <img
+                class="user-img"
+                src="./../../../assets/img/character4.png"
+              />
+              <div class="message-details">
+                <div class="user-wrapper">
+                  <div class="user-name">Noah Braun</div>
+                  <div class="time">14:25 Uhr</div>
+                </div>
+                <div class="text-bubble">Hallo Welt!</div>
+                <div class="answer-wrapper">
+                  <div class="total-answers">2 Antworten</div>
+                  <div class="last-answer">Letzte Antwort 14:56</div>
+                </div>
+              </div>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </div>
     </mat-card-content>
 
     <mat-card-footer>
