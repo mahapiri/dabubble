@@ -26,32 +26,32 @@ export class WorkspaceMenuComponent {
 
   user: User[] = [
     {
-      name: 'Federik Beck (Du)', 
+      name: 'Federik Beck (Du)',
       img: '../../../assets/img/character1.png',
       status: 'online'
     },
     {
-      name: 'Sofia Müller', 
+      name: 'Sofia Müller',
       img: '../../../assets/img/character2.png',
       status: 'online'
     },
     {
-      name: 'Noah Braun', 
+      name: 'Noah Braun',
       img: '../../../assets/img/character3.png',
       status: 'offline'
     },
     {
-      name: 'Elise Roth', 
+      name: 'Elise Roth',
       img: '../../../assets/img/character4.png',
       status: 'offline'
     },
     {
-      name: 'Elias Neumann', 
+      name: 'Elias Neumann',
       img: '../../../assets/img/character5.png',
       status: 'online'
     },
     {
-      name: 'Steffen Hoffmann', 
+      name: 'Steffen Hoffmann',
       img: '../../../assets/img/character6.png',
       status: 'online'
     },

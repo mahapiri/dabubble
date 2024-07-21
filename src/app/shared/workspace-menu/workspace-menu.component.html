@@ -94,7 +94,8 @@
                     <div class="channels-content" *ngFor="let profile of user; let i = index">
                         <div class="channels-section">
                             <div class="channels-header subtitle-header">
-                                <div class="channels-title subtitle-title profile-border" (click)="clickedProfile(i)" [attr.id]="'profile-' + i">
+                                <div class="channels-title subtitle-title profile-border" (click)="clickedProfile(i)"
+                                    [attr.id]="'profile-' + i">
                                     <div class="profile-content">
                                         <img src="{{ profile.img }}" alt="Character" class="profile-icon">
                                         <div class="status-icon" ngClass="{{ profile.status }}"></div>
