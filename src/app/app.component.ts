@@ -5,6 +5,7 @@ import { WorkspaceMenuComponent } from './shared/workspace-menu/workspace-menu.c
 import { ChannelComponent } from './main-board/channel/channel.component';
 import { MatIconRegistry } from '@angular/material/icon';
 import { SignUpComponent } from './login/sign-up/sign-up.component';
+import { LogInComponent } from './login/log-in/log-in.component';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,7 @@ import { SignUpComponent } from './login/sign-up/sign-up.component';
     CommonModule,
     RouterOutlet,
     WorkspaceMenuComponent,
-    ChannelComponent, SignUpComponent
+    ChannelComponent, SignUpComponent, LogInComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

@@ -1,19 +1,22 @@
 <div class="wrapper">
-  <mat-card appearance="outlined" class="login-card">
-    <h1>Anmeldung</h1>
-    <p>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest.</p>
-    <input type="text">
-    <input type="text">
-    <a href="">Passwort vergessen?</a>
-    <div class="divider-wrapper">
-      <div class="divider"></div>
-      oder
-      <div class="divider"></div>
-    </div>
-    <button class="google-signin-button">Anmelden mit Google</button>
-    <div class="singup-button-container">
-      <button class="signin-button">Anmelden</button>
-      <button class="guest-login-button">Gäste-Login</button>
-    </div>
-  </mat-card>
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <mat-card appearance="outlined" class="login-card">
+      <h1>Anmeldung</h1>
+      <p>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest.</p>
+      <input type="text" formControlName="userEmail" placeholder="beispielname@email.com">
+      <input type="text" formControlName="userPassword" placeholder="Passwort">
+      <a href="">Passwort vergessen?</a>
+      <div class="divider-wrapper">
+        <div class="divider"></div>
+        oder
+        <div class="divider"></div>
+      </div>
+      <button class="google-signin-button">Anmelden mit Google</button>
+      <div class="singup-button-container">
+        <button type="submit" class="signin-button">Anmelden</button>
+        <button (click)="logInAsGuest()" class="guest-login-button">Gäste-Login</button>
+      </div>
+    </mat-card>
+  </form>
+
 </div>
