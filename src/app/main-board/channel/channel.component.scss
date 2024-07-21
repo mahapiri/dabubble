@@ -148,18 +148,6 @@ mat-card-footer {
     justify-content: space-between;
     align-items: center;
 
-    button {
-      background-color: var(--white);
-      box-shadow: none;
-      color: var(--gray);
-      cursor: pointer;
-
-      &:hover {
-        color: var(--purple-3);
-        //weight: bold
-      }
-    }
-
     .add-elements {
       display: flex;
       gap: 5px;
@@ -177,6 +165,7 @@ mat-card-footer {
 
       &:hover {
         color: var(--purple-2);
+        background-color: var(--white);
         --mat-fab-small-state-layer-color: var(--white);
       }
     }
@@ -203,6 +192,7 @@ mat-card-footer {
     height: fit-content;
     padding: 24px;
     margin-top: 32px;
+    overflow: visible;
 
     &:hover {
       background-color: var(--bg-color);
@@ -213,6 +203,12 @@ mat-card-footer {
 
       .last-answer {
         color: var(--black);
+      }
+
+      .reaction-bar {
+        opacity: 1;
+        right: 24px;
+        transition: right 0.15s ease-out, opacity 0.15s ease-out;
       }
     }
   }
@@ -300,5 +296,49 @@ mat-card-footer {
     border-radius: 0 30px 30px 30px;
     background-color: var(--bg-color);
     color: var(--black);
+  }
+}
+
+.reaction-bar {
+  position: absolute;
+  top: -18px;
+  right: 90px;
+  width: 210px;
+  height: 46px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid var(--lines);
+  border-radius: 25px 25px 0 25px;
+  padding: 3px 15px 3px 20px;
+  background-color: var(--white);
+  opacity: 0;
+  cursor: pointer;
+
+  img {
+    display: flex;
+    width: 20px;
+    height: 20px;
+    align-items: center;
+  }
+
+  .mini-fab-btn {
+    color: var(--black);
+  }
+}
+
+.mini-fab-btn {
+  background-color: var(--white);
+  box-shadow: none;
+  color: var(--gray);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--purple-3);
+    background-color: var(--bg-color);
+    --mat-fab-small-state-layer-color: var(--white);
+    box-shadow: none;
+    //weight: bold
   }
 }

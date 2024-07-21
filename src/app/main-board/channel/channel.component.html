@@ -35,7 +35,23 @@
             <mat-divider> </mat-divider>
             <div class="message-date">Heute</div>
           </div>
+
           <mat-list-item>
+            <div id="reactionBar" class="reaction-bar">
+              <button class="mini-fab-btn" mat-mini-fab>
+                <img src="./../../../assets/emojis/check.png" alt="check" />
+              </button>
+              <button class="mini-fab-btn" mat-mini-fab>
+                <img src="./../../../assets/emojis/heart.png" alt="check" />
+              </button>
+              <button class="mini-fab-btn" mat-mini-fab>
+                <mat-icon>add_reaction</mat-icon>
+              </button>
+              <button class="mini-fab-btn" mat-mini-fab>
+                <mat-icon>comment</mat-icon>
+              </button>
+            </div>
+
             <div class="message-container">
               <img
                 class="user-img"
@@ -64,18 +80,22 @@
 
         <div class="message-controls">
           <div class="add-elements">
-            <button mat-mini-fab class="add-doc">
+            <button
+              class="mini-fab-button"
+              mat-mini-fab
+              class="add-doc mini-fab-btn"
+            >
               <mat-icon>add</mat-icon>
             </button>
             <div class="vertical-divider"></div>
-            <button mat-mini-fab class="emojis">
+            <button mat-mini-fab class="emojis mini-fab-btn">
               <mat-icon>sentiment_satisfied</mat-icon>
             </button>
-            <button mat-mini-fab class="tag-person">
+            <button mat-mini-fab class="tag-person mini-fab-btn">
               <mat-icon>alternate_email</mat-icon>
             </button>
           </div>
-          <button mat-mini-fab class="send-btn">
+          <button mat-mini-fab class="send-btn mini-fab-btn">
             <mat-icon>send</mat-icon>
           </button>
         </div>
