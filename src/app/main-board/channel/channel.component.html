@@ -19,7 +19,7 @@
                 alt="member2"
               /><img src="./../../../assets/img/character3.png" alt="member3" />
             </div>
-            <span class="number-mambers">3</span>
+            <span class="number-members">3</span>
           </button>
           <button class="add-member-btn" mat-mini-fab>
             <mat-icon>person_add</mat-icon>
@@ -29,11 +29,77 @@
     </mat-card-header>
 
     <mat-card-content>
-      <div class="main-chat">Chat Content</div>
+      <div class="main-chat">
+        <mat-list>
+          <div class="divider-container">
+            <mat-divider> </mat-divider>
+            <div class="message-date">Heute</div>
+          </div>
+
+          <mat-list-item>
+            <div id="reactionBar" class="reaction-bar">
+              <button class="mini-fab-btn" mat-mini-fab>
+                <img src="./../../../assets/emojis/check.png" alt="check" />
+              </button>
+              <button class="mini-fab-btn" mat-mini-fab>
+                <img src="./../../../assets/emojis/heart.png" alt="check" />
+              </button>
+              <button class="mini-fab-btn" mat-mini-fab>
+                <mat-icon>add_reaction</mat-icon>
+              </button>
+              <button class="mini-fab-btn" mat-mini-fab>
+                <mat-icon>comment</mat-icon>
+              </button>
+            </div>
+
+            <div class="message-container">
+              <img
+                class="user-img"
+                src="./../../../assets/img/character4.png"
+              />
+              <div class="message-details">
+                <div class="user-wrapper">
+                  <div class="user-name">Noah Braun</div>
+                  <div class="time">14:25 Uhr</div>
+                </div>
+                <div class="text-bubble">Hallo Welt!</div>
+                <div class="answer-wrapper">
+                  <div class="total-answers">2 Antworten</div>
+                  <div class="last-answer">Letzte Antwort 14:56</div>
+                </div>
+              </div>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </div>
     </mat-card-content>
 
-    <mat-card-footer class="example-card-footer">
-      <div class="message-box"></div>
+    <mat-card-footer>
+      <div class="new-message-container">
+        <input matInput type="text" placeholder="Nachricht an #Channel Name" />
+
+        <div class="message-controls">
+          <div class="add-elements">
+            <button
+              class="mini-fab-button"
+              mat-mini-fab
+              class="add-doc mini-fab-btn"
+            >
+              <mat-icon>add</mat-icon>
+            </button>
+            <div class="vertical-divider"></div>
+            <button mat-mini-fab class="emojis mini-fab-btn">
+              <mat-icon>sentiment_satisfied</mat-icon>
+            </button>
+            <button mat-mini-fab class="tag-person mini-fab-btn">
+              <mat-icon>alternate_email</mat-icon>
+            </button>
+          </div>
+          <button mat-mini-fab class="send-btn mini-fab-btn">
+            <mat-icon>send</mat-icon>
+          </button>
+        </div>
+      </div>
     </mat-card-footer>
   </mat-card>
 </div>
