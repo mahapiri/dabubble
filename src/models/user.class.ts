@@ -1,11 +1,15 @@
-class User {
+export class User {
     fullName: string = "";
     userID: string = "";
     email: string = "";
-    password: string ="";
+    password: string = "";
+    
 
-
-    constructor() {
-        
+    constructor(obj?: any) {
+        this.fullName = "";
+        this.userID = "";
+        this.email = "";
+        this.password = "";
     }
+
 }

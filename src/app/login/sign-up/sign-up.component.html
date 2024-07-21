@@ -1,5 +1,5 @@
 <div class="wrapper">
-    <form [formGroup]="userForm">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
     <mat-card appearance="outlined" class="login-card">
 
         <button class="arrow-back-button"><mat-icon class="icon">arrow_back</mat-icon></button>
@@ -10,10 +10,10 @@
         <input type="text" placeholder="Passwort" formControlName="userPassword">
         <div><input type="checkbox" name="" id="">Ich stimme der <a href="">Datenschutzerklärung</a> zu</div>
         <div class="next-button-container">
-            <button (click)="showInfos()" class="next-button">Weiter</button>
+            <button type="submit" class="next-button">Weiter</button>
         </div>
 
 
     </mat-card>
-    </form>
+    </form >
 </div>
