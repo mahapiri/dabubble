@@ -39,6 +39,7 @@ mat-card-header {
     font-size: 24px;
     color: var(--black);
     font-weight: 700;
+    text-align: left;
     border-radius: 100px;
     padding: 6px 10px 6px 10px;
     border: none;
@@ -102,4 +103,80 @@ mat-card-header {
 
 mat-card-content {
   padding-top: 16px;
+}
+
+mat-card-footer {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  width: calc(100% - 32px);
+}
+
+.new-message-container {
+  height: 145px;
+  padding: 20px;
+  border: 1px solid var(--lines);
+  border-radius: 20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 40px;
+  cursor: pointer;
+
+  &:hover {
+    border: 1px solid var(--purple-2);
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    border: none;
+    font-size: 18px;
+    outline: none;
+    color: var(--gray);
+  }
+
+  .message-controls {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    width: calc(100% - 16px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    button {
+      background-color: var(--white);
+      box-shadow: none;
+      color: var(--gray);
+      cursor: pointer;
+
+      &:hover {
+        color: var(--purple-3);
+        //weight: bold
+      }
+    }
+
+    .add-elements {
+      display: flex;
+      gap: 5px;
+    }
+
+    .vertical-divider {
+      width: 1px;
+      background-color: var(--lines);
+    }
+
+    .send-btn {
+      color: var(--purple-3);
+
+      //fill symbol
+
+      &:hover {
+        color: var(--purple-2);
+        --mat-fab-small-state-layer-color: var(--white);
+      }
+    }
+  }
 }

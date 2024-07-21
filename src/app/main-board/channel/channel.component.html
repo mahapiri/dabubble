@@ -32,8 +32,28 @@
       <div class="main-chat">Chat Content</div>
     </mat-card-content>
 
-    <mat-card-footer class="example-card-footer">
-      <div class="message-box"></div>
+    <mat-card-footer>
+      <div class="new-message-container">
+        <input matInput type="text" placeholder="Nachricht an #Channel Name" />
+
+        <div class="message-controls">
+          <div class="add-elements">
+            <button mat-mini-fab class="add-doc">
+              <mat-icon>add</mat-icon>
+            </button>
+            <div class="vertical-divider"></div>
+            <button mat-mini-fab class="emojis">
+              <mat-icon>sentiment_satisfied</mat-icon>
+            </button>
+            <button mat-mini-fab class="tag-person">
+              <mat-icon>alternate_email</mat-icon>
+            </button>
+          </div>
+          <button mat-mini-fab class="send-btn">
+            <mat-icon>send</mat-icon>
+          </button>
+        </div>
+      </div>
     </mat-card-footer>
   </mat-card>
 </div>
