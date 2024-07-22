@@ -1,1 +1,20 @@
-<p>send-mail works!</p>
+<div class="wrapper send-mail">
+    <form > <!-- [formGroup]="userForm" -->
+    <mat-card appearance="outlined" class="login-card">
+
+
+        <button class="arrow-back-button"><mat-icon class="icon">arrow_back</mat-icon></button>
+        <h1>Passwort zurücksetzen</h1>
+        <p>Bitte geben Sie Ihre E-Mail Adresse ein</p>
+        <input type="text" placeholder="beispielname@email.com" formControlName="usermail">
+        <p class="send-mail-text">Wir senden Ihnen eine E-Mail, über die Sie Ihr Passwort ändern können.</p>
+        <div class="next-button-container">
+            <button type="submit" class="next-button">E-Mail senden</button>
+        </div>
+
+
+
+
+    </mat-card>
+    </form >
+</div>
