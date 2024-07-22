@@ -7,6 +7,9 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { SignUpComponent } from './login/sign-up/sign-up.component';
 import { LogInComponent } from './login/log-in/log-in.component';
 import { HeaderComponent } from './shared/header/header.component';
+import { ChooseAvatarComponent } from './login/choose-avatar/choose-avatar.component';
+import { ResetPasswordComponent } from './login/reset-password/reset-password.component';
+import { SendMailComponent } from './login/send-mail/send-mail.component';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +19,7 @@ import { HeaderComponent } from './shared/header/header.component';
     RouterOutlet,
     WorkspaceMenuComponent,
     ChannelComponent, SignUpComponent, LogInComponent,
-    HeaderComponent
+    HeaderComponent, ChooseAvatarComponent, ResetPasswordComponent, SendMailComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
