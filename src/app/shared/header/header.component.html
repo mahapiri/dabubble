@@ -1,1 +1,23 @@
-<p>header works!</p>
+<header>
+    <img src="../../../assets/img/logo-with-font.png" alt="Logo Dabubble" class="logo">
+    <div class="searchfield-container">
+        <input type="text" placeholder="Code learning durchsuchen" class="searchfield">
+        <mat-icon class="search-icon">search</mat-icon>
+    </div>
+    <div class="user-div">
+        <div class="user-container" (click)="openUser()">
+            <div class="user-name">Federik Beck</div>
+            <div class="img-content">
+                <img src="../../../assets/img/character1.png" alt="User">
+                <div class="status-icon online"></div>
+            </div>
+            <div>
+                <mat-icon class="arrow-icon">keyboard_arrow_down</mat-icon>
+            </div>
+        </div>
+        <div class="info-container" [class.d-none]="!clickedUser">
+            <a href="/">Profil</a>
+            <a href="/">Log out</a>
+        </div>
+    </div>
+</header>

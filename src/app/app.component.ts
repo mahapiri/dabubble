@@ -6,6 +6,7 @@ import { ChannelComponent } from './main-board/channel/channel.component';
 import { MatIconRegistry } from '@angular/material/icon';
 import { SignUpComponent } from './login/sign-up/sign-up.component';
 import { LogInComponent } from './login/log-in/log-in.component';
+import { HeaderComponent } from './shared/header/header.component';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,8 @@ import { LogInComponent } from './login/log-in/log-in.component';
     CommonModule,
     RouterOutlet,
     WorkspaceMenuComponent,
-    ChannelComponent, SignUpComponent, LogInComponent
+    ChannelComponent, SignUpComponent, LogInComponent,
+    HeaderComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
