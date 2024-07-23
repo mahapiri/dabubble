@@ -5,11 +5,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { User } from '../../models/user.interface';
 import { CommonModule } from '@angular/common';
+import { CreateChannelComponent } from '../../main-board/create-channel/create-channel.component';
 
 @Component({
   selector: 'app-workspace-menu',
   standalone: true,
-  imports: [MatSidenavModule, MatExpansionModule, MatButtonModule, MatIconModule, CommonModule],
+  imports: [MatSidenavModule, MatExpansionModule, MatButtonModule, MatIconModule, CommonModule, CreateChannelComponent],
   templateUrl: './workspace-menu.component.html',
   styleUrl: './workspace-menu.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
