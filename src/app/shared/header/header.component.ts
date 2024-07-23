@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -12,12 +13,15 @@ import { AuthService } from '../../services/auth.service';
 export class HeaderComponent {
   clickedUser: boolean = false; 
   authService: AuthService = inject(AuthService);
+  constructor(private router: Router) {}
   
   openUser() {
     this.clickedUser = !this.clickedUser;
   }
-  logOut(){
+  logOut(event: Event){
+    event.preventDefault();
     this.authService.logOut();
+    this.router.navigate(['/']);
   }
 
 

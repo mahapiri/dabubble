@@ -6,11 +6,12 @@ import { Firestore } from '@angular/fire/firestore';
 import { User } from '../../../models/user.class';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-log-in',
   standalone: true,
-  imports: [MatCardModule, ReactiveFormsModule, MatIcon],
+  imports: [MatCardModule, ReactiveFormsModule, MatIcon, RouterLink],
   templateUrl: './log-in.component.html',
   styleUrl: './log-in.component.scss'
 })
