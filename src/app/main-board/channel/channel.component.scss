@@ -1,17 +1,14 @@
 @import "./../../../styles.scss";
 
-.header-placeholder {
-  height: 102px;
-}
-
-.card-container {
-  height: calc(100vh - 102px);
+:host {
+  display: flex;
   width: 100%;
-  padding: 16px;
 }
 
 mat-card {
-  height: 100%;
+  height: calc(100vh - 125.5px);
+  display: flex;
+  flex: 1;
   @include cardstyling();
 }
 
@@ -225,6 +222,7 @@ mat-card-footer {
   .message-date {
     position: absolute;
     left: 50%;
+    transform: translateX(-50%);
     top: -18px;
     display: flex;
     justify-content: center;
