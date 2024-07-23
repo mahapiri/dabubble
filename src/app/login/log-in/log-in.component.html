@@ -1,3 +1,10 @@
+<header>
+  <img src="../../../assets/img/logo-with-font.png" alt="Logo Dabubble" class="logo">
+  <div class="header-link">
+    <span>Neu bei DABubble?</span>
+    <a routerLink="/sign-up">Konto erstellen</a>
+  </div>
+</header>
 <div class="wrapper">
   <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
     <mat-card appearance="outlined" class="login-card">
@@ -14,7 +21,7 @@
         </button>
       </div>
 
-      <a href="">Passwort vergessen?</a>
+      <a routerLink="/reset-password">Passwort vergessen?</a>
       <div class="divider-wrapper">
         <div class="divider"></div>
         oder
@@ -22,8 +29,8 @@
       </div>
       <button type="button" class="google-signin-button">Anmelden mit Google</button>
       <div class="singup-button-container">
-        <button type="submit" class="signin-button">Anmelden</button>
-        <button type="button" (click)="logInAsGuest()" routerLink="main" class="guest-login-button">Gäste-Login</button>
+        <button type="submit" routerLink="/main-window" class="signin-button">Anmelden</button>
+        <button type="button" (click)="logInAsGuest()" routerLink="/main-window" class="guest-login-button">Gäste-Login</button>
       </div>
     </mat-card>
   </form>

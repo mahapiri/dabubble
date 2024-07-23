@@ -5,12 +5,13 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { AuthService } from './../../services/auth.service';
 import { User } from '../../../models/user.class';
 import { Firestore } from '@angular/fire/firestore';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
   selector: 'app-sign-up',
   standalone: true,
-  imports: [MatCardModule, MatIconModule, ReactiveFormsModule, MatIcon],
+  imports: [MatCardModule, MatIconModule, ReactiveFormsModule, MatIcon, RouterLink],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss'
 })
