@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, signal, ViewChild } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, ViewChild, Output, EventEmitter, Input } from '@angular/core';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,11 +19,11 @@ import { CreateChannelComponent } from '../../main-board/create-channel/create-c
 export class WorkspaceMenuComponent {
   hover: boolean = false;
   open: boolean = false;
-  clickedChannel: boolean = false;
   clickedMessage: boolean = false;
   clickedUser: boolean = false;
   openChannel: boolean = false;
   openDm: boolean = false;
+  @Input() clickedChannel: boolean = false;
 
   user: User[] = [
     {
@@ -61,6 +61,10 @@ export class WorkspaceMenuComponent {
 
   readonly panelOpenState = signal(false);
   @ViewChild('drawer') drawer!: MatDrawer;
+  @Output() clickedChannelChange = new EventEmitter<boolean>();
+
+  constructor() {
+  }
 
   toggle() {
     this.drawer.toggle();
@@ -82,6 +86,7 @@ export class WorkspaceMenuComponent {
 
   createChannel() {
     this.clickedChannel = !this.clickedChannel;
+    this.clickedChannelChange.emit(this.clickedChannel);
   }
 
   openChannels() {
@@ -97,5 +102,4 @@ export class WorkspaceMenuComponent {
     let id = i;
     document.getElementById(`profile-${id}`)?.classList.toggle('bold-user');
   }
-
 }

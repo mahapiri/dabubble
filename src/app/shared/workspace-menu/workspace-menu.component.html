@@ -1,6 +1,5 @@
-<app-create-channel class="create-section" [class.d-none]="!clickedChannel"></app-create-channel>
 <section>
-    <mat-drawer #drawer class="sidenav" mode="side">
+    <mat-drawer #drawer class="sidenav" mode="side" opened>
         <div class="workspace-content">
             <div class="workspace-title">
                 <img src="../assets/img/workspace-logo.png" alt="Workspace Logo">
@@ -91,7 +90,7 @@
                 </div>
             </div>
             <div class="channel-undersection" [class.d-none]="openDm">
-                <div class="profil-section">
+                <div class="profile-section">
                     <div class="channels-content" *ngFor="let profile of user; let i = index">
                         <div class="channels-section">
                             <div class="channels-header subtitle-header">
@@ -111,10 +110,10 @@
             </div>
         </div>
     </mat-drawer>
-    <div class="navigation-bar" [class]="open ? 'close' : 'open'" (click)="toggle()" (mouseenter)="hoverTrue()"
+    <div class="navigation-bar" [class]="!open ? 'close' : 'open'" (click)="toggle()" (mouseenter)="hoverTrue()"
         (mouseleave)="hoverFalse()">
         <div class="navigation-bar-content">
-            @if (!open) {
+            @if (open) {
             <p>Workspace-Menü öffnen</p>
             <div class="navigation-bar-img">
                 <mat-icon class="panel-icon">left_panel_open</mat-icon>
