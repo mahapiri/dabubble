@@ -4,7 +4,17 @@
       <h1>Anmeldung</h1>
       <p>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest.</p>
       <input type="text" formControlName="userEmail" placeholder="beispielname@email.com">
-      <input type="text" formControlName="userPassword" placeholder="Passwort">
+      <div class="show-button-container">
+        <input [type]="passwordVisible ? 'text' : 'password'" formControlName="userPassword" placeholder="Passwort">
+        <button type="button" (click)="showPassword()" mat-icon-button
+          aria-label="Example icon button with a vertical three dot icon">
+          <mat-icon>
+            @if ( passwordVisible ) {visibility}
+            @else {visibility_off}
+          </mat-icon>
+        </button>
+      </div>
+
       <a href="">Passwort vergessen?</a>
       <div class="divider-wrapper">
         <div class="divider"></div>
@@ -18,5 +28,7 @@
       </div>
     </mat-card>
   </form>
+
+
 
 </div>

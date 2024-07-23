@@ -5,11 +5,13 @@ import { UserService } from '../../user.service';
 import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
 import { Firestore } from '@angular/fire/firestore';
 import { User } from '../../../models/user.class';
+import {MatButtonModule} from '@angular/material/button'; 
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-log-in',
   standalone: true,
-  imports: [MatCardModule, ReactiveFormsModule],
+  imports: [MatCardModule, ReactiveFormsModule, MatIcon],
   templateUrl: './log-in.component.html',
   styleUrl: './log-in.component.scss'
 })
@@ -18,6 +20,7 @@ export class LogInComponent {
   userService: UserService = inject(UserService);
   firestore: Firestore = inject(Firestore);
   user: User = new User();
+  passwordVisible: boolean = false;
 
   constructor(private auth: Auth) {
 
@@ -72,7 +75,10 @@ export class LogInComponent {
       });
   }
 
-
+  showPassword(){
+    this.passwordVisible = !this.passwordVisible;
+    
+  }
 
 
 
