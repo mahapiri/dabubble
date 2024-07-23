@@ -1,24 +1,24 @@
 import { Component, inject } from '@angular/core';
-import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
-import { UserService } from '../../user.service';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { AuthService } from './../../services/auth.service';
 import { User } from '../../../models/user.class';
-import { Auth, createUserWithEmailAndPassword } from '@angular/fire/auth';
 import { Firestore } from '@angular/fire/firestore';
 
 
 @Component({
   selector: 'app-sign-up',
   standalone: true,
-  imports: [MatCardModule, MatIconModule, ReactiveFormsModule],
+  imports: [MatCardModule, MatIconModule, ReactiveFormsModule, MatIcon],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss'
 })
 export class SignUpComponent {
   formbuilder: FormBuilder = inject(FormBuilder);
-  userService: UserService = inject(UserService);
+  authService: AuthService = inject(AuthService);
   firestore: Firestore = inject(Firestore);
+  passwordVisible: boolean = false;
 
   user: User = new User();
 
@@ -29,24 +29,19 @@ export class SignUpComponent {
     userPassword: ["", Validators.required]
   })
 
-  constructor(private auth: Auth) {
-
-  }
 
   onSubmit() {
     this.user.email = this.userForm.value.userEmail || "";
     this.user.fullName = this.userForm.value.userName || "";
     this.user.password = this.userForm.value.userPassword || "";
-    this.userService.saveCurrentUser(this.user);
-    this.createUser();
+    this.authService.createUser(this.user.email, this.user.password)
+    this.userForm.reset();
   }
 
-  createUser() {
-    createUserWithEmailAndPassword(this.auth, this.user.email, this.user.password).then((userCredential) => {
-      console.log("User created:", userCredential.user);
-      this.userForm.reset();
-    });
+  showPassword() {
+    this.passwordVisible = !this.passwordVisible;
   }
+
 
 
 

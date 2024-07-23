@@ -17,7 +17,7 @@
         </div>
         <div class="info-container" [class.d-none]="!clickedUser">
             <a href="/">Profil</a>
-            <a href="/">Log out</a>
+            <a (click)="logOut()">Log out</a>
         </div>
     </div>
 </header>

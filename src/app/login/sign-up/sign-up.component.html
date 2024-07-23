@@ -7,7 +7,18 @@
         <p>Mit deinem Namen und deiner E-Mail-Adresse hast du dein neues DABubble-Konto</p>
         <input type="text" placeholder="Name und Nachname" formControlName="userName">
         <input type="text" placeholder="beispielname@email.com" formControlName="userEmail">
-        <input type="text" placeholder="Passwort" formControlName="userPassword">
+        <div class="show-button-container">
+            <input [type]="passwordVisible ? 'text' : 'password'" formControlName="userPassword" placeholder="Passwort">
+            <button type="button" (click)="showPassword()" mat-icon-button>
+              <mat-icon>
+                @if ( passwordVisible ) {visibility}
+                @else {visibility_off}
+              </mat-icon>
+            </button>
+          </div>
+
+
+
         <div><input type="checkbox" name="" id="">Ich stimme der <a href="">Datenschutzerklärung</a> zu</div>
         <div class="next-button-container">
             <button type="submit" class="next-button">Weiter</button>

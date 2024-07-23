@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -10,8 +11,16 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class HeaderComponent {
   clickedUser: boolean = false; 
+  authService: AuthService = inject(AuthService);
   
   openUser() {
     this.clickedUser = !this.clickedUser;
   }
+  logOut(){
+    this.authService.logOut();
+  }
+
+
+
+
 }

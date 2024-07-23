@@ -6,8 +6,7 @@
       <input type="text" formControlName="userEmail" placeholder="beispielname@email.com">
       <div class="show-button-container">
         <input [type]="passwordVisible ? 'text' : 'password'" formControlName="userPassword" placeholder="Passwort">
-        <button type="button" (click)="showPassword()" mat-icon-button
-          aria-label="Example icon button with a vertical three dot icon">
+        <button type="button" (click)="showPassword()" mat-icon-button>
           <mat-icon>
             @if ( passwordVisible ) {visibility}
             @else {visibility_off}
@@ -21,10 +20,10 @@
         oder
         <div class="divider"></div>
       </div>
-      <button class="google-signin-button">Anmelden mit Google</button>
+      <button type="button" class="google-signin-button">Anmelden mit Google</button>
       <div class="singup-button-container">
         <button type="submit" class="signin-button">Anmelden</button>
-        <button (click)="logInAsGuest()" class="guest-login-button">Gäste-Login</button>
+        <button type="button" (click)="logInAsGuest()" class="guest-login-button">Gäste-Login</button>
       </div>
     </mat-card>
   </form>

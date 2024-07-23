@@ -98,3 +98,21 @@ input[type="checkbox"] {
         }
     }
 }
+
+.show-button-container {
+    display: flex;
+
+    input {
+        flex: 1;
+    }
+
+    button {
+        width: 0;
+        padding: 0;
+        margin: 0;
+        background: transparent;
+        border: none;
+        position: relative;
+        right: 40px;
+    }
+}
