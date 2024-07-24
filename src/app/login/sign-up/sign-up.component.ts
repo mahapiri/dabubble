@@ -18,10 +18,6 @@ export class SignUpComponent {
   authService: AuthService = inject(AuthService);
   passwordVisible: boolean = false;
   constructor(private router: Router) { }
-  usermail: string = "";
-  username: string = "";
-  userpassword: string = "";
-
 
   userForm = this.formbuilder.group({
     userName: ["", Validators.required],
@@ -31,12 +27,13 @@ export class SignUpComponent {
 
   async onSubmit() {
 
-    this.usermail = this.userForm.value.userEmail ||"";
-    this.username = this.userForm.value.userName || "";
-    this.userpassword = this.userForm.value.userPassword || "";    
-    await this.authService.createUser(this.usermail, this.userpassword, this.username);
-    this.userForm.reset();
-    this.router.navigate(['/choose-avatar']);
+    if (this.userForm.valid) {
+      this.authService.usermail = this.userForm.value.userEmail || "";
+      this.authService.username = this.userForm.value.userName || "";
+      this.authService.userpassword = this.userForm.value.userPassword || "";
+      this.router.navigate(['/choose-avatar']);
+    }
+
   }
 
   showPassword() {

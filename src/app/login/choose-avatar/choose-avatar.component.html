@@ -22,7 +22,7 @@
             <span>eigenes Bild verwenden <button class="guest-login-button">Datei hochladen</button></span>
         </div>
         <div class="next-button-container">
-            <button type="button" (click)="createUserImage()" class="next-button">Weiter</button>
+            <button type="button" (click)="createUser()" [disabled]="!pictureChosen" class="next-button">Weiter</button>
         </div>
     </mat-card>
 </div>

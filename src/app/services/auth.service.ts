@@ -12,30 +12,25 @@ export class AuthService {
   currentUser: User = new User;
   userService: UserService = inject(UserService);
   firestore: Firestore = inject(Firestore)
-  displayedUserName: string = "";
-  //currentUserId: string = "";
+  usermail: string = "";
+  username: string = "";
+  userpassword: string = "";
+  profileImage: string = "";
 
   constructor(private auth: Auth) { }
 
-  async createUser(mail: string, password: string, username: string) {
-    await createUserWithEmailAndPassword(this.auth, mail, password).then((userCredential) => {
-      this.saveUserInDocument(mail, username, userCredential.user.uid);
-      this.displayedUserName = username;
-     // this.currentUserId = userCredential.user.uid;
+  async createUser() {
+    await createUserWithEmailAndPassword(this.auth, this.usermail, this.userpassword).then((userCredential) => {
+      this.saveUserInDocument(userCredential.user.uid);
     })
   }
 
-  async saveUserInDocument(mail: string, name: string, id: string) {
+  async saveUserInDocument(id: string) {
+    this.userService.getUserID();
     await setDoc(doc(this.firestore, "users", id), {
-      username: name,
-      email: mail,
-    });
-  }
-
-  async saveProfilepictureInDoc(profilePictureURL: string) {
-    await this.userService.getUserID();
-    await updateDoc(doc(this.firestore, "users", this.userService.userID), {
-      profileImage: profilePictureURL
+      username: this.username,
+      email: this.usermail,
+      profileImage: this.profileImage
     });
   }
 

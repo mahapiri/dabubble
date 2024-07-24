@@ -15,18 +15,22 @@ import { AuthService } from '../../services/auth.service';
 })
 export class ChooseAvatarComponent {
   authService: AuthService = inject(AuthService)
+  pictureChosen: boolean = false;
   constructor(private router: Router) { }
 
 
-  username: string = this.authService.displayedUserName;
+  username: string = this.authService.username;
   imgURL: string = "assets/img/character-empty.png";
 
   setPicture(src: string) {
+    this.pictureChosen = true;
     this.imgURL = src;
+    this.authService.profileImage = src;
   }
 
-  async createUserImage(){
-    await this.authService.saveProfilepictureInDoc(this.imgURL);
+  async createUser(){
+    await this.authService.createUser();
+    this.pictureChosen = false;
     this.router.navigate(['/main-window']);
   }
 

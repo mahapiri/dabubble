@@ -24,7 +24,7 @@
 
         <div><input type="checkbox" name="" id="">Ich stimme der <a href="">Datenschutzerklärung</a> zu</div>
         <div class="next-button-container">
-            <button type="submit" class="next-button">Weiter</button>
+            <button type="submit" class="next-button" [disabled]="!userForm.valid">Weiter</button>
         </div>
 
 

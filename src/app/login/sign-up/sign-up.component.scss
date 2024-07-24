@@ -71,6 +71,11 @@ input[type="checkbox"] {
         &:hover {
             background-color: var(--purple-2);
         }
+
+        &:disabled {
+            background-color: var(--gray) !important;
+            color: white !important;
+        }
     }
 }
 
