@@ -1,0 +1,155 @@
+.member-container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 40px;
+    background-color: var(--white);
+    border-radius: 30px 0px 30px 30px;
+    box-shadow: 0px 6px 10px 0px rgba(0, 0, 0, 0.2);
+}
+
+.title-content {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+.icon-container {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.close-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 18px;
+    transition: all 70ms ease-in;
+
+    &:hover {
+        border-radius: 20px;
+        background-color: var(--bg-color);
+        gap: 10px;
+    }
+}
+
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    width: 335px;
+    gap: 15px;
+}
+
+.profile-div {
+    display: flex;
+    width: 306px;
+    border-radius: 30px;
+    gap: 15px;
+}
+
+.profile-container {
+    display: flex;
+    align-items: center;
+    // width: 216px;
+    border-radius: 35px;
+    padding: 4px 20px;
+    gap: 15px;
+}
+
+.add-member-btn {
+    cursor: pointer;
+    border-radius: 100px;
+
+    &:hover {
+        background-color: var(--bg-color);
+
+        .add-member-title {
+            color: var(--purple-3);
+        }
+
+        .add-icon {
+            color: var(--purple-3);
+            transform: scale(1.2);
+        }
+    }
+}
+
+.profile-content {
+    display: flex;
+    position: relative;
+}
+
+.icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-icon {
+    border-radius: 30px;
+}
+
+.add-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 20px;
+    gap: 10px;
+    padding: 18px;
+    background-color: var(--bg-color);
+    transition: all 75ms ease-in;
+}
+
+.status-icon {
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--white);
+    border-radius: 50%;
+    position: absolute;
+    top: 38px;
+    left: 34px;
+}
+
+.online {
+    background-color: var(--green);
+}
+
+.offline {
+    background-color: var(--rosa);
+}
+
+h2 {
+    font-family: 'Nunito';
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 32.74px;
+    margin: 0;
+}
+
+h3 {
+    font-family: 'Nunito';
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 24.55px;
+    margin: 0;
+}
+
+p {
+    font-family: 'Nunito';
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 24.55px;
+    margin: 0;
+}

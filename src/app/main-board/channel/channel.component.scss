@@ -25,6 +25,15 @@ mat-card-header {
     box-shadow: 0px 8px 10px -6px rgba(0, 0, 0, 0.08);
   }
 
+  .channel-info-content {
+    position: relative;
+  }
+
+  .edit-channel-container {
+    position: absolute;
+    bottom: 0;
+  }
+
   .channel-btn {
     width: auto;
     height: 45px;
@@ -100,6 +109,16 @@ mat-card-header {
     font-weight: 600;
     font-size: 20px;
   }
+}
+
+.members-container-content {
+  position: relative;
+}
+
+.app-member {
+  position: absolute;
+  right: 0;
+  top: 58px;
 }
 
 mat-card-content {

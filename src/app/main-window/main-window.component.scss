@@ -1,4 +1,9 @@
-.workspace {
+.main-container {
   display: flex;
-  padding: 16px;
+  padding: 17px;
+  position: relative;
+}
+
+.d-none {
+  display: none;
 }

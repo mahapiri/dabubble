@@ -5,7 +5,9 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { EditChannelComponent } from '../edit-channel/edit-channel.component';
+import { CommonModule } from '@angular/common';
+import { MemberComponent } from '../../users/member/member.component';
 
 @Component({
   selector: 'app-channel',
@@ -17,19 +19,23 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
     MatDividerModule,
     MatInputModule,
     MatListModule,
-    MatDialogModule,
+    EditChannelComponent,
+    CommonModule,
+    MemberComponent,
   ],
   templateUrl: './channel.component.html',
   styleUrl: './channel.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChannelComponent {
-  /* readonly dialog = inject(MatDialog);
+  clickedEditChannel: boolean = false;
+  clickedMembers: boolean = false;
 
-  openDialog() {
-    const dialogRef = this.dialog.open();
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`);
-    });
-  } */
+  editChannel() {
+    this.clickedEditChannel = true;
+  }
+
+  showMembers() {
+    this.clickedMembers = true;
+  }
 }

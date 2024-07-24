@@ -1,5 +1,5 @@
 <section>
-    <mat-drawer #drawer class="sidenav" mode="side">
+    <mat-drawer #drawer class="sidenav" mode="side" opened>
         <div class="workspace-content">
             <div class="workspace-title">
                 <img src="../assets/img/workspace-logo.png" alt="Workspace Logo">
@@ -37,7 +37,7 @@
                     <div class="channels-content">
                         <div class="channels-section">
                             <div class="channels-header subtitle-header">
-                                <div class="channels-title subtitle-title">
+                                <div class="channels-title subtitle-title" (click)="editChannel('entwicklerteam')">
                                     <mat-icon class="channel-icon">tag</mat-icon>
                                     <h3>Entwicklerteam</h3>
                                 </div>
@@ -47,7 +47,7 @@
                     <div class="channels-content">
                         <div class="channels-section">
                             <div class="channels-header subtitle-header">
-                                <div class="channels-title subtitle-title">
+                                <div class="channels-title subtitle-title" (click)="editChannel('entwicklerteam')">
                                     <mat-icon class="channel-icon">tag</mat-icon>
                                     <h3>Office-team</h3>
                                 </div>
@@ -90,7 +90,7 @@
                 </div>
             </div>
             <div class="channel-undersection" [class.d-none]="openDm">
-                <div class="profil-section">
+                <div class="profile-section">
                     <div class="channels-content" *ngFor="let profile of user; let i = index">
                         <div class="channels-section">
                             <div class="channels-header subtitle-header">
@@ -110,10 +110,10 @@
             </div>
         </div>
     </mat-drawer>
-    <div class="navigation-bar" [class]="open ? 'close' : 'open'" (click)="toggle()" (mouseenter)="hoverTrue()"
+    <div class="navigation-bar" [class]="!open ? 'close' : 'open'" (click)="toggle()" (mouseenter)="hoverTrue()"
         (mouseleave)="hoverFalse()">
         <div class="navigation-bar-content">
-            @if (!open) {
+            @if (open) {
             <p>Workspace-Menü öffnen</p>
             <div class="navigation-bar-img">
                 <mat-icon class="panel-icon">left_panel_open</mat-icon>
