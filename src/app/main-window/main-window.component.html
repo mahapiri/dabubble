@@ -1,14 +1,10 @@
 <app-header></app-header>
 <div class="main-container">
-  <app-workspace-menu
-    [clickedChannel]="clickedChannel"
-    (clickedChannelChange)="handleChannelClick($event)"
-  ></app-workspace-menu>
+  <app-workspace-menu [clickedChannel]="clickedChannel"
+    (clickedChannelChange)="handleChannelClick($event)"></app-workspace-menu>
   <app-channel></app-channel>
   <app-thread></app-thread>
 </div>
-<app-create-channel
-  class="create-section"
-  *ngIf="clickedChannel"
-  (clickedChannel)="handleChannelClick($event)"
-></app-create-channel>
+<app-create-channel class="create-section" *ngIf="clickedChannel"
+  (clickedChannel)="handleChannelClick($event)"></app-create-channel>
+  <app-profile *ngIf=""></app-profile>

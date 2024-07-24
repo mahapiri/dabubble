@@ -216,7 +216,7 @@ mat-content-hide-toggle {
 }
 
 .profile-section {
-  max-height: 426px;
+  max-height: 347px;
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
@@ -278,7 +278,7 @@ mat-content-hide-toggle {
   background-color: var(--white);
   border-radius: 0px 0px 30px 30px;
   box-shadow: -4px 4px 7px 0px rgba(0, 0, 0, 0.2);
-  padding: 23px 14px;
+  padding: 14px 14px;
   display: flex;
   justify-content: center;
   gap: 10px;
@@ -294,8 +294,8 @@ mat-content-hide-toggle {
 }
 
 .open {
-  top: 656px;
-  left: -130px;
+  top: 556px;
+  left: -140px;
 
   p {
     width: 235px;
@@ -303,8 +303,8 @@ mat-content-hide-toggle {
 }
 
 .close {
-  top: 671px;
-  left: -145px;
+  top: 571px;
+  left: -155px;
 
   p {
     width: 265px;

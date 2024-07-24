@@ -5,6 +5,7 @@ import { ChannelComponent } from '../main-board/channel/channel.component';
 import { CreateChannelComponent } from '../main-board/create-channel/create-channel.component';
 import { CommonModule } from '@angular/common';
 import { ThreadComponent } from '../main-board/thread/thread.component';
+import { ProfileComponent } from '../users/profile/profile.component';
 
 @Component({
   selector: 'app-main-window',
@@ -16,6 +17,7 @@ import { ThreadComponent } from '../main-board/thread/thread.component';
     CreateChannelComponent,
     CommonModule,
     ThreadComponent,
+    ProfileComponent
   ],
   templateUrl: './main-window.component.html',
   styleUrl: './main-window.component.scss',
