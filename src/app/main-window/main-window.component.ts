@@ -6,6 +6,7 @@ import { CreateChannelComponent } from '../main-board/create-channel/create-chan
 import { CommonModule } from '@angular/common';
 import { ThreadComponent } from '../main-board/thread/thread.component';
 import { ProfileComponent } from '../users/profile/profile.component';
+import { PrivacyPolicyComponent } from '../privacy-policy/privacy-policy.component';
 
 @Component({
   selector: 'app-main-window',
@@ -17,7 +18,8 @@ import { ProfileComponent } from '../users/profile/profile.component';
     CreateChannelComponent,
     CommonModule,
     ThreadComponent,
-    ProfileComponent
+    ProfileComponent,
+    PrivacyPolicyComponent
   ],
   templateUrl: './main-window.component.html',
   styleUrl: './main-window.component.scss',
