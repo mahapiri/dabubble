@@ -13,7 +13,7 @@ export class AuthService {
   userService: UserService = inject(UserService);
   firestore: Firestore = inject(Firestore)
   displayedUserName: string = "";
-  currentUserId: string = "";
+  //currentUserId: string = "";
 
   constructor(private auth: Auth) { }
 
@@ -21,7 +21,7 @@ export class AuthService {
     await createUserWithEmailAndPassword(this.auth, mail, password).then((userCredential) => {
       this.saveUserInDocument(mail, username, userCredential.user.uid);
       this.displayedUserName = username;
-      this.currentUserId = userCredential.user.uid;
+     // this.currentUserId = userCredential.user.uid;
     })
   }
 
@@ -33,7 +33,8 @@ export class AuthService {
   }
 
   async saveProfilepictureInDoc(profilePictureURL: string) {
-    await updateDoc(doc(this.firestore, "users", this.currentUserId), {
+    await this.userService.getUserID();
+    await updateDoc(doc(this.firestore, "users", this.userService.userID), {
       profileImage: profilePictureURL
     });
   }
