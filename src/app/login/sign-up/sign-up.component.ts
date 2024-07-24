@@ -3,9 +3,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { AuthService } from './../../services/auth.service';
-import { User } from '../../../models/user.class';
-import { Firestore } from '@angular/fire/firestore';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 
 @Component({
@@ -18,10 +16,11 @@ import { RouterLink } from '@angular/router';
 export class SignUpComponent {
   formbuilder: FormBuilder = inject(FormBuilder);
   authService: AuthService = inject(AuthService);
-  firestore: Firestore = inject(Firestore);
   passwordVisible: boolean = false;
-
-  user: User = new User();
+  constructor(private router: Router) { }
+  usermail: string = "";
+  username: string = "";
+  userpassword: string = "";
 
 
   userForm = this.formbuilder.group({
@@ -30,22 +29,19 @@ export class SignUpComponent {
     userPassword: ["", Validators.required]
   })
 
-
   onSubmit() {
-    this.user.email = this.userForm.value.userEmail || "";
-    this.user.fullName = this.userForm.value.userName || "";
-    this.user.password = this.userForm.value.userPassword || "";
-    this.authService.createUser(this.user.email, this.user.password)
+
+    this.usermail = this.userForm.value.userEmail ||"";
+    this.username = this.userForm.value.userName || "";
+    this.userpassword = this.userForm.value.userPassword || "";    
+    this.authService.createUser(this.usermail, this.userpassword, this.username);
     this.userForm.reset();
+    this.router.navigate(['/choose-avatar']);
   }
 
   showPassword() {
     this.passwordVisible = !this.passwordVisible;
   }
-
-
-
-
 }
 
 

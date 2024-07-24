@@ -13,9 +13,10 @@ export class AuthService {
 
   constructor(private auth: Auth) { }
 
-  createUser(mail: string, password: string) {
+  createUser(mail: string, password: string, username: string) {
     createUserWithEmailAndPassword(this.auth, mail, password).then((userCredential) => {
-      console.log("User created:", userCredential.user);
+      console.log("User created:", username, userCredential.user);
+
     });
   }
 
