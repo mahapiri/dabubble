@@ -102,4 +102,8 @@ export class WorkspaceMenuComponent {
     let id = i;
     document.getElementById(`profile-${id}`)?.classList.toggle('bold-user');
   }
+
+  editChannel(channel: string) {
+    
+  }
 }

@@ -1,24 +1,31 @@
 <mat-card appearance="outlined">
   <mat-card-header>
     <div class="channel-info">
-      <button class="channel-btn">
-        <mat-icon class="icon tag">tag</mat-icon>
-        <span>Channel Name</span>
-        <mat-icon class="icon arrow">keyboard_arrow_down</mat-icon>
-      </button>
+      <div class="channel-info-content">
+        <button class="channel-btn" (click)="editChannel()">
+          <mat-icon class="icon tag">tag</mat-icon>
+          <span>Channel Name</span>
+          <mat-icon class="icon arrow">keyboard_arrow_down</mat-icon>
+        </button>
+        <app-edit-channel class="edit-channel-container" *ngIf="clickedEditChannel"></app-edit-channel>
+      </div>
       <div class="members-container">
-        <button class="channel-btn">
-          <div class="img-container">
-            <img src="./../../../assets/img/character1.png" alt="member1" /><img
-              src="./../../../assets/img/character2.png"
-              alt="member2"
-            /><img src="./../../../assets/img/character3.png" alt="member3" />
-          </div>
-          <span class="number-members">3</span>
-        </button>
-        <button class="add-member-btn" mat-mini-fab>
-          <mat-icon>person_add</mat-icon>
-        </button>
+        <div class="members-container-content">
+          <button class="channel-btn" (click)="showMembers()">
+            <div class="img-container">
+              <img src="./../../../assets/img/character1.png" alt="member1" /><img
+                src="./../../../assets/img/character2.png" alt="member2" /><img
+                src="./../../../assets/img/character3.png" alt="member3" />
+            </div>
+            <span class="number-members">3</span>
+          </button>
+          <app-member class="app-member" *ngIf="clickedMembers"></app-member>
+        </div>
+        <div class="add-member-container">
+          <button class="add-member-btn" mat-mini-fab>
+            <mat-icon>person_add</mat-icon>
+          </button>
+        </div>
       </div>
     </div>
   </mat-card-header>
@@ -72,11 +79,7 @@
 
       <div class="message-controls">
         <div class="add-elements">
-          <button
-            class="mini-fab-button"
-            mat-mini-fab
-            class="add-doc mini-fab-btn"
-          >
+          <button class="mini-fab-button" mat-mini-fab class="add-doc mini-fab-btn">
             <mat-icon>add</mat-icon>
           </button>
           <div class="vertical-divider"></div>

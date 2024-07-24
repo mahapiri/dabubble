@@ -42,7 +42,18 @@ section {
 .close-icon {
     width: 24px;
     height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
+    padding: 18px;
+    transition: all 70ms ease-in;
+
+    &:hover {
+        border-radius: 20px;
+        background-color: var(--bg-color);
+        gap: 10px;
+    }
 }
 
 p {
@@ -123,8 +134,10 @@ p {
     gap: 10px;
     background-color: var(--purple-1);
     color: var(--white);
+    font-family: 'Nunito';
     font-weight: 700;
     font-size: 18px;
     line-height: 24.55px;
     transition: all 100ms ease-in-out;
+    cursor: pointer;
 }
