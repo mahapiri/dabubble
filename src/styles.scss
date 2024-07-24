@@ -32,6 +32,12 @@ body {
   background-color: var(--bg-color);
 }
 
+h1,
+h2 {
+  font-family: "Nunito", Roboto, sans-serif;
+  font-weight: 700;
+}
+
 * {
   box-sizing: border-box;
   scroll-behavior: smooth;

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
@@ -30,6 +30,7 @@ import { MemberComponent } from '../../users/member/member.component';
 export class ChannelComponent {
   clickedEditChannel: boolean = false;
   clickedMembers: boolean = false;
+  clickedAnswer: boolean = false;
 
   editChannel() {
     this.clickedEditChannel = true;
@@ -37,5 +38,9 @@ export class ChannelComponent {
 
   showMembers() {
     this.clickedMembers = true;
+  }
+
+  openThread() {
+    this.clickedAnswer = true;
   }
 }
