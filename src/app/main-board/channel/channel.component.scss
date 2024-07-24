@@ -325,6 +325,9 @@ mat-card-footer {
 
   .mini-fab-btn {
     color: var(--black);
+    &:hover {
+      color: var(--purple-3);
+    }
   }
 }
 

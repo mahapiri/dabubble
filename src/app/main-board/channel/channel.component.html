@@ -7,7 +7,7 @@
         <mat-icon class="icon arrow">keyboard_arrow_down</mat-icon>
       </button>
       <div class="members-container">
-        <button class="channel-btn">
+        <button (click)="openDialog()" class="channel-btn">
           <div class="img-container">
             <img src="./../../../assets/img/character1.png" alt="member1" /><img
               src="./../../../assets/img/character2.png"
@@ -16,6 +16,7 @@
           </div>
           <span class="number-members">3</span>
         </button>
+
         <button class="add-member-btn" mat-mini-fab>
           <mat-icon>person_add</mat-icon>
         </button>
