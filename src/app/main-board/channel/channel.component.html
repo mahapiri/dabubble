@@ -28,10 +28,11 @@
           </button>
           <app-member class="app-member" *ngIf="clickedMembers"></app-member>
         </div>
-        <div class="add-member-container">
+        <div class="add-member-container" (click)="addMembers()">
           <button class="add-member-btn" mat-mini-fab>
             <mat-icon>person_add</mat-icon>
           </button>
+          <app-add-member class="add-member-content" *ngIf="clickedAddMembers"></app-add-member>
         </div>
       </div>
     </div>

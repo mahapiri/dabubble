@@ -92,6 +92,17 @@ mat-card-header {
     }
   }
 
+  .add-member-container {
+    cursor: pointer;
+    position: relative;
+  }
+
+  .add-member-content {
+    position: absolute;
+    right: 0;
+    top: 58px;
+  }
+
   .add-member-btn {
     background-color: var(--bg-color);
     box-shadow: none;

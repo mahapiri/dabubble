@@ -8,6 +8,7 @@ import { MatListModule } from '@angular/material/list';
 import { EditChannelComponent } from '../edit-channel/edit-channel.component';
 import { CommonModule } from '@angular/common';
 import { MemberComponent } from '../../users/member/member.component';
+import { AddMemberComponent } from '../../users/add-member/add-member.component';
 
 @Component({
   selector: 'app-channel',
@@ -22,6 +23,7 @@ import { MemberComponent } from '../../users/member/member.component';
     EditChannelComponent,
     CommonModule,
     MemberComponent,
+    AddMemberComponent
   ],
   templateUrl: './channel.component.html',
   styleUrl: './channel.component.scss',
@@ -29,6 +31,7 @@ import { MemberComponent } from '../../users/member/member.component';
 })
 export class ChannelComponent {
   clickedEditChannel: boolean = false;
+  clickedAddMembers:boolean = false;
   clickedMembers: boolean = false;
   clickedAnswer: boolean = false;
 
@@ -42,5 +45,9 @@ export class ChannelComponent {
 
   openThread() {
     this.clickedAnswer = true;
+  }
+
+  addMembers() {
+    this.clickedAddMembers = true;
   }
 }
