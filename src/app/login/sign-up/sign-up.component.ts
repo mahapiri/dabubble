@@ -29,12 +29,12 @@ export class SignUpComponent {
     userPassword: ["", Validators.required]
   })
 
-  onSubmit() {
+  async onSubmit() {
 
     this.usermail = this.userForm.value.userEmail ||"";
     this.username = this.userForm.value.userName || "";
     this.userpassword = this.userForm.value.userPassword || "";    
-    this.authService.createUser(this.usermail, this.userpassword, this.username);
+    await this.authService.createUser(this.usermail, this.userpassword, this.username);
     this.userForm.reset();
     this.router.navigate(['/choose-avatar']);
   }

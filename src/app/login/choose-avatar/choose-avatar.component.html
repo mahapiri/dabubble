@@ -6,23 +6,23 @@
         <button routerLink="/sign-up" class="arrow-back-button"><mat-icon class="icon">arrow_back</mat-icon></button>
         <h1>Wähle deinen Avatar</h1>
         <div class="avatar-container">
-            <img class="profile-picture" src="./../../../assets/img/character-empty.png" alt="">
-            <h2>Frederick Beck</h2>
+            <img class="profile-picture" [src]="'./../../../' + imgURL " alt="">
+            <h2>{{username}}</h2>
         </div>
         <div class="choose-avatar-container">
             <span>Aus der Liste wählen</span>
             <div class="choose-picture-container">
-                <img src="./../../../assets/img/character1.png" alt="">
-                <img src="./../../../assets/img/character2.png" alt="">
-                <img src="./../../../assets/img/character3.png" alt="">
-                <img src="./../../../assets/img/character4.png" alt="">
-                <img src="./../../../assets/img/character5.png" alt="">
-                <img src="./../../../assets/img/character6.png" alt="">
+                <img (click)="setPicture('assets/img/character1.png')" src="./../../../assets/img/character1.png" alt="">
+                <img (click)="setPicture('assets/img/character2.png')" src="./../../../assets/img/character2.png" alt="">
+                <img (click)="setPicture('assets/img/character3.png')" src="./../../../assets/img/character3.png" alt="">
+                <img (click)="setPicture('assets/img/character4.png')" src="./../../../assets/img/character4.png" alt="">
+                <img (click)="setPicture('assets/img/character5.png')" src="./../../../assets/img/character5.png" alt="">
+                <img (click)="setPicture('assets/img/character6.png')" src="./../../../assets/img/character6.png" alt="">
             </div>
             <span>eigenes Bild verwenden <button class="guest-login-button">Datei hochladen</button></span>
         </div>
         <div class="next-button-container">
-            <button routerLink="/main-window" class="next-button">Weiter</button>
+            <button type="button" (click)="createUserImage()" class="next-button">Weiter</button>
         </div>
     </mat-card>
 </div>
