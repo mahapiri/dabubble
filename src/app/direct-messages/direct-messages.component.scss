@@ -1,0 +1,223 @@
+@import "./../../../src/styles.scss";
+
+:host {
+  display: flex;
+  width: 100%;
+}
+
+mat-card {
+  height: calc(100vh - 125.5px);
+  display: flex;
+  flex: 1;
+  @include cardstyling();
+}
+
+mat-card-header {
+  padding: 0;
+  height: 96px;
+
+  .direct-message-info {
+    width: 100%;
+    height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 24px;
+    box-shadow: 0px 8px 10px -6px rgba(0, 0, 0, 0.08);
+  }
+
+  .channel-btn {
+    width: auto;
+    //height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-family: "Nunito", Roboto, sans-serif;
+    font-size: 24px;
+    color: var(--black);
+    font-weight: 700;
+    text-align: left;
+    border-radius: 100px;
+    padding: 6px 10px 6px 10px;
+    border: none;
+    background-color: white;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--bg-color);
+      color: var(--purple-3);
+    }
+  }
+}
+
+mat-card-content {
+  padding: 16px 0 16px 0;
+  flex: 1;
+  margin-bottom: 180px;
+  overflow: auto;
+}
+
+mat-card-footer {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  width: calc(100% - 32px);
+}
+
+.new-message-container {
+  height: 145px;
+  padding: 20px;
+  border: 1px solid var(--lines);
+  border-radius: 20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 40px;
+  cursor: pointer;
+
+  &:hover {
+    border: 1px solid var(--purple-2);
+  }
+
+  input,
+  select,
+  textarea {
+    font-family: "Nunito";
+    width: 100%;
+    border: none;
+    font-size: 18px;
+    outline: none;
+  }
+
+  .message-controls {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    width: calc(100% - 16px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .add-elements {
+      display: flex;
+      gap: 5px;
+    }
+
+    .vertical-divider {
+      width: 1px;
+      background-color: var(--lines);
+    }
+
+    .send-btn {
+      font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 40;
+      color: var(--purple-1);
+      background-color: var(--white);
+      box-shadow: none;
+      &:hover {
+        color: var(--purple-2);
+        background-color: var(--white);
+        --mat-fab-small-state-layer-color: var(--white);
+      }
+    }
+  }
+}
+
+.main-chat {
+  font-family: "Nunito";
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 16px;
+  color: var(--black);
+  height: 100%;
+
+  mat-list-item {
+    font-family: "Nunito";
+    height: fit-content;
+    overflow: visible;
+    padding: 0;
+  }
+
+  .initial-info {
+    display: flex;
+    padding: 24px;
+
+    .user-info {
+      font-family: "Nunito";
+      display: flex;
+      align-items: flex-end;
+      gap: 25px;
+      margin-bottom: 24px;
+    }
+
+    .user-img {
+      height: 100px;
+      width: 100px;
+      border-radius: 100px;
+      object-fit: contain;
+    }
+
+    .chat-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--black);
+    }
+
+    span {
+      font-family: "Nunito";
+      font-size: 20px;
+      color: var(--gray);
+
+      .tag {
+        color: var(--purple-3);
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.mini-fab-btn {
+  background-color: var(--white);
+  box-shadow: none;
+  color: var(--gray);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--purple-3);
+    background-color: var(--bg-color);
+    --mat-fab-small-state-layer-color: var(--white);
+    box-shadow: none;
+
+    .mat-icon {
+      font-weight: bold;
+    }
+  }
+}
+
+.profile-content {
+  display: flex;
+  position: relative;
+}
+
+.profile-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 30px;
+}
+
+.status-icon {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--white);
+  border-radius: 50%;
+  position: absolute;
+  top: 38px;
+  left: 34px;
+  background-color: var(--green);
+}

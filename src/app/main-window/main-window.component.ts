@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { ThreadComponent } from '../main-board/thread/thread.component';
 import { ProfileComponent } from '../users/profile/profile.component';
 import { PrivacyPolicyComponent } from '../privacy-policy/privacy-policy.component';
+import { DirectMessagesComponent } from '../direct-messages/direct-messages.component';
 
 @Component({
   selector: 'app-main-window',
@@ -19,7 +20,8 @@ import { PrivacyPolicyComponent } from '../privacy-policy/privacy-policy.compone
     CommonModule,
     ThreadComponent,
     ProfileComponent,
-    PrivacyPolicyComponent
+    PrivacyPolicyComponent,
+    DirectMessagesComponent,
   ],
   templateUrl: './main-window.component.html',
   styleUrl: './main-window.component.scss',

@@ -1,1 +1,62 @@
-<p>direct-messages works!</p>
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <div class="direct-message-info">
+      <button class="channel-btn">
+        <div class="profile-content">
+          <img
+            src="./../../assets/img/character5.png"
+            alt="Character"
+            class="profile-icon"
+          />
+          <div class="status-icon"></div>
+        </div>
+        <span class="user-name">Sofia Müller</span>
+      </button>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="main-chat">
+      <mat-list>
+        <mat-list-item class="initial-info">
+          <div class="user-info">
+            <img class="user-img" src="./../../../assets/img/character3.png" />
+            <span class="user-name">Frederik Beck</span>
+          </div>
+          <span class="info"
+            >Diese Unterhaltung findet nur zwischen
+            <span class="tag">&#64;Sofia Müller</span> und dir statt.</span
+          >
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </mat-card-content>
+
+  <mat-card-footer>
+    <div class="new-message-container">
+      <input matInput type="text" placeholder="Nachricht an Sofia Müller" />
+
+      <div class="message-controls">
+        <div class="add-elements">
+          <button
+            class="mini-fab-button"
+            mat-mini-fab
+            class="add-doc mini-fab-btn"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+          <div class="vertical-divider"></div>
+          <button mat-mini-fab class="emojis mini-fab-btn">
+            <mat-icon>sentiment_satisfied</mat-icon>
+          </button>
+          <button mat-mini-fab class="tag-person mini-fab-btn">
+            <mat-icon>alternate_email</mat-icon>
+          </button>
+        </div>
+        <button mat-mini-fab class="send-btn">
+          <mat-icon>send</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mat-card-footer>
+</mat-card>
