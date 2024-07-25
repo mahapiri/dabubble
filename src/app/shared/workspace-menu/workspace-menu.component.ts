@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, signal, ViewChild, Output, EventEmitter, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, ViewChild, Output, EventEmitter, Input, inject } from '@angular/core';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { User } from '../../models/user.interface';
 import { CommonModule } from '@angular/common';
 import { CreateChannelComponent } from '../../main-board/create-channel/create-channel.component';
+import { ChannelService } from '../../services/channel.service';
 
 @Component({
   selector: 'app-workspace-menu',
@@ -24,6 +25,8 @@ export class WorkspaceMenuComponent {
   openChannel: boolean = false;
   openDm: boolean = false;
   @Input() clickedChannel: boolean = false;
+  channelService: ChannelService = inject(ChannelService)
+
 
   user: User[] = [
     {
@@ -87,6 +90,8 @@ export class WorkspaceMenuComponent {
   createChannel() {
     this.clickedChannel = !this.clickedChannel;
     this.clickedChannelChange.emit(this.clickedChannel);
+    this.channelService.createChannel();
+
   }
 
   openChannels() {

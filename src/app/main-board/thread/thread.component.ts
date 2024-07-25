@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
@@ -8,6 +8,7 @@ import { MatListModule } from '@angular/material/list';
 import { EditChannelComponent } from '../edit-channel/edit-channel.component';
 import { CommonModule } from '@angular/common';
 import { MemberComponent } from '../../users/member/member.component';
+import { ChannelService } from '../../services/channel.service';
 
 @Component({
   selector: 'app-thread',
@@ -28,4 +29,7 @@ import { MemberComponent } from '../../users/member/member.component';
 })
 export class ThreadComponent {
   @Output() clickedAnswer = new EventEmitter<boolean>();
+  channelService: ChannelService = inject(ChannelService);
+
+
 }

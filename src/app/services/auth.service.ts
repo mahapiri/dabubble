@@ -39,6 +39,7 @@ export class AuthService {
     signInWithEmailAndPassword(this.auth, mail, password)
       .then(() => {
         this.userService.getUserID();
+        // UserObjekt Online: true
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -50,6 +51,7 @@ export class AuthService {
   logOut() {
     signOut(this.auth).then().catch((error) => {
       console.log(error);
+      //online: false
     });
   }
 }
