@@ -135,6 +135,7 @@ mat-card-header {
 mat-card-content {
   padding: 16px 0 16px 0;
   flex: 1;
+  margin-bottom: 160px;
 }
 
 mat-card-footer {
@@ -214,7 +215,6 @@ mat-card-footer {
     width: 100%;
     color: black;
     height: 100%;
-    margin-bottom: 160px;
   }
 
   mat-list-item {
@@ -331,7 +331,7 @@ mat-card-footer {
 
 .reaction-bar {
   position: absolute;
-  top: -18px;
+  top: -24px;
   right: 90px;
   width: 210px;
   height: 46px;

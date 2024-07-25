@@ -32,7 +32,10 @@
           <button class="add-member-btn" mat-mini-fab>
             <mat-icon>person_add</mat-icon>
           </button>
-          <app-add-member class="add-member-content" *ngIf="clickedAddMembers"></app-add-member>
+          <app-add-member
+            class="add-member-content"
+            *ngIf="clickedAddMembers"
+          ></app-add-member>
         </div>
       </div>
     </div>
@@ -52,7 +55,7 @@
               <img src="./../../../assets/emojis/check.png" alt="check" />
             </button>
             <button class="mini-fab-btn" mat-mini-fab>
-              <img src="./../../../assets/emojis/heart.png" alt="check" />
+              <img src="./../../../assets/emojis/heart.png" alt="heart" />
             </button>
             <button class="mini-fab-btn" mat-mini-fab>
               <mat-icon>add_reaction</mat-icon>

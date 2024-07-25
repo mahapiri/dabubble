@@ -16,13 +16,8 @@
   </mat-card-header>
 
   <mat-card-content>
-    <div class="main-chat">
-      <mat-list>
-        <div class="divider-container">
-          <mat-divider> </mat-divider>
-          <div class="message-date">Heute</div>
-        </div>
-
+    <mat-list class="main-chat">
+      <div class="initial-message-container">
         <mat-list-item>
           <div id="reactionBar" class="reaction-bar">
             <button class="mini-fab-btn" mat-mini-fab>
@@ -38,15 +33,44 @@
                 <div class="time">14:25 Uhr</div>
               </div>
               <div class="text-bubble">Hallo Welt!</div>
-              <div class="answer-wrapper">
-                <div class="total-answers">2 Antworten</div>
-                <div class="last-answer">Letzte Antwort 14:56</div>
-              </div>
+              <div class="reaction-wrapper"></div>
             </div>
           </div>
         </mat-list-item>
-      </mat-list>
-    </div>
+        <div class="divider-container">
+          <div class="total-answers">2 Antworten</div>
+          <mat-divider> </mat-divider>
+        </div>
+      </div>
+
+      <mat-list-item>
+        <div id="reactionBar" class="reaction-bar">
+          <button class="mini-fab-btn" mat-mini-fab>
+            <mat-icon>add_reaction</mat-icon>
+          </button>
+        </div>
+
+        <div class="answer-container">
+          <img class="user-img" src="./../../../assets/img/character5.png" />
+          <div class="message-details">
+            <div class="user-wrapper">
+              <div class="user-name">Sofia Müller</div>
+              <div class="time">14:30 Uhr</div>
+            </div>
+            <div class="text-bubble">Hallo Noah! Wie geht's dir?</div>
+            <div class="reaction-container">
+              <button class="reaction-btn">
+                <img src="./../../../assets/emojis/check.png" alt="nerd" />
+                <span class="reaction-count">1</span>
+              </button>
+              <button class="mini-fab-btn" mat-mini-fab>
+                <mat-icon>add_reaction</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-list-item>
+    </mat-list>
   </mat-card-content>
 
   <mat-card-footer>
