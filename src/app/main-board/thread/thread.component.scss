@@ -262,13 +262,47 @@ mat-card-footer {
   }
 }
 
-.reaction-container {
+.reactions-container {
+  position: relative;
+}
+
+.reaction-info-menu {
+  position: absolute;
+  width: 158px;
+  height: 112px;
+  left: 148px;
+  top: -8px;
+  border-radius: 30px 30px 30px 0;
+  padding: 15px 8px 15px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  background-color: var(--purple-1);
+  color: white;
+  font-size: 16px;
+  font-family: "Nunito";
+  z-index: 1;
+  visibility: hidden;
+
+  img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .user {
+    font-size: 18px;
+    font-weight: 700;
+  }
+}
+
+.reactions-wrapper {
   display: flex;
   align-items: center;
   gap: 10px;
 
   .reaction-btn {
-    width: 64px;
+    width: fit-content;
     height: 34px;
     background-color: var(--white);
     border: 1px solid var(--lines);
@@ -279,10 +313,13 @@ mat-card-footer {
     gap: 10px;
     cursor: pointer;
     font-family: "Nunito";
-    color: var(--gray);
 
     &:hover {
       border: 1px solid var(--purple-1);
+
+      .reaction-info-menu {
+        visibility: visible;
+      }
     }
 
     img {
