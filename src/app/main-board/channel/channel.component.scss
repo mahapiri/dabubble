@@ -163,6 +163,7 @@ mat-card-footer {
   input,
   select,
   textarea {
+    font-family: "Nunito";
     width: 100%;
     border: none;
     font-size: 18px;
@@ -203,49 +204,27 @@ mat-card-footer {
 }
 
 .main-chat {
-  display: flex;
-  flex-direction: column;
-  color: var(--black);
-  height: 100%;
-
   mat-list {
+    font-family: "Nunito";
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    width: 100%;
-    color: black;
+    gap: 16px;
+    color: var(--black);
     height: 100%;
   }
 
   mat-list-item {
+    font-family: "Nunito";
     height: fit-content;
-    padding: 24px;
-    margin-top: 32px;
     overflow: visible;
-
-    &:hover {
-      background-color: var(--bg-color);
-
-      .text-bubble {
-        background-color: var(--white);
-      }
-
-      .last-answer {
-        color: var(--black);
-      }
-
-      .reaction-bar {
-        opacity: 1;
-        right: 24px;
-        transition: right 0.15s ease-out, opacity 0.15s ease-out;
-      }
-    }
+    padding: 0;
   }
 }
 
 .divider-container {
   position: relative;
-  padding: 0 16px 0 16px;
+  margin: 32px 20px 32px 20px;
 
   mat-divider {
     border-top-color: var(--lines);
@@ -265,14 +244,42 @@ mat-card-footer {
     border-radius: 30px;
     padding: 5px 15px 5px 15px;
     background-color: var(--white);
-    font-weight: 18px;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--black);
+    font-family: "Nunito";
+  }
+}
+
+.member-message {
+  position: relative;
+
+  &:hover {
+    background-color: var(--bg-color);
+
+    .text-bubble {
+      background-color: var(--white);
+    }
+
+    .last-answer {
+      color: var(--black);
+    }
+
+    .reaction-bar {
+      opacity: 1;
+      right: 24px;
+      transition: right 0.15s ease-out, opacity 0.15s ease-out;
+    }
   }
 }
 
 .message-container {
+  font-family: "Nunito";
   display: flex;
   color: var(--gray);
   gap: 24px;
+  padding: 10px 0 10px 24px;
+  overflow: visible;
   cursor: pointer;
 
   .message-details {
@@ -329,6 +336,46 @@ mat-card-footer {
   }
 }
 
+.my-message {
+  .message-container {
+    justify-content: flex-end;
+    padding: 10px 45px 10px 146px;
+  }
+
+  .user-wrapper {
+    justify-content: flex-end;
+  }
+
+  .text-bubble {
+    border-radius: 30px 0 30px 30px;
+    background-color: var(--purple-2);
+    color: var(--white);
+  }
+
+  .reaction-bar {
+    right: unset;
+    left: 90px;
+  }
+
+  .reactions-wrapper {
+    justify-content: flex-end;
+  }
+
+  &:hover {
+    background-color: var(--bg-color);
+
+    .last-answer {
+      color: var(--black);
+    }
+
+    .reaction-bar {
+      opacity: 1;
+      left: 32px;
+      transition: left 0.15s ease-out, opacity 0.15s ease-out;
+    }
+  }
+}
+
 .reaction-bar {
   position: absolute;
   top: -24px;
@@ -376,5 +423,79 @@ mat-card-footer {
     .mat-icon {
       font-weight: bold;
     }
+  }
+}
+
+::ng-deep mat-list-item .mdc-list-item__content {
+  overflow: visible;
+}
+
+.reaction-info-menu {
+  position: absolute;
+  width: 158px;
+  height: 112px;
+  left: 50%;
+  top: -112px;
+  border-radius: 30px 30px 30px 0;
+  padding: 15px 8px 15px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  background-color: var(--purple-1);
+  color: white;
+  font-size: 16px;
+  font-family: "Nunito";
+  z-index: 1;
+  visibility: hidden;
+
+  img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .user {
+    font-size: 18px;
+    font-weight: 700;
+  }
+}
+
+.reactions-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .reaction-btn {
+    position: relative;
+    width: fit-content;
+    height: 34px;
+    background-color: var(--white);
+    border: 1px solid var(--lines);
+    border-radius: 20px;
+    padding: 5px 10px 5px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-family: "Nunito";
+
+    &:hover {
+      border: 1px solid var(--purple-1);
+
+      .reaction-info-menu {
+        visibility: visible;
+      }
+    }
+
+    img {
+      display: flex;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .mini-fab-btn {
+    height: 34px;
+    width: 34px;
   }
 }

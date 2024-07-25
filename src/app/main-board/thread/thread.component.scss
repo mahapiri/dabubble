@@ -120,6 +120,10 @@ mat-card-footer {
   }
 }
 
+::ng-deep .main-chat mat-list-item .mdc-list-item__content {
+  overflow: visible;
+}
+
 .main-chat {
   color: var(--black);
   height: 100%;
@@ -128,6 +132,7 @@ mat-card-footer {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  overflow: visible;
 
   mat-list-item {
     height: fit-content;
@@ -173,11 +178,13 @@ mat-card-footer {
   color: var(--gray);
   gap: 24px;
   cursor: pointer;
+  overflow: visible;
 
   .message-details {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    overflow: visible;
   }
 
   .user-img {
@@ -262,16 +269,12 @@ mat-card-footer {
   }
 }
 
-.reactions-container {
-  position: relative;
-}
-
 .reaction-info-menu {
   position: absolute;
   width: 158px;
   height: 112px;
-  left: 148px;
-  top: -8px;
+  left: 50%;
+  top: -112px;
   border-radius: 30px 30px 30px 0;
   padding: 15px 8px 15px 10px;
   display: flex;
@@ -302,6 +305,7 @@ mat-card-footer {
   gap: 10px;
 
   .reaction-btn {
+    position: relative;
     width: fit-content;
     height: 34px;
     background-color: var(--white);
