@@ -17,20 +17,16 @@ export class ChannelService {
       {
         channelName: "",
         channelMember: [],
+        createdBy: "",
         description: "",
-        //channelID: this.docRef.toString()
       })
     this.channelID = docRef.id;
   }
 
   //aufrufen wenn nachricht geschrieben wurde
-  async addAnotherDoc() {
+  async addMessageInChannel() {
     const docRef2 = await addDoc(collection(this.firestore, `channels/${this.channelID}/messages`),
       { test: "test 2" })
     console.log(docRef2.id);
   }
-
-
-
-
 }

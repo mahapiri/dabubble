@@ -52,10 +52,9 @@ export class ChannelComponent {
 
   addMembers() {
     this.clickedAddMembers = true;
-
   }
 
   sendMessage() {
-    this.channelService.addAnotherDoc();
+    this.channelService.addMessageInChannel();
   }
 }
