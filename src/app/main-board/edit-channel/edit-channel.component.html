@@ -9,10 +9,12 @@
                 <mat-icon class="close-icon" (click)="close()">close</mat-icon>
             </div>
         </div>
-        <div class="input-container">
+        <div class="input-container" [class.border]="!editing">
             <div class="title-save-div">
                 <h3>Channel-Name</h3>
-                <a href="" (click)="edit()">Bearbeiten</a>
+                <a (click)="edit()">
+                    {{ editing ? 'Speichern' : 'Bearbeiten' }}
+                </a>
             </div>
 
             <div class="inputfield">
@@ -20,10 +22,12 @@
                 <p>Entwicklerteam</p>
             </div>
         </div>
-        <div class="input-container">
+        <div class="input-container" [class.border]="!editing">
             <div class="title-save-div">
                 <h3>Channel-Name</h3>
-                <a href="" (click)="edit()">Bearbeiten</a>
+                <a (click)="edit()">
+                    {{ editing ? 'Speichern' : 'Bearbeiten' }}
+                </a>
             </div>
             <p>Dieser Channel ist für alles rund um #dfsdf vorgesehen. Hier kannst du zusammen mit deinem Team Meetings abhalten, Dokumente teilen und Entscheidungen treffen.</p>
             <div class="line"></div>

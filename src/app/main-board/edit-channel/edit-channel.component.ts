@@ -16,6 +16,6 @@ export class EditChannelComponent {
   }
 
   edit() {
-    this.editing = true;
+    this.editing = !this.editing;
   }
 }

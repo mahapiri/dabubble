@@ -76,8 +76,11 @@ p {
     flex-direction: column;
     gap: 20px;
     border-radius: 20px;
-    border: 1px solid var(--lines);
     padding: 20px;
+}
+
+.border {
+    border: 1px solid var(--lines);
 }
 
 .inputfield {
@@ -98,6 +101,8 @@ p {
         font-size: 18px;
         line-height: 24.55px;
         color: var(--purple-3);
+        cursor: pointer;
+        transition: all 100ms ease-out;
     }
 }
 
