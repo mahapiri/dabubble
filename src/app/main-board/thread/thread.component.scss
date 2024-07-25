@@ -1,10 +1,9 @@
 @import "./../../../styles.scss";
 
 mat-card {
-  font-family: Nunito;
   height: calc(100vh - 125.5px);
+  max-width: 485px;
   display: flex;
-  flex: 1;
   @include cardstyling();
   margin-left: 16px;
 }
@@ -53,7 +52,8 @@ mat-card-header {
 mat-card-content {
   padding: 16px 0 16px 0;
   flex: 1;
-  margin-bottom: 160px;
+  margin-bottom: 180px;
+  overflow: auto;
 }
 
 mat-card-footer {
@@ -131,12 +131,11 @@ mat-card-footer {
   padding: 32px 0 32px 0;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
   overflow: visible;
 
   mat-list-item {
     height: fit-content;
-    padding: 10px 40px 10px 24px;
+    padding: 10px 24px 10px 24px;
     overflow: visible;
 
     &:hover {
@@ -336,5 +335,50 @@ mat-card-footer {
   .mini-fab-btn {
     height: 34px;
     width: 34px;
+  }
+}
+
+.my-message {
+  display: flex;
+  justify-content: flex-end;
+
+  .message-container {
+    justify-content: flex-end;
+    padding: 10px 0px 10px 0px;
+  }
+
+  .user-wrapper {
+    justify-content: flex-end;
+  }
+
+  .text-bubble {
+    border-radius: 30px 0 30px 30px;
+    background-color: var(--purple-2);
+    color: var(--white);
+  }
+
+  .reaction-bar {
+    width: 111px;
+    justify-content: space-between;
+    left: 50px;
+    right: unset;
+  }
+
+  .reactions-wrapper {
+    justify-content: flex-end;
+  }
+
+  &:hover {
+    background-color: var(--bg-color);
+
+    .reaction-bar {
+      opacity: 1;
+      left: 32px;
+      transition: left 0.15s ease-out, opacity 0.15s ease-out;
+    }
+
+    .text-bubble {
+      background-color: var(--purple-2) !important;
+    }
   }
 }

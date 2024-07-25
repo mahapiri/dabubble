@@ -84,6 +84,54 @@
           </div>
         </div>
       </mat-list-item>
+
+      <mat-list-item class="my-message">
+        <div>
+          <div id="reactionBar" class="reaction-bar">
+            <button class="mini-fab-btn" mat-mini-fab>
+              <mat-icon>add_reaction</mat-icon>
+            </button>
+            <button class="mini-fab-btn" mat-mini-fab>
+              <mat-icon>more_vert</mat-icon>
+            </button>
+          </div>
+
+          <div class="message-container">
+            <div class="message-details">
+              <div class="user-wrapper">
+                <div class="time">14:45 Uhr</div>
+                <div class="user-name">Frederik Beck</div>
+              </div>
+
+              <div class="text-bubble">Hey, ihr beiden!</div>
+
+              <div class="reaction-container">
+                <div class="reactions-wrapper">
+                  <button class="reaction-btn">
+                    <div class="reaction-info-menu">
+                      <img
+                        src="./../../../assets/emojis/waving-hand-sign.svg"
+                        alt="nerd"
+                      />
+                      <span class="user">Sofia Müller</span>
+                      <span>hat reagiert</span>
+                    </div>
+                    <img
+                      src="./../../../assets/emojis/waving-hand-sign.svg"
+                      alt="check"
+                    />
+                    <span class="reaction-count">1</span>
+                  </button>
+                  <button class="mini-fab-btn" mat-mini-fab>
+                    <mat-icon>add_reaction</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <img class="user-img" src="./../../../assets/img/character3.png" />
+          </div>
+        </div>
+      </mat-list-item>
     </mat-list>
   </mat-card-content>
 
