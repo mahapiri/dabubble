@@ -330,6 +330,7 @@ mat-card-footer {
   }
 
   .text-bubble {
+    width: fit-content;
     font-size: 18px;
     padding: 15px;
     border-radius: 0 30px 30px 30px;
@@ -340,8 +341,17 @@ mat-card-footer {
 
 .my-message {
   .message-container {
+    position: relative;
     justify-content: flex-end;
-    padding: 10px 45px 10px 146px;
+    padding: 10px 24px 10px 24px;
+
+    &:hover {
+      .reaction-bar {
+        opacity: 1;
+        left: 24px;
+        transition: left 0.15s ease-out, opacity 0.15s ease-out;
+      }
+    }
   }
 
   .user-wrapper {
@@ -364,16 +374,12 @@ mat-card-footer {
   }
 
   &:hover {
-    background-color: var(--bg-color);
+    .message-container {
+      background-color: var(--bg-color);
+    }
 
     .last-answer {
       color: var(--black);
-    }
-
-    .reaction-bar {
-      opacity: 1;
-      left: 32px;
-      transition: left 0.15s ease-out, opacity 0.15s ease-out;
     }
   }
 }

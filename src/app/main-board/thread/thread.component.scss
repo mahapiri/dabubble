@@ -2,7 +2,7 @@
 
 mat-card {
   height: calc(100vh - 125.5px);
-  max-width: 485px;
+  width: clamp(366px, 30vw, 485px);
   display: flex;
   @include cardstyling();
   margin-left: 16px;
@@ -144,12 +144,6 @@ mat-card-footer {
       .text-bubble {
         background-color: var(--white);
       }
-
-      .reaction-bar {
-        opacity: 1;
-        right: 24px;
-        transition: right 0.15s ease-out, opacity 0.15s ease-out;
-      }
     }
   }
 }
@@ -210,6 +204,7 @@ mat-card-footer {
   }
 
   .text-bubble {
+    width: fit-content;
     font-size: 18px;
     padding: 15px;
     border-radius: 0 30px 30px 30px;
@@ -246,6 +241,17 @@ mat-card-footer {
     color: var(--black);
     &:hover {
       color: var(--purple-3);
+    }
+  }
+}
+
+.member-message,
+.initial-message-container {
+  &:hover {
+    .reaction-bar {
+      opacity: 1;
+      right: 24px;
+      transition: right 0.15s ease-out, opacity 0.15s ease-out;
     }
   }
 }
@@ -347,6 +353,10 @@ mat-card-footer {
     padding: 10px 0px 10px 0px;
   }
 
+  .message-details {
+    align-items: flex-end;
+  }
+
   .user-wrapper {
     justify-content: flex-end;
   }
@@ -360,7 +370,7 @@ mat-card-footer {
   .reaction-bar {
     width: 111px;
     justify-content: space-between;
-    left: 50px;
+    left: 90px;
     right: unset;
   }
 
@@ -373,7 +383,7 @@ mat-card-footer {
 
     .reaction-bar {
       opacity: 1;
-      left: 32px;
+      left: 24px;
       transition: left 0.15s ease-out, opacity 0.15s ease-out;
     }
 
