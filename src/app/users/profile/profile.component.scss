@@ -30,18 +30,6 @@ section {
     justify-content: space-between;
 }
 
-.icon-container {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-}
-
-.close-icon {
-    cursor: pointer;
-}
-
 .profile-img {
     width: 200px;
     height: 200px;
@@ -71,18 +59,6 @@ section {
     border-radius: 50%;
 }
 
-.online {
-    background-color: var(--green);
-}
-
-.offline {
-    background-color: var(--rosa);
-}
-
-.away {
-    background-color: var(--gray);
-}
-
 .online-text {
     color: var(--green);
 }
@@ -91,7 +67,7 @@ section {
     color: var(--rosa);
 }
 
-.away-text {
+.absent-text {
     color: var(--gray);
 }
 

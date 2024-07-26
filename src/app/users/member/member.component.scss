@@ -1,44 +1,11 @@
 .member-container {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 40px;
-    background-color: var(--white);
     border-radius: 30px 0px 30px 30px;
-    box-shadow: 0px 6px 10px 0px rgba(0, 0, 0, 0.2);
 }
 
 .title-content {
     display: flex;
     justify-content: space-between;
     position: relative;
-}
-
-.icon-container {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-}
-
-.close-icon {
-    width: 24px;
-    height: 24px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    padding: 18px;
-    transition: all 70ms ease-in;
-
-    &:hover {
-        border-radius: 20px;
-        background-color: var(--bg-color);
-        gap: 10px;
-    }
 }
 
 .profile-section {
