@@ -42,7 +42,7 @@ mat-card-header {
     justify-content: center;
     align-items: center;
     gap: 10px;
-    font-family: "Nunito", Roboto, sans-serif;
+    //font-family: "Nunito", Roboto, sans-serif;
     font-size: 24px;
     color: var(--black);
     font-weight: 700;
@@ -165,7 +165,7 @@ mat-card-footer {
   input,
   select,
   textarea {
-    font-family: "Nunito";
+    //font-family: "Nunito";
     width: 100%;
     border: none;
     font-size: 18px;
@@ -207,7 +207,7 @@ mat-card-footer {
 
 .main-chat {
   mat-list {
-    font-family: "Nunito";
+    //font-family: "Nunito";
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -217,7 +217,7 @@ mat-card-footer {
   }
 
   mat-list-item {
-    font-family: "Nunito";
+    //font-family: "Nunito";
     height: fit-content;
     overflow: visible;
     padding: 0;
@@ -249,7 +249,7 @@ mat-card-footer {
     font-size: 16px;
     font-weight: 400;
     color: var(--black);
-    font-family: "Nunito";
+    //font-family: "Nunito";
   }
 }
 
@@ -276,7 +276,7 @@ mat-card-footer {
 }
 
 .message-container {
-  font-family: "Nunito";
+  //font-family: "Nunito";
   display: flex;
   color: var(--gray);
   gap: 24px;
@@ -453,7 +453,7 @@ mat-card-footer {
   background-color: var(--purple-1);
   color: white;
   font-size: 16px;
-  font-family: "Nunito";
+  //font-family: "Nunito";
   z-index: 1;
   visibility: hidden;
 
@@ -485,7 +485,7 @@ mat-card-footer {
     align-items: center;
     gap: 10px;
     cursor: pointer;
-    font-family: "Nunito";
+    //font-family: "Nunito";
 
     &:hover {
       border: 1px solid var(--purple-1);
