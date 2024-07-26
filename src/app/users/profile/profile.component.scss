@@ -84,41 +84,7 @@ section {
     gap: 15px;
 }
 
-h2 {
-    font-family: 'Nunito';
-    font-size: 32px;
-    font-weight: 700;
-    line-height: 43.65px;
-    margin: 0;
-}
-
-h3 {
-    font-family: 'Nunito';
-    font-size: 24px;
-    font-weight: 700;
-    line-height: 32.74px;
-    margin: 0;
-}
-
-h4 {
-    font-family: 'Nunito';
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 27.28px;
-    margin: 0;
-}
-
-p {
-    font-family: 'Nunito';
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 24.55px;
-    margin: 0;
-}
-
 a {
-    text-decoration: none;
     padding: 0px 10px 0px 40px;
     color: var(--blue);
-    cursor: pointer;
 }

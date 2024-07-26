@@ -3,7 +3,7 @@
         <div class="workspace-content">
             <div class="workspace-title">
                 <img src="../assets/img/workspace-logo.png" alt="Workspace Logo">
-                <h2>Devspace</h2>
+                <h4 class="n-h4 bold">Devspace</h4>
             </div>
             <div class="workspace-img" (click)="newMessage()">
                 <mat-icon class="message-icon" [class.bold-message]="clickedMessage">edit_square</mat-icon>
@@ -14,16 +14,12 @@
                 <div class="channels-content">
                     <div class="channels-section">
                         <div class="channels-header" (click)="openChannels()">
-                            @if(!openChannel) {
-                            <mat-icon>arrow_drop_down</mat-icon>
-                            }
-                            @else {
-                            <mat-icon>arrow_right</mat-icon>
-                            }
-
+                            <div class="channels-header" (click)="openChannels()">
+                                <mat-icon>{{ openChannel ? 'arrow_right' : 'arrow_drop_down' }}</mat-icon>
+                            </div>
                             <div class="channels-title">
                                 <mat-icon>workspaces</mat-icon>
-                                <h2>Channels</h2>
+                                <h4 class="n-h4 bold">Channels</h4>
                             </div>
                         </div>
                         <div class="add-div" (click)="createChannel()">
@@ -39,7 +35,7 @@
                             <div class="channels-header subtitle-header">
                                 <div class="channels-title subtitle-title" (click)="editChannel('entwicklerteam')">
                                     <mat-icon class="channel-icon">tag</mat-icon>
-                                    <h3>Entwicklerteam</h3>
+                                    <p class="n-p">Entwicklerteam</p>
                                 </div>
                             </div>
                         </div>
@@ -49,7 +45,7 @@
                             <div class="channels-header subtitle-header">
                                 <div class="channels-title subtitle-title" (click)="editChannel('entwicklerteam')">
                                     <mat-icon class="channel-icon">tag</mat-icon>
-                                    <h3>Office-team</h3>
+                                    <p class="n-p">Office-team</p>
                                 </div>
                             </div>
                         </div>
@@ -61,7 +57,7 @@
                             <div class="channels-header subtitle-header">
                                 <div class="channels-title subtitle-title add-channel">
                                     <mat-icon>add_circle</mat-icon>
-                                    <h3>Channel hinzufügen</h3>
+                                    <p class="n-p">Channel hinzufügen</p>
                                 </div>
                             </div>
                         </div>
@@ -83,7 +79,7 @@
 
                             <div class="channels-title">
                                 <mat-icon>account_circle</mat-icon>
-                                <h2>Direktnachrichten</h2>
+                                <h4 class="n-h4 bold">Direktnachrichten</h4>
                             </div>
                         </div>
                     </div>
@@ -101,7 +97,7 @@
                                         <div class="status-icon" ngClass="{{ profile.status }}"></div>
                                     </div>
 
-                                    <h3>{{ profile.name }}</h3>
+                                    <p class="n-p">{{ profile.name }}</p>
                                 </div>
                             </div>
                         </div>
@@ -114,13 +110,13 @@
         (mouseleave)="hoverFalse()">
         <div class="navigation-bar-content">
             @if (open) {
-            <p>Workspace-Menü öffnen</p>
+            <h4 class="n-h4">Workspace-Menü öffnen</h4>
             <div class="navigation-bar-img">
                 <mat-icon class="panel-icon">left_panel_open</mat-icon>
             </div>
             }
             @else {
-            <p>Workspace-Menü schließen</p>
+            <h4 class="n-h4">Workspace-Menü schließen</h4>
             <div class="navigation-bar-img">
                 <mat-icon class="panel-icon">right_panel_open</mat-icon>
             </div>
