@@ -146,20 +146,3 @@ a {
     color: var(--blue);
     cursor: pointer;
 }
-
-.primary-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 25px;
-    padding: 12px 25px 12px 25px;
-    gap: 10px;
-    background-color: var(--purple-1);
-    color: var(--white);
-    font-family: 'Nunito';
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 24.55px;
-    transition: all 100ms ease-in-out;
-    cursor: pointer;
-}
