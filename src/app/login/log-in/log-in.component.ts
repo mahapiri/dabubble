@@ -6,7 +6,7 @@ import { Firestore } from '@angular/fire/firestore';
 import { User } from '../../../models/user.class';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-log-in',
@@ -19,8 +19,11 @@ export class LogInComponent {
   formbuilder: FormBuilder = inject(FormBuilder);
   authService: AuthService = inject(AuthService);
   firestore: Firestore = inject(Firestore);
-  user: User = new User();
+  email: string = "";
+  password: string = "";
   passwordVisible: boolean = false;
+  constructor(private router: Router) { }
+
 
   userForm = this.formbuilder.group({
     userEmail: ["", Validators.required],
@@ -28,10 +31,14 @@ export class LogInComponent {
   })
 
   onSubmit() {
-    this.user.email = this.userForm.value.userEmail || "";
-    this.user.password = this.userForm.value.userPassword || "";
-    this.authService.logInUser(this.user.email, this.user.password);
+    console.log(this.userForm);
+    
+    this.email = this.userForm.value.userEmail || "";
+    this.password = this.userForm.value.userPassword || "";
+    this.authService.logInUser(this.email, this.password);
     this.userForm.reset();
+    this.router.navigate(['/main-window']);
+
   }
 
   logInAsGuest() {

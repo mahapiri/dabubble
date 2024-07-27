@@ -16,6 +16,7 @@ export class AuthService {
   username: string = "";
   userpassword: string = "";
   profileImage: string = "";
+  state: string = "";
 
   constructor(private auth: Auth) { }
 
@@ -30,7 +31,9 @@ export class AuthService {
     await setDoc(doc(this.firestore, "users", id), {
       username: this.username,
       email: this.usermail,
-      profileImage: this.profileImage
+      profileImage: this.profileImage,
+      userChannels: ["Entwicklerteam", "Office-Team"],
+      state: this.state
     });
   }
 

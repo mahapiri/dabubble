@@ -30,26 +30,19 @@
             </div>
             <div class="channel-undersection" [class.d-none]="openChannel">
                 <div>
+                    @for (channel of userChannels$ | async; track $index) {
                     <div class="channels-content">
                         <div class="channels-section">
                             <div class="channels-header subtitle-header">
                                 <div class="channels-title subtitle-title" (click)="editChannel('entwicklerteam')">
                                     <mat-icon class="channel-icon">tag</mat-icon>
-                                    <p class="n-p">Entwicklerteam</p>
+                                    <p class="n-p">{{channel}}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="channels-content">
-                        <div class="channels-section">
-                            <div class="channels-header subtitle-header">
-                                <div class="channels-title subtitle-title" (click)="editChannel('entwicklerteam')">
-                                    <mat-icon class="channel-icon">tag</mat-icon>
-                                    <p class="n-p">Office-team</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    }
+
                 </div>
                 <div>
                     <div class="channels-content">

@@ -7,11 +7,13 @@ import { User } from '../../models/user.interface';
 import { CommonModule } from '@angular/common';
 import { CreateChannelComponent } from '../../main-board/create-channel/create-channel.component';
 import { ChannelService } from '../../services/channel.service';
+import { FormsModule } from '@angular/forms';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-workspace-menu',
   standalone: true,
-  imports: [MatSidenavModule, MatExpansionModule, MatButtonModule, MatIconModule, CommonModule, CreateChannelComponent],
+  imports: [MatSidenavModule, MatExpansionModule, MatButtonModule, MatIconModule, CommonModule, CreateChannelComponent, FormsModule],
   templateUrl: './workspace-menu.component.html',
   styleUrl: './workspace-menu.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,7 +28,7 @@ export class WorkspaceMenuComponent {
   openDm: boolean = false;
   @Input() clickedChannel: boolean = false;
   channelService: ChannelService = inject(ChannelService)
-
+  userService: UserService = inject(UserService)
 
   user: User[] = [
     {
@@ -65,10 +67,12 @@ export class WorkspaceMenuComponent {
   readonly panelOpenState = signal(false);
   @ViewChild('drawer') drawer!: MatDrawer;
   @Output() clickedChannelChange = new EventEmitter<boolean>();
+  userChannels$ = this.userService.userChannels$;
 
   constructor() {
   }
 
+  
   toggle() {
     this.drawer.toggle();
     this.open = !this.open;
