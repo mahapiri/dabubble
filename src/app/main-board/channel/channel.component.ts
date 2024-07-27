@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Output,
+  inject,
+} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
@@ -10,6 +16,7 @@ import { CommonModule } from '@angular/common';
 import { MemberComponent } from '../../users/member/member.component';
 import { AddMemberComponent } from '../../users/add-member/add-member.component';
 import { ChannelService } from '../../services/channel.service';
+import { ThreadComponent } from '../thread/thread.component';
 
 @Component({
   selector: 'app-channel',
@@ -24,7 +31,8 @@ import { ChannelService } from '../../services/channel.service';
     EditChannelComponent,
     CommonModule,
     MemberComponent,
-    AddMemberComponent
+    AddMemberComponent,
+    ThreadComponent,
   ],
   templateUrl: './channel.component.html',
   styleUrl: './channel.component.scss',
@@ -34,9 +42,10 @@ export class ChannelComponent {
   clickedEditChannel: boolean = false;
   clickedAddMembers: boolean = false;
   clickedMembers: boolean = false;
-  clickedAnswer: boolean = false;
+
   channelService: ChannelService = inject(ChannelService);
 
+  @Output() clickedAnswer = new EventEmitter<boolean>();
 
   editChannel() {
     this.clickedEditChannel = true;
@@ -47,7 +56,7 @@ export class ChannelComponent {
   }
 
   openThread() {
-    this.clickedAnswer = true;
+    this.clickedAnswer.emit(true);
   }
 
   addMembers() {

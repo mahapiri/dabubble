@@ -28,9 +28,13 @@ import { DirectMessagesComponent } from '../direct-messages/direct-messages.comp
 })
 export class MainWindowComponent {
   clickedChannel: boolean = false;
-  clickedAnswer: boolean = false;
+  clickedOpenThread: boolean = false;
 
   handleChannelClick(event: boolean) {
     this.clickedChannel = event;
+  }
+
+  handleThreadClick(event: boolean) {
+    this.clickedOpenThread = event;
   }
 }

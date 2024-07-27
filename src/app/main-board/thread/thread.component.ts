@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
@@ -28,8 +28,10 @@ import { ChannelService } from '../../services/channel.service';
   styleUrl: './thread.component.scss',
 })
 export class ThreadComponent {
-  @Output() clickedAnswer = new EventEmitter<boolean>();
+  @Output() clickedCloseThread = new EventEmitter<boolean>();
   channelService: ChannelService = inject(ChannelService);
 
-
+  closeThread() {
+    this.clickedCloseThread.emit(false);
+  }
 }
