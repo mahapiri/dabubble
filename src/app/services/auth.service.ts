@@ -45,16 +45,12 @@ export class AuthService {
         // UserObjekt Online: true
       })
       .catch((error) => {
-        const errorMessage = error.message;
-        console.warn(errorMessage);
-
+        console.warn(error.message);
       });
   }
 
-  logOut() {
-    signOut(this.auth).then().catch((error) => {
-      console.log(error);
-      //online: false
-    });
+  async logOut() {
+    await signOut(this.auth);
+    this.userService.getUserID();
   }
 }

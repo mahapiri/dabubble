@@ -44,6 +44,8 @@ export class LogInComponent {
   logInAsGuest() {
     this.authService.logInUser("gast@googlemail.com", "123456")
     this.userForm.reset();
+    this.router.navigate(['/main-window']);
+
   }
 
   showPassword() {
