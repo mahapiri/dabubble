@@ -33,7 +33,7 @@ export class AuthService {
       email: this.usermail,
       profileImage: this.profileImage,
       userChannels: ["Entwicklerteam", "Office-Team"],
-      state: this.state
+      state: this.state,
     });
   }
 
@@ -42,11 +42,13 @@ export class AuthService {
     signInWithEmailAndPassword(this.auth, mail, password)
       .then(() => {
         this.userService.getUserID();
-        // UserObjekt Online: true
+        this.userService.loadChannels();
+
       })
       .catch((error) => {
         console.warn(error.message);
       });
+
   }
 
   async logOut() {

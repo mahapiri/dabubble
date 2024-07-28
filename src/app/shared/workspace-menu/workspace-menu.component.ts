@@ -43,49 +43,23 @@ export class WorkspaceMenuComponent {
   openChannel: boolean = false;
   openDm: boolean = false;
   @Input() clickedChannel: boolean = false;
-  channelService: ChannelService = inject(ChannelService);
-  userService: UserService = inject(UserService);
-
-  user: User[] = [
-    {
-      name: 'Federik Beck (Du)',
-      img: '../../../assets/img/character1.png',
-      status: 'online',
-    },
-    {
-      name: 'Sofia Müller',
-      img: '../../../assets/img/character2.png',
-      status: 'online',
-    },
-    {
-      name: 'Noah Braun',
-      img: '../../../assets/img/character3.png',
-      status: 'offline',
-    },
-    {
-      name: 'Elise Roth',
-      img: '../../../assets/img/character4.png',
-      status: 'offline',
-    },
-    {
-      name: 'Elias Neumann',
-      img: '../../../assets/img/character5.png',
-      status: 'online',
-    },
-    {
-      name: 'Steffen Hoffmann',
-      img: '../../../assets/img/character6.png',
-      status: 'online',
-    },
-  ];
+  channelService: ChannelService = inject(ChannelService)
+  userService: UserService = inject(UserService)
+  user: any[] = []
 
   readonly panelOpenState = signal(false);
   @ViewChild('drawer') drawer!: MatDrawer;
   @Output() clickedChannelChange = new EventEmitter<boolean>();
   userChannels$ = this.userService.userChannels$;
 
-  constructor() {}
+  constructor() {
+  }
 
+   ngOnInit(){
+    this.userService.getUserList(this.user);
+    console.log(this.user);
+  }
+  
   toggle() {
     this.drawer.toggle();
     this.open = !this.open;

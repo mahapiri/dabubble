@@ -1,15 +1,19 @@
 export class User {
-    fullName: string = "";
+    username: string = "";
     userID: string = "";
     email: string = "";
-    password: string = "";
+    state: string = "";
+    userChannels: string[] = [];
+    profileImage: string = ""
     
 
     constructor(obj?: any) {
-        this.fullName = "";
+        this.username = "";
         this.userID = "";
         this.email = "";
-        this.password = "";
+        this.state = "";
+        this.userChannels = [];
+        this.profileImage = "";
     }
 
 }
