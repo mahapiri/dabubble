@@ -50,19 +50,16 @@ export class WorkspaceMenuComponent {
   @ViewChild('drawer') drawer!: MatDrawer;
   @Output() clickedChannelChange = new EventEmitter<boolean>();
   userChannels$ = this.userService.userChannels$;
-  userArray: any[] = []
 
 
   constructor() {
   }
 
   ngOnInit(){
-    this.userService.getUserList(this.userArray)
+    this.userService.getUserList();
+    
   }
 
-  ngOnDestroy(){
-    this.userArray = [];
-  }
  
   toggle() {
     this.drawer.toggle();

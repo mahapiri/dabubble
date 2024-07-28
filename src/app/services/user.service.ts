@@ -12,8 +12,8 @@ export class UserService {
   userChannels$ = this._userChannels.asObservable();
   constructor(private auth: Auth) { }
   userID: string = "";
-  public unsubChannel: Unsubscribe | undefined;
-  public unsubUserlist: Unsubscribe | undefined;
+  userArray: any[] = [];
+  channelsLoaded: boolean = false;
 
 
   getUserID() {
@@ -22,6 +22,10 @@ export class UserService {
       this.userID = user.uid;
       console.log("User", this.userID, "is logged in");
       this.setUserState("online")
+      if (!this.channelsLoaded) {
+        this.channelsLoaded = true
+        this.loadChannels()
+      }
     } else {
       console.log("User is logged out");
       this.setUserState("offline")
@@ -30,11 +34,10 @@ export class UserService {
   }
 
   loadChannels() {
-    this.unsubChannel = onSnapshot(this.getUserRef(), (doc) => {
+    onSnapshot(this.getUserRef(), (doc) => {
       const data = doc.data();
       if (data) {
         this._userChannels.next(data['userChannels']);
-        console.log('Current data: ', this._userChannels.value);
       }
     });
   }
@@ -43,10 +46,11 @@ export class UserService {
     updateDoc(this.getUserRef(), { state: state });
   }
 
-  getUserList(userArray: any[]) {
-    this.unsubUserlist = onSnapshot(collection(this.firestore, "users"), (querySnapshot) => {
+  getUserList() {
+    onSnapshot(collection(this.firestore, "users"), (querySnapshot) => {
+      this.userArray = [];
       querySnapshot.forEach((doc) => {
-        userArray.push(
+        this.userArray.push(
           {
             name: doc.data()['username'],
             img: doc.data()['profileImage'],

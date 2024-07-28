@@ -42,7 +42,6 @@ export class AuthService {
     signInWithEmailAndPassword(this.auth, mail, password)
       .then(() => {
         this.userService.getUserID();
-        this.userService.loadChannels();
       })
       .catch((error) => {
         console.warn(error.message);
