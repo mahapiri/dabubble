@@ -45,53 +45,6 @@
     <div class="main-chat">
       <mat-list>
         <mat-list-item>
-          <div class="divider-container">
-            <mat-divider> </mat-divider>
-            <div class="message-date">Dienstag, 14. Januar</div>
-          </div>
-
-          <div class="member-message">
-            <div id="reactionBar" class="reaction-bar">
-              <button class="mini-fab-btn" mat-mini-fab>
-                <img src="./../../../assets/emojis/check.png" alt="hands up" />
-              </button>
-              <button class="mini-fab-btn" mat-mini-fab>
-                <img
-                  src="./../../../assets/emojis/raising-both-hands.svg"
-                  alt="heart"
-                />
-              </button>
-              <button class="mini-fab-btn" mat-mini-fab>
-                <mat-icon>add_reaction</mat-icon>
-              </button>
-              <button class="mini-fab-btn" mat-mini-fab>
-                <mat-icon>comment</mat-icon>
-              </button>
-            </div>
-
-            <div class="message-container">
-              <img
-                class="user-img"
-                src="./../../../assets/img/character4.png"
-              />
-              <div class="message-details">
-                <div class="user-wrapper">
-                  <div class="user-name">Noah Braun</div>
-                  <div class="time">14:25 Uhr</div>
-                </div>
-                <div class="text-bubble">Hallo Welt!</div>
-                <div class="answer-wrapper">
-                  <div (click)="openThread()" class="total-answers">
-                    2 Antworten
-                  </div>
-                  <div class="last-answer">Letzte Antwort 14:56</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </mat-list-item>
-
-        <mat-list-item>
           <div class="my-message">
             <div class="divider-container">
               <mat-divider> </mat-divider>
@@ -170,35 +123,14 @@
             </div>
           </div>
         </mat-list-item>
+
+        <app-channel-message
+          (clickedAnswer)="handleThreadClick($event)"
+        ></app-channel-message>
       </mat-list>
     </div>
   </mat-card-content>
-
   <mat-card-footer>
-    <div class="new-message-container">
-      <input matInput type="text" placeholder="Nachricht an #Channel Name" />
-
-      <div class="message-controls">
-        <div class="add-elements">
-          <button
-            class="mini-fab-button"
-            mat-mini-fab
-            class="add-doc mini-fab-btn"
-          >
-            <mat-icon>add</mat-icon>
-          </button>
-          <div class="vertical-divider"></div>
-          <button mat-mini-fab class="emojis mini-fab-btn">
-            <mat-icon>sentiment_satisfied</mat-icon>
-          </button>
-          <button mat-mini-fab class="tag-person mini-fab-btn">
-            <mat-icon>alternate_email</mat-icon>
-          </button>
-        </div>
-        <button (click)="sendMessage()" mat-mini-fab class="send-btn">
-          <mat-icon>send</mat-icon>
-        </button>
-      </div>
-    </div>
+    <app-channel-new-message-input></app-channel-new-message-input>
   </mat-card-footer>
 </mat-card>

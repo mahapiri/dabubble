@@ -1,0 +1,24 @@
+@import "./../../../../styles.scss";
+@import "./../../channel/channel.component.scss";
+
+.member-message {
+  position: relative;
+
+  &:hover {
+    background-color: var(--bg-color);
+
+    .text-bubble {
+      background-color: var(--white);
+    }
+
+    .last-answer {
+      color: var(--black);
+    }
+
+    .reaction-bar {
+      opacity: 1;
+      right: 24px;
+      transition: right 0.15s ease-out, opacity 0.15s ease-out;
+    }
+  }
+}

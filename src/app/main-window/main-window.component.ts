@@ -29,19 +29,13 @@ import { UserService } from '../services/user.service';
 })
 export class MainWindowComponent {
   clickedChannel: boolean = false;
-  clickedOpenThread: boolean = false;
-  userService: UserService = inject(UserService);
-
-  ngOnDestroy() {
-    this.userService.unsubChannel;
-    this.userService.unsubUserlist;   
-  }
+  clickedThread: boolean = false;
 
   handleChannelClick(event: boolean) {
     this.clickedChannel = event;
   }
 
   handleThreadClick(event: boolean) {
-    this.clickedOpenThread = event;
+    this.clickedThread = event;
   }
 }
