@@ -17,6 +17,8 @@ import { MemberComponent } from '../../users/member/member.component';
 import { AddMemberComponent } from '../../users/add-member/add-member.component';
 import { ChannelService } from '../../services/channel.service';
 import { ThreadComponent } from '../../thread/thread.component';
+import { ChannelNewMessageInputComponent } from './channel-new-message-input/channel-new-message-input.component';
+import { ChannelMessageComponent } from './channel-message/channel-message.component';
 
 @Component({
   selector: 'app-channel',
@@ -33,6 +35,8 @@ import { ThreadComponent } from '../../thread/thread.component';
     MemberComponent,
     AddMemberComponent,
     ThreadComponent,
+    ChannelNewMessageInputComponent,
+    ChannelMessageComponent,
   ],
   templateUrl: './channel.component.html',
   styleUrl: './channel.component.scss',
@@ -42,10 +46,11 @@ export class ChannelComponent {
   clickedEditChannel: boolean = false;
   clickedAddMembers: boolean = false;
   clickedMembers: boolean = false;
+  clickedThread: boolean = false;
 
   channelService: ChannelService = inject(ChannelService);
 
-  @Output() clickedAnswer = new EventEmitter<boolean>();
+  @Output() clickedThreadChange = new EventEmitter<boolean>();
 
   editChannel() {
     this.clickedEditChannel = true;
@@ -55,15 +60,12 @@ export class ChannelComponent {
     this.clickedMembers = true;
   }
 
-  openThread() {
-    this.clickedAnswer.emit(true);
-  }
-
   addMembers() {
     this.clickedAddMembers = true;
   }
 
-  sendMessage() {
-    this.channelService.addMessageInChannel();
+  handleThreadClick(event: boolean) {
+    this.clickedThread = event;
+    this.clickedThreadChange.emit(this.clickedThread);
   }
 }

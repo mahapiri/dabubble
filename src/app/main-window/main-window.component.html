@@ -4,9 +4,9 @@
     [clickedChannel]="clickedChannel"
     (clickedChannelChange)="handleChannelClick($event)"
   ></app-workspace-menu>
-  <app-channel (clickedAnswer)="handleThreadClick($event)"></app-channel>
+  <app-channel (clickedThreadChange)="handleThreadClick($event)"></app-channel>
   <app-thread
-    *ngIf="clickedOpenThread"
+    *ngIf="clickedThread"
     (clickedCloseThread)="handleThreadClick($event)"
   ></app-thread>
   <!-- <app-direct-message></app-direct-message> -->

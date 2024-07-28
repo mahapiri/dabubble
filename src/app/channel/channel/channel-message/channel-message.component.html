@@ -1,0 +1,41 @@
+<mat-list-item>
+  <div class="divider-container">
+    <mat-divider> </mat-divider>
+    <div class="message-date">Dienstag, 14. Januar</div>
+  </div>
+
+  <div class="member-message">
+    <div id="reactionBar" class="reaction-bar">
+      <button class="mini-fab-btn" mat-mini-fab>
+        <img src="./../../../assets/emojis/check.png" alt="hands up" />
+      </button>
+      <button class="mini-fab-btn" mat-mini-fab>
+        <img
+          src="./../../../assets/emojis/raising-both-hands.svg"
+          alt="heart"
+        />
+      </button>
+      <button class="mini-fab-btn" mat-mini-fab>
+        <mat-icon>add_reaction</mat-icon>
+      </button>
+      <button (click)="openThread()" class="mini-fab-btn" mat-mini-fab>
+        <mat-icon>comment</mat-icon>
+      </button>
+    </div>
+
+    <div class="message-container">
+      <img class="user-img" src="./../../../assets/img/character4.png" />
+      <div class="message-details">
+        <div class="user-wrapper">
+          <div class="user-name">Noah Braun</div>
+          <div class="time">14:25 Uhr</div>
+        </div>
+        <div class="text-bubble">Hallo Welt!</div>
+        <div class="answer-wrapper">
+          <div (click)="openThread()" class="total-answers">2 Antworten</div>
+          <div class="last-answer">Letzte Antwort 14:56</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-list-item>
