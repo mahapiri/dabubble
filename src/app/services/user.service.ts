@@ -15,14 +15,19 @@ export class UserService {
 
 
   getUserID() {
+    var authFlag = true;
     onAuthStateChanged(this.auth, (user) => {
-      if (user) {
-        this.userID = user.uid;
-        console.log("User", this.userID, "is logged in");
-        this.loadChannels();
-      } else {
-        console.log("User is logged out");
-        this.userID = "";
+      if (authFlag) {
+        authFlag = false;
+        if (user) {
+          this.userID = user.uid;
+          console.log("User", this.userID, "is logged in");
+          this.loadChannels();
+        }
+        else {
+          console.log("User is logged out");
+          this.userID = "";          
+        }
       }
     });
   }
