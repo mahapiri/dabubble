@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { HeaderComponent } from '../shared/header/header.component';
 import { WorkspaceMenuComponent } from '../shared/workspace-menu/workspace-menu.component';
 import { ChannelComponent } from '../channel/channel/channel.component';
@@ -8,6 +8,7 @@ import { ThreadComponent } from '../thread/thread.component';
 import { ProfileComponent } from '../users/profile/profile.component';
 import { PrivacyPolicyComponent } from '../privacy-policy/privacy-policy.component';
 import { DirectMessageComponent } from '../direct-message/direct-message.component';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-main-window',
@@ -29,6 +30,12 @@ import { DirectMessageComponent } from '../direct-message/direct-message.compone
 export class MainWindowComponent {
   clickedChannel: boolean = false;
   clickedOpenThread: boolean = false;
+  userService: UserService = inject(UserService);
+
+  ngOnDestroy() {
+    this.userService.unsubChannel;
+    this.userService.unsubUserlist;   
+  }
 
   handleChannelClick(event: boolean) {
     this.clickedChannel = event;

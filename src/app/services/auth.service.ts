@@ -43,7 +43,6 @@ export class AuthService {
       .then(() => {
         this.userService.getUserID();
         this.userService.loadChannels();
-
       })
       .catch((error) => {
         console.warn(error.message);
@@ -52,6 +51,7 @@ export class AuthService {
   }
 
   async logOut() {
+    this.userService.getUserID();
     await signOut(this.auth);
     this.userService.getUserID();
   }

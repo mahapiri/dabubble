@@ -45,21 +45,25 @@ export class WorkspaceMenuComponent {
   @Input() clickedChannel: boolean = false;
   channelService: ChannelService = inject(ChannelService)
   userService: UserService = inject(UserService)
-  user: any[] = []
 
   readonly panelOpenState = signal(false);
   @ViewChild('drawer') drawer!: MatDrawer;
   @Output() clickedChannelChange = new EventEmitter<boolean>();
   userChannels$ = this.userService.userChannels$;
+  userArray: any[] = []
+
 
   constructor() {
   }
 
-   ngOnInit(){
-    this.userService.getUserList(this.user);
-    console.log(this.user);
+  ngOnInit(){
+    this.userService.getUserList(this.userArray)
   }
-  
+
+  ngOnDestroy(){
+    this.userArray = [];
+  }
+ 
   toggle() {
     this.drawer.toggle();
     this.open = !this.open;

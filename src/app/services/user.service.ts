@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth, onAuthStateChanged } from '@angular/fire/auth';
+import { Auth, onAuthStateChanged, Unsubscribe } from '@angular/fire/auth';
 import { collection, doc, Firestore, onSnapshot, setDoc, updateDoc } from '@angular/fire/firestore';
 import { BehaviorSubject } from 'rxjs';
 
@@ -12,7 +12,8 @@ export class UserService {
   userChannels$ = this._userChannels.asObservable();
   constructor(private auth: Auth) { }
   userID: string = "";
-
+  public unsubChannel: Unsubscribe | undefined;
+  public unsubUserlist: Unsubscribe | undefined;
 
 
   getUserID() {
@@ -28,28 +29,8 @@ export class UserService {
     }
   }
 
-  /* getUserID() {
-    var authFlag = true;
-    onAuthStateChanged(this.auth, (user) => {
-      if (authFlag) {
-        authFlag = false;
-        if (user) {
-          this.userID = user.uid;
-          console.log("User", this.userID, "is logged in");
-          this.setUserState("online")
-          this.loadChannels();
-        }
-        else {
-          console.log("User is logged out");
-          this.setUserState("offline")
-          this.userID = "";
-        }
-      }
-    });
-  } */
-
   loadChannels() {
-    onSnapshot(this.getUserRef(), (doc) => {
+    this.unsubChannel = onSnapshot(this.getUserRef(), (doc) => {
       const data = doc.data();
       if (data) {
         this._userChannels.next(data['userChannels']);
@@ -62,11 +43,10 @@ export class UserService {
     updateDoc(this.getUserRef(), { state: state });
   }
 
-  getUserList(user: any[]) {
-    
-    onSnapshot(collection(this.firestore, "users"), (querySnapshot) => {
+  getUserList(userArray: any[]) {
+    this.unsubUserlist = onSnapshot(collection(this.firestore, "users"), (querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        user.push(
+        userArray.push(
           {
             name: doc.data()['username'],
             img: doc.data()['profileImage'],

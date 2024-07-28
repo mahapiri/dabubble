@@ -80,7 +80,7 @@
             </div>
             <div class="channel-undersection" [class.d-none]="openDm">
                 <div class="profile-section">
-                    <div class="channels-content" *ngFor="let profile of user; let i = index">
+                    <div class="channels-content" *ngFor="let profile of userArray; let i = index">
                         <div class="channels-section">
                             <div class="channels-header subtitle-header">
                                 <div class="channels-title subtitle-title profile-border" (click)="clickedProfile(i)"
