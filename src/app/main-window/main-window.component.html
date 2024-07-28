@@ -1,5 +1,5 @@
 <app-header></app-header>
-<div class="main-container">
+<div class="workspace">
   <app-workspace-menu
     [clickedChannel]="clickedChannel"
     (clickedChannelChange)="handleChannelClick($event)"
@@ -9,7 +9,7 @@
     *ngIf="clickedOpenThread"
     (clickedCloseThread)="handleThreadClick($event)"
   ></app-thread>
-  <!-- <app-direct-messages></app-direct-messages> -->
+  <!-- <app-direct-message></app-direct-message> -->
 </div>
 <app-create-channel
   class="create-section"

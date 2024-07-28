@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ChannelComponent } from './channel.component';
 
 describe('ChannelComponent', () => {
@@ -8,10 +7,9 @@ describe('ChannelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ChannelComponent]
-    })
-    .compileComponents();
-    
+      imports: [ChannelComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(ChannelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
