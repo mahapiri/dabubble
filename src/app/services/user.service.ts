@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
-import { doc, Firestore, onSnapshot } from '@angular/fire/firestore';
+import { collection, doc, Firestore, onSnapshot, setDoc, updateDoc } from '@angular/fire/firestore';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -23,31 +23,52 @@ export class UserService {
           this.userID = user.uid;
           console.log("User", this.userID, "is logged in");
           this.loadChannels();
+          this.setUserState("online")
+         // this.getUserList();
         }
         else {
           console.log("User is logged out");
-          this.userID = "";          
+          this.setUserState("offline")
+          this.userID = "";
         }
       }
     });
   }
 
-
   loadChannels() {
-    onSnapshot(doc(this.firestore, 'users', this.userID), (doc) => {
+    onSnapshot(this.getUserRef(), (doc) => {
       const data = doc.data();
       if (data) {
         this._userChannels.next(data['userChannels']);
         console.log('Current data: ', this._userChannels.value);
-
       }
     });
   }
 
+  setUserState(state: string) {
+    updateDoc(this.getUserRef(), { state: state });
+  }
 
-  // getUserRef() {
-  //    return doc(this.firestore, 'users', this.userID)
-  // }
+  getUserList(user: any[]) {
+    onSnapshot(collection(this.firestore, "users"), (querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        user.push(
+          {
+            name: doc.data()['username'],
+            img: doc.data()['profileImage'],
+            status: doc.data()['state']
+          }
+        );
+      });
+    });
+  }
+
+
+  getUserRef() {
+    return doc(this.firestore, 'users', this.userID)
+  }
+
+
 }
 
 

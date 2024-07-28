@@ -29,8 +29,9 @@ export class WorkspaceMenuComponent {
   @Input() clickedChannel: boolean = false;
   channelService: ChannelService = inject(ChannelService)
   userService: UserService = inject(UserService)
+  user: any[] = []
 
-  user: User[] = [
+  /* user: User[] = [
     {
       name: 'Federik Beck (Du)',
       img: '../../../assets/img/character1.png',
@@ -62,7 +63,7 @@ export class WorkspaceMenuComponent {
       status: 'online'
     },
 
-  ]
+  ] */
 
   readonly panelOpenState = signal(false);
   @ViewChild('drawer') drawer!: MatDrawer;
@@ -72,6 +73,11 @@ export class WorkspaceMenuComponent {
   constructor() {
   }
 
+  ngOnInit(){
+    this.userService.getUserList(this.user);
+    console.log(this.user);
+    
+  }
   
   toggle() {
     this.drawer.toggle();
