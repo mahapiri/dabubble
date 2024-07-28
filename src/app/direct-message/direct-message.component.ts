@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
 @Component({
-  selector: 'app-direct-messages',
+  selector: 'app-direct-message',
   standalone: true,
   imports: [
     MatCardModule,
@@ -18,8 +18,8 @@ import { CommonModule } from '@angular/common';
     MatListModule,
     CommonModule,
   ],
-  templateUrl: './direct-messages.component.html',
-  styleUrl: './direct-messages.component.scss',
+  templateUrl: './direct-message.component.html',
+  styleUrl: './direct-message.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DirectMessagesComponent {}
+export class DirectMessageComponent {}

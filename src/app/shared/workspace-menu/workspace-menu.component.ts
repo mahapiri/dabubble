@@ -1,11 +1,20 @@
-import { Component, ChangeDetectionStrategy, signal, ViewChild, Output, EventEmitter, Input, inject } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  signal,
+  ViewChild,
+  Output,
+  EventEmitter,
+  Input,
+  inject,
+} from '@angular/core';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { User } from '../../models/user.interface';
 import { CommonModule } from '@angular/common';
-import { CreateChannelComponent } from '../../main-board/create-channel/create-channel.component';
+import { CreateChannelComponent } from '../../channel/create-channel/create-channel.component';
 import { ChannelService } from '../../services/channel.service';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
@@ -13,12 +22,19 @@ import { UserService } from '../../services/user.service';
 @Component({
   selector: 'app-workspace-menu',
   standalone: true,
-  imports: [MatSidenavModule, MatExpansionModule, MatButtonModule, MatIconModule, CommonModule, CreateChannelComponent, FormsModule],
+  imports: [
+    MatSidenavModule,
+    MatExpansionModule,
+    MatButtonModule,
+    MatIconModule,
+    CommonModule,
+    CreateChannelComponent,
+    FormsModule,
+  ],
   templateUrl: './workspace-menu.component.html',
   styleUrl: './workspace-menu.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class WorkspaceMenuComponent {
   hover: boolean = false;
   open: boolean = false;
@@ -35,32 +51,32 @@ export class WorkspaceMenuComponent {
     {
       name: 'Federik Beck (Du)',
       img: '../../../assets/img/character1.png',
-      status: 'online'
+      status: 'online',
     },
     {
       name: 'Sofia Müller',
       img: '../../../assets/img/character2.png',
-      status: 'online'
+      status: 'online',
     },
     {
       name: 'Noah Braun',
       img: '../../../assets/img/character3.png',
-      status: 'offline'
+      status: 'offline',
     },
     {
       name: 'Elise Roth',
       img: '../../../assets/img/character4.png',
-      status: 'offline'
+      status: 'offline',
     },
     {
       name: 'Elias Neumann',
       img: '../../../assets/img/character5.png',
-      status: 'online'
+      status: 'online',
     },
     {
       name: 'Steffen Hoffmann',
       img: '../../../assets/img/character6.png',
-      status: 'online'
+      status: 'online',
     },
 
   ] */
@@ -101,7 +117,6 @@ export class WorkspaceMenuComponent {
     this.clickedChannel = !this.clickedChannel;
     this.clickedChannelChange.emit(this.clickedChannel);
     this.channelService.createChannel();
-
   }
 
   openChannels() {
@@ -118,7 +133,5 @@ export class WorkspaceMenuComponent {
     document.getElementById(`profile-${id}`)?.classList.toggle('bold-user');
   }
 
-  editChannel(channel: string) {
-    
-  }
+  editChannel(channel: string) {}
 }

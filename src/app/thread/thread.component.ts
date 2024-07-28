@@ -5,10 +5,10 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
-import { EditChannelComponent } from '../edit-channel/edit-channel.component';
+import { EditChannelComponent } from '../channel/edit-channel/edit-channel.component';
 import { CommonModule } from '@angular/common';
-import { MemberComponent } from '../../users/member/member.component';
-import { ChannelService } from '../../services/channel.service';
+import { MemberComponent } from '../users/member/member.component';
+import { ChannelService } from '../services/channel.service';
 
 @Component({
   selector: 'app-thread',

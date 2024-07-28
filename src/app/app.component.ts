@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { WorkspaceMenuComponent } from './shared/workspace-menu/workspace-menu.component';
-import { ChannelComponent } from './main-board/channel/channel.component';
+import { ChannelComponent } from './channel/channel/channel.component';
 import { MatIconRegistry } from '@angular/material/icon';
 import { SignUpComponent } from './login/sign-up/sign-up.component';
 import { LogInComponent } from './login/log-in/log-in.component';
@@ -18,8 +18,13 @@ import { SendMailComponent } from './login/send-mail/send-mail.component';
     CommonModule,
     RouterOutlet,
     WorkspaceMenuComponent,
-    ChannelComponent, SignUpComponent, LogInComponent,
-    HeaderComponent, ChooseAvatarComponent, ResetPasswordComponent, SendMailComponent
+    ChannelComponent,
+    SignUpComponent,
+    LogInComponent,
+    HeaderComponent,
+    ChooseAvatarComponent,
+    ResetPasswordComponent,
+    SendMailComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

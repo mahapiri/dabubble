@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
 import { MemberComponent } from '../../users/member/member.component';
 import { AddMemberComponent } from '../../users/add-member/add-member.component';
 import { ChannelService } from '../../services/channel.service';
-import { ThreadComponent } from '../thread/thread.component';
+import { ThreadComponent } from '../../thread/thread.component';
 
 @Component({
   selector: 'app-channel',
