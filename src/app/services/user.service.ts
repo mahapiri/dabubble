@@ -14,7 +14,21 @@ export class UserService {
   userID: string = "";
 
 
+
   getUserID() {
+    let user = this.auth.currentUser;
+    if (user) {
+      this.userID = user.uid;
+      console.log("User", this.userID, "is logged in");
+      this.setUserState("online")
+    } else {
+      console.log("User is logged out");
+      this.setUserState("offline")
+      this.userID = "";
+    }
+  }
+
+  /* getUserID() {
     var authFlag = true;
     onAuthStateChanged(this.auth, (user) => {
       if (authFlag) {
@@ -22,9 +36,8 @@ export class UserService {
         if (user) {
           this.userID = user.uid;
           console.log("User", this.userID, "is logged in");
-          this.loadChannels();
           this.setUserState("online")
-         // this.getUserList();
+          this.loadChannels();
         }
         else {
           console.log("User is logged out");
@@ -33,7 +46,7 @@ export class UserService {
         }
       }
     });
-  }
+  } */
 
   loadChannels() {
     onSnapshot(this.getUserRef(), (doc) => {
@@ -50,6 +63,7 @@ export class UserService {
   }
 
   getUserList(user: any[]) {
+    
     onSnapshot(collection(this.firestore, "users"), (querySnapshot) => {
       querySnapshot.forEach((doc) => {
         user.push(
