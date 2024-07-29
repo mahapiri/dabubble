@@ -20,19 +20,23 @@ export class ChannelService {
   firestore: Firestore = inject(Firestore);
   userService: UserService = inject(UserService)
   channelID: string = '';
+  createdBy: string = "";
 
 
   constructor() { }
 
 
-  async createChannel(name: string, description: string, user: User[]) {
+  async createChannel(name: string, description: string, user: any[]) {
+    await this.getCreatedByUser();
     const docRef = await addDoc(collection(this.firestore, 'channels'), {
       channelName: name,
       //channelMember: user,
-      //createdBy: this.getCreatedByUser(),
+      createdBy: this.createdBy,
       description: description,
     });
     this.channelID = docRef.id;
+    console.log(this.getCreatedByUser());
+
     // this.addChannelToContact(user.id, docRef.id);
     console.log('Channel:', docRef.id, 'created');
   }
@@ -55,11 +59,9 @@ export class ChannelService {
   }
 
   async getCreatedByUser() {
-    let userRef = await (await getDoc(doc(this.firestore, "users", this.userService.userID))).data()
+    let userRef = (await getDoc(doc(this.firestore, "users", this.userService.userID))).data()
     if (userRef) {
-      return userRef['username'];
+      this.createdBy = userRef['username']
     }
-
-
   }
 }
