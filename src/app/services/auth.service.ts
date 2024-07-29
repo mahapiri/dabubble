@@ -34,6 +34,7 @@ export class AuthService {
       profileImage: this.profileImage,
       userChannels: ["Entwicklerteam", "Office-Team"],
       state: this.state,
+      userId: id
     });
   }
 

@@ -19,6 +19,7 @@ import { ChannelService } from '../../services/channel.service';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 
+
 @Component({
   selector: 'app-workspace-menu',
   standalone: true,
@@ -43,8 +44,10 @@ export class WorkspaceMenuComponent {
   openChannel: boolean = false;
   openDm: boolean = false;
   @Input() clickedChannel: boolean = false;
-  channelService: ChannelService = inject(ChannelService)
-  userService: UserService = inject(UserService)
+  clickedChannelId: string = '';
+  channelService: ChannelService = inject(ChannelService);
+  userService: UserService = inject(UserService);
+
 
   readonly panelOpenState = signal(false);
   @ViewChild('drawer') drawer!: MatDrawer;
@@ -52,46 +55,56 @@ export class WorkspaceMenuComponent {
   userChannels$ = this.userService.userChannels$;
 
 
-  constructor() {
-  }
+  constructor() { }
 
-  ngOnInit(){
+
+  ngOnInit() {
     this.userService.getUserList();
-    
   }
 
- 
+
   toggle() {
     this.drawer.toggle();
     this.open = !this.open;
     this.hover = true;
   }
 
+
   hoverTrue() {
     this.hover = true;
   }
+
 
   hoverFalse() {
     this.hover = false;
   }
 
+
   newMessage() {
     this.clickedMessage = !this.clickedMessage;
   }
 
+
   createChannel() {
     this.clickedChannel = !this.clickedChannel;
     this.clickedChannelChange.emit(this.clickedChannel);
-    this.channelService.createChannel();
   }
+
 
   openChannels() {
     this.openChannel = !this.openChannel;
   }
 
+
+  openChannelWithId(channelId: any) {
+    this.clickedChannelId = channelId;
+  }
+
+
   openDirectMessages() {
     this.openDm = !this.openDm;
   }
+
 
   clickedProfile(i: number) {
     this.clickedUser = !this.clickedUser;
@@ -99,5 +112,6 @@ export class WorkspaceMenuComponent {
     document.getElementById(`profile-${id}`)?.classList.toggle('bold-user');
   }
 
-  editChannel(channel: string) {}
+
+  editChannel(channel: string) { }
 }

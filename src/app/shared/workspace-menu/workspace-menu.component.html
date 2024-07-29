@@ -30,8 +30,8 @@
             </div>
             <div class="channel-undersection" [class.d-none]="openChannel">
                 <div>
-                    @for (channel of userChannels$ | async; track $index) {
-                    <div class="channels-content">
+                    <div *ngFor="let channel of userChannels$ | async" (click)="openChannelWithId(channel)"
+                        class="channels-content">
                         <div class="channels-section">
                             <div class="channels-header subtitle-header">
                                 <div class="channels-title subtitle-title" (click)="editChannel('entwicklerteam')">
@@ -41,8 +41,6 @@
                             </div>
                         </div>
                     </div>
-                    }
-
                 </div>
                 <div>
                     <div class="channels-content">
@@ -70,6 +68,7 @@
                             <mat-icon>arrow_right</mat-icon>
                             }
 
+
                             <div class="channels-title">
                                 <mat-icon>account_circle</mat-icon>
                                 <h4 class="n-h4 bold">Direktnachrichten</h4>
@@ -89,6 +88,7 @@
                                         <img src="{{ profile.img }}" alt="Character" class="profile-icon">
                                         <div class="status-icon" ngClass="{{ profile.status }}"></div>
                                     </div>
+
 
                                     <p class="n-p">{{ profile.name }}</p>
                                 </div>
