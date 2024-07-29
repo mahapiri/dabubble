@@ -10,7 +10,7 @@ import {
   getDoc,
 } from '@angular/fire/firestore';
 import { UserService } from './user.service';
-import { User } from '@angular/fire/auth';
+import { User } from '../../models/user.class';
 
 
 @Injectable({
@@ -26,17 +26,17 @@ export class ChannelService {
   constructor() { }
 
 
-  async createChannel(name: string, description: string, user: any[]) {
-    await this.getCreatedByUser();
+  async createChannel(name: string, description: string, user: User[]) {
+    await this.getCreatedByUser();  
+    console.log(user);
+      
     const docRef = await addDoc(collection(this.firestore, 'channels'), {
       channelName: name,
-      //channelMember: user,
+      channelMember: user,
       createdBy: this.createdBy,
       description: description,
     });
     this.channelID = docRef.id;
-    console.log(this.getCreatedByUser());
-
     // this.addChannelToContact(user.id, docRef.id);
     console.log('Channel:', docRef.id, 'created');
   }

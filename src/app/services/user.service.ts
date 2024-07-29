@@ -23,7 +23,7 @@ export class UserService {
   public _userList = new BehaviorSubject<any[]>([]);
   userList$ = this._userList.asObservable();
   userID: string = '';
-  userArray: any[] = [];
+  userArray: User[] = [];
   channelsLoaded: boolean = false;
 
 
