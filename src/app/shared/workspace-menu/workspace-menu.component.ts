@@ -100,6 +100,8 @@ export class WorkspaceMenuComponent {
 
   openChannelWithId(channelId: any) {
     this.clickedChannelId = channelId;
+    console.log(this.clickedChannelId);
+    
   }
 
 
