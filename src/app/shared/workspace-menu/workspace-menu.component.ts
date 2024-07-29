@@ -37,6 +37,7 @@ import { UserService } from '../../services/user.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WorkspaceMenuComponent {
+[x: string]: any;
   hover: boolean = false;
   open: boolean = false;
   clickedMessage: boolean = false;
@@ -53,6 +54,7 @@ export class WorkspaceMenuComponent {
   @ViewChild('drawer') drawer!: MatDrawer;
   @Output() clickedChannelChange = new EventEmitter<boolean>();
   userChannels$ = this.userService.userChannels$;
+  userList$ = this.userService.userList$
 
 
   constructor() { }

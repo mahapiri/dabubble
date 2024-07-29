@@ -9,16 +9,19 @@ import {
   updateDoc,
 } from '@angular/fire/firestore';
 import { BehaviorSubject } from 'rxjs';
+import { User } from '../../models/user.class';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+  constructor(private auth: Auth) { }
   firestore: Firestore = inject(Firestore);
   public _userChannels = new BehaviorSubject<string[]>([]);
   userChannels$ = this._userChannels.asObservable();
-  constructor(private auth: Auth) { }
+  public _userList = new BehaviorSubject<any[]>([]);
+  userList$ = this._userList.asObservable();
   userID: string = '';
   userArray: any[] = [];
   channelsLoaded: boolean = false;
@@ -47,6 +50,7 @@ export class UserService {
       const data = doc.data();
       if (data) {
         this._userChannels.next(data['userChannels']);
+
       }
     });
   }
@@ -55,14 +59,12 @@ export class UserService {
     onSnapshot(collection(this.firestore, 'users'), (querySnapshot) => {
       this.userArray = [];
       querySnapshot.forEach((doc) => {
-        this.userArray.push({
-          name: doc.data()['username'],
-          img: doc.data()['profileImage'],
-          status: doc.data()['state'],
-          userId: doc.data()['userId']
-        });
+        let user = new User(doc.data());
+        this.userArray.push(user);
       });
+      this._userList.next(this.userArray);
     });
+
   }
 
   setUserState(state: string) {

@@ -1,6 +1,6 @@
 export class User {
     username: string = "";
-    userID: string = "";
+    userId: string = "";
     email: string = "";
     state: string = "";
     userChannels: string[] = [];
@@ -8,12 +8,12 @@ export class User {
     
 
     constructor(obj?: any) {
-        this.username = "";
-        this.userID = "";
-        this.email = "";
-        this.state = "";
-        this.userChannels = [];
-        this.profileImage = "";
+        this.username = obj? obj.username : "";
+        this.userId = obj? obj.userId :  "";
+        this.email = obj? obj.email :  "";
+        this.state = obj? obj.state :  "";
+        this.userChannels = obj? obj.userChannels :  "";
+        this.profileImage = obj? obj.profileImage : "";
     }
 
 }
