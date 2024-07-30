@@ -17,14 +17,14 @@
           <button class="channel-btn" (click)="showMembers()">
             <div class="img-container">
               <img
-                src="./../../../assets/img/character1.png"
-                alt="member1"
-              /><img
-                src="./../../../assets/img/character2.png"
-                alt="member2"
-              /><img src="./../../../assets/img/character3.png" alt="member3" />
+                *ngFor="let member of channel.channelMember"
+                src="./../../../{{ member.profileImage }}"
+                alt="member"
+              />
             </div>
-            <span class="number-members">3</span>
+            <span class="number-members">{{
+              channel.channelMember.length
+            }}</span>
           </button>
           <app-member class="app-member" *ngIf="clickedMembers"></app-member>
         </div>

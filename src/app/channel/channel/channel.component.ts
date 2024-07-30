@@ -12,13 +12,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { EditChannelComponent } from '../edit-channel/edit-channel.component';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgFor } from '@angular/common';
 import { MemberComponent } from '../../users/member/member.component';
 import { AddMemberComponent } from '../../users/add-member/add-member.component';
 import { ThreadComponent } from '../../thread/thread.component';
 import { ChannelNewMessageInputComponent } from './channel-new-message-input/channel-new-message-input.component';
 import { ChannelMessageComponent } from './channel-message/channel-message.component';
 import { Channel } from '../../../models/channel.class';
+import { ChannelService } from '../../services/channel.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-channel',
@@ -45,8 +47,10 @@ import { Channel } from '../../../models/channel.class';
 export class ChannelComponent {
   @Input() channel!: Channel;
   @Output() clickedThreadChange = new EventEmitter<boolean>();
+  selectedChannel$: Observable<Channel | null> =
+    this.channelService.selectedChannel$;
 
-  constructor() {}
+  constructor(private channelService: ChannelService) {}
 
   clickedEditChannel: boolean = false;
   clickedAddMembers: boolean = false;

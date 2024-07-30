@@ -1,7 +1,7 @@
 export class Channel {
   channelID?: string = '';
   channelName: string = '';
-  channelMember: {}[] = [];
+  channelMember: ChannelMember[] = [];
   createdBy: string = '';
   description: string = '';
 
@@ -22,4 +22,13 @@ export class Channel {
       description: this.description,
     };
   }
+}
+
+export class ChannelMember {
+  email: string = '';
+  profileImage: string = '';
+  state: string = '';
+  userChannels: string[] = [];
+  userId: string = '';
+  username: string = '';
 }

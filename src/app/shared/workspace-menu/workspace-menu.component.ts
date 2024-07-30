@@ -84,7 +84,6 @@ export class WorkspaceMenuComponent implements OnInit {
   selectChannel(channel: Channel) {
     this.channel = channel;
     this.channelService.setSelectedChannel(channel);
-    console.log(this.channel.channelName);
   }
 
   toggle() {
