@@ -48,31 +48,16 @@ export class ChannelService {
   setChannelObject(
     name: string,
     description: string,
-    users: User[],
+    user: User[],
     channelID?: string
   ): Channel {
     return new Channel({
       channelID: channelID || '',
       channelName: name,
-      channelMember: this.convertUsersToJSON(users),
+      channelMember: User.convertUsersToJson(user),
       createdBy: this.createdBy,
       description: description,
     });
-  }
-
-  getCleanJson(user: User): {} {
-    return {
-      username: user.username,
-      userId: user.userId,
-      email: user.email,
-      state: user.state,
-      userChannels: user.userChannels,
-      profileImage: user.profileImage,
-    };
-  }
-
-  convertUsersToJSON(user: User[]): {}[] {
-    return user.map((user) => this.getCleanJson(user));
   }
 
   async addChannelToContact(userdocId: string, channelId: string) {
