@@ -4,13 +4,13 @@ import {
   collection,
   doc,
   Firestore,
-  setDoc,
   updateDoc,
   arrayUnion,
   getDoc,
 } from '@angular/fire/firestore';
 import { UserService } from './user.service';
 import { User } from '../../models/user.class';
+import { Channel } from '../../models/channel.class';
 
 @Injectable({
   providedIn: 'root',
@@ -25,17 +25,39 @@ export class ChannelService {
 
   async createChannel(name: string, description: string, user: User[]) {
     await this.getCreatedByUser();
-    console.log(user);
+    const newChannel: Channel = this.setChannelObject(name, description, user);
 
-    const docRef = await addDoc(collection(this.firestore, 'channels'), {
+    const docRef = await addDoc(
+      collection(this.firestore, 'channels'),
+      newChannel.getChannelJson()
+    );
+
+    this.channelID = docRef.id;
+
+    await this.updateChannelWithID(docRef.id);
+
+    // this.addChannelToContact(user.id, docRef.id);
+    console.log('Channel:', docRef.id, 'created');
+  }
+
+  async updateChannelWithID(channelID: string) {
+    const docRef = doc(this.firestore, 'channels', channelID);
+    await updateDoc(docRef, { channelID: channelID });
+  }
+
+  setChannelObject(
+    name: string,
+    description: string,
+    users: User[],
+    channelID?: string
+  ): Channel {
+    return new Channel({
+      channelID: channelID || '',
       channelName: name,
-      channelMember: this.convertUsersToJSON(user),
+      channelMember: this.convertUsersToJSON(users),
       createdBy: this.createdBy,
       description: description,
     });
-    this.channelID = docRef.id;
-    // this.addChannelToContact(user.id, docRef.id);
-    console.log('Channel:', docRef.id, 'created');
   }
 
   getCleanJson(user: User): {} {
@@ -51,10 +73,6 @@ export class ChannelService {
 
   convertUsersToJSON(user: User[]): {}[] {
     return user.map((user) => this.getCleanJson(user));
-  }
-
-  ObjectIntoJson() {
-    return;
   }
 
   async addChannelToContact(userdocId: string, channelId: string) {
