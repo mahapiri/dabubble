@@ -59,10 +59,10 @@ export class WorkspaceMenuComponent {
 
   userList$ = this.userService.userList$;
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit() {
-    this.userService.getUserID();
+  async ngOnInit() {
+    await this.userService.getUserID();
     this.userService.getUserList();
     this.loadChannels();
   }
@@ -130,5 +130,5 @@ export class WorkspaceMenuComponent {
     document.getElementById(`profile-${id}`)?.classList.toggle('bold-user');
   }
 
-  editChannel(channel: string) {}
+  editChannel(channel: string) { }
 }

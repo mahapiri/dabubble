@@ -16,7 +16,7 @@ import { Channel } from '../../models/channel.class';
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private auth: Auth) {}
+  constructor(private auth: Auth) { }
   firestore: Firestore = inject(Firestore);
   public _userChannels = new BehaviorSubject<Channel[]>([]);
   public _userList = new BehaviorSubject<any[]>([]);
@@ -26,21 +26,16 @@ export class UserService {
 
   userID: string = '';
   userArray: User[] = [];
-  channelsLoaded: boolean = false;
 
-  getUserID() {
-    let user = this.auth.currentUser;
+  async getUserID() {
+    let user = await this.auth.currentUser;
     if (user) {
       this.userID = user.uid;
       console.log('User', this.userID, 'is logged in');
-      this.setUserState('online');
-      if (!this.channelsLoaded) {
-        this.channelsLoaded = true;
-        //this.loadChannels();
-      }
+      await this.setUserState('online');
     } else {
       console.log('User is logged out');
-      this.setUserState('offline');
+      await this.setUserState('offline');
       this.userID = '';
     }
   }
@@ -66,9 +61,9 @@ export class UserService {
     });
   }
 
-  setUserState(state: string) {
+  async setUserState(state: string) {
     if (this.userID) {
-      updateDoc(this.getUserRef(), { state: state });
+     await updateDoc(this.getUserRef(), { state: state });
     }
   }
 

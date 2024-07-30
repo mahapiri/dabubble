@@ -39,10 +39,10 @@ export class AuthService {
   }
 
 
-  logInUser(mail: string, password: string) {
-    signInWithEmailAndPassword(this.auth, mail, password)
+  async logInUser(mail: string, password: string) {
+    await signInWithEmailAndPassword(this.auth, mail, password)
       .then(() => {
-        this.userService.getUserID();
+       // this.userService.getUserID();
       })
       .catch((error) => {
         console.warn(error.message);
