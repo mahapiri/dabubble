@@ -11,6 +11,7 @@ import {
 import { UserService } from './user.service';
 import { User } from '../../models/user.class';
 import { Channel } from '../../models/channel.class';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -36,13 +37,28 @@ export class ChannelService {
 
     await this.updateChannelWithID(docRef.id);
 
-    // this.addChannelToContact(user.id, docRef.id);
+    this.userService.updateUserChannels(
+      this.userService.userID,
+      this.channelID
+    );
+
     console.log('Channel:', docRef.id, 'created');
   }
 
+  async getChannelById(channelID: string) {
+    const channelRef = doc(this.firestore, 'channels', channelID);
+    const channelDoc = await getDoc(channelRef);
+    if (channelDoc.exists()) {
+      return new Channel(channelDoc.data());
+    } else {
+      console.error('No such channel!');
+      return undefined;
+    }
+  }
+
   async updateChannelWithID(channelID: string) {
-    const docRef = doc(this.firestore, 'channels', channelID);
-    await updateDoc(docRef, { channelID: channelID });
+    const channelRef = doc(this.firestore, 'channels', channelID);
+    await updateDoc(channelRef, { channelID: channelID });
   }
 
   setChannelObject(

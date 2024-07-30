@@ -1,117 +1,144 @@
 <section>
-    <mat-drawer #drawer class="sidenav" mode="side" opened>
-        <div class="workspace-content">
-            <div class="workspace-title">
-                <img src="../assets/img/workspace-logo.png" alt="Workspace Logo">
-                <h4 class="n-h4 bold">Devspace</h4>
-            </div>
-            <div class="workspace-img" (click)="newMessage()">
-                <mat-icon class="message-icon" [class.bold-message]="clickedMessage">edit_square</mat-icon>
-            </div>
-        </div>
-        <div class="gap-25">
-            <div>
-                <div class="channels-content">
-                    <div class="channels-section">
-                        <div class="channels-header" (click)="openChannels()">
-                            <div class="channels-header" (click)="openChannels()">
-                                <mat-icon>{{ openChannel ? 'arrow_right' : 'arrow_drop_down' }}</mat-icon>
-                            </div>
-                            <div class="channels-title">
-                                <mat-icon>workspaces</mat-icon>
-                                <h4 class="n-h4 bold">Channels</h4>
-                            </div>
-                        </div>
-                        <div class="add-div" (click)="createChannel()">
-                            <mat-icon class="add-icon" [class.bold-add]="clickedChannel">add</mat-icon>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="channel-undersection" [class.d-none]="openChannel">
-                <div>
-                    <div *ngFor="let channel of userChannels$ | async" (click)="openChannelWithId(channel)"
-                        class="channels-content">
-                        <div class="channels-section">
-                            <div class="channels-header subtitle-header">
-                                <div class="channels-title subtitle-title" (click)="editChannel('entwicklerteam')">
-                                    <mat-icon class="channel-icon">tag</mat-icon>
-                                    <p class="n-p">{{channel}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div class="channels-content">
-                        <div class="channels-section">
-                            <div class="channels-header subtitle-header">
-                                <div class="channels-title subtitle-title add-channel">
-                                    <mat-icon>add_circle</mat-icon>
-                                    <p class="n-p">Channel hinzufügen</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="gap-25">
-            <div>
-                <div class="channels-content">
-                    <div class="channels-section">
-                        <div class="channels-header" (click)="openDirectMessages()">
-                            @if(!openDm) {
-                            <mat-icon>arrow_drop_down</mat-icon>
-                            }
-                            @else {
-                            <mat-icon>arrow_right</mat-icon>
-                            }
-
-
-                            <div class="channels-title">
-                                <mat-icon>account_circle</mat-icon>
-                                <h4 class="n-h4 bold">Direktnachrichten</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="channel-undersection" [class.d-none]="openDm">
-                <div class="profile-section">
-                    <div class="channels-content" *ngFor="let profile of userList$ | async; let i = index">
-                        <div class="channels-section">
-                            <div class="channels-header subtitle-header">
-                                <div class="channels-title subtitle-title profile-border" (click)="clickedProfile(i)"
-                                    [attr.id]="'profile-' + i">
-                                    <div class="profile-content">
-                                        <img src="{{ profile.profileImage }}" alt="Character" class="profile-icon">
-                                        <div class="status-icon" ngClass="{{ profile.state }}"></div>
-                                    </div>
-                                    <p class="n-p">{{ profile.username }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </mat-drawer>
-    <div class="navigation-bar" [class]="!open ? 'close' : 'open'" (click)="toggle()" (mouseenter)="hoverTrue()"
-        (mouseleave)="hoverFalse()">
-        <div class="navigation-bar-content">
-            @if (open) {
-            <h4 class="n-h4">Workspace-Menü öffnen</h4>
-            <div class="navigation-bar-img">
-                <mat-icon class="panel-icon">left_panel_open</mat-icon>
-            </div>
-            }
-            @else {
-            <h4 class="n-h4">Workspace-Menü schließen</h4>
-            <div class="navigation-bar-img">
-                <mat-icon class="panel-icon">right_panel_open</mat-icon>
-            </div>
-            }
-        </div>
+  <mat-drawer #drawer class="sidenav" mode="side" opened>
+    <div class="workspace-content">
+      <div class="workspace-title">
+        <img src="../assets/img/workspace-logo.png" alt="Workspace Logo" />
+        <h4 class="n-h4 bold">Devspace</h4>
+      </div>
+      <div class="workspace-img" (click)="newMessage()">
+        <mat-icon class="message-icon" [class.bold-message]="clickedMessage"
+          >edit_square</mat-icon
+        >
+      </div>
     </div>
+    <div class="gap-25">
+      <div>
+        <div class="channels-content">
+          <div class="channels-section">
+            <div class="channels-header" (click)="openChannels()">
+              <div class="channels-header" (click)="openChannels()">
+                <mat-icon>{{
+                  openChannel ? "arrow_right" : "arrow_drop_down"
+                }}</mat-icon>
+              </div>
+              <div class="channels-title">
+                <mat-icon>workspaces</mat-icon>
+                <h4 class="n-h4 bold">Channels</h4>
+              </div>
+            </div>
+            <div class="add-div" (click)="createChannel()">
+              <mat-icon class="add-icon" [class.bold-add]="clickedChannel"
+                >add</mat-icon
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="channel-undersection" [class.d-none]="openChannel">
+        <div>
+          <div
+            *ngFor="let channel of userChannels$ | async"
+            (click)="openChannelWithId(channel)"
+            class="channels-content"
+          >
+            <div class="channels-section">
+              <div class="channels-header subtitle-header">
+                <div
+                  class="channels-title subtitle-title"
+                  (click)="editChannel('entwicklerteam')"
+                >
+                  <mat-icon class="channel-icon">tag</mat-icon>
+                  <p class="n-p">{{ channel.channelName }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="channels-content">
+            <div class="channels-section">
+              <div class="channels-header subtitle-header">
+                <div class="channels-title subtitle-title add-channel">
+                  <mat-icon>add_circle</mat-icon>
+                  <p class="n-p">Channel hinzufügen</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="gap-25">
+      <div>
+        <div class="channels-content">
+          <div class="channels-section">
+            <div class="channels-header" (click)="openDirectMessages()">
+              @if(!openDm) {
+              <mat-icon>arrow_drop_down</mat-icon>
+              } @else {
+              <mat-icon>arrow_right</mat-icon>
+              }
+
+              <div class="channels-title">
+                <mat-icon>account_circle</mat-icon>
+                <h4 class="n-h4 bold">Direktnachrichten</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="channel-undersection" [class.d-none]="openDm">
+        <div class="profile-section">
+          <div
+            class="channels-content"
+            *ngFor="let profile of userList$ | async; let i = index"
+          >
+            <div class="channels-section">
+              <div class="channels-header subtitle-header">
+                <div
+                  class="channels-title subtitle-title profile-border"
+                  (click)="clickedProfile(i)"
+                  [attr.id]="'profile-' + i"
+                >
+                  <div class="profile-content">
+                    <img
+                      src="{{ profile.profileImage }}"
+                      alt="Character"
+                      class="profile-icon"
+                    />
+                    <div
+                      class="status-icon"
+                      ngClass="{{ profile.state }}"
+                    ></div>
+                  </div>
+                  <p class="n-p">{{ profile.username }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-drawer>
+  <div
+    class="navigation-bar"
+    [class]="!open ? 'close' : 'open'"
+    (click)="toggle()"
+    (mouseenter)="hoverTrue()"
+    (mouseleave)="hoverFalse()"
+  >
+    <div class="navigation-bar-content">
+      @if (open) {
+      <h4 class="n-h4">Workspace-Menü öffnen</h4>
+      <div class="navigation-bar-img">
+        <mat-icon class="panel-icon">left_panel_open</mat-icon>
+      </div>
+      } @else {
+      <h4 class="n-h4">Workspace-Menü schließen</h4>
+      <div class="navigation-bar-img">
+        <mat-icon class="panel-icon">right_panel_open</mat-icon>
+      </div>
+      }
+    </div>
+  </div>
 </section>
