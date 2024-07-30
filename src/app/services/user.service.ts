@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
+import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import {
   arrayUnion,
   collection,
@@ -28,16 +28,17 @@ export class UserService {
   userArray: User[] = [];
 
   async getUserID() {
-    let user = await this.auth.currentUser;
-    if (user) {
-      this.userID = user.uid;
-      console.log('User', this.userID, 'is logged in');
-      await this.setUserState('online');
-    } else {
-      console.log('User is logged out');
-      await this.setUserState('offline');
-      this.userID = '';
-    }
+    onAuthStateChanged(this.auth, (user) => {
+      if (user) {
+        this.userID = user.uid;
+        console.log('User', this.userID, 'is logged in');
+        this.setUserState('online');
+      } else {
+        console.log('User is logged out');
+        this.setUserState('offline');
+        this.userID = '';
+      }
+    });
   }
 
   /* loadChannels() {
@@ -63,7 +64,7 @@ export class UserService {
 
   async setUserState(state: string) {
     if (this.userID) {
-     await updateDoc(this.getUserRef(), { state: state });
+      await updateDoc(this.getUserRef(), { state: state });
     }
   }
 

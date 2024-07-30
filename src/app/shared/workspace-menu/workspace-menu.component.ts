@@ -64,7 +64,9 @@ export class WorkspaceMenuComponent {
   async ngOnInit() {
     await this.userService.getUserID();
     this.userService.getUserList();
-    this.loadChannels();
+    setTimeout(() => {
+      this.loadChannels();
+    }, 500);
   }
 
   toggle() {
