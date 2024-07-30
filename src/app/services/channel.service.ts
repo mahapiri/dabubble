@@ -22,7 +22,7 @@ export class ChannelService {
   channelID: string = '';
   createdBy: string = '';
 
-  constructor() {}
+  constructor() { }
 
   async createChannel(name: string, description: string, user: User[]) {
     await this.getCreatedByUser();
@@ -38,7 +38,7 @@ export class ChannelService {
     await this.updateChannelWithID(docRef.id);
 
     this.userService.updateUserChannels(
-      this.userService.userID,
+      user,
       this.channelID
     );
 

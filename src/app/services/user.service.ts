@@ -58,8 +58,9 @@ export class UserService {
         let user = new User(doc.data());
         this.userArray.push(user);
       });
-      this._userList.next(this.userArray);
+      this._userList.next(this.userArray);      
     });
+    
   }
 
   async setUserState(state: string) {
@@ -75,12 +76,16 @@ export class UserService {
   /** Adds the channels to the User Objekt: when a channel is created to the Creator or when a user gets added to a channel as a member
    * then reloads the channels to update the BehaviorSubject
    */
-  updateUserChannels(userID: string, channelID: string) {
-    const userRef = doc(this.firestore, 'users', userID);
-    updateDoc(userRef, {
-      userChannels: arrayUnion(channelID),
-    }); /* .then(() => {
-      //this.loadChannels();
-    }); */
+  updateUserChannels(user: User[], channelID: string) {
+    user.forEach(async (user) => {
+      await updateDoc(doc(this.firestore, 'users', user.userId), {
+        userChannels: arrayUnion(channelID),
+      });
+    });
   }
+
+
+
+
+
 }
