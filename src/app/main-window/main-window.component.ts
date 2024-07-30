@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { HeaderComponent } from '../shared/header/header.component';
 import { WorkspaceMenuComponent } from '../shared/workspace-menu/workspace-menu.component';
 import { ChannelComponent } from '../channel/channel/channel.component';
@@ -8,7 +8,8 @@ import { ThreadComponent } from '../thread/thread.component';
 import { ProfileComponent } from '../users/profile/profile.component';
 import { PrivacyPolicyComponent } from '../privacy-policy/privacy-policy.component';
 import { DirectMessageComponent } from '../direct-message/direct-message.component';
-import { UserService } from '../services/user.service';
+import { Channel } from '../../models/channel.class';
+import { ChannelService } from '../services/channel.service';
 
 @Component({
   selector: 'app-main-window',
@@ -27,9 +28,20 @@ import { UserService } from '../services/user.service';
   templateUrl: './main-window.component.html',
   styleUrl: './main-window.component.scss',
 })
-export class MainWindowComponent {
+export class MainWindowComponent implements OnInit {
+  channel: Channel = new Channel();
   clickedChannel: boolean = false;
   clickedThread: boolean = false;
+
+  constructor(private channelService: ChannelService) {}
+
+  ngOnInit() {
+    this.channelService.selectedChannel$.subscribe((channel) => {
+      if (channel) {
+        this.channel = channel;
+      }
+    });
+  }
 
   handleChannelClick(event: boolean) {
     this.clickedChannel = event;

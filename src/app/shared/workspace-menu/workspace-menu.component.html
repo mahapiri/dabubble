@@ -15,8 +15,8 @@
       <div>
         <div class="channels-content">
           <div class="channels-section">
-            <div class="channels-header" (click)="openChannels()">
-              <div class="channels-header" (click)="openChannels()">
+            <div class="channels-header" (click)="openChannelsMenu()">
+              <div class="channels-header" (click)="openChannelsMenu()">
                 <mat-icon>{{
                   openChannel ? "arrow_right" : "arrow_drop_down"
                 }}</mat-icon>
@@ -38,7 +38,7 @@
         <div>
           <div
             *ngFor="let channel of userChannels$ | async"
-            (click)="openChannelWithId(channel)"
+            (click)="selectChannel(channel)"
             class="channels-content"
           >
             <div class="channels-section">

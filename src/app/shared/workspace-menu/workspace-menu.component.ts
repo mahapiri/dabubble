@@ -7,6 +7,7 @@ import {
   EventEmitter,
   Input,
   inject,
+  OnInit,
 } from '@angular/core';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -37,15 +38,13 @@ import { onSnapshot } from '@angular/fire/firestore';
   styleUrl: './workspace-menu.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WorkspaceMenuComponent {
+export class WorkspaceMenuComponent implements OnInit {
   @ViewChild('drawer') drawer!: MatDrawer;
   @Output() clickedChannelChange = new EventEmitter<boolean>();
   @Input() clickedChannel: boolean = false;
 
-  clickedChannelId: string = '';
-  channelService: ChannelService = inject(ChannelService);
-  userService: UserService = inject(UserService);
   userChannels$: Observable<Channel[]> = this.userService.userChannels$;
+  channel: Channel = new Channel();
 
   [x: string]: any;
   hover: boolean = false;
@@ -59,12 +58,31 @@ export class WorkspaceMenuComponent {
 
   userList$ = this.userService.userList$;
 
-  constructor() {}
+  constructor(
+    private channelService: ChannelService,
+    private userService: UserService
+  ) {}
 
   ngOnInit() {
     this.userService.getUserID();
     this.userService.getUserList();
     this.loadChannels();
+    this.showFirstChannel();
+  }
+
+  showFirstChannel() {
+    this.userChannels$.subscribe((channels) => {
+      if (channels.length > 0) {
+        this.channel = channels[0];
+        this.channelService.setSelectedChannel(this.channel);
+      }
+    });
+  }
+
+  selectChannel(channel: Channel) {
+    this.channel = channel;
+    this.channelService.setSelectedChannel(channel);
+    console.log(this.channel.channelName);
   }
 
   toggle() {
@@ -111,13 +129,8 @@ export class WorkspaceMenuComponent {
     });
   }
 
-  openChannels() {
+  openChannelsMenu() {
     this.openChannel = !this.openChannel;
-  }
-
-  openChannelWithId(channelId: any) {
-    this.clickedChannelId = channelId;
-    console.log(this.clickedChannelId);
   }
 
   openDirectMessages() {

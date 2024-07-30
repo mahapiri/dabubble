@@ -19,10 +19,18 @@ import { BehaviorSubject } from 'rxjs';
 export class ChannelService {
   firestore: Firestore = inject(Firestore);
   userService: UserService = inject(UserService);
+
+  private selectedChannel = new BehaviorSubject<Channel | null>(null);
+  selectedChannel$ = this.selectedChannel.asObservable();
+
   channelID: string = '';
   createdBy: string = '';
 
   constructor() {}
+
+  setSelectedChannel(channel: Channel) {
+    this.selectedChannel.next(channel);
+  }
 
   async createChannel(name: string, description: string, user: User[]) {
     await this.getCreatedByUser();

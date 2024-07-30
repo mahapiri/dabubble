@@ -2,8 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  Input,
   Output,
-  inject,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,10 +15,10 @@ import { EditChannelComponent } from '../edit-channel/edit-channel.component';
 import { CommonModule } from '@angular/common';
 import { MemberComponent } from '../../users/member/member.component';
 import { AddMemberComponent } from '../../users/add-member/add-member.component';
-import { ChannelService } from '../../services/channel.service';
 import { ThreadComponent } from '../../thread/thread.component';
 import { ChannelNewMessageInputComponent } from './channel-new-message-input/channel-new-message-input.component';
 import { ChannelMessageComponent } from './channel-message/channel-message.component';
+import { Channel } from '../../../models/channel.class';
 
 @Component({
   selector: 'app-channel',
@@ -43,14 +43,17 @@ import { ChannelMessageComponent } from './channel-message/channel-message.compo
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChannelComponent {
+  @Input() channel!: Channel;
+  @Output() clickedThreadChange = new EventEmitter<boolean>();
+
+  constructor() {}
+
   clickedEditChannel: boolean = false;
   clickedAddMembers: boolean = false;
   clickedMembers: boolean = false;
   clickedThread: boolean = false;
 
-  channelService: ChannelService = inject(ChannelService);
-
-  @Output() clickedThreadChange = new EventEmitter<boolean>();
+  ngOnInit() {}
 
   editChannel() {
     this.clickedEditChannel = true;
