@@ -32,17 +32,17 @@ export class LogInComponent {
     userPassword: ["", Validators.required]
   })
 
-  onSubmit() {
+  async onSubmit() {
     this.email = this.userForm.value.userEmail || "";
     this.password = this.userForm.value.userPassword || "";
-    this.authService.logInUser(this.email, this.password);
+    await this.authService.logInUser(this.email, this.password);
     this.userForm.reset();
     this.router.navigate(['/main-window']);
 
   }
 
-  logInAsGuest() {
-    this.authService.logInUser("gast@googlemail.com", "123456")
+  async logInAsGuest() {
+    await this.authService.logInUser("gast@googlemail.com", "123456")
     this.userForm.reset();
     this.router.navigate(['/main-window']);
   }

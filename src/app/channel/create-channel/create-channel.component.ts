@@ -29,11 +29,11 @@ export class CreateChannelComponent {
     this.clickedChannel.emit(false);
   }
   createChannel() {
-     this.channelService.createChannel(
+    this.channelService.createChannel(
       this.channelName,
       this.channelDescription,
       this.userService.userArray,
-    ); 
+    );
     this.close();
   }
 }

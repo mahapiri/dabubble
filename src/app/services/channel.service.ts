@@ -26,7 +26,7 @@ export class ChannelService {
   channelID: string = '';
   createdBy: string = '';
 
-  constructor() {}
+  constructor() { }
 
   setSelectedChannel(channel: Channel) {
     this.selectedChannel.next(channel);
@@ -46,7 +46,7 @@ export class ChannelService {
     await this.updateChannelWithID(docRef.id);
 
     this.userService.updateUserChannels(
-      this.userService.userID,
+      user,
       this.channelID
     );
 

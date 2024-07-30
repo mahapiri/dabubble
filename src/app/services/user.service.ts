@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
+import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import {
   arrayUnion,
   collection,
@@ -16,7 +16,7 @@ import { Channel } from '../../models/channel.class';
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private auth: Auth) {}
+  constructor(private auth: Auth) { }
   firestore: Firestore = inject(Firestore);
   public _userChannels = new BehaviorSubject<Channel[]>([]);
   public _userList = new BehaviorSubject<any[]>([]);
@@ -26,23 +26,19 @@ export class UserService {
 
   userID: string = '';
   userArray: User[] = [];
-  channelsLoaded: boolean = false;
 
-  getUserID() {
-    let user = this.auth.currentUser;
-    if (user) {
-      this.userID = user.uid;
-      console.log('User', this.userID, 'is logged in');
-      this.setUserState('online');
-      if (!this.channelsLoaded) {
-        this.channelsLoaded = true;
-        //this.loadChannels();
+  async getUserID() {
+    onAuthStateChanged(this.auth, (user) => {
+      if (user) {
+        this.userID = user.uid;
+        console.log('User', this.userID, 'is logged in');
+        this.setUserState('online');
+      } else {
+        console.log('User is logged out');
+        this.setUserState('offline');
+        this.userID = '';
       }
-    } else {
-      console.log('User is logged out');
-      this.setUserState('offline');
-      this.userID = '';
-    }
+    });
   }
 
   /* loadChannels() {
@@ -62,13 +58,14 @@ export class UserService {
         let user = new User(doc.data());
         this.userArray.push(user);
       });
-      this._userList.next(this.userArray);
+      this._userList.next(this.userArray);      
     });
+    
   }
 
-  setUserState(state: string) {
+  async setUserState(state: string) {
     if (this.userID) {
-      updateDoc(this.getUserRef(), { state: state });
+      await updateDoc(this.getUserRef(), { state: state });
     }
   }
 
@@ -79,12 +76,16 @@ export class UserService {
   /** Adds the channels to the User Objekt: when a channel is created to the Creator or when a user gets added to a channel as a member
    * then reloads the channels to update the BehaviorSubject
    */
-  updateUserChannels(userID: string, channelID: string) {
-    const userRef = doc(this.firestore, 'users', userID);
-    updateDoc(userRef, {
-      userChannels: arrayUnion(channelID),
-    }); /* .then(() => {
-      //this.loadChannels();
-    }); */
+  updateUserChannels(user: User[], channelID: string) {
+    user.forEach(async (user) => {
+      await updateDoc(doc(this.firestore, 'users', user.userId), {
+        userChannels: arrayUnion(channelID),
+      });
+    });
   }
+
+
+
+
+
 }
