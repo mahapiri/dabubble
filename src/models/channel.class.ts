@@ -4,6 +4,7 @@ export class Channel {
   channelMember: ChannelMember[] = [];
   createdBy: string = '';
   description: string = '';
+  messages?: ChannelMessages[] = [];
 
   constructor(obj?: any) {
     this.channelID = obj ? obj.channelID : '';
@@ -11,6 +12,7 @@ export class Channel {
     this.channelMember = obj ? obj.channelMember : [];
     this.createdBy = obj ? obj.createdBy : '';
     this.description = obj ? obj.description : '';
+    this.messages = obj ? obj.messages : [];
   }
 
   getChannelJson() {
@@ -20,6 +22,7 @@ export class Channel {
       channelMember: this.channelMember,
       createdBy: this.createdBy,
       description: this.description,
+      messages: this.messages,
     };
   }
 }
@@ -31,4 +34,14 @@ export class ChannelMember {
   userChannels: string[] = [];
   userId: string = '';
   username: string = '';
+}
+
+export class ChannelMessages {
+  id: string = '';
+  text: string = '';
+  time: string = '';
+  date: string = '';
+  authorName: string = '';
+  authorId: string = '';
+  profileImage: string = '';
 }
