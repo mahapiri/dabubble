@@ -29,7 +29,13 @@ import { ChannelService } from '../services/channel.service';
   styleUrl: './main-window.component.scss',
 })
 export class MainWindowComponent implements OnInit {
-  channel: Channel = new Channel();
+  channel: Channel = new Channel({
+    channelID: '',
+    channelName: '',
+    channelMember: [],
+    createdBy: '',
+    description: '',
+  });
   clickedChannel: boolean = false;
   clickedThread: boolean = false;
 

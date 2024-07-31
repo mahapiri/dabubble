@@ -16,7 +16,6 @@ import { Channel } from '../../models/channel.class';
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private auth: Auth) { }
   firestore: Firestore = inject(Firestore);
   public _userChannels = new BehaviorSubject<Channel[]>([]);
   public _userList = new BehaviorSubject<any[]>([]);
@@ -24,8 +23,13 @@ export class UserService {
   userChannels$: Observable<Channel[]> = this._userChannels.asObservable();
   userList$ = this._userList.asObservable();
 
+  private currentUser = new BehaviorSubject<User | null>(null);
+  currentUser$ = this.currentUser.asObservable();
+
   userID: string = '';
   userArray: User[] = [];
+
+  constructor(private auth: Auth) {}
 
   async getUserID() {
     onAuthStateChanged(this.auth, (user) => {
@@ -41,16 +45,6 @@ export class UserService {
     });
   }
 
-  /* loadChannels() {
-    onSnapshot(this.getUserRef(), (doc) => {
-      const data = doc.data();
-      if (data) {
-        const channelIds = data['userChannels'] || [];
-        this._userChannels.next(data['userChannels'] || []);
-      }
-    });
-  } */
-
   getUserList() {
     onSnapshot(collection(this.firestore, 'users'), (querySnapshot) => {
       this.userArray = [];
@@ -58,9 +52,23 @@ export class UserService {
         let user = new User(doc.data());
         this.userArray.push(user);
       });
-      this._userList.next(this.userArray);      
+      this._userList.next(this.userArray);
     });
-    
+  }
+
+  getCurrentUser() {
+    onSnapshot(
+      this.getUserRef(),
+      (user) => {
+        if (user.exists()) {
+          this.currentUser.next(new User(user.data()));
+        }
+      },
+      (error) => {
+        console.error('Error getting current user:', error);
+        this.currentUser.next(null);
+      }
+    );
   }
 
   async setUserState(state: string) {
@@ -83,9 +91,4 @@ export class UserService {
       });
     });
   }
-
-
-
-
-
 }

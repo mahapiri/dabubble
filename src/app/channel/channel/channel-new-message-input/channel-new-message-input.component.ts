@@ -4,18 +4,32 @@ import { ChannelService } from '../../../services/channel.service';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-channel-new-message-input',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, MatInputModule],
+  imports: [
+    CommonModule,
+    MatIconModule,
+    MatButtonModule,
+    MatInputModule,
+    FormsModule,
+  ],
   templateUrl: './channel-new-message-input.component.html',
   styleUrl: './channel-new-message-input.component.scss',
 })
 export class ChannelNewMessageInputComponent {
+  messageText: string = '';
+
   channelService: ChannelService = inject(ChannelService);
 
-  sendMessage() {
-    this.channelService.addMessageInChannel();
+  /** Sends the text in the input field to the Channel Collection in the Backend. Trims the message from whitespace, ensures input is not empty, clears the input field after send */
+  async sendMessage() {
+    console.log('Message text:', this.messageText);
+    if (this.messageText.trim()) {
+      await this.channelService.addMessageToChannel(this.messageText);
+      this.messageText = '';
+    }
   }
 }

@@ -4,15 +4,13 @@ export class Channel {
   channelMember: ChannelMember[] = [];
   createdBy: string = '';
   description: string = '';
-  messages?: ChannelMessages[] = [];
 
-  constructor(obj?: any) {
-    this.channelID = obj ? obj.channelID : '';
-    this.channelName = obj ? obj.channelName : '';
-    this.channelMember = obj ? obj.channelMember : [];
-    this.createdBy = obj ? obj.createdBy : '';
-    this.description = obj ? obj.description : '';
-    this.messages = obj ? obj.messages : [];
+  constructor(obj: any) {
+    this.channelID = obj.channelID || '';
+    this.channelName = obj.channelName || '';
+    this.channelMember = obj.channelMember || [];
+    this.createdBy = obj.createdBy || '';
+    this.description = obj.description || '';
   }
 
   getChannelJson() {
@@ -22,7 +20,6 @@ export class Channel {
       channelMember: this.channelMember,
       createdBy: this.createdBy,
       description: this.description,
-      messages: this.messages,
     };
   }
 }
@@ -36,7 +33,7 @@ export class ChannelMember {
   username: string = '';
 }
 
-export class ChannelMessages {
+export class ChannelMessage {
   id: string = '';
   text: string = '';
   time: string = '';
@@ -44,4 +41,26 @@ export class ChannelMessages {
   authorName: string = '';
   authorId: string = '';
   profileImage: string = '';
+
+  constructor(obj?: any) {
+    this.id = obj ? obj.id : '';
+    this.text = obj ? obj.text : '';
+    this.time = obj ? obj.time : '';
+    this.date = obj ? obj.date : '';
+    this.authorName = obj ? obj.authorName : '';
+    this.authorId = obj ? obj.authorId : '';
+    this.profileImage = obj ? obj.profileImage : '';
+  }
+
+  getMessageJson() {
+    return {
+      id: this.id,
+      text: this.text,
+      time: this.time,
+      date: this.date,
+      authorName: this.authorName,
+      authorId: this.authorId,
+      profileImage: this.profileImage,
+    };
+  }
 }

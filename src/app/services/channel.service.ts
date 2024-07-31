@@ -10,7 +10,7 @@ import {
 } from '@angular/fire/firestore';
 import { UserService } from './user.service';
 import { User } from '../../models/user.class';
-import { Channel } from '../../models/channel.class';
+import { Channel, ChannelMessage } from '../../models/channel.class';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -26,31 +26,30 @@ export class ChannelService {
   channelID: string = '';
   createdBy: string = '';
 
-  constructor() { }
+  constructor() {}
 
   setSelectedChannel(channel: Channel) {
     this.selectedChannel.next(channel);
+    this.setChannelId(channel.channelID);
+  }
+
+  setChannelId(channelID?: string) {
+    if (channelID) {
+      this.channelID = channelID;
+    }
   }
 
   async createChannel(name: string, description: string, user: User[]) {
     await this.getCreatedByUser();
     const newChannel: Channel = this.setChannelObject(name, description, user);
-
     const docRef = await addDoc(
       collection(this.firestore, 'channels'),
       newChannel.getChannelJson()
     );
 
     this.channelID = docRef.id;
-
     await this.updateChannelWithID(docRef.id);
-
-    this.userService.updateUserChannels(
-      user,
-      this.channelID
-    );
-
-    console.log('Channel:', docRef.id, 'created');
+    this.userService.updateUserChannels(user, this.channelID);
   }
 
   async getChannelById(channelID: string) {
@@ -59,7 +58,6 @@ export class ChannelService {
     if (channelDoc.exists()) {
       return new Channel(channelDoc.data());
     } else {
-      console.error('No such channel!');
       return undefined;
     }
   }
@@ -90,15 +88,6 @@ export class ChannelService {
     });
   }
 
-  //aufrufen wenn nachricht geschrieben wurde
-  async addMessageInChannel() {
-    const docRef2 = await addDoc(
-      collection(this.firestore, `channels/${this.channelID}/messages`),
-      { test: 'test 2' }
-    );
-    console.log(docRef2.id);
-  }
-
   async getCreatedByUser() {
     let userRef = (
       await getDoc(doc(this.firestore, 'users', this.userService.userID))
@@ -106,5 +95,36 @@ export class ChannelService {
     if (userRef) {
       this.createdBy = userRef['username'];
     }
+  }
+
+  //aufrufen wenn nachricht geschrieben wurde
+  async addMessageToChannel(text: string) {
+    this.userService.getCurrentUser();
+    this.userService.currentUser$.subscribe(async (currentUser) => {
+      if (currentUser) {
+        const newMessage: ChannelMessage = this.setChannelMessage(
+          text,
+          currentUser
+        );
+        const messageRef = await addDoc(
+          collection(this.firestore, `channels/${this.channelID}/messages`),
+          newMessage.getMessageJson()
+        );
+        console.log('Message added:', messageRef.id);
+      }
+    });
+  }
+
+  setChannelMessage(text: string, user: User): ChannelMessage {
+    const now = new Date();
+    return new ChannelMessage({
+      id: '',
+      text: text,
+      time: now.toLocaleTimeString(),
+      date: now.toLocaleDateString(),
+      authorName: user.username,
+      authorId: user.userId,
+      profileImage: user.profileImage,
+    });
   }
 }

@@ -1,5 +1,10 @@
 <div class="new-message-container">
-  <input matInput type="text" placeholder="Nachricht an #Channel Name" />
+  <input
+    [(ngModel)]="messageText"
+    matInput
+    type="text"
+    placeholder="Nachricht an #Channel Name"
+  />
 
   <div class="message-controls">
     <div class="add-elements">

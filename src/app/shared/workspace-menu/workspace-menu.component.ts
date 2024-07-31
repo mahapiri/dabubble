@@ -44,7 +44,13 @@ export class WorkspaceMenuComponent implements OnInit {
   @Input() clickedChannel: boolean = false;
 
   userChannels$: Observable<Channel[]> = this.userService.userChannels$;
-  channel: Channel = new Channel();
+  channel: Channel = new Channel({
+    channelID: '',
+    channelName: '',
+    channelMember: [],
+    createdBy: '',
+    description: '',
+  });
 
   [x: string]: any;
   hover: boolean = false;
