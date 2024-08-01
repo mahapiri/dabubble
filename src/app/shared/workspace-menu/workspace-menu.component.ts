@@ -78,6 +78,9 @@ export class WorkspaceMenuComponent implements OnInit {
     this.showFirstChannel();
   }
 
+  /**
+   * Upon page load, selects the first channel from the user's channel list and sets it as the currently active channel, shown in the main-window.
+   */
   showFirstChannel() {
     this.userChannels$.subscribe((channels) => {
       if (channels.length > 0) {
@@ -87,6 +90,11 @@ export class WorkspaceMenuComponent implements OnInit {
     });
   }
 
+  /**
+   * When a channel is clicked, it gets set as the local `channel` property.
+   * The `ChannelService` is notified to set the selected channel.
+   * @param channel - The Channel object
+   */
   selectChannel(channel: Channel) {
     this.channel = channel;
     this.channelService.setSelectedChannel(channel);
