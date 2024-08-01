@@ -19,11 +19,12 @@ export class CreateChannelComponent {
   channelService: ChannelService = inject(ChannelService);
   userService: UserService = inject(UserService);
   addUserChannelVisible: boolean = false;
-  isSelected: boolean = false;
+  someUsers: boolean = false;
   searchMember: string = "";
   userlistOpen: boolean = false;
   showUser: User[] = [];
-
+  selectedUsersForChannel: User[] = [];
+  usersToAdd: User[] = [];
 
   channelName: string = '';
   channelDescription: string = '';
@@ -32,9 +33,13 @@ export class CreateChannelComponent {
     this.clickedChannel.emit(false);
   }
 
-  onRadioChange(event: any): void {
-    this.isSelected = event.target.checked;
+  nextPage() {
+    this.addUserChannelVisible = !this.addUserChannelVisible;
+    this.selectedUsersForChannel = []
+  }
 
+  onRadioChange(event: any): void {
+    this.someUsers = event.target.checked;
   }
 
   showMember() {
@@ -47,18 +52,36 @@ export class CreateChannelComponent {
       this.showUser = this.userService.userArray.filter(user => { return user.username.toLowerCase().includes(this.searchMember.toLowerCase()) })
     }
   }
+  selectMember(user: User) {
+    user.chosenToChannel = !user.chosenToChannel;
+    this.addSelectedUserToChannel(user);
+  }
+
+  addSelectedUserToChannel(user: User) {
+    if (this.selectedUsersForChannel.includes(user)) {
+      this.selectedUsersForChannel.splice(this.selectedUsersForChannel.indexOf(user), 1)
+    }
+    else {
+      this.selectedUsersForChannel.push(user)
+    }
+  }
 
 
 
 
 
   createChannel() {
-    /*     this.channelService.addChannel(
-          this.channelName,
-          this.channelDescription,
-          this.userService.userArray
-        );
-        this.close(); */
-    this.addUserChannelVisible = !this.addUserChannelVisible;
+    if (this.someUsers) {
+      this.usersToAdd = this.selectedUsersForChannel
+    }
+    else {
+      this.usersToAdd = this.userService.userArray
+    }
+    this.channelService.addChannel(
+      this.channelName,
+      this.channelDescription,
+      this.usersToAdd
+    );
+    this.close();
   }
 }
