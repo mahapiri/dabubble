@@ -19,7 +19,7 @@ export class CreateChannelComponent {
   channelService: ChannelService = inject(ChannelService);
   userService: UserService = inject(UserService);
   addUserChannelVisible: boolean = false;
-  someUsers: boolean = false;
+  someUsersChecked: boolean = false;
   searchMember: string = "";
   userlistOpen: boolean = false;
   showUser: User[] = [];
@@ -33,15 +33,25 @@ export class CreateChannelComponent {
     this.clickedChannel.emit(false);
   }
 
+  /**
+   * leads from create channel window to add-member-window
+   */
   nextPage() {
     this.addUserChannelVisible = !this.addUserChannelVisible;
     this.selectedUsersForChannel = []
+    this.userService.getUserList();
   }
 
+/**
+ * detects the radio button and sets the someUsersChecked variable accordingly
+ */
   onRadioChange(event: any): void {
-    this.someUsers = event.target.checked;
+    this.someUsersChecked = event.target.checked;
   }
 
+  /**
+   * shows a list of all members and allows to search individual members
+   */
   showMember() {
     this.userlistOpen = true;
     this.showUser = this.userService.userArray;
@@ -52,11 +62,21 @@ export class CreateChannelComponent {
       this.showUser = this.userService.userArray.filter(user => { return user.username.toLowerCase().includes(this.searchMember.toLowerCase()) })
     }
   }
+
+  /**
+   * sets a boolean variable to add a "selected" class
+   * @param user the clicked User in the list
+   */
   selectMember(user: User) {
     user.chosenToChannel = !user.chosenToChannel;
     this.addSelectedUserToChannel(user);
   }
 
+
+/**
+ * adds or removes the selected user to the selectedUsersForChannel array, 
+ * @param user the clicked User in the list
+ */
   addSelectedUserToChannel(user: User) {
     if (this.selectedUsersForChannel.includes(user)) {
       this.selectedUsersForChannel.splice(this.selectedUsersForChannel.indexOf(user), 1)
@@ -66,12 +86,11 @@ export class CreateChannelComponent {
     }
   }
 
-
-
-
-
+  /**
+   * creates a new Channel with selected users or with all users, depending on the radio button
+   */
   createChannel() {
-    if (this.someUsers) {
+    if (this.someUsersChecked) {
       this.usersToAdd = this.selectedUsersForChannel
     }
     else {
