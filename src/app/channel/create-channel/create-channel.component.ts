@@ -6,8 +6,6 @@ import { ChannelService } from '../../services/channel.service';
 import { UserService } from '../../services/user.service';
 import { User } from '../../../models/user.class';
 
-
-
 @Component({
   selector: 'app-create-channel',
   standalone: true,
@@ -20,19 +18,17 @@ export class CreateChannelComponent {
   channelService: ChannelService = inject(ChannelService);
   userService: UserService = inject(UserService);
 
-
   channelName: string = '';
   channelDescription: string = '';
-
 
   close() {
     this.clickedChannel.emit(false);
   }
   createChannel() {
-    this.channelService.createChannel(
+    this.channelService.addChannel(
       this.channelName,
       this.channelDescription,
-      this.userService.userArray,
+      this.userService.userArray
     );
     this.close();
   }

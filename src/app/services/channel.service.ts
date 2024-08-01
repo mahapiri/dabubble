@@ -7,6 +7,7 @@ import {
   updateDoc,
   arrayUnion,
   getDoc,
+  onSnapshot,
 } from '@angular/fire/firestore';
 import { UserService } from './user.service';
 import { User } from '../../models/user.class';
@@ -23,14 +24,30 @@ export class ChannelService {
   private selectedChannel = new BehaviorSubject<Channel | null>(null);
   selectedChannel$ = this.selectedChannel.asObservable();
 
-  channelID: string = '';
+  channelID?: string = '';
   createdBy: string = '';
 
-  constructor() {}
+  channelMessages: ChannelMessage[] = [];
+
+  unsubMessages!: () => void;
+
+  cconstructor() {
+    /* // Abonniere nur, wenn eine Channel ID gesetzt ist
+    this.selectedChannel$.subscribe((channel) => {
+      if (channel) {
+        this.channelID = channel.channelID;
+        if (this.unsubMessages) {
+          this.unsubMessages();
+        }
+        this.unsubMessages = this.subMessageList();
+      }
+    }); */
+  }
 
   setSelectedChannel(channel: Channel) {
     this.selectedChannel.next(channel);
     this.setChannelId(channel.channelID);
+    this.unsubMessages = this.subMessageList(); //muss nachher aus dieser Fkt wieder raus.
   }
 
   setChannelId(channelID?: string) {
@@ -39,16 +56,16 @@ export class ChannelService {
     }
   }
 
-  async createChannel(name: string, description: string, user: User[]) {
+  async addChannel(name: string, description: string, user: User[]) {
     await this.getCreatedByUser();
     const newChannel: Channel = this.setChannelObject(name, description, user);
-    const docRef = await addDoc(
-      collection(this.firestore, 'channels'),
+    const channelRef = await addDoc(
+      this.getChannelRef(),
       newChannel.getChannelJson()
     );
 
-    this.channelID = docRef.id;
-    await this.updateChannelWithID(docRef.id);
+    this.channelID = channelRef.id;
+    await this.updateChannelWithID(channelRef.id);
     this.userService.updateUserChannels(user, this.channelID);
   }
 
@@ -98,8 +115,7 @@ export class ChannelService {
   }
 
   //aufrufen wenn nachricht geschrieben wurde
-  async addMessageToChannel(text: string) {
-    this.userService.getCurrentUser();
+  async addMessage(text: string) {
     this.userService.currentUser$.subscribe(async (currentUser) => {
       if (currentUser) {
         const newMessage: ChannelMessage = this.setChannelMessage(
@@ -107,12 +123,37 @@ export class ChannelService {
           currentUser
         );
         const messageRef = await addDoc(
-          collection(this.firestore, `channels/${this.channelID}/messages`),
+          this.getMessageRef(),
           newMessage.getMessageJson()
         );
         console.log('Message added:', messageRef.id);
       }
     });
+  }
+
+  subMessageList() {
+    return onSnapshot(this.getMessageRef(), (list) => {
+      this.channelMessages = [];
+      list.forEach((message) => {
+        const data = message.data();
+        this.channelMessages.push(
+          new ChannelMessage({
+            id: message.id,
+            text: data['text'],
+            time: data['time'],
+            date: data['date'],
+            authorName: data['authorName'],
+            authorId: data['authorId'],
+            profileImage: data['profileImage'],
+          })
+        );
+      });
+      console.log('Message received:', this.channelMessages);
+    });
+  }
+
+  ngOnDestroy() {
+    this.unsubMessages();
   }
 
   setChannelMessage(text: string, user: User): ChannelMessage {
@@ -126,5 +167,13 @@ export class ChannelService {
       authorId: user.userId,
       profileImage: user.profileImage,
     });
+  }
+
+  getChannelRef() {
+    return collection(this.firestore, 'channels');
+  }
+
+  getMessageRef() {
+    return collection(this.firestore, `channels/${this.channelID}/messages`);
   }
 }

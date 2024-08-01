@@ -12,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { EditChannelComponent } from '../edit-channel/edit-channel.component';
-import { CommonModule, NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { MemberComponent } from '../../users/member/member.component';
 import { AddMemberComponent } from '../../users/add-member/add-member.component';
 import { ThreadComponent } from '../../thread/thread.component';
