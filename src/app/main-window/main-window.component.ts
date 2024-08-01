@@ -38,6 +38,7 @@ export class MainWindowComponent implements OnInit {
   });
   clickedChannel: boolean = false;
   clickedThread: boolean = false;
+  selectProfile: boolean = false;
 
   constructor(private channelService: ChannelService) {}
 
@@ -56,4 +57,11 @@ export class MainWindowComponent implements OnInit {
   handleThreadClick(event: boolean) {
     this.clickedThread = event;
   }
+
+  handleProfileClick(event: boolean) {
+    this.selectProfile = event;
+    this.clickedChannel = false;
+    this.clickedThread = false;
+  }
+  
 }

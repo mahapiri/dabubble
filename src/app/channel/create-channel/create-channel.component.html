@@ -23,7 +23,7 @@
             <input type="text" placeholder="Dein Text hier" [(ngModel)]="channelDescription">
         </div>
         <div class="btn-container">
-            <button (click)="createChannel()" class="btn-default btn-primary">Erstellen</button>
+            <button (click)="nextPage()" class="btn-default btn-primary">Erstellen</button>
         </div>
     </div>
 </section>
@@ -44,21 +44,23 @@
         </div>
         <div class="input-container">
             <div class="inputfield">
-                <input type="radio" id="add-some-users" name="radioButton" [(ngModel)]="isSelected"
+                <input type="radio" id="add-some-users" name="radioButton" [(ngModel)]="someUsers"
                     (change)="onRadioChange($event)">
                 <label for="add-some-users">Bestimmte Leute hinzufügen</label><br>
             </div>
         </div>
 
-        <div *ngIf="isSelected" class="input-container">
+        <div *ngIf="someUsers" class="input-container">
             <div class="input-title">
                 <p class="n-p bold">Name eingeben</p>
             </div>
-            <input type="text" placeholder="Dein Text hier" [(ngModel)]="searchMember" (ngModelChange)="showMember()">
+            <input type="text" placeholder="Dein Text hier" [(ngModel)]="searchMember" (click)="showMember()"
+                (ngModelChange)="showMember()">
             <div *ngIf="userlistOpen" class="profile-section">
                 <div class="channels-content" *ngFor="let profile of showUser; let i = index">
                     <div class="channels-section">
-                        <div class="channels-header subtitle-header">
+                        <div class="channels-header subtitle-header"
+                            [ngClass]=" profile.chosenToChannel ? 'chosen' : '' " (click)="selectMember(profile)">
                             <div class="channels-title subtitle-title profile-border">
                                 <div class="profile-content">
                                     <img src="{{ profile.profileImage }}" alt="Character" class="profile-icon" />

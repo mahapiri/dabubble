@@ -21,6 +21,7 @@ import { UserService } from '../../services/user.service';
 import { Observable } from 'rxjs';
 import { Channel } from '../../../models/channel.class';
 import { onSnapshot } from '@angular/fire/firestore';
+import { User } from '../../../models/user.class';
 
 @Component({
   selector: 'app-workspace-menu',
@@ -41,6 +42,7 @@ import { onSnapshot } from '@angular/fire/firestore';
 export class WorkspaceMenuComponent implements OnInit {
   @ViewChild('drawer') drawer!: MatDrawer;
   @Output() clickedChannelChange = new EventEmitter<boolean>();
+  @Output() selectProfileChange = new EventEmitter<boolean>();
   @Input() clickedChannel: boolean = false;
 
   userChannels$: Observable<Channel[]> = this.userService.userChannels$;
@@ -98,6 +100,7 @@ export class WorkspaceMenuComponent implements OnInit {
   selectChannel(channel: Channel) {
     this.channel = channel;
     this.channelService.setSelectedChannel(channel);
+    this.selectProfileChange.emit(false);
   }
 
   toggle() {
@@ -152,11 +155,13 @@ export class WorkspaceMenuComponent implements OnInit {
     this.openDm = !this.openDm;
   }
 
-  clickedProfile(i: number) {
+  clickedProfile(i: number, profile: User) {
     this.clickedUser = !this.clickedUser;
-    let id = i;
-    document.getElementById(`profile-${id}`)?.classList.toggle('bold-user');
+    document.getElementById(`profile-${i}`)?.classList.toggle('bold-user');
+    this.selectProfileChange.emit(true);
   }
+  
+
 
   editChannel(channel: string) {}
 }

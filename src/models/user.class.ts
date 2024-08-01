@@ -6,6 +6,8 @@ export class User {
   userChannels: string[] = [];
   profileImage: string = '';
 
+  chosenToChannel: boolean = false;
+
   constructor(obj?: any) {
     this.username = obj ? obj.username : '';
     this.userId = obj ? obj.userId : '';
