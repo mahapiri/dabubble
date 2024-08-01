@@ -1,7 +1,7 @@
 <mat-list-item>
   <div class="divider-container">
     <mat-divider> </mat-divider>
-    <div class="message-date">{{ channelMessage.date }}</div>
+    <div class="message-date">{{ formatDateString(channelMessage.date) }}</div>
   </div>
 
   <div class="member-message">
@@ -28,7 +28,7 @@
       <div class="message-details">
         <div class="user-wrapper">
           <div class="user-name">{{ channelMessage.authorName }}</div>
-          <div class="time">{{ channelMessage.time }}</div>
+          <div class="time">{{ formatTime(channelMessage.time) }} Uhr</div>
         </div>
         <div class="text-bubble">{{ channelMessage.text }}</div>
         <div class="answer-wrapper">
