@@ -174,6 +174,7 @@ mat-content-hide-toggle {
 }
 
 .subtitle-header {
+  width: 100%;
   padding: 5px 10px 5px 15px;
 }
 
@@ -216,14 +217,15 @@ mat-content-hide-toggle {
 }
 
 .profile-section {
-  max-height: 347px;
-  overflow-y: scroll;
+  max-height: calc(100vh - 618px);
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 13px;
 }
 
 .profile-border {
+  width: 100%;
   padding: 4px 20px 4px 25px;
 
   &:hover {

@@ -1,33 +1,60 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
+import { ClickOutsideDirective } from '../../directive/click-outside.directive';
+import { CommonModule } from '@angular/common';
+import { User } from '../../../models/user.class';
+import { MyProfileComponent } from '../../users/my-profile/my-profile.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [MatIconModule],
+  imports: [MatIconModule, ClickOutsideDirective, CommonModule, MyProfileComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   clickedUser: boolean = false; 
+  clickedProfile: boolean = false;
+  ignoreNextClick: boolean = false;
   authService: AuthService = inject(AuthService);
   userService: UserService = inject(UserService);
+  currentUser: User | null = null;
 
   constructor(private router: Router) {}
-  
-  openUser() {
-    this.clickedUser = !this.clickedUser;
+
+  async ngOnInit() {
+    await this.userService.getUserID();
+    this.userService.currentUser$.subscribe((user) => {
+      this.currentUser = user;
+    });
   }
+  
+  openPopup(event: Event) {
+    event.stopPropagation();
+    this.ignoreNextClick = true;
+    this.clickedUser = !this.clickedUser;
+    setTimeout(() => this.ignoreNextClick = false, 0);
+  }
+
+  closePopup() {
+    this.clickedUser = false;
+  }
+
+  openProfile() {
+    this.clickedProfile = true;
+    this.clickedUser = false;
+  }
+
+  profileClosed() {
+    this.clickedProfile = false;
+  }
+
   async logOut(event: Event){
     event.preventDefault();
     await this.authService.logOut();
     this.router.navigate(['/']);
   }
-
-
-
-
 }

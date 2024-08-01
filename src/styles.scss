@@ -53,6 +53,7 @@ p,
 a {
   font-family: "Nunito", Roboto, sans-serif !important;
   margin: 0;
+  text-decoration: none;
 }
 
 .n-h1,
@@ -98,6 +99,9 @@ a {
 }
 
 .n-a {
+  font-weight: 500 !important;
+  font-size: 18px !important;
+  line-height: 21.6px !important;
   text-decoration: none !important;
   cursor: pointer !important;
 }
@@ -116,6 +120,18 @@ a {
 
 .absent {
   background-color: var(--gray);
+}
+
+.online-text {
+  color: var(--green);
+}
+
+.offline-text {
+  color: var(--rosa);
+}
+
+.absent-text {
+  color: var(--gray);
 }
 
 .popup-container {

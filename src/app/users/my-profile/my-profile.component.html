@@ -1,0 +1,35 @@
+<section>
+    <div class="profile-container">
+        <div class="profile-title">
+            <h3 class="n-h3">Profil</h3>
+            <div class="icon-container">
+                <mat-icon class="close-icon" (click)="closeProfile()">close</mat-icon>
+            </div>
+        </div>
+        <img class="profile-img" src="{{ currentUser?.profileImage }}" alt="Profile Image">
+        <div class="profile-info">
+            <div class="name-title">
+                <h2 class="n-h2">{{ currentUser?.username }}</h2>
+                <p class="n-p">Bearbeiten</p>
+            </div>
+
+            <div class="status-container">
+                <div class="status-icon" ngClass="{{ currentUser?.state }}"></div>
+                <p class="n-p" [ngClass]="{
+                    'online-text': currentUser?.state === 'online',
+                    'offline-text': currentUser?.state === 'offline',
+                    'absent-text': currentUser?.state === 'absent'
+                  }">
+                    {{ getStatusText(currentUser?.state) }}
+                  </p>
+            </div>
+        </div>
+        <div class="mail-container">
+            <div class="mail-info">
+                <mat-icon>mail</mat-icon>
+                <h4 class="n-h4">E-Mail-Adresse</h4>
+            </div>
+            <a href="" class="n-a">{{ currentUser?.email }}</a>
+        </div>
+    </div>    
+</section> 

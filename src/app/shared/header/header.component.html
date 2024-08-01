@@ -5,19 +5,20 @@
         <mat-icon class="search-icon">search</mat-icon>
     </div>
     <div class="user-div">
-        <div class="user-container" (click)="openUser()">
-            <div class="user-name">Federik Beck</div>
+        <div class="user-container" (click)="openPopup($event)">
+            <div class="user-name">{{ currentUser?.username }}</div>
             <div class="img-content">
-                <img src="../../../assets/img/character1.png" alt="User">
-                <div class="status-icon online"></div>
+                <img src="{{ currentUser?.profileImage }}" alt="User">
+                <div class="status-icon" ngClass="{{ currentUser?.state }}"></div>
             </div>
             <div>
                 <mat-icon class="arrow-icon">keyboard_arrow_down</mat-icon>
             </div>
         </div>
-        <div class="info-container" [class.d-none]="!clickedUser">
-            <a href="/">Profil</a>
+        <div class="info-container" *ngIf="clickedUser" appClickOutside (clickOutside)="closePopup()">
+            <a (click)="openProfile()">Profil</a>
             <a (click)="logOut($event)">Log out</a>
         </div>
     </div>
 </header>
+<app-my-profile *ngIf="clickedProfile" [clickedProfile]="clickedProfile" (clickedProfileChange)="profileClosed()"></app-my-profile>
