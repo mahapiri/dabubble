@@ -269,9 +269,9 @@ mat-content-hide-toggle {
   border-radius: 35px;
   color: var(--black);
 
-  h3 {
+  p {
     color: var(--purple-3);
-    font-weight: 700;
+    font-weight: 700 !important;
   }
 }
 

@@ -31,31 +31,49 @@ export class ChannelService {
 
   unsubMessages!: () => void;
 
-  cconstructor() {
-    /* // Abonniere nur, wenn eine Channel ID gesetzt ist
+  /**
+   * Subscribes to the `selectedChannel$` observable to react to changes in the selected channel.
+   * Then, updates the ChannelID and listens for changes (read) in the message list.
+   */
+  constructor() {
     this.selectedChannel$.subscribe((channel) => {
       if (channel) {
-        this.channelID = channel.channelID;
-        if (this.unsubMessages) {
-          this.unsubMessages();
-        }
+        this.setChannelId(channel);
         this.unsubMessages = this.subMessageList();
       }
-    }); */
+    });
   }
 
+  /**
+   * Sets the currently selected channel. It updates the `BehaviorSubject` `selectedChannel`, notifying all subscribers of the change.
+   * @param channel - The `Channel` object to be set as the currently selected channel.
+   */
   setSelectedChannel(channel: Channel) {
     this.selectedChannel.next(channel);
-    this.setChannelId(channel.channelID);
-    this.unsubMessages = this.subMessageList(); //muss nachher aus dieser Fkt wieder raus.
+    //this.setChannelId(channel.channelID);
   }
 
-  setChannelId(channelID?: string) {
-    if (channelID) {
-      this.channelID = channelID;
-    }
+  /**
+   * Updates the channelID variable based on the selected Channel.
+   * @param channel Channel Object
+   */
+  setChannelId(channel: Channel) {
+    this.channelID = channel.channelID;
   }
 
+  /**
+   * Creates a new channel and adds it to the Firestore database.
+   * @param name - The name of the new channel.
+   * @param description - A brief description of the new channel.
+   * @param user - An array of `User` objects who will be members of the new channel.
+   *
+   * - Retrieves user info who is creating the channel. To set the `createdBy` field.
+   * - Constructs a `Channel` object with the user-info
+   * - Adds the new channel to the Firestore database.
+   * - Sets the `channelID` property of the service to the ID of the newly created channel.
+   * - Then updates the Channel in Firestore with the channel ID.
+   * - Updates the `userService` with the new channel ID for each user. This may involve adding the new channel ID to the users' channel lists in the database.
+   */
   async addChannel(name: string, description: string, user: User[]) {
     await this.getCreatedByUser();
     const newChannel: Channel = this.setChannelObject(name, description, user);
@@ -118,7 +136,7 @@ export class ChannelService {
   async addMessage(text: string) {
     this.userService.currentUser$.subscribe(async (currentUser) => {
       if (currentUser) {
-        const newMessage: ChannelMessage = this.setChannelMessage(
+        const newMessage: ChannelMessage = this.setMessageWithUser(
           text,
           currentUser
         );
@@ -136,17 +154,7 @@ export class ChannelService {
       this.channelMessages = [];
       list.forEach((message) => {
         const data = message.data();
-        this.channelMessages.push(
-          new ChannelMessage({
-            id: message.id,
-            text: data['text'],
-            time: data['time'],
-            date: data['date'],
-            authorName: data['authorName'],
-            authorId: data['authorId'],
-            profileImage: data['profileImage'],
-          })
-        );
+        this.channelMessages.push(this.setMessageObject(message.id, data));
       });
       console.log('Message received:', this.channelMessages);
     });
@@ -156,7 +164,19 @@ export class ChannelService {
     this.unsubMessages();
   }
 
-  setChannelMessage(text: string, user: User): ChannelMessage {
+  setMessageObject(id: string, data: any) {
+    return new ChannelMessage({
+      id: id,
+      text: data['text'],
+      time: data['time'],
+      date: data['date'],
+      authorName: data['authorName'],
+      authorId: data['authorId'],
+      profileImage: data['profileImage'],
+    });
+  }
+
+  setMessageWithUser(text: string, user: User): ChannelMessage {
     const now = new Date();
     return new ChannelMessage({
       id: '',
