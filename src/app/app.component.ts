@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { WorkspaceMenuComponent } from './shared/workspace-menu/workspace-menu.component';
 import { ChannelComponent } from './channel/channel/channel.component';
@@ -10,6 +10,9 @@ import { HeaderComponent } from './shared/header/header.component';
 import { ChooseAvatarComponent } from './login/choose-avatar/choose-avatar.component';
 import { ResetPasswordComponent } from './login/reset-password/reset-password.component';
 import { SendMailComponent } from './login/send-mail/send-mail.component';
+import localeDe from '@angular/common/locales/de';
+
+registerLocaleData(localeDe, 'de');
 
 @Component({
   selector: 'app-root',
