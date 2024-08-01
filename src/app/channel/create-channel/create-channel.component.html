@@ -44,13 +44,13 @@
         </div>
         <div class="input-container">
             <div class="inputfield">
-                <input type="radio" id="add-some-users" name="radioButton" [(ngModel)]="someUsers"
+                <input type="radio" id="add-some-users" name="radioButton" [(ngModel)]="someUsersChecked"
                     (change)="onRadioChange($event)">
                 <label for="add-some-users">Bestimmte Leute hinzufügen</label><br>
             </div>
         </div>
 
-        <div *ngIf="someUsers" class="input-container">
+        <div *ngIf="someUsersChecked" class="input-container">
             <div class="input-title">
                 <p class="n-p bold">Name eingeben</p>
             </div>
@@ -60,7 +60,7 @@
                 <div class="channels-content" *ngFor="let profile of showUser; let i = index">
                     <div class="channels-section">
                         <div class="channels-header subtitle-header"
-                            [ngClass]=" profile.chosenToChannel ? 'chosen' : '' " (click)="selectMember(profile)">
+                            [ngClass]=" profile.chosenToChannel ? 'selected' : '' " (click)="selectMember(profile)">
                             <div class="channels-title subtitle-title profile-border">
                                 <div class="profile-content">
                                     <img src="{{ profile.profileImage }}" alt="Character" class="profile-icon" />
