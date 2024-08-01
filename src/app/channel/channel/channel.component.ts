@@ -18,7 +18,7 @@ import { AddMemberComponent } from '../../users/add-member/add-member.component'
 import { ThreadComponent } from '../../thread/thread.component';
 import { ChannelNewMessageInputComponent } from './channel-new-message-input/channel-new-message-input.component';
 import { ChannelMessageComponent } from './channel-message/channel-message.component';
-import { Channel } from '../../../models/channel.class';
+import { Channel, ChannelMessage } from '../../../models/channel.class';
 import { ChannelService } from '../../services/channel.service';
 import { Observable } from 'rxjs';
 
@@ -47,6 +47,8 @@ import { Observable } from 'rxjs';
 export class ChannelComponent {
   @Input() channel!: Channel;
   @Output() clickedThreadChange = new EventEmitter<boolean>();
+  channelMessages: ChannelMessage[] = [];
+
   selectedChannel$: Observable<Channel | null> =
     this.channelService.selectedChannel$;
 
@@ -74,5 +76,9 @@ export class ChannelComponent {
   handleThreadClick(event: boolean) {
     this.clickedThread = event;
     this.clickedThreadChange.emit(this.clickedThread);
+  }
+
+  getMessageList(): ChannelMessage[] {
+    return this.channelService.channelMessages;
   }
 }
