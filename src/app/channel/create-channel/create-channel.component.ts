@@ -20,6 +20,7 @@ export class CreateChannelComponent {
   userService: UserService = inject(UserService);
   addUserChannelVisible: boolean = false;
   someUsersChecked: boolean = false;
+  allUsersChecked: boolean = false;
   searchMember: string = "";
   userlistOpen: boolean = false;
   showUser: User[] = [];
@@ -47,6 +48,9 @@ export class CreateChannelComponent {
  */
   onRadioChange(event: any): void {
     this.someUsersChecked = event.target.checked;
+    this.allUsersChecked = !this.someUsersChecked;
+    console.log("some:", this.someUsersChecked,"all:", this.allUsersChecked);
+    
   }
 
   /**
@@ -55,7 +59,7 @@ export class CreateChannelComponent {
   showMember() {
     this.userlistOpen = true;
     this.showUser = this.userService.userArray;
-    if (this.searchMember == "") {
+    if (this.searchMember == "" && this.someUsersChecked) {
       this.showUser = this.userService.userArray;
     }
     else {
