@@ -12,7 +12,9 @@
     *ngIf="clickedThread"
     (clickedCloseThread)="handleThreadClick($event)"
   ></app-thread>
-  <!-- <app-direct-message></app-direct-message> -->
+  <app-direct-message
+    *ngIf="clickedProfile"
+  ></app-direct-message>
 </div>
 <app-create-channel
   class="create-section"
