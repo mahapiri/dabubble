@@ -42,7 +42,7 @@ import { User } from '../../../models/user.class';
 export class WorkspaceMenuComponent implements OnInit {
   @ViewChild('drawer') drawer!: MatDrawer;
   @Output() clickedChannelChange = new EventEmitter<boolean>();
-  @Output() selectProfile = new EventEmitter<boolean>();
+  @Output() selectProfileChange = new EventEmitter<boolean>();
   @Input() clickedChannel: boolean = false;
 
   userChannels$: Observable<Channel[]> = this.userService.userChannels$;
@@ -100,6 +100,7 @@ export class WorkspaceMenuComponent implements OnInit {
   selectChannel(channel: Channel) {
     this.channel = channel;
     this.channelService.setSelectedChannel(channel);
+    this.selectProfileChange.emit(false);
   }
 
   toggle() {
@@ -156,10 +157,11 @@ export class WorkspaceMenuComponent implements OnInit {
 
   clickedProfile(i: number, profile: User) {
     this.clickedUser = !this.clickedUser;
-    let id = i;
-    document.getElementById(`profile-${id}`)?.classList.toggle('bold-user');
-    this.selectProfile.emit();
+    document.getElementById(`profile-${i}`)?.classList.toggle('bold-user');
+    this.selectProfileChange.emit(true);
   }
+  
+
 
   editChannel(channel: string) {}
 }
