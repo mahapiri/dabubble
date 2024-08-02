@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { ChannelService } from '../../../services/channel.service';
 import { CommonModule } from '@angular/common';
-import { ChannelMessage } from '../../../../models/channel.class';
+import { Channel, ChannelMessage } from '../../../../models/channel.class';
 import { formatDate } from '@angular/common';
 
 @Component({
@@ -22,6 +22,7 @@ import { formatDate } from '@angular/common';
   styleUrl: './channel-message.component.scss',
 })
 export class ChannelMessageComponent {
+  @Input() channel!: Channel;
   @Input() channelMessage!: ChannelMessage;
   @Output() clickedAnswer = new EventEmitter<boolean>();
 

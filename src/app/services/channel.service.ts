@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, OnDestroy } from '@angular/core';
 import {
   addDoc,
   collection,
@@ -17,12 +17,15 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class ChannelService {
+export class ChannelService implements OnDestroy {
   firestore: Firestore = inject(Firestore);
   userService: UserService = inject(UserService);
 
   private selectedChannel = new BehaviorSubject<Channel | null>(null);
   selectedChannel$ = this.selectedChannel.asObservable();
+
+  private channelMessagesSubjects = new BehaviorSubject<ChannelMessage[]>([]);
+  channelMessages$ = this.channelMessagesSubjects.asObservable();
 
   channelID?: string = '';
   createdBy: string = '';
@@ -35,8 +38,14 @@ export class ChannelService {
    * Subscribes to the `selectedChannel$` observable to react to changes in the selected channel.
    * Then, updates the ChannelID and listens for changes (read) in the message list.
    */
-  constructor() {
+  constructor(firestore: Firestore, userService: UserService) {
+    this.firestore = firestore;
+    this.userService = userService;
+
     this.selectedChannel$.subscribe((channel) => {
+      if (this.unsubMessages) {
+        this.unsubMessages();
+      }
       if (channel) {
         this.setChannelId(channel);
         this.unsubMessages = this.subMessageList();
@@ -149,7 +158,7 @@ export class ChannelService {
     });
   }
 
-  subMessageList() {
+  /* subMessageList() {
     return onSnapshot(this.getMessageRef(), (list) => {
       this.channelMessages = [];
       list.forEach((message) => {
@@ -158,10 +167,19 @@ export class ChannelService {
       });
       console.log('Message received:', this.channelMessages);
     });
+  } */
+
+  private subMessageList() {
+    return onSnapshot(this.getMessageRef(), (snapshot) => {
+      const messages = snapshot.docs.map((doc) => doc.data() as ChannelMessage);
+      this.channelMessagesSubjects.next(messages);
+    });
   }
 
   ngOnDestroy() {
-    this.unsubMessages();
+    if (this.unsubMessages) {
+      this.unsubMessages();
+    }
   }
 
   setMessageObject(id: string, data: any) {

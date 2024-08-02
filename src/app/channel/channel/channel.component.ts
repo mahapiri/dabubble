@@ -47,19 +47,23 @@ import { Observable } from 'rxjs';
 export class ChannelComponent {
   @Input() channel!: Channel;
   @Output() clickedThreadChange = new EventEmitter<boolean>();
-  channelMessages: ChannelMessage[] = [];
-
-  selectedChannel$: Observable<Channel | null> =
-    this.channelService.selectedChannel$;
-
-  constructor(private channelService: ChannelService) {}
+  //channelMessages: ChannelMessage[] = [];
 
   clickedEditChannel: boolean = false;
   clickedAddMembers: boolean = false;
   clickedMembers: boolean = false;
   clickedThread: boolean = false;
 
-  ngOnInit() {}
+  selectedChannel$: Observable<Channel | null> =
+    this.channelService.selectedChannel$;
+  channelMessages$: Observable<ChannelMessage[]> =
+    this.channelService.channelMessages$;
+
+  constructor(private channelService: ChannelService) {}
+
+  /* getMessageList(): ChannelMessage[] {
+    return this.channelService.channelMessages;
+  } */
 
   editChannel() {
     this.clickedEditChannel = true;
@@ -76,9 +80,5 @@ export class ChannelComponent {
   handleThreadClick(event: boolean) {
     this.clickedThread = event;
     this.clickedThreadChange.emit(this.clickedThread);
-  }
-
-  getMessageList(): ChannelMessage[] {
-    return this.channelService.channelMessages;
   }
 }
