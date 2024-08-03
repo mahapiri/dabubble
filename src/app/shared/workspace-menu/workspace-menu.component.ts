@@ -22,6 +22,7 @@ import { Observable } from 'rxjs';
 import { Channel } from '../../../models/channel.class';
 import { onSnapshot } from '@angular/fire/firestore';
 import { User } from '../../../models/user.class';
+import { DirectMessageService } from '../../services/direct-message.service';
 
 @Component({
   selector: 'app-workspace-menu',
@@ -58,9 +59,9 @@ export class WorkspaceMenuComponent implements OnInit {
   hover: boolean = false;
   open: boolean = false;
   clickedMessage: boolean = false;
-  clickedUser: boolean = false;
   openChannel: boolean = false;
   openDm: boolean = false;
+  selectedUserIndex: number | null = null; 
 
   readonly panelOpenState = signal(false);
 
@@ -68,7 +69,8 @@ export class WorkspaceMenuComponent implements OnInit {
 
   constructor(
     private channelService: ChannelService,
-    private userService: UserService
+    private userService: UserService,
+    private directMessage: DirectMessageService
   ) {}
 
   async ngOnInit() {
@@ -156,9 +158,9 @@ export class WorkspaceMenuComponent implements OnInit {
   }
 
   clickedProfile(i: number, profile: User) {
-    this.clickedUser = !this.clickedUser;
-    document.getElementById(`profile-${i}`)?.classList.toggle('bold-user');
+    this.selectedUserIndex = i;
     this.selectProfileChange.emit(true);
+    this.directMessage.getActualProfile(profile);
   }
 
   editChannel(channel: string) {}
