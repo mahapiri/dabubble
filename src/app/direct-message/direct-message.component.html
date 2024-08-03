@@ -4,13 +4,13 @@
       <button class="channel-btn">
         <div class="profile-content">
           <img
-            src="./../../assets/img/character5.png"
+            src="{{ profile?.profileImage }}"
             alt="Character"
             class="profile-icon"
           />
-          <div class="status-icon"></div>
+          <div class="status-icon" ngClass="{{ profile?.state }}"></div>
         </div>
-        <span class="user-name">Sofia Müller</span>
+        <span class="user-name">{{ profile?.username }}</span>
       </button>
     </div>
   </mat-card-header>
@@ -20,12 +20,12 @@
       <mat-list>
         <mat-list-item class="initial-info">
           <div class="user-info">
-            <img class="user-img" src="./../../../assets/img/character3.png" />
-            <span class="user-name">Frederik Beck</span>
+            <img class="user-img" src="{{ profile?.profileImage }}" />
+            <span class="user-name">{{ profile?.username }}</span>
           </div>
           <span class="info"
             >Diese Unterhaltung findet nur zwischen
-            <span class="tag">&#64;Sofia Müller</span> und dir statt.</span
+            <span class="tag">&#64;{{ profile?.username }}</span> und dir statt.</span
           >
         </mat-list-item>
       </mat-list>
@@ -34,7 +34,7 @@
 
   <mat-card-footer>
     <div class="new-message-container">
-      <input matInput type="text" placeholder="Nachricht an Sofia Müller" />
+      <input matInput type="text" placeholder="Nachricht an {{ profile?.username }}" />
 
       <div class="message-controls">
         <div class="add-elements">

@@ -22,6 +22,7 @@ import { Observable } from 'rxjs';
 import { Channel } from '../../../models/channel.class';
 import { onSnapshot } from '@angular/fire/firestore';
 import { User } from '../../../models/user.class';
+import { DirectMessageService } from '../../services/direct-message.service';
 
 @Component({
   selector: 'app-workspace-menu',
@@ -68,7 +69,8 @@ export class WorkspaceMenuComponent implements OnInit {
 
   constructor(
     private channelService: ChannelService,
-    private userService: UserService
+    private userService: UserService,
+    private directMessage: DirectMessageService
   ) {}
 
   async ngOnInit() {
@@ -159,6 +161,7 @@ export class WorkspaceMenuComponent implements OnInit {
     this.clickedUser = !this.clickedUser;
     document.getElementById(`profile-${i}`)?.classList.toggle('bold-user');
     this.selectProfileChange.emit(true);
+    this.directMessage.getActualProfile(profile);
   }
   
 
