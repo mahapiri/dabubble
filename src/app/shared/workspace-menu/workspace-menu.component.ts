@@ -160,8 +160,6 @@ export class WorkspaceMenuComponent implements OnInit {
     document.getElementById(`profile-${i}`)?.classList.toggle('bold-user');
     this.selectProfileChange.emit(true);
   }
-  
-
 
   editChannel(channel: string) {}
 }

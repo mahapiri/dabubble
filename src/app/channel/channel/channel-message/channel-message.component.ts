@@ -37,21 +37,29 @@ export class ChannelMessageComponent {
     return `${hours}:${minutes}`;
   }
 
-  formatDateString(dateString: string): string {
-    const [day, month, year] = dateString.split('.').map(Number);
-    const inputDate = new Date(year, month - 1, day);
-    const today = new Date();
+  formatDate(date: string): string {
+    const todayDate = new Date();
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'long',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    };
 
-    const todayDate = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate()
-    );
+    const today = todayDate.toLocaleDateString('de-DE', options);
 
-    if (inputDate.toDateString() === todayDate.toDateString()) {
+    const yesterdayDate = new Date();
+    yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+    const yesterday = yesterdayDate.toLocaleDateString('de-DE', options);
+
+    if (date === today) {
       return 'Heute';
     }
 
-    return formatDate(inputDate, 'EEEE, dd.MM.yyyy', 'de');
+    if (date === yesterday) {
+      return 'Gestern';
+    }
+
+    return date;
   }
 }
