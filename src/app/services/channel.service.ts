@@ -24,8 +24,8 @@ export class ChannelService implements OnDestroy {
   private selectedChannel = new BehaviorSubject<Channel | null>(null);
   selectedChannel$ = this.selectedChannel.asObservable();
 
-  private channelMessagesSubjects = new BehaviorSubject<ChannelMessage[]>([]);
-  channelMessages$ = this.channelMessagesSubjects.asObservable();
+  /*   private channelMessagesSubjects = new BehaviorSubject<ChannelMessage[]>([]);
+  channelMessages$ = this.channelMessagesSubjects.asObservable(); */
 
   channelID?: string = '';
   createdBy: string = '';
@@ -43,9 +43,9 @@ export class ChannelService implements OnDestroy {
     this.userService = userService;
 
     this.selectedChannel$.subscribe((channel) => {
-      if (this.unsubMessages) {
+      /* if (this.unsubMessages) {
         this.unsubMessages();
-      }
+      } */
       if (channel) {
         this.setChannelId(channel);
         this.unsubMessages = this.subMessageList();
@@ -158,7 +158,7 @@ export class ChannelService implements OnDestroy {
     });
   }
 
-  /* subMessageList() {
+  subMessageList() {
     return onSnapshot(this.getMessageRef(), (list) => {
       this.channelMessages = [];
       list.forEach((message) => {
@@ -167,19 +167,21 @@ export class ChannelService implements OnDestroy {
       });
       console.log('Message received:', this.channelMessages);
     });
-  } */
+  }
 
-  private subMessageList() {
+  /* private subMessageList() {
     return onSnapshot(this.getMessageRef(), (snapshot) => {
       const messages = snapshot.docs.map((doc) => doc.data() as ChannelMessage);
       this.channelMessagesSubjects.next(messages);
     });
-  }
+  } */
 
   ngOnDestroy() {
-    if (this.unsubMessages) {
+    /* if (this.unsubMessages) {
       this.unsubMessages();
-    }
+    } */
+
+    this.unsubMessages();
   }
 
   setMessageObject(id: string, data: any) {
@@ -200,7 +202,12 @@ export class ChannelService implements OnDestroy {
       id: '',
       text: text,
       time: now.toLocaleTimeString(),
-      date: now.toLocaleDateString(),
+      date: now.toLocaleDateString('de-DE', {
+        weekday: 'long',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      }),
       authorName: user.username,
       authorId: user.userId,
       profileImage: user.profileImage,

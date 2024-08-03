@@ -56,14 +56,14 @@ export class ChannelComponent {
 
   selectedChannel$: Observable<Channel | null> =
     this.channelService.selectedChannel$;
-  channelMessages$: Observable<ChannelMessage[]> =
-    this.channelService.channelMessages$;
+  /* channelMessages$: Observable<ChannelMessage[]> =
+    this.channelService.channelMessages$; */
 
   constructor(private channelService: ChannelService) {}
 
-  /* getMessageList(): ChannelMessage[] {
+  getMessageList(): ChannelMessage[] {
     return this.channelService.channelMessages;
-  } */
+  }
 
   editChannel() {
     this.clickedEditChannel = true;

@@ -124,18 +124,15 @@
           </div>
         </mat-list-item>
 
-        <ng-container
-          *ngIf="channelMessages$ | async as channelMessages; else loading"
-        >
-          <app-channel-message
-            (clickedAnswer)="handleThreadClick($event)"
-            *ngFor="let channelMessage of channelMessages"
-            [channelMessage]="channelMessage"
-          ></app-channel-message>
-        </ng-container>
-        <ng-template #loading>
-          <div class="loading-indicator">Loading...</div>
-        </ng-template>
+        <!-- <ng-container
+          *ngIf="channelMessages$ | async as channelMessages"
+        > -->
+        <app-channel-message
+          (clickedAnswer)="handleThreadClick($event)"
+          *ngFor="let channelMessage of getMessageList()"
+          [channelMessage]="channelMessage"
+        ></app-channel-message>
+        <!-- </ng-container> -->
       </mat-list>
     </div>
   </mat-card-content>

@@ -163,8 +163,6 @@ export class WorkspaceMenuComponent implements OnInit {
     this.directMessage.getActualProfile(profile);
     this.directMessage.addDirectMessage(profile);
   }
-  
-
 
   editChannel(channel: string) {}
 }
