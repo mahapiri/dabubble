@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
@@ -28,6 +28,7 @@ import { User } from '../../models/user.class';
 })
 export class DirectMessageComponent implements OnInit {
   private directMessageService : DirectMessageService = inject(DirectMessageService);
+  private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
   profile: User | null = null;
 
   constructor() {
@@ -37,6 +38,7 @@ export class DirectMessageComponent implements OnInit {
   ngOnInit() {
       this.directMessageService.userSelected$.subscribe((user) => {
         this.profile = user;
+        this.cdr.markForCheck();
       })
   }
 }

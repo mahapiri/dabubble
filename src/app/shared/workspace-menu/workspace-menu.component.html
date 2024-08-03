@@ -98,7 +98,7 @@
                 <div
                   class="channels-title subtitle-title profile-border"
                   (click)="clickedProfile(i, profile)"
-                  [attr.id]="'profile-' + i"
+                  [class.bold-user]="selectedUserIndex === i"
                 >
                   <div class="profile-content">
                     <img

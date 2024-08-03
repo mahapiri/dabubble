@@ -59,9 +59,9 @@ export class WorkspaceMenuComponent implements OnInit {
   hover: boolean = false;
   open: boolean = false;
   clickedMessage: boolean = false;
-  clickedUser: boolean = false;
   openChannel: boolean = false;
   openDm: boolean = false;
+  selectedUserIndex: number | null = null; 
 
   readonly panelOpenState = signal(false);
 
@@ -158,8 +158,7 @@ export class WorkspaceMenuComponent implements OnInit {
   }
 
   clickedProfile(i: number, profile: User) {
-    this.clickedUser = !this.clickedUser;
-    document.getElementById(`profile-${i}`)?.classList.toggle('bold-user');
+    this.selectedUserIndex = i;
     this.selectProfileChange.emit(true);
     this.directMessage.getActualProfile(profile);
   }

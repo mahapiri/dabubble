@@ -10,7 +10,6 @@ import { BehaviorSubject } from 'rxjs';
 export class DirectMessageService implements OnInit {
   private firestore: Firestore = inject(Firestore);
   private userService: UserService = inject(UserService);
-  actualProfile: object = [];
   private userSubject = new BehaviorSubject<User | null>(null);
   public userSelected$ = this.userSubject.asObservable();
 
