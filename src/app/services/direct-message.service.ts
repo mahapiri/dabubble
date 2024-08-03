@@ -22,3 +22,4 @@ export class DirectMessageService implements OnInit {
     this.userSubject.next(profile);
   }
 }
+  

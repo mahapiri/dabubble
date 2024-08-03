@@ -114,6 +114,7 @@ mat-card-footer {
       color: var(--purple-1);
       background-color: var(--white);
       box-shadow: none;
+
       &:hover {
         color: var(--purple-2);
         background-color: var(--white);
@@ -219,4 +220,21 @@ mat-card-footer {
   position: absolute;
   top: 38px;
   left: 34px;
+}
+
+.info-bold {
+  font-family: Nunito;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 27.28px;
+  text-align: left;
+}
+
+.info-own-user {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  text-wrap: wrap;
 }

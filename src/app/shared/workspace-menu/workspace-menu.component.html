@@ -111,8 +111,11 @@
                       ngClass="{{ profile.state }}"
                     ></div>
                   </div>
-                  <p class="n-p">{{ profile.username }}</p>
-                </div>
+                  <div style="display: flex; gap: 8px">
+                    <p class="n-p">{{ profile.username }}</p>
+                    <p class="n-p" *ngIf="profile?.userId === userService.userID">(Du)</p>    
+                  </div>
+            </div>
               </div>
             </div>
           </div>

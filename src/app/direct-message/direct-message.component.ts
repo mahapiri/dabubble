@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { WorkspaceMenuComponent } from '../shared/workspace-menu/workspace-menu.component';
 import { DirectMessageService } from '../services/direct-message.service';
 import { User } from '../../models/user.class';
+import { UserService } from '../services/user.service';
 @Component({
   selector: 'app-direct-message',
   standalone: true,
@@ -28,6 +29,7 @@ import { User } from '../../models/user.class';
 })
 export class DirectMessageComponent implements OnInit {
   private directMessageService : DirectMessageService = inject(DirectMessageService);
+  public userService : UserService = inject(UserService);
   private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
   profile: User | null = null;
 
@@ -38,6 +40,7 @@ export class DirectMessageComponent implements OnInit {
   ngOnInit() {
       this.directMessageService.userSelected$.subscribe((user) => {
         this.profile = user;
+        console.log(this.profile?.userId)
         this.cdr.markForCheck();
       })
   }

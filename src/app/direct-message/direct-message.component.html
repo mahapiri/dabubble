@@ -3,14 +3,11 @@
     <div class="direct-message-info">
       <button class="channel-btn">
         <div class="profile-content">
-          <img
-            src="{{ profile?.profileImage }}"
-            alt="Character"
-            class="profile-icon"
-          />
+          <img src="{{ profile?.profileImage }}" alt="Character" class="profile-icon" />
           <div class="status-icon" ngClass="{{ profile?.state }}"></div>
         </div>
         <span class="user-name">{{ profile?.username }}</span>
+        <span class="user-name" *ngIf="profile?.userId === userService.userID">(Du)</span>
       </button>
     </div>
   </mat-card-header>
@@ -21,12 +18,24 @@
         <mat-list-item class="initial-info">
           <div class="user-info">
             <img class="user-img" src="{{ profile?.profileImage }}" />
-            <span class="user-name">{{ profile?.username }}</span>
+            <div style="display: flex; gap: 8px;">
+              <span class="user-name">{{ profile?.username }}</span>
+              <span class="user-name" *ngIf="profile?.userId === userService.userID">(Du)</span>
+            </div>
           </div>
-          <span class="info"
-            >Diese Unterhaltung findet nur zwischen
-            <span class="tag">&#64;{{ profile?.username }}</span> und dir statt.</span
-          >
+
+          @if (profile?.userId === userService.userID) {
+            <div class="info-own-user">
+              <span class="info-bold">Dieser Raum ist nur für dich da.</span>
+              <span class="info">Mache dir Notizen, liste deine To-dos auf oder bewahre
+                Links und Dateien griffbereit auf. Du kannst hier auch gerne Dinge mit dir selbst besprechen.</span>
+            </div>
+          }
+
+          @else {
+            <span class="info">Diese Unterhaltung findet nur zwischen
+              <span class="tag">&#64;{{ profile?.username }}</span> und dir statt.</span>
+          }
         </mat-list-item>
       </mat-list>
     </div>
@@ -38,11 +47,7 @@
 
       <div class="message-controls">
         <div class="add-elements">
-          <button
-            class="mini-fab-button"
-            mat-mini-fab
-            class="add-doc mini-fab-btn"
-          >
+          <button class="mini-fab-button" mat-mini-fab class="add-doc mini-fab-btn">
             <mat-icon>add</mat-icon>
           </button>
           <div class="vertical-divider"></div>

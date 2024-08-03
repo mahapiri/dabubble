@@ -69,7 +69,7 @@ export class WorkspaceMenuComponent implements OnInit {
 
   constructor(
     private channelService: ChannelService,
-    private userService: UserService,
+    public userService: UserService,
     private directMessage: DirectMessageService
   ) {}
 
@@ -161,6 +161,7 @@ export class WorkspaceMenuComponent implements OnInit {
     this.selectedUserIndex = i;
     this.selectProfileChange.emit(true);
     this.directMessage.getActualProfile(profile);
+    console.log(this.userService.userID);
   }
   
 
