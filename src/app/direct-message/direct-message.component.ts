@@ -40,7 +40,6 @@ export class DirectMessageComponent implements OnInit {
   ngOnInit() {
       this.directMessageService.userSelected$.subscribe((user) => {
         this.profile = user;
-        console.log(this.profile?.userId)
         this.cdr.markForCheck();
       })
   }

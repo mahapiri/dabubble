@@ -161,7 +161,7 @@ export class WorkspaceMenuComponent implements OnInit {
     this.selectedUserIndex = i;
     this.selectProfileChange.emit(true);
     this.directMessage.getActualProfile(profile);
-    console.log(this.userService.userID);
+    this.directMessage.addDirectMessage(profile);
   }
   
 
