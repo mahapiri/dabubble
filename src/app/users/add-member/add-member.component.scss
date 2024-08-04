@@ -92,3 +92,9 @@ input[type=text] {
     top: 38px;
     left: 34px;
 }
+
+.selected{
+    background-color: var(--bg-color);
+    border-radius: 35px;
+    color: var(--black);
+  }

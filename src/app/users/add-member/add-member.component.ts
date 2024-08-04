@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ChannelMember } from '../../../models/channel.class';
 import { ChannelService } from '../../services/channel.service';
+import { arrayUnion, doc, Firestore, updateDoc } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-add-member',
@@ -16,13 +17,15 @@ import { ChannelService } from '../../services/channel.service';
 })
 export class AddMemberComponent {
   @Output() clickedAddMembers = new EventEmitter<boolean>();
+  firestore: Firestore = inject(Firestore);
   userService: UserService = inject(UserService);
   channelService: ChannelService = inject(ChannelService);
   searchMember: string = "";
   userlistOpen: boolean = false;
+  selectedUsersForChannel: User[] = [];
   showUser: User[] = [];
   channelMember: ChannelMember[] = [];
-  usersNotInChannel: any [] = [];
+  usersNotInChannel: User[] = [];
 
   ngOnInit() {
     this.getChannelMember();
@@ -34,6 +37,20 @@ export class AddMemberComponent {
         this.channelMember.push(member)
       })
     })
+  }
+
+  selectMember(user: User) {
+    user.chosenToChannel = !user.chosenToChannel;
+    this.addSelectedUserToChannel(user);
+  }
+
+  addSelectedUserToChannel(user: User) {
+    if (this.selectedUsersForChannel.includes(user)) {
+      this.selectedUsersForChannel.splice(this.selectedUsersForChannel.indexOf(user), 1)
+    }
+    else {
+      this.selectedUsersForChannel.push(user)
+    }
   }
 
   showMember() {
@@ -61,9 +78,27 @@ export class AddMemberComponent {
     return selectedUsers
   }
 
-  addMemberToChannel() {
-
+  addUserToActiveChannel() {
+    this.selectedUsersForChannel.forEach(async (user) => {
+      if (this.channelService.channelID) {
+        await updateDoc(doc(this.firestore, 'channels', this.channelService.channelID), {
+          channelMember: arrayUnion({
+            username: user.username,
+            userId: user.userId,
+            email: user.email,
+            state: user.state,
+            userChannels: user.userChannels,
+            profileImage: user.profileImage
+          })
+        });
+        console.log("done");
+      }
+      await updateDoc(doc(this.firestore, 'users', user.userId), {
+        userChannels: arrayUnion(this.channelService.channelID)
+      })
+    });
   }
+
 
   closeWindow() {
     this.clickedAddMembers.emit(false)
