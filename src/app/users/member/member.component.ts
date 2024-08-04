@@ -20,11 +20,11 @@ export class MemberComponent {
 
 
   ngOnInit() {
-    this.channelMember = []
-    this.getChannelMember()
+    this.getChannelMember()   
   }
 
   getChannelMember() {
+    this.channelMember = []
     this.channelService.selectedChannel$.forEach((channel) => {
       (channel?.channelMember)?.forEach((member) => {
         this.channelMember.push(member)
@@ -35,6 +35,4 @@ export class MemberComponent {
   closeWindow() {
     this.clickedMembers.emit(false)   
   }
-
-
 }

@@ -70,6 +70,11 @@ export class ChannelComponent {
   }
 
 
+  openMembers(event: Event) {
+    event.stopPropagation()
+    this.clickedMembers = true;
+  }
+
   toggleMembers(event: boolean) {
     this.clickedMembers = event;
   }

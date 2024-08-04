@@ -14,7 +14,7 @@
       </div>
       <div class="members-container">
         <div class="members-container-content">
-          <button class="channel-btn" (click)="toggleMembers(true)">
+          <button class="channel-btn"  (click)="openMembers($event)">
             <div class="img-container">
               <img
                 *ngFor="let member of channel.channelMember"
