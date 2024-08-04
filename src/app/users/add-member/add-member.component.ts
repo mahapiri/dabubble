@@ -7,11 +7,12 @@ import { CommonModule } from '@angular/common';
 import { ChannelMember } from '../../../models/channel.class';
 import { ChannelService } from '../../services/channel.service';
 import { arrayUnion, doc, Firestore, updateDoc } from '@angular/fire/firestore';
+import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 
 @Component({
   selector: 'app-add-member',
   standalone: true,
-  imports: [MatIconModule, FormsModule, CommonModule],
+  imports: [MatIconModule, FormsModule, CommonModule, ClickOutsideDirective],
   templateUrl: './add-member.component.html',
   styleUrl: './add-member.component.scss'
 })
@@ -31,6 +32,9 @@ export class AddMemberComponent {
     this.getChannelMember();
   }
 
+  /**
+   * gets all the members in the current channel
+   */
   getChannelMember() {
     this.channelService.selectedChannel$.forEach((channel) => {
       (channel?.channelMember)?.forEach((member) => {
@@ -39,11 +43,20 @@ export class AddMemberComponent {
     })
   }
 
+  /**
+   * highlights the selected user
+   * @param user the user which is clicked on in the list 
+   */
   selectMember(user: User) {
     user.chosenToChannel = !user.chosenToChannel;
     this.addSelectedUserToChannel(user);
   }
 
+
+  /**
+   * adds the marked users into the selectedUsersForChannel-array if they´re not already in it
+   * @param user the user which schould be added to the channel 
+   */
   addSelectedUserToChannel(user: User) {
     if (this.selectedUsersForChannel.includes(user)) {
       this.selectedUsersForChannel.splice(this.selectedUsersForChannel.indexOf(user), 1)
@@ -53,6 +66,9 @@ export class AddMemberComponent {
     }
   }
 
+  /**
+   * shows the member which can be added to the channel and
+   */
   showMember() {
     this.userlistOpen = true;
     this.usersNotInChannel = this.getNotIncludedMembers(this.userService.userArray)
@@ -65,6 +81,11 @@ export class AddMemberComponent {
     }
   }
 
+  /**
+   * gets an array of users which are not already in the channel
+   * @param allUsers array of all the users in DABubble
+   * @returns array of users which are not already in the channel
+   */
   getNotIncludedMembers(allUsers: User[]) {
     let selectedUsers: any = [];
     let allMemberIds = allUsers.map((user) => user.userId)
@@ -78,6 +99,9 @@ export class AddMemberComponent {
     return selectedUsers
   }
 
+  /**
+   * adds the marked users to the channel document in the firestore database and adds the channelId to the newly added user
+   */
   addUserToActiveChannel() {
     this.selectedUsersForChannel.forEach(async (user) => {
       if (this.channelService.channelID) {
@@ -99,7 +123,9 @@ export class AddMemberComponent {
     });
   }
 
-
+  /**
+   * closes the add-User window
+   */
   closeWindow() {
     this.clickedAddMembers.emit(false)
   }

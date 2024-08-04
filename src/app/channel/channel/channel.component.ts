@@ -73,13 +73,23 @@ export class ChannelComponent {
   openMembers(event: Event) {
     event.stopPropagation()
     this.clickedMembers = true;
+    setInterval(() => {
+      console.log(this.clickedAddMembers);
+
+    }, 50);
   }
 
-  toggleMembers(event: boolean) {
+  openAddMembers(event: Event) {
+    event.stopPropagation()
+    this.clickedAddMembers = true;
+  }
+
+
+    closeMembers(event: boolean) {
     this.clickedMembers = event;
   }
 
-  toggleAddMembers(event: boolean) {
+  closeAddMembers(event: boolean) {
     this.clickedAddMembers = event;
   }
 
