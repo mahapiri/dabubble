@@ -43,7 +43,7 @@
 
   <mat-card-footer>
     <div class="new-message-container">
-      <input matInput type="text" placeholder="Nachricht an {{ profile?.username }}" />
+      <input matInput #messageInput type="text" placeholder="Nachricht an {{ profile?.username }}" />
 
       <div class="message-controls">
         <div class="add-elements">
@@ -58,7 +58,7 @@
             <mat-icon>alternate_email</mat-icon>
           </button>
         </div>
-        <button mat-mini-fab class="send-btn">
+        <button mat-mini-fab class="send-btn" (click)="createMessage(messageInput.value, messageInput)">
           <mat-icon>send</mat-icon>
         </button>
       </div>

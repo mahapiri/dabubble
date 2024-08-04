@@ -28,7 +28,7 @@ import { UserService } from '../services/user.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DirectMessageComponent implements OnInit {
-  private directMessageService : DirectMessageService = inject(DirectMessageService);
+  public directMessageService : DirectMessageService = inject(DirectMessageService);
   public userService : UserService = inject(UserService);
   private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
   profile: User | null = null;
@@ -41,6 +41,28 @@ export class DirectMessageComponent implements OnInit {
       this.directMessageService.userSelected$.subscribe((user) => {
         this.profile = user;
         this.cdr.markForCheck();
+        console.log(this.profile?.username)
       })
+  }
+
+  async createMessage(messageText: string, messageInput: HTMLInputElement) {
+    if (!messageText.trim()) {
+      console.log('Leere Nachricht')
+      return;
+    }
+
+    const messageData = {
+      authorId: this.userService.getUserRef().id,
+      authorName: '',
+      date: new Date().toLocaleDateString(),
+      time: new Date().toLocaleTimeString(),
+      text: messageText,
+      reaction: [],
+      file: '',
+    };
+
+    await this.directMessageService.createMessageToDm(messageData);
+    console.log('Nachricht gesendet');
+    messageInput.value = '';
   }
 }
