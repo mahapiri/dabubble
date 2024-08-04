@@ -69,8 +69,9 @@ export class ChannelComponent {
     this.clickedEditChannel = true;
   }
 
-  showMembers() {
-    this.clickedMembers = true;
+
+  toggleMembers(event: boolean){
+    this.clickedMembers = event;
   }
 
   addMembers() {

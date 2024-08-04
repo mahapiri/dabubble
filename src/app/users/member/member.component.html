@@ -2,18 +2,20 @@
     <div class="title-content">
         <h3 class="n-h3">Mitglieder</h3>
         <div class="icon-container">
-            <mat-icon class="close-icon" (click)="close()">close</mat-icon>
+            <mat-icon class="close-icon" (click)="closeWindow()">close</mat-icon>
         </div>
     </div>
     <div class="profile-section">
         <div class="profile-div">
+            @for (member of channelMember; track $index) {
             <div class="profile-container">
                 <div class="profile-content">
-                    <img src="../../../assets/img/character1.png" alt="Character" class=" icon profile-icon">
-                    <div class="status-icon online"></div>
+                    <img src="{{ member.profileImage }}" alt="Character" class="profile-icon" />
+                    <div class="status-icon" ngClass="{{ member.state }}"></div>
                 </div>
-                <p class="n-p">Federik Beck (Du)</p>
+                <p class="n-p">{{member.username}}</p>
             </div>
+            }
         </div>
         <div class="add-member-container profile-div">
             <div class="add-member-btn profile-container">

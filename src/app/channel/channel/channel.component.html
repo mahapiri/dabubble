@@ -14,7 +14,7 @@
       </div>
       <div class="members-container">
         <div class="members-container-content">
-          <button class="channel-btn" (click)="showMembers()">
+          <button class="channel-btn" (click)="toggleMembers(true)">
             <div class="img-container">
               <img
                 *ngFor="let member of channel.channelMember"
@@ -26,7 +26,7 @@
               channel.channelMember.length
             }}</span>
           </button>
-          <app-member class="app-member" *ngIf="clickedMembers"></app-member>
+          <app-member (clickedMembers)="toggleMembers($event)" class="app-member" *ngIf="clickedMembers"></app-member>
         </div>
         <div class="add-member-container" (click)="addMembers()">
           <button class="add-member-btn" mat-mini-fab>

@@ -17,6 +17,7 @@
 
 .profile-div {
     display: flex;
+    flex-direction: column;
     width: 306px;
     border-radius: 30px;
     gap: 15px;
@@ -25,7 +26,6 @@
 .profile-container {
     display: flex;
     align-items: center;
-    // width: 216px;
     border-radius: 35px;
     padding: 4px 20px;
     gap: 15px;
@@ -52,6 +52,10 @@
 .profile-content {
     display: flex;
     position: relative;
+    img{
+        height: 50px;
+        width: 50px;
+    }
 }
 
 .icon {
