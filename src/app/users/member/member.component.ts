@@ -1,15 +1,15 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ChannelService } from '../../services/channel.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { User } from '../../../models/user.class';
 import { ChannelMember } from '../../../models/channel.class';
+import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 
 @Component({
   selector: 'app-member',
   standalone: true,
-  imports: [MatIconModule, FormsModule, CommonModule],
+  imports: [MatIconModule, FormsModule, CommonModule, ClickOutsideDirective],
   templateUrl: './member.component.html',
   styleUrl: './member.component.scss'
 })
@@ -20,6 +20,7 @@ export class MemberComponent {
 
 
   ngOnInit() {
+    this.channelMember = []
     this.getChannelMember()
   }
 
@@ -34,5 +35,6 @@ export class MemberComponent {
   closeWindow() {
     this.clickedMembers.emit(false)   
   }
+
 
 }

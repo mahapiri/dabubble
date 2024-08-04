@@ -54,3 +54,41 @@ input[type=text] {
     display: flex;
     justify-content: flex-end;
 }
+
+.profile-container {
+    display: flex;
+    align-items: center;
+    border-radius: 35px;
+    padding: 4px 20px;
+    gap: 15px;
+
+    &:hover {
+        background-color: var(--bg-color);
+        border-radius: 35px;
+        color: var(--black);
+    }
+}
+
+.profile-content {
+    display: flex;
+    position: relative;
+
+    img {
+        height: 50px;
+        width: 50px;
+    }
+}
+
+.profile-icon {
+    border-radius: 30px;
+}
+
+.status-icon {
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--white);
+    border-radius: 50%;
+    position: absolute;
+    top: 38px;
+    left: 34px;
+}

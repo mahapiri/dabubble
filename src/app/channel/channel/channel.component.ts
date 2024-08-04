@@ -59,7 +59,7 @@ export class ChannelComponent {
   /* channelMessages$: Observable<ChannelMessage[]> =
     this.channelService.channelMessages$; */
 
-  constructor(private channelService: ChannelService) {}
+  constructor(private channelService: ChannelService) { }
 
   getMessageList(): ChannelMessage[] {
     return this.channelService.channelMessages;
@@ -70,12 +70,12 @@ export class ChannelComponent {
   }
 
 
-  toggleMembers(event: boolean){
+  toggleMembers(event: boolean) {
     this.clickedMembers = event;
   }
 
-  addMembers() {
-    this.clickedAddMembers = true;
+  toggleAddMembers(event: boolean) {
+    this.clickedAddMembers = event;
   }
 
   handleThreadClick(event: boolean) {

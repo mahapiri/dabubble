@@ -28,12 +28,13 @@
           </button>
           <app-member (clickedMembers)="toggleMembers($event)" class="app-member" *ngIf="clickedMembers"></app-member>
         </div>
-        <div class="add-member-container" (click)="addMembers()">
-          <button class="add-member-btn" mat-mini-fab>
+        <div class="add-member-container" >
+          <button class="add-member-btn" mat-mini-fab (click)="toggleAddMembers(true)">
             <mat-icon>person_add</mat-icon>
           </button>
           <app-add-member
             class="add-member-content"
+            (clickedAddMembers)="toggleAddMembers($event)"
             *ngIf="clickedAddMembers"
           ></app-add-member>
         </div>
