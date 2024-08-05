@@ -24,8 +24,8 @@ export class ChannelService implements OnDestroy {
   private selectedChannel = new BehaviorSubject<Channel | null>(null);
   selectedChannel$ = this.selectedChannel.asObservable();
 
-  /*   private channelMessagesSubjects = new BehaviorSubject<ChannelMessage[]>([]);
-  channelMessages$ = this.channelMessagesSubjects.asObservable(); */
+  private channelMessagesSubjects = new BehaviorSubject<ChannelMessage[]>([]);
+  channelMessages$ = this.channelMessagesSubjects.asObservable();
 
   channelID?: string = '';
   createdBy: string = '';
@@ -43,9 +43,6 @@ export class ChannelService implements OnDestroy {
     this.userService = userService;
 
     this.selectedChannel$.subscribe((channel) => {
-      /* if (this.unsubMessages) {
-        this.unsubMessages();
-      } */
       if (channel) {
         this.setChannelId(channel);
         this.unsubMessages = this.subMessageList();
@@ -165,22 +162,12 @@ export class ChannelService implements OnDestroy {
         const data = message.data();
         this.channelMessages.push(this.setMessageObject(message.id, data));
       });
+      this.channelMessagesSubjects.next(this.channelMessages);
       console.log('Message received:', this.channelMessages);
     });
   }
 
-  /* private subMessageList() {
-    return onSnapshot(this.getMessageRef(), (snapshot) => {
-      const messages = snapshot.docs.map((doc) => doc.data() as ChannelMessage);
-      this.channelMessagesSubjects.next(messages);
-    });
-  } */
-
   ngOnDestroy() {
-    /* if (this.unsubMessages) {
-      this.unsubMessages();
-    } */
-
     this.unsubMessages();
   }
 

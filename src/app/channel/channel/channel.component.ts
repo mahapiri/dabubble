@@ -56,10 +56,10 @@ export class ChannelComponent {
 
   selectedChannel$: Observable<Channel | null> =
     this.channelService.selectedChannel$;
-  /* channelMessages$: Observable<ChannelMessage[]> =
-    this.channelService.channelMessages$; */
+  channelMessages$: Observable<ChannelMessage[]> =
+    this.channelService.channelMessages$;
 
-  constructor(private channelService: ChannelService) { }
+  constructor(private channelService: ChannelService) {}
 
   getMessageList(): ChannelMessage[] {
     return this.channelService.channelMessages;
@@ -69,23 +69,20 @@ export class ChannelComponent {
     this.clickedEditChannel = true;
   }
 
-
   openMembers(event: Event) {
-    event.stopPropagation()
+    event.stopPropagation();
     this.clickedMembers = true;
     setInterval(() => {
       console.log(this.clickedAddMembers);
-
     }, 50);
   }
 
   openAddMembers(event: Event) {
-    event.stopPropagation()
+    event.stopPropagation();
     this.clickedAddMembers = true;
   }
 
-
-    closeMembers(event: boolean) {
+  closeMembers(event: boolean) {
     this.clickedMembers = event;
   }
 
