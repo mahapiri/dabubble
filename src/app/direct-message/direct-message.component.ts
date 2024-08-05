@@ -10,6 +10,7 @@ import { WorkspaceMenuComponent } from '../shared/workspace-menu/workspace-menu.
 import { DirectMessageService } from '../services/direct-message.service';
 import { User } from '../../models/user.class';
 import { UserService } from '../services/user.service';
+import { DmMessageComponent } from './dm-message/dm-message.component';
 @Component({
   selector: 'app-direct-message',
   standalone: true,
@@ -21,7 +22,8 @@ import { UserService } from '../services/user.service';
     MatInputModule,
     MatListModule,
     CommonModule,
-    WorkspaceMenuComponent
+    WorkspaceMenuComponent,
+    DmMessageComponent
   ],
   templateUrl: './direct-message.component.html',
   styleUrl: './direct-message.component.scss',
@@ -41,11 +43,10 @@ export class DirectMessageComponent implements OnInit {
       this.directMessageService.userSelected$.subscribe((user) => {
         this.profile = user;
         this.cdr.markForCheck();
-        console.log(this.profile?.username)
       })
   }
 
-  async createMessage(messageText: string, messageInput: HTMLInputElement) {
+  async createMessage(messageText: string, messageInput: HTMLInputElement, profile: any) {
     if (!messageText.trim()) {
       console.log('Leere Nachricht')
       return;
@@ -61,8 +62,7 @@ export class DirectMessageComponent implements OnInit {
       file: '',
     };
 
-    await this.directMessageService.createMessageToDm(messageData);
-    console.log('Nachricht gesendet');
+    await this.directMessageService.createMessageToDm(messageData, profile);
     messageInput.value = '';
   }
 }

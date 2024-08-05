@@ -29,11 +29,15 @@ export class DirectMessageService {
     const currentUserId = this.getCurrentUserID();
     const otherUserId = profile.userId;
 
+    let exisitingDmId: any;
+
     if (currentUserId === otherUserId) {
-      await this.handleSelfDm(currentUserId);
+      exisitingDmId = await this.handleSelfDm(currentUserId);
     } else {
-      await this.handleUsertoUserDm(currentUserId, otherUserId);
+      exisitingDmId = await this.handleUsertoUserDm(currentUserId, otherUserId);
     }
+
+    return exisitingDmId;
   }
 
 
@@ -45,10 +49,14 @@ export class DirectMessageService {
         userIDs: [userId],
       });
       await this.setDirectMessageID(messageRef.id);
+      this.directMessageId = messageRef.id;
+      return messageRef.id;
     } else {
       console.log('Own Channel exist already', existingOwnDmId)
+      this.directMessageId = existingOwnDmId;
+      return existingOwnDmId;
     }
-    this.directMessageId = existingOwnDmId;
+
   }
 
 
@@ -60,10 +68,14 @@ export class DirectMessageService {
         userIDs: [otherUserId, currentUserId],
       });
       await this.setDirectMessageID(messageRef.id);
+      this.directMessageId = messageRef.id;
+      return messageRef.id;
     } else {
       console.log('Channel exist already', existingDmId)
+      this.directMessageId = existingDmId;
+      return existingDmId;
     }
-    this.directMessageId = existingDmId;
+
   }
 
 
@@ -118,10 +130,42 @@ export class DirectMessageService {
     return null;
   }
 
-  async createMessageToDm(messageData: any) {
+
+  async createMessageToDm(messageData: any, profile: any) {
+    this.addDirectMessage(profile);
     const docRef = doc(this.getMessageRef());
     await setDoc(docRef, messageData,
       { merge: true });
+  }
+
+
+  async showDmMessages(profile: User) {
+    let currentUser = this.getCurrentUserID();
+    let messageRef = await this.addDirectMessage(profile);
+    console.log('Eingeloggter User:', currentUser,'Auf Profil geklickt:', profile.userId, 'messageRef:', messageRef);
+    this.getMessageRefForId(messageRef);
+    this.getMessagesForDm(messageRef);
+  }
+
+  getMessageRefForId(directMessageId: string) {
+    return collection(this.firestore, `direct-messages/${directMessageId}/messages`);
+  }
+
+  async getMessagesForDm(directMessageId: string): Promise<DmMessage[]> {
+    const messageRef = this.getMessageRefForId(directMessageId);
+    const q = query(messageRef);
+    const querySnapshot = await getDocs(q);
+
+    const messages: DmMessage[] = [];
+    querySnapshot.forEach((doc) => {
+      messages.push(doc.data() as DmMessage);
+    });
+
+    return messages;
+  }
+
+  loadMessages() {
+
   }
 }
 

@@ -162,6 +162,8 @@ export class WorkspaceMenuComponent implements OnInit {
     this.selectProfileChange.emit(true);
     this.directMessage.getActualProfile(profile);
     this.directMessage.addDirectMessage(profile);
+    this.directMessage.showDmMessages(profile);
+    
   }
 
   editChannel(channel: string) {}
