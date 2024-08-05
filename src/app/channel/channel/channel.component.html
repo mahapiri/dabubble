@@ -136,6 +136,7 @@
         <app-channel-message
           (clickedAnswer)="handleThreadClick($event)"
           *ngFor="let channelMessage of channelMessages$ | async"
+          [channelMessage]="channelMessage"
         ></app-channel-message>
       </mat-list>
     </div>

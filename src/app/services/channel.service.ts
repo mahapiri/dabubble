@@ -18,9 +18,6 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class ChannelService implements OnDestroy {
-  firestore: Firestore = inject(Firestore);
-  userService: UserService = inject(UserService);
-
   private selectedChannel = new BehaviorSubject<Channel | null>(null);
   selectedChannel$ = this.selectedChannel.asObservable();
 
@@ -38,10 +35,7 @@ export class ChannelService implements OnDestroy {
    * Subscribes to the `selectedChannel$` observable to react to changes in the selected channel.
    * Then, updates the ChannelID and listens for changes (read) in the message list.
    */
-  constructor(firestore: Firestore, userService: UserService) {
-    this.firestore = firestore;
-    this.userService = userService;
-
+  constructor(private firestore: Firestore, private userService: UserService) {
     this.selectedChannel$.subscribe((channel) => {
       if (channel) {
         this.setChannelId(channel);
@@ -167,10 +161,6 @@ export class ChannelService implements OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    this.unsubMessages();
-  }
-
   setMessageObject(id: string, data: any) {
     return new ChannelMessage({
       id: id,
@@ -207,5 +197,9 @@ export class ChannelService implements OnDestroy {
 
   getMessageRef() {
     return collection(this.firestore, `channels/${this.channelID}/messages`);
+  }
+
+  ngOnDestroy() {
+    this.unsubMessages();
   }
 }
