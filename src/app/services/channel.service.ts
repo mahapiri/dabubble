@@ -18,14 +18,11 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class ChannelService implements OnDestroy {
-  firestore: Firestore = inject(Firestore);
-  userService: UserService = inject(UserService);
-
   private selectedChannel = new BehaviorSubject<Channel | null>(null);
   selectedChannel$ = this.selectedChannel.asObservable();
 
-  /*   private channelMessagesSubjects = new BehaviorSubject<ChannelMessage[]>([]);
-  channelMessages$ = this.channelMessagesSubjects.asObservable(); */
+  private channelMessagesSubjects = new BehaviorSubject<ChannelMessage[]>([]);
+  channelMessages$ = this.channelMessagesSubjects.asObservable();
 
   channelID?: string = '';
   createdBy: string = '';
@@ -38,14 +35,8 @@ export class ChannelService implements OnDestroy {
    * Subscribes to the `selectedChannel$` observable to react to changes in the selected channel.
    * Then, updates the ChannelID and listens for changes (read) in the message list.
    */
-  constructor(firestore: Firestore, userService: UserService) {
-    this.firestore = firestore;
-    this.userService = userService;
-
+  constructor(private firestore: Firestore, private userService: UserService) {
     this.selectedChannel$.subscribe((channel) => {
-      /* if (this.unsubMessages) {
-        this.unsubMessages();
-      } */
       if (channel) {
         this.setChannelId(channel);
         this.unsubMessages = this.subMessageList();
@@ -165,23 +156,9 @@ export class ChannelService implements OnDestroy {
         const data = message.data();
         this.channelMessages.push(this.setMessageObject(message.id, data));
       });
+      this.channelMessagesSubjects.next(this.channelMessages);
       console.log('Message received:', this.channelMessages);
     });
-  }
-
-  /* private subMessageList() {
-    return onSnapshot(this.getMessageRef(), (snapshot) => {
-      const messages = snapshot.docs.map((doc) => doc.data() as ChannelMessage);
-      this.channelMessagesSubjects.next(messages);
-    });
-  } */
-
-  ngOnDestroy() {
-    /* if (this.unsubMessages) {
-      this.unsubMessages();
-    } */
-
-    this.unsubMessages();
   }
 
   setMessageObject(id: string, data: any) {
@@ -220,5 +197,9 @@ export class ChannelService implements OnDestroy {
 
   getMessageRef() {
     return collection(this.firestore, `channels/${this.channelID}/messages`);
+  }
+
+  ngOnDestroy() {
+    this.unsubMessages();
   }
 }

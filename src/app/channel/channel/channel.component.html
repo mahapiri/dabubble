@@ -7,28 +7,44 @@
           <span>{{ channel.channelName }}</span>
           <mat-icon class="icon arrow">keyboard_arrow_down</mat-icon>
         </button>
-        <app-edit-channel class="edit-channel-container" *ngIf="clickedEditChannel"></app-edit-channel>
+        <app-edit-channel
+          class="edit-channel-container"
+          *ngIf="clickedEditChannel"
+        ></app-edit-channel>
       </div>
       <div class="members-container">
         <div class="members-container-content">
           <button class="channel-btn" (click)="openMembers($event)">
             <div class="img-container">
-              <img *ngFor="let member of channel.channelMember" src="./../../../{{ member.profileImage }}"
-                alt="member" />
+              <img
+                *ngFor="let member of channel.channelMember"
+                src="./../../../{{ member.profileImage }}"
+                alt="member"
+              />
             </div>
             <span class="number-members">{{
               channel.channelMember.length
-              }}</span>
+            }}</span>
           </button>
-          <app-member (clickedMembers)="closeMembers($event)"
-            class="app-member" *ngIf="clickedMembers"></app-member>
+          <app-member
+            (clickedMembers)="closeMembers($event)"
+            class="app-member"
+            *ngIf="clickedMembers"
+          ></app-member>
         </div>
         <div class="add-member-container">
-          <button class="add-member-btn" mat-mini-fab (click)="openAddMembers($event)">
+          <button
+            class="add-member-btn"
+            mat-mini-fab
+            (click)="openAddMembers($event)"
+          >
             <mat-icon>person_add</mat-icon>
           </button>
-          <app-add-member class="add-member-content" (clickedAddMembers)="closeAddMembers($event)"
-            *ngIf="clickedAddMembers"></app-add-member>
+          <app-add-member
+            class="add-member-content"
+            (clickedAddMembers)="closeAddMembers($event)"
+            *ngIf="clickedAddMembers"
+          ></app-add-member>
         </div>
       </div>
     </div>
@@ -50,7 +66,10 @@
                   <img src="./../../../assets/emojis/check.png" alt="check" />
                 </button>
                 <button class="mini-fab-btn" mat-mini-fab>
-                  <img src="./../../../assets/emojis/raising-both-hands.svg" alt="hands up" />
+                  <img
+                    src="./../../../assets/emojis/raising-both-hands.svg"
+                    alt="hands up"
+                  />
                 </button>
                 <button class="mini-fab-btn" mat-mini-fab>
                   <mat-icon>add_reaction</mat-icon>
@@ -71,21 +90,33 @@
                   <div class="reactions-wrapper">
                     <button class="reaction-btn">
                       <div class="reaction-info-menu">
-                        <img src="./../../../assets/emojis/rocket.svg" alt="nerd" />
+                        <img
+                          src="./../../../assets/emojis/rocket.svg"
+                          alt="nerd"
+                        />
                         <span class="user">Noah Braun</span>
                         <span>hat reagiert</span>
                       </div>
-                      <img src="./../../../assets/emojis/rocket.svg" alt="check" />
+                      <img
+                        src="./../../../assets/emojis/rocket.svg"
+                        alt="check"
+                      />
                       <span class="reaction-count">1</span>
                     </button>
 
                     <button class="reaction-btn">
                       <div class="reaction-info-menu">
-                        <img src="./../../../assets/emojis/check.png" alt="rocket" />
+                        <img
+                          src="./../../../assets/emojis/check.png"
+                          alt="rocket"
+                        />
                         <span class="user">Sofia Müller</span>
                         <span>hat reagiert</span>
                       </div>
-                      <img src="./../../../assets/emojis/check.png" alt="check" />
+                      <img
+                        src="./../../../assets/emojis/check.png"
+                        alt="check"
+                      />
                       <span class="reaction-count">1</span>
                     </button>
                     <button class="mini-fab-btn" mat-mini-fab>
@@ -94,21 +125,25 @@
                   </div>
                 </div>
               </div>
-              <img class="user-img" src="./../../../assets/img/character3.png" />
+              <img
+                class="user-img"
+                src="./../../../assets/img/character3.png"
+              />
             </div>
           </div>
         </mat-list-item>
 
-        <!-- <ng-container
-          *ngIf="channelMessages$ | async as channelMessages"
-        > -->
-        <app-channel-message (clickedAnswer)="handleThreadClick($event)" *ngFor="let channelMessage of getMessageList()"
-          [channelMessage]="channelMessage"></app-channel-message>
-        <!-- </ng-container> -->
+        <app-channel-message
+          (clickedAnswer)="handleThreadClick($event)"
+          *ngFor="let channelMessage of channelMessages$ | async"
+          [channelMessage]="channelMessage"
+        ></app-channel-message>
       </mat-list>
     </div>
   </mat-card-content>
   <mat-card-footer>
-    <app-channel-new-message-input [channel]="channel"></app-channel-new-message-input>
+    <app-channel-new-message-input
+      [channel]="channel"
+    ></app-channel-new-message-input>
   </mat-card-footer>
 </mat-card>
