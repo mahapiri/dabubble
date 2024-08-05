@@ -39,6 +39,8 @@
         </mat-list-item>
       </mat-list>
     </div>
+
+    <app-dm-message></app-dm-message>
   </mat-card-content>
 
   <mat-card-footer>
@@ -58,7 +60,7 @@
             <mat-icon>alternate_email</mat-icon>
           </button>
         </div>
-        <button mat-mini-fab class="send-btn" (click)="createMessage(messageInput.value, messageInput)">
+        <button mat-mini-fab class="send-btn" (click)="createMessage(messageInput.value, messageInput, profile)">
           <mat-icon>send</mat-icon>
         </button>
       </div>
