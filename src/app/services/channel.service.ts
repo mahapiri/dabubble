@@ -1,4 +1,4 @@
-import { inject, Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import {
   addDoc,
   collection,
@@ -8,6 +8,9 @@ import {
   arrayUnion,
   getDoc,
   onSnapshot,
+  query,
+  orderBy,
+  limit,
 } from '@angular/fire/firestore';
 import { UserService } from './user.service';
 import { User } from '../../models/user.class';
@@ -149,8 +152,16 @@ export class ChannelService implements OnDestroy {
     });
   }
 
+  /**
+   * Subscribes to changes in the messages collection of the currently selected channel.
+   * Fetches the latest list of messages and updates the channelMessagesSubjects BehaviorSubject.
+   *
+   * @returns - the unsubscribe function for the onSnapshot listener.
+   */
   subMessageList() {
-    return onSnapshot(this.getMessageRef(), (list) => {
+    const q = query(this.getMessageRef(), orderBy('time', 'desc'), limit(100));
+
+    return onSnapshot(q, (list) => {
       this.channelMessages = [];
       list.forEach((message) => {
         const data = message.data();
