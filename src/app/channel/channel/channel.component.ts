@@ -60,10 +60,11 @@ export class ChannelComponent {
 
   constructor(private channelService: ChannelService) { }
 
-  editChannel() {
-    console.log(this.channel);
-    
+  editChannel() {    
     this.clickedEditChannel = true;
+  }
+  closeEditChannel(event: boolean){
+    this.clickedEditChannel = event;
   }
 
   openMembers(event: Event) {

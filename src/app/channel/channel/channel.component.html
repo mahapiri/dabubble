@@ -9,6 +9,7 @@
         </button>
         <app-edit-channel
         [channel]="channel"
+        (channelClosed)="closeEditChannel($event)"
           class="edit-channel-container"
           *ngIf="clickedEditChannel"
         ></app-edit-channel>

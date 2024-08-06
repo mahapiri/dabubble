@@ -6,7 +6,7 @@
                 <h3 class="n-h3">{{channel.channelName}}</h3>
             </div>
             <div class="icon-container">
-                <mat-icon class="close-icon" (click)="close()">close</mat-icon>
+                <mat-icon class="close-icon" (click)="closeChannel()">close</mat-icon>
             </div>
         </div>
         <div class="input-container" [class.border]="!editing">
@@ -19,7 +19,7 @@
 
             <div class="inputfield">
                 <mat-icon>tag</mat-icon>
-                <p class="n-p">Entwicklerteam</p>
+                <p class="n-p">{{channel.channelName}}</p>
             </div>
         </div>
         <div class="input-container" [class.border]="!editing">
@@ -29,11 +29,11 @@
                     {{ editing ? 'Speichern' : 'Bearbeiten' }}
                 </a>
             </div>
-            <p>Dieser Channel ist für alles rund um #dfsdf vorgesehen. Hier kannst du zusammen mit deinem Team Meetings abhalten, Dokumente teilen und Entscheidungen treffen.</p>
+            <p>{{channel.description}}</p>
             <div class="line"></div>
             <div class="creator-container">
                 <p class="n-p bold">Erstellt von</p>
-                <h3 class="n-h3 color-p-3">Noah Braun</h3>
+                <h3 class="n-h3 color-p-3">{{channel.createdBy}}</h3>
             </div>
         </div>
         <div class="btn-container">

@@ -12,10 +12,15 @@ import { Channel } from '../../../models/channel.class';
 export class EditChannelComponent {
   editing: boolean = false;
   @Input() channel!: Channel;
+  @Output() channelClosed = new EventEmitter<boolean>();
 
 
-  close() {
 
+  ngOnInit(){
+    
+  }
+  closeChannel(){
+    this.channelClosed.emit(false)
   }
 
   edit() {
