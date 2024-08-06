@@ -41,14 +41,15 @@ export class ChannelMessageComponent {
   }
 
   /**
-   * Formats the date from the message into the german date format "weekday, day.month.year" for display.
-   * If the date corresponds to today, it returns 'Heute'. If the date corresponds to yesterday, it returns 'Gestern'. Otherwise, it returns the date in the format: Wochentag, tt.mm.jjj.
+   * Formats the date into the german date format "weekday, tt.mm.yyyy".
+   * Compares the date to the current date, and returns today or tomorrow if that matches.
    *
-   * @param {string} date - The date string to format. ISO 8601 format (e.g., 'YYYY-MM-DD').
+   * @param {string} date - The date in format 'YYYY-MM-DD'
    * @returns {string} The formatted date string.
    */
   formatDate(date: string): string {
-    const dateObj = new Date(date); // converts the date string into a date Object
+    const [year, month, day] = date.split('-').map(Number);
+    const dateObj = new Date(year, month - 1, day); // converts the iso-date string into a date Object
 
     const options: Intl.DateTimeFormatOptions = {
       weekday: 'long',
@@ -57,19 +58,34 @@ export class ChannelMessageComponent {
       day: '2-digit',
     };
 
+    const todayDate = new Date();
+    const today = new Date(
+      todayDate.getFullYear(),
+      todayDate.getMonth(),
+      todayDate.getDate()
+    );
+
+    // Holt sich das Datum von gestern
+    const yesterdayDate = new Date(todayDate);
+    yesterdayDate.setDate(todayDate.getDate() - 1);
+    const yesterday = new Date(
+      yesterdayDate.getFullYear(),
+      yesterdayDate.getMonth(),
+      yesterdayDate.getDate()
+    );
+
+    // Holt sich das Datum der Nachricht ohne Zeit
+    const messageDate = new Date(
+      dateObj.getFullYear(),
+      dateObj.getMonth(),
+      dateObj.getDate()
+    );
+
     const formattedDate = dateObj.toLocaleDateString('de-DE', options);
 
-    const todayDate = new Date();
-    const today = todayDate.toString();
-
-    const yesterdayDate = new Date().setDate(todayDate.getDate() - 1);
-    const yesterday = yesterdayDate.toString();
-
-    const messageDate = dateObj.toString();
-
-    if (messageDate === today) {
+    if (messageDate.getTime() === today.getTime()) {
       return 'Heute';
-    } else if (messageDate === yesterday) {
+    } else if (messageDate.getTime() === yesterday.getTime()) {
       return 'Gestern';
     } else {
       return formattedDate;

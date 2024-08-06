@@ -156,7 +156,8 @@ export class ChannelService implements OnDestroy {
   /**
    * Subscribes to changes in the messages collection of the currently selected channel.
    * Fetches the latest list of messages and updates the channelMessagesSubjects BehaviorSubject.
-   * Orders the messages by the "time" they are written.
+   * Orders the messages by the "date" and "time" they are written in ascending order first to be able to call the isFirstMessageOfDay Function to determine which message is the first one of the day.
+   * Then reverses the Order, so older messages are shown higher up in the chat and the latest messages are shown at the bottom.
    * @returns - the unsubscribe function for the onSnapshot listener.
    */
   subMessageList() {
@@ -174,27 +175,32 @@ export class ChannelService implements OnDestroy {
       list.forEach((message) => {
         const data = message.data();
         const currentMessage = this.setMessageObject(message.id, data);
-
-        // Setze isFirstMessageOfDay auf true, wenn previousDate null ist oder das Datum unterschiedlich ist
-        if (
-          this.previousDate === null ||
-          currentMessage.date !== this.previousDate
-        ) {
-          currentMessage.isFirstMessageOfDay = true;
-          this.previousDate = currentMessage.date;
-        } else {
-          currentMessage.isFirstMessageOfDay = false;
-        }
-
+        this.setFirstMessageOfDay(currentMessage);
         this.channelMessages.push(currentMessage);
       });
 
-      // Umkehre die Reihenfolge der Nachrichten, damit die neuesten Nachrichten unten stehen
       this.channelMessages.reverse();
-
       this.channelMessagesSubjects.next(this.channelMessages);
       console.log('Message received:', this.channelMessages);
     });
+  }
+
+  /**
+   * Determines if a message is the first of the day for the dividing line between days in the Chat.
+   * If the date is different or if no previous date is set, it marks the message as the first message. `previousDate` is updated to the date of the current message for the next comparison.
+   *
+   * @param {ChannelMessage} currentMessage - The message object to be checked and updated.
+   */
+  setFirstMessageOfDay(currentMessage: ChannelMessage) {
+    if (
+      this.previousDate === null ||
+      currentMessage.date !== this.previousDate
+    ) {
+      currentMessage.isFirstMessageOfDay = true;
+      this.previousDate = currentMessage.date;
+    } else {
+      currentMessage.isFirstMessageOfDay = false;
+    }
   }
 
   setMessageObject(id: string, data: any) {
@@ -212,11 +218,18 @@ export class ChannelService implements OnDestroy {
 
   setMessageWithUser(text: string, user: User): ChannelMessage {
     const now = new Date();
+
+    const timeOptions: Intl.DateTimeFormatOptions = {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    };
+
     return new ChannelMessage({
       id: '',
       text: text,
-      time: now.toLocaleTimeString(),
-      date: now.toISOString(),
+      time: now.toLocaleTimeString('de-DE', timeOptions),
+      date: now.toISOString().split('T')[0],
       authorName: user.username,
       authorId: user.userId,
       profileImage: user.profileImage,
