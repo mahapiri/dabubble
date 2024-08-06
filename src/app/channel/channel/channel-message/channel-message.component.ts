@@ -57,12 +57,10 @@ export class ChannelMessageComponent {
 
     if (date === today) {
       return 'Heute';
-    }
-
-    if (date === yesterday) {
+    } else if (date === yesterday) {
       return 'Gestern';
+    } else {
+      return date;
     }
-
-    return date;
   }
 }

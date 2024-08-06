@@ -162,24 +162,35 @@ export class ChannelService implements OnDestroy {
   subMessageList() {
     const q = query(
       this.getMessageRef(),
-      orderBy('date', 'desc'),
-      orderBy('time', 'desc'),
+      orderBy('date', 'asc'),
+      orderBy('time', 'asc'),
       limit(100)
     );
 
     return onSnapshot(q, (list) => {
       this.channelMessages = [];
+      this.previousDate = null;
+
       list.forEach((message) => {
         const data = message.data();
         const currentMessage = this.setMessageObject(message.id, data);
-        if (currentMessage.date !== this.previousDate) {
+
+        // Setze isFirstMessageOfDay auf true, wenn previousDate null ist oder das Datum unterschiedlich ist
+        if (
+          this.previousDate === null ||
+          currentMessage.date !== this.previousDate
+        ) {
           currentMessage.isFirstMessageOfDay = true;
           this.previousDate = currentMessage.date;
         } else {
           currentMessage.isFirstMessageOfDay = false;
         }
+
         this.channelMessages.push(currentMessage);
       });
+
+      // Umkehre die Reihenfolge der Nachrichten, damit die neuesten Nachrichten unten stehen
+      this.channelMessages.reverse();
 
       this.channelMessagesSubjects.next(this.channelMessages);
       console.log('Message received:', this.channelMessages);
