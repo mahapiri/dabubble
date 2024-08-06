@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatCardContent } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
@@ -23,16 +23,12 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './own-message.component.html',
   styleUrl: './own-message.component.scss'
 })
-export class OwnMessageComponent implements OnInit {
-
+export class OwnMessageComponent {
+  @Input() message!: DmMessage;
   messages$: Observable<DmMessage[]>;
 
   constructor(private directMessageService: DirectMessageService) {
     this.messages$ = this.directMessageService.messages$;
-  }
-
-  ngOnInit() {
-
   }
 
   formatTime(time: string): string {

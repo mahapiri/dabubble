@@ -4,7 +4,7 @@
             <mat-list-item>
                 <div class="divider-container">
                     <mat-divider> </mat-divider>
-                    <div class="message-date">Datum</div>
+                    <div class="message-date">{{ formatDate(message.date) }}</div>
                 </div>
 
                 <div class="member-message1">
@@ -24,13 +24,13 @@
                     </div>
 
                     <div class="message-container">
-                        <img class="user-img" src="./../../../assets/img/character4.png" />
+                        <img class="user-img" src="{{ message.profileImg }}" />
                         <div class="message-details">
                             <div class="user-wrapper">
-                                <div class="user-name">Author name</div>
-                                <div class="time">Time Uhr</div>
+                                <div class="user-name">{{ message.authorName }}</div>
+                                <div class="time">{{ formatTime(message.time) }} Uhr</div>
                             </div>
-                            <div class="text-bubble">text</div>
+                            <div class="text-bubble">{{ message.text }}</div>
                             <div class="reaction-container">
                                 <div class="reactions-wrapper">
                                     <button class="reaction-btn">
