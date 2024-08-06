@@ -29,6 +29,7 @@ export class ChannelService implements OnDestroy {
 
   channelID?: string = '';
   createdBy: string = '';
+  previousDate: string | null = null;
 
   channelMessages: ChannelMessage[] = [];
 
@@ -155,18 +156,31 @@ export class ChannelService implements OnDestroy {
   /**
    * Subscribes to changes in the messages collection of the currently selected channel.
    * Fetches the latest list of messages and updates the channelMessagesSubjects BehaviorSubject.
-   *
+   * Orders the messages by the "time" they are written.
    * @returns - the unsubscribe function for the onSnapshot listener.
    */
   subMessageList() {
-    const q = query(this.getMessageRef(), orderBy('time', 'desc'), limit(100));
+    const q = query(
+      this.getMessageRef(),
+      orderBy('date', 'desc'),
+      orderBy('time', 'desc'),
+      limit(100)
+    );
 
     return onSnapshot(q, (list) => {
       this.channelMessages = [];
       list.forEach((message) => {
         const data = message.data();
-        this.channelMessages.push(this.setMessageObject(message.id, data));
+        const currentMessage = this.setMessageObject(message.id, data);
+        if (currentMessage.date !== this.previousDate) {
+          currentMessage.isFirstMessageOfDay = true;
+          this.previousDate = currentMessage.date;
+        } else {
+          currentMessage.isFirstMessageOfDay = false;
+        }
+        this.channelMessages.push(currentMessage);
       });
+
       this.channelMessagesSubjects.next(this.channelMessages);
       console.log('Message received:', this.channelMessages);
     });
@@ -181,6 +195,7 @@ export class ChannelService implements OnDestroy {
       authorName: data['authorName'],
       authorId: data['authorId'],
       profileImage: data['profileImage'],
+      isFirstMessageOfDay: false,
     });
   }
 
@@ -199,6 +214,7 @@ export class ChannelService implements OnDestroy {
       authorName: user.username,
       authorId: user.userId,
       profileImage: user.profileImage,
+      isFirstMessageOfDay: false,
     });
   }
 

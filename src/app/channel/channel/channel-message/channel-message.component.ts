@@ -6,7 +6,7 @@ import { MatListModule } from '@angular/material/list';
 import { ChannelService } from '../../../services/channel.service';
 import { CommonModule } from '@angular/common';
 import { Channel, ChannelMessage } from '../../../../models/channel.class';
-import { formatDate } from '@angular/common';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-channel-message',
@@ -25,6 +25,9 @@ export class ChannelMessageComponent {
   @Input() channel!: Channel;
   @Input() channelMessage!: ChannelMessage;
   @Output() clickedAnswer = new EventEmitter<boolean>();
+
+  channelMessages$: Observable<ChannelMessage[]> =
+    this.channelService.channelMessages$;
 
   constructor(private channelService: ChannelService) {}
 

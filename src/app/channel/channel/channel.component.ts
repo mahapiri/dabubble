@@ -47,7 +47,6 @@ import { Observable } from 'rxjs';
 export class ChannelComponent {
   @Input() channel!: Channel;
   @Output() clickedThreadChange = new EventEmitter<boolean>();
-  //channelMessages: ChannelMessage[] = [];
 
   clickedEditChannel: boolean = false;
   clickedAddMembers: boolean = false;
@@ -60,10 +59,6 @@ export class ChannelComponent {
     this.channelService.channelMessages$;
 
   constructor(private channelService: ChannelService) {}
-
-  getMessageList(): ChannelMessage[] {
-    return this.channelService.channelMessages;
-  }
 
   editChannel() {
     this.clickedEditChannel = true;

@@ -1,5 +1,5 @@
 <mat-list-item>
-  <div class="divider-container">
+  <div *ngIf="channelMessage.isFirstMessageOfDay" class="divider-container">
     <mat-divider> </mat-divider>
     <div class="message-date">{{ formatDate(channelMessage.date) }}</div>
   </div>

@@ -41,6 +41,7 @@ export class ChannelMessage {
   authorName: string = '';
   authorId: string = '';
   profileImage: string = '';
+  isFirstMessageOfDay: boolean = false;
 
   constructor(obj?: any) {
     this.id = obj ? obj.id : '';
@@ -50,6 +51,7 @@ export class ChannelMessage {
     this.authorName = obj ? obj.authorName : '';
     this.authorId = obj ? obj.authorId : '';
     this.profileImage = obj ? obj.profileImage : '';
+    this.isFirstMessageOfDay = obj ? obj.isFirstMessageOfDay || false : false;
   }
 
   getMessageJson() {
@@ -61,6 +63,7 @@ export class ChannelMessage {
       authorName: this.authorName,
       authorId: this.authorId,
       profileImage: this.profileImage,
+      isFirstMessageOfDay: this.isFirstMessageOfDay,
     };
   }
 }
