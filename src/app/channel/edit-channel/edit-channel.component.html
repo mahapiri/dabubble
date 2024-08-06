@@ -16,10 +16,14 @@
                     {{ editing ? 'Speichern' : 'Bearbeiten' }}
                 </a>
             </div>
-
             <div class="inputfield">
+
+                @if(!editing){
                 <mat-icon>tag</mat-icon>
                 <p class="n-p">{{channel.channelName}}</p>
+                }@else{
+                <input class="padding-left" [(ngModel)]="channel.channelName" type="text">
+                }
             </div>
         </div>
         <div class="input-container" [class.border]="!editing">
@@ -29,7 +33,11 @@
                     {{ editing ? 'Speichern' : 'Bearbeiten' }}
                 </a>
             </div>
-            <p>{{channel.description}}</p>
+            @if(!editing){
+            <p class="n-p">{{channel.description}}</p>
+            }@else{
+            <input [(ngModel)]="channel.description" type="text">
+            }
             <div class="line"></div>
             <div class="creator-container">
                 <p class="n-p bold">Erstellt von</p>
