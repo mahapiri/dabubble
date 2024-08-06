@@ -40,8 +40,16 @@ export class ChannelMessageComponent {
     return `${hours}:${minutes}`;
   }
 
+  /**
+   * Formats the date from the message into the german date format "weekday, day.month.year" for display.
+   * If the date corresponds to today, it returns 'Heute'. If the date corresponds to yesterday, it returns 'Gestern'. Otherwise, it returns the date in the format: Wochentag, tt.mm.jjj.
+   *
+   * @param {string} date - The date string to format. ISO 8601 format (e.g., 'YYYY-MM-DD').
+   * @returns {string} The formatted date string.
+   */
   formatDate(date: string): string {
-    const todayDate = new Date();
+    const dateObj = new Date(date); // converts the date string into a date Object
+
     const options: Intl.DateTimeFormatOptions = {
       weekday: 'long',
       year: 'numeric',
@@ -49,18 +57,22 @@ export class ChannelMessageComponent {
       day: '2-digit',
     };
 
-    const today = todayDate.toLocaleDateString('de-DE', options);
+    const formattedDate = dateObj.toLocaleDateString('de-DE', options);
 
-    const yesterdayDate = new Date();
-    yesterdayDate.setDate(yesterdayDate.getDate() - 1);
-    const yesterday = yesterdayDate.toLocaleDateString('de-DE', options);
+    const todayDate = new Date();
+    const today = todayDate.toString();
 
-    if (date === today) {
+    const yesterdayDate = new Date().setDate(todayDate.getDate() - 1);
+    const yesterday = yesterdayDate.toString();
+
+    const messageDate = dateObj.toString();
+
+    if (messageDate === today) {
       return 'Heute';
-    } else if (date === yesterday) {
+    } else if (messageDate === yesterday) {
       return 'Gestern';
     } else {
-      return date;
+      return formattedDate;
     }
   }
 }

@@ -216,12 +216,7 @@ export class ChannelService implements OnDestroy {
       id: '',
       text: text,
       time: now.toLocaleTimeString(),
-      date: now.toLocaleDateString('de-DE', {
-        weekday: 'long',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      }),
+      date: now.toISOString(),
       authorName: user.username,
       authorId: user.userId,
       profileImage: user.profileImage,
