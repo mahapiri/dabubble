@@ -61,6 +61,8 @@ export class ChannelComponent {
   constructor(private channelService: ChannelService) { }
 
   editChannel() {
+    console.log(this.channel);
+    
     this.clickedEditChannel = true;
   }
 
@@ -83,7 +85,7 @@ export class ChannelComponent {
   }
 
   switchToAddMembers(event: boolean) {    
-    this.clickedAddMembers = true;
+    this.clickedAddMembers = event;
   }
 
   handleThreadClick(event: boolean) {

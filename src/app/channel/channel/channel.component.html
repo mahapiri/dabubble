@@ -8,6 +8,7 @@
           <mat-icon class="icon arrow">keyboard_arrow_down</mat-icon>
         </button>
         <app-edit-channel
+        [channel]="channel"
           class="edit-channel-container"
           *ngIf="clickedEditChannel"
         ></app-edit-channel>
