@@ -54,7 +54,7 @@ export class DirectMessageComponent implements OnInit {
 
     const messageData = {
       authorId: this.userService.getUserRef().id,
-      authorName: '',
+      authorName: profile.username,
       date: new Date().toLocaleDateString(),
       time: new Date().toLocaleTimeString(),
       text: messageText,

@@ -1,11 +1,11 @@
 <mat-card-content>
-    <div class="main-chat">
+    <div class="main-chat" >
       <mat-list>
-        <mat-list-item>
+        <mat-list-item *ngFor="let message of messages$ | async; let i = index">
           <div class="my-message">
             <div class="divider-container">
               <mat-divider> </mat-divider>
-              <div class="message-date">Heute</div>
+              <div class="message-date">{{ formatDate(message.date) }}</div>
             </div>
 
             <div class="message-container">
@@ -26,11 +26,11 @@
 
               <div class="message-details">
                 <div class="user-wrapper">
-                  <div class="time">14:30 Uhr</div>
-                  <div class="user-name">Frederik Beck</div>
+                  <div class="time">{{ formatTime(message.time) }} Uhr</div>
+                  <div class="user-name">{{ message.authorName }}</div>
                 </div>
 
-                <div class="text-bubble">Hallo, willkommen im Chat!</div>
+                <div class="text-bubble">{{ message.text }}</div>
                 <div class="reaction-container">
                   <div class="reactions-wrapper">
                     <button class="reaction-btn">

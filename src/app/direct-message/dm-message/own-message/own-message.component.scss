@@ -136,9 +136,9 @@ mat-card-header {
 }
 
 mat-card-content {
-    padding: 16px 0 0 0;
+    padding: 0 0 0 0;
     flex: 1;
-    margin-bottom: 180px;
+    margin-bottom: 0px;
     overflow: auto;
 }
 
@@ -150,7 +150,7 @@ mat-card-footer {
 }
 
 .main-chat {
-    height: 100%;
+    height: unset !important;
 }
 
 mat-list {
@@ -212,6 +212,7 @@ mat-list-item {
     .message-details {
         display: flex;
         flex-direction: column;
+        align-items: flex-end;
         gap: 8px;
     }
 
@@ -334,10 +335,10 @@ mat-list-item {
     }
 
     .mini-fab-btn {
-        color: var(--black);
+        color: var(--black) !important;
 
         &:hover {
-            color: var(--purple-3);
+            color: var(--purple-3) !important;
         }
     }
 }
@@ -432,4 +433,12 @@ mat-list-item {
         height: 34px;
         width: 34px;
     }
+}
+
+.mat-mdc-card-content:last-child {
+    padding-bottom: unset; 
+}
+
+.mat-mdc-card-content:first-child {
+    padding-top: unset;
 }

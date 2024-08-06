@@ -26,34 +26,4 @@ import { UserMessageComponent } from './user-message/user-message.component';
 })
 export class DmMessageComponent {
 
-  formatTime(time: string): string {
-    const [hours, minutes] = time.split(':');
-    return `${hours}:${minutes}`;
-  }
-
-  formatDate(date: string): string {
-    const todayDate = new Date();
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: 'long',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    };
-
-    const today = todayDate.toLocaleDateString('de-DE', options);
-
-    const yesterdayDate = new Date();
-    yesterdayDate.setDate(yesterdayDate.getDate() - 1);
-    const yesterday = yesterdayDate.toLocaleDateString('de-DE', options);
-
-    if (date === today) {
-      return 'Heute';
-    }
-
-    if (date === yesterday) {
-      return 'Gestern';
-    }
-
-    return date;
-  }
 }

@@ -1,1 +1,66 @@
-<p>user-message works!</p>
+<mat-card-content>
+    <div class="main-chat">
+        <mat-list>
+            <mat-list-item>
+                <div class="divider-container">
+                    <mat-divider> </mat-divider>
+                    <div class="message-date">Datum</div>
+                </div>
+
+                <div class="member-message1">
+                    <div id="reactionBar" class="reaction-bar">
+                        <button class="mini-fab-btn" mat-mini-fab>
+                            <img src="./../../../assets/emojis/check.png" alt="hands up" />
+                        </button>
+                        <button class="mini-fab-btn" mat-mini-fab>
+                            <img src="./../../../assets/emojis/raising-both-hands.svg" alt="heart" />
+                        </button>
+                        <button class="mini-fab-btn" mat-mini-fab>
+                            <mat-icon>add_reaction</mat-icon>
+                        </button>
+                        <button class="mini-fab-btn" mat-mini-fab>
+                            <mat-icon>comment</mat-icon>
+                        </button>
+                    </div>
+
+                    <div class="message-container">
+                        <img class="user-img" src="./../../../assets/img/character4.png" />
+                        <div class="message-details">
+                            <div class="user-wrapper">
+                                <div class="user-name">Author name</div>
+                                <div class="time">Time Uhr</div>
+                            </div>
+                            <div class="text-bubble">text</div>
+                            <div class="reaction-container">
+                                <div class="reactions-wrapper">
+                                    <button class="reaction-btn">
+                                        <div class="reaction-info-menu">
+                                            <img src="./../../../assets/emojis/rocket.svg" alt="nerd" />
+                                            <span class="user">Noah Braun</span>
+                                            <span>hat reagiert</span>
+                                        </div>
+                                        <img src="./../../../assets/emojis/rocket.svg" alt="check" />
+                                        <span class="reaction-count">1</span>
+                                    </button>
+
+                                    <button class="reaction-btn">
+                                        <div class="reaction-info-menu">
+                                            <img src="./../../../assets/emojis/check.png" alt="rocket" />
+                                            <span class="user">Sofia Müller</span>
+                                            <span>hat reagiert</span>
+                                        </div>
+                                        <img src="./../../../assets/emojis/check.png" alt="check" />
+                                        <span class="reaction-count">1</span>
+                                    </button>
+                                    <button class="mini-fab-btn" mat-mini-fab>
+                                        <mat-icon>add_reaction</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-list-item>
+        </mat-list>
+    </div>
+</mat-card-content>
