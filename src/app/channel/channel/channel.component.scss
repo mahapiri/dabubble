@@ -42,7 +42,6 @@ mat-card-header {
     justify-content: center;
     align-items: center;
     gap: 10px;
-    //font-family: "Nunito", Roboto, sans-serif;
     font-size: 24px;
     color: var(--black);
     font-weight: 700;
@@ -155,7 +154,7 @@ mat-list {
   display: flex;
   flex-direction: column-reverse;
   justify-content: flex-end;
-  //gap: 16px;
+  gap: 8px;
   color: var(--black);
   height: 100%;
 }
@@ -167,176 +166,6 @@ mat-list-item {
 
 .mdc-list-item.mdc-list-item--with-one-line {
   height: fit-content;
-}
-
-.divider-container {
-  position: relative;
-  margin: 32px 20px 32px 20px;
-
-  mat-divider {
-    border-top-color: var(--lines);
-  }
-
-  .message-date {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: -18px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 36px;
-    width: fit-content;
-    border: 1px solid var(--lines);
-    border-radius: 30px;
-    padding: 5px 15px 5px 15px;
-    background-color: var(--white);
-    font-size: 16px;
-    font-weight: 400;
-    color: var(--black);
-    //font-family: "Nunito";
-  }
-}
-
-.message-container {
-  font-family: "Nunito";
-  display: flex;
-  color: var(--gray);
-  gap: 24px;
-  padding: 10px 0 10px 24px;
-  overflow: visible;
-  cursor: pointer;
-
-  .message-details {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .user-img {
-    height: 70px;
-    width: 70px;
-    border-radius: 40px;
-    object-fit: contain;
-  }
-
-  .user-wrapper,
-  .answer-wrapper {
-    display: flex;
-    gap: 20px;
-  }
-
-  .user-name {
-    color: var(--black);
-    font-size: 18px;
-    font-weight: 700;
-
-    &:hover {
-      color: var(--purple-1);
-    }
-  }
-
-  .total-answers {
-    color: var(--purple-3);
-    font-size: 18px;
-
-    &:hover {
-      color: var(--purple-1);
-      font-weight: 700;
-    }
-  }
-
-  .time,
-  .last-answer {
-    font-size: 14px;
-    font-weight: 400;
-  }
-
-  .text-bubble {
-    width: fit-content;
-    font-size: 18px;
-    padding: 15px;
-    border-radius: 0 30px 30px 30px;
-    background-color: var(--bg-color);
-    color: var(--black);
-  }
-}
-
-.my-message {
-  .message-container {
-    position: relative;
-    justify-content: flex-end;
-    padding: 10px 24px 10px 24px;
-
-    &:hover {
-      .reaction-bar {
-        opacity: 1;
-        left: 24px;
-        transition: left 0.15s ease-out, opacity 0.15s ease-out;
-      }
-    }
-  }
-
-  .user-wrapper {
-    justify-content: flex-end;
-  }
-
-  .text-bubble {
-    border-radius: 30px 0 30px 30px;
-    background-color: var(--purple-2);
-    color: var(--white);
-  }
-
-  .reaction-bar {
-    right: unset;
-    left: 90px;
-  }
-
-  .reactions-wrapper {
-    justify-content: flex-end;
-  }
-
-  &:hover {
-    .message-container {
-      background-color: var(--bg-color);
-    }
-
-    .last-answer {
-      color: var(--black);
-    }
-  }
-}
-
-.reaction-bar {
-  position: absolute;
-  top: -24px;
-  right: 90px;
-  width: 210px;
-  height: 46px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  border: 1px solid var(--lines);
-  border-radius: 25px 25px 0 25px;
-  padding: 3px 15px 3px 20px;
-  background-color: var(--white);
-  opacity: 0;
-  cursor: pointer;
-
-  img {
-    display: flex;
-    width: 20px;
-    height: 20px;
-    align-items: center;
-  }
-
-  .mini-fab-btn {
-    color: var(--black);
-    &:hover {
-      color: var(--purple-3);
-    }
-  }
 }
 
 .mini-fab-btn {
@@ -359,74 +188,4 @@ mat-list-item {
 
 ::ng-deep mat-list-item .mdc-list-item__content {
   overflow: visible;
-}
-
-.reaction-info-menu {
-  position: absolute;
-  width: 158px;
-  height: 112px;
-  left: 50%;
-  top: -112px;
-  border-radius: 30px 30px 30px 0;
-  padding: 15px 8px 15px 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  background-color: var(--purple-1);
-  color: white;
-  font-size: 16px;
-  //font-family: "Nunito";
-  z-index: 1;
-  visibility: hidden;
-
-  img {
-    width: 30px;
-    height: 30px;
-  }
-
-  .user {
-    font-size: 18px;
-    font-weight: 700;
-  }
-}
-
-.reactions-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  .reaction-btn {
-    position: relative;
-    width: fit-content;
-    height: 34px;
-    background-color: var(--white);
-    border: 1px solid var(--lines);
-    border-radius: 20px;
-    padding: 5px 10px 5px 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    //font-family: "Nunito";
-
-    &:hover {
-      border: 1px solid var(--purple-1);
-
-      .reaction-info-menu {
-        visibility: visible;
-      }
-    }
-
-    img {
-      display: flex;
-      width: 20px;
-      height: 20px;
-    }
-  }
-
-  .mini-fab-btn {
-    height: 34px;
-    width: 34px;
-  }
 }

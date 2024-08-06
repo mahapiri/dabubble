@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { UserService } from './user.service';
-import { addDoc, collection, doc, Firestore, getDocs, setDoc, where, query, CollectionReference, DocumentData } from '@angular/fire/firestore';
+import { addDoc, collection, doc, Firestore, getDocs, setDoc, where, query, CollectionReference, DocumentData, onSnapshot } from '@angular/fire/firestore';
 import { User } from '../../models/user.class';
 import { BehaviorSubject } from 'rxjs';
 import { DmMessage } from '../../models/direct-message.class';
@@ -130,23 +130,23 @@ export class DirectMessageService {
     const currentUser = this.getCurrentUserID();
     const messageRef = await this.addDirectMessage(profile);
     console.log('Eingeloggter User:', currentUser, 'Auf Profil geklickt:', profile.userId, 'messageRef:', messageRef);
-    await this.loadMessages(messageRef);
+    this.subscribeToMessages(messageRef);
   }
 
   getMessageRefForId(directMessageId: string): CollectionReference<DocumentData> {
     return collection(this.firestore, `direct-messages/${directMessageId}/messages`);
   }
 
-  async loadMessages(directMessageId: string) {
+  subscribeToMessages(directMessageId: string) {
     const messageRef = this.getMessageRefForId(directMessageId);
-    const querySnapshot = await getDocs(messageRef);
 
-    const messages: DmMessage[] = [];
-    querySnapshot.forEach((doc) => {
-      messages.push(doc.data() as DmMessage);
+    onSnapshot(messageRef, (snapshot) => {
+      const messages: DmMessage[] = [];
+      snapshot.forEach((doc) => {
+        messages.push(doc.data() as DmMessage);
+      });
+
+      this.messagesSubject.next(messages);
     });
-
-    // Aktualisiere das BehaviorSubject mit den neuen Nachrichten
-    this.messagesSubject.next(messages);
   }
 }

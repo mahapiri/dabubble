@@ -11,6 +11,8 @@ import { DirectMessageService } from '../services/direct-message.service';
 import { User } from '../../models/user.class';
 import { UserService } from '../services/user.service';
 import { DmMessageComponent } from './dm-message/dm-message.component';
+import { doc, Firestore, getDoc } from '@angular/fire/firestore';
+import { user } from '@angular/fire/auth';
 @Component({
   selector: 'app-direct-message',
   standalone: true,
@@ -30,6 +32,7 @@ import { DmMessageComponent } from './dm-message/dm-message.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DirectMessageComponent implements OnInit {
+  private firestore: Firestore = inject(Firestore);
   public directMessageService : DirectMessageService = inject(DirectMessageService);
   public userService : UserService = inject(UserService);
   private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
@@ -52,17 +55,39 @@ export class DirectMessageComponent implements OnInit {
       return;
     }
 
+    const currentUser = await this.getUserList();
+    const username = currentUser['username'];
+    const profileimage = currentUser['profileImage'];
+
     const messageData = {
       authorId: this.userService.getUserRef().id,
-      authorName: profile.username,
+      authorName: username,
       date: new Date().toLocaleDateString(),
       time: new Date().toLocaleTimeString(),
       text: messageText,
       reaction: [],
       file: '',
+      profileImg: profileimage,
     };
 
     await this.directMessageService.createMessageToDm(messageData, profile);
     messageInput.value = '';
   }
+
+
+
+  async getUserList() {
+    const username = this.userService.getUserRef().id;
+    const docRef = doc(this.firestore, `users/${username}`);
+    
+    const userDoc = await getDoc(docRef);
+
+    const userData: any = userDoc.data();
+
+    return userData;
+  }
+  
+
 }
+
+

@@ -23,6 +23,8 @@ export class DmMessage {
     text: string = '';
     reaction: string[] = [];
     file: string = '';
+    id: string = '';
+    profileImg: string = '';
 
     constructor(obj: any) {
         this.authorId = obj.authorId || '';
@@ -32,6 +34,8 @@ export class DmMessage {
         this.text = obj.text || '';
         this.reaction = obj.reaction || [];
         this.file = obj.file || '';
+        this.id = obj.id || '';
+        this.profileImg = obj.profileImg || '';
     }
 
     getMessageJson() {
@@ -43,6 +47,8 @@ export class DmMessage {
             text: this.text,
             reaction: this.reaction,
             file: this.file,
+            id: this.id,
+            profileImg: this.profileImg,
         }
     }
 }

@@ -7,6 +7,7 @@ import { ChannelService } from '../../../services/channel.service';
 import { CommonModule } from '@angular/common';
 import { Channel, ChannelMessage } from '../../../../models/channel.class';
 import { Observable } from 'rxjs';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-channel-message',
@@ -26,10 +27,19 @@ export class ChannelMessageComponent {
   @Input() channelMessage!: ChannelMessage;
   @Output() clickedAnswer = new EventEmitter<boolean>();
 
+  isMyMessage: boolean = false;
+
   channelMessages$: Observable<ChannelMessage[]> =
     this.channelService.channelMessages$;
 
-  constructor(private channelService: ChannelService) {}
+  constructor(
+    private channelService: ChannelService,
+    private userService: UserService
+  ) {}
+
+  ngOnInit() {
+    this.setMyMessage();
+  }
 
   openThread() {
     this.clickedAnswer.emit(true);
@@ -89,6 +99,14 @@ export class ChannelMessageComponent {
       return 'Gestern';
     } else {
       return formattedDate;
+    }
+  }
+
+  setMyMessage() {
+    if (this.channelMessage.authorId == this.userService.userID) {
+      this.isMyMessage = true;
+    } else {
+      this.isMyMessage = false;
     }
   }
 }
