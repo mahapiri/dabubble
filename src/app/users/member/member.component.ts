@@ -16,6 +16,7 @@ import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 export class MemberComponent {
   channelService: ChannelService = inject(ChannelService);
   @Output() clickedMembers = new EventEmitter<boolean>();
+  @Output() switchToAddMembers = new EventEmitter<boolean>();
   channelMember: ChannelMember[] = [];
 
 
@@ -30,6 +31,12 @@ export class MemberComponent {
         this.channelMember.push(member)
       })
     })
+  }
+
+  switchToAdd(event: Event){
+    event.stopPropagation();
+    this.switchToAddMembers.emit(true);
+    this.closeWindow()
   }
 
   closeWindow() {

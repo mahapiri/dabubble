@@ -1,7 +1,7 @@
 <mat-card-content>
     <div class="main-chat" >
       <mat-list>
-        <mat-list-item *ngFor="let message of messages$ | async; let i = index">
+        <mat-list-item>
           <div class="my-message">
             <div class="divider-container">
               <mat-divider> </mat-divider>
@@ -58,7 +58,7 @@
                   </div>
                 </div>
               </div>
-              <img class="user-img" src="./../../../assets/img/character3.png" />
+              <img class="user-img" src="{{ message.profileImg }}" />
             </div>
           </div>
         </mat-list-item>

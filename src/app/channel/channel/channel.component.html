@@ -28,6 +28,7 @@
           </button>
           <app-member
             (clickedMembers)="closeMembers($event)"
+            (switchToAddMembers)="switchToAddMembers($event)"
             class="app-member"
             *ngIf="clickedMembers"
           ></app-member>

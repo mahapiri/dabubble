@@ -1,2 +1,10 @@
-<app-own-message></app-own-message>
-<app-user-message></app-user-message>
+<mat-list>
+    <mat-list-item *ngFor="let message of messages$ | async">
+        <ng-container *ngIf="message.authorId === userService.getUserRef().id; else userMessage">
+            <app-own-message [message]="message"></app-own-message>
+        </ng-container>
+        <ng-template #userMessage>
+            <app-user-message [message]="message"></app-user-message>
+        </ng-template>
+    </mat-list-item>
+</mat-list>
