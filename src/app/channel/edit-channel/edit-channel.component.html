@@ -20,9 +20,9 @@
 
                 @if(!editing){
                 <mat-icon>tag</mat-icon>
-                <p class="n-p">{{channel.channelName}}</p>
+                <p class="n-p">{{channelName}}</p>
                 }@else{
-                <input class="padding-left" [(ngModel)]="channel.channelName" type="text">
+                <input class="padding-left" [(ngModel)]="channelName" type="text">
                 }
             </div>
         </div>
@@ -34,14 +34,14 @@
                 </a>
             </div>
             @if(!editing){
-            <p class="n-p">{{channel.description}}</p>
+            <p class="n-p">{{channelDescription}}</p>
             }@else{
-            <input [(ngModel)]="channel.description" type="text">
+            <input [(ngModel)]="channelDescription" type="text">
             }
             <div class="line"></div>
             <div class="creator-container">
                 <p class="n-p bold">Erstellt von</p>
-                <h3 class="n-h3 color-p-3">{{channel.createdBy}}</h3>
+                <h3 class="n-h3 color-p-3">{{activeChannel.createdBy}}</h3>
             </div>
         </div>
         <div class="btn-container">

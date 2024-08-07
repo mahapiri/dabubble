@@ -8,7 +8,7 @@
           <mat-icon class="icon arrow">keyboard_arrow_down</mat-icon>
         </button>
         <app-edit-channel
-          [channel]="channel"
+          [channel]="activeChannel"
           (channelClosed)="closeEditChannel($event)"
           class="edit-channel-container"
           *ngIf="clickedEditChannel"
@@ -19,13 +19,13 @@
           <button class="channel-btn" (click)="openMembers($event)">
             <div class="img-container">
               <img
-                *ngFor="let member of channel.channelMember"
+                *ngFor="let member of activeChannel.channelMember"
                 src="./../../../{{ member.profileImage }}"
                 alt="member"
               />
             </div>
             <span class="number-members">{{
-              channel.channelMember.length
+              activeChannel.channelMember.length
             }}</span>
           </button>
           <app-member
@@ -45,6 +45,7 @@
           </button>
           <app-add-member
             class="add-member-content"
+            [channel]="activeChannel"
             (clickedAddMembers)="closeAddMembers($event)"
             *ngIf="clickedAddMembers"
           ></app-add-member>

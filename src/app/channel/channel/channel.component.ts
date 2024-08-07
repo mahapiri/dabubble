@@ -62,7 +62,6 @@ export class ChannelComponent {
   constructor(private channelService: ChannelService) { 
     this.selectedChannel$.subscribe(value => {
       this.activeChannel = new Channel(value)
-      console.log("active Channel is:", value);
     })
   }
 

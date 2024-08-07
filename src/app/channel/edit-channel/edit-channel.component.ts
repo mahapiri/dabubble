@@ -13,8 +13,9 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user.service';
 import { __values } from 'tslib';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { User } from '../../../models/user.class';
+import { ChannelService } from '../../services/channel.service';
 
 
 @Component({
@@ -27,12 +28,24 @@ import { User } from '../../../models/user.class';
 export class EditChannelComponent {
   editing: boolean = false;
   firestore: Firestore = inject(Firestore);
+  userService: UserService = inject(UserService);
   @Input() channel!: Channel;
   @Output() channelClosed = new EventEmitter<boolean>();
-  userService: UserService = inject(UserService);
   currentUser: User = new User();
   subscription: Subscription = new Subscription();
+  activeChannel: Channel = new Channel({})
+  selectedChannel$: Observable<Channel | null> =  this.channelService.selectedChannel$;
 
+  channelName: string = "";
+  channelDescription: string = "";
+
+  constructor(private channelService: ChannelService) { 
+    this.selectedChannel$.subscribe(value => {
+      this.activeChannel = new Channel(value)
+      this.channelName = this.activeChannel.channelName
+      this.channelDescription = this.activeChannel.description
+    })
+  }
 
   ngOnInit() {
     this.subscription = this.userService.currentUser$.subscribe((value) => {
@@ -62,14 +75,14 @@ export class EditChannelComponent {
 
 
   async saveChanges() {
+
     if (this.channel.channelID) {
       await updateDoc(doc(this.firestore, 'channels', this.channel.channelID), {
-        channelName: this.channel.channelName,
-        description: this.channel.description,
+        channelName: this.channelName,
+        description: this.channelDescription
       });
     }
   }
-
 
   closeChannel() {
     this.channelClosed.emit(false);

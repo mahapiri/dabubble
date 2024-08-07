@@ -59,10 +59,14 @@ export class ChannelService implements OnDestroy {
    * @param channel - The `Channel` object to be set as the currently selected channel.
    */
   setSelectedChannel(channel: Channel) {
-    this.selectedChannel.next(channel);
-    //this.setChannelId(channel.channelID);
-  }
+    if (channel.channelID != undefined) {
+      onSnapshot(doc(this.firestore, 'channels', channel.channelID), (doc) => {
+        this.selectedChannel.next(new Channel(doc.data()))   
+      })
 
+      //this.setChannelId(channel.channelID);
+    }
+  }
   /**
    * Updates the channelID variable based on the selected Channel.
    * @param channel Channel Object
