@@ -13,6 +13,9 @@ import { UserService } from '../services/user.service';
 import { DmMessageComponent } from './dm-message/dm-message.component';
 import { doc, Firestore, getDoc } from '@angular/fire/firestore';
 import { user } from '@angular/fire/auth';
+import { DirectMessageHeaderComponent } from './direct-message-header/direct-message-header.component';
+import { DirectMessageInfoComponent } from './direct-message-info/direct-message-info.component';
+import { DirectMessageNewMessageInputComponent } from './direct-message-new-message-input/direct-message-new-message-input.component';
 @Component({
   selector: 'app-direct-message',
   standalone: true,
@@ -25,7 +28,10 @@ import { user } from '@angular/fire/auth';
     MatListModule,
     CommonModule,
     WorkspaceMenuComponent,
-    DmMessageComponent
+    DmMessageComponent,
+    DirectMessageHeaderComponent,
+    DirectMessageInfoComponent,
+    DirectMessageNewMessageInputComponent
   ],
   templateUrl: './direct-message.component.html',
   styleUrl: './direct-message.component.scss',
