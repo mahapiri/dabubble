@@ -14,8 +14,10 @@ import {
 } from '@angular/fire/firestore';
 import { UserService } from './user.service';
 import { User } from '../../models/user.class';
-import { Channel, ChannelMessage } from '../../models/channel.class';
+import { Channel } from '../../models/channel.class';
+import { ChannelMessage } from '../../models/channel.class';
 import { BehaviorSubject } from 'rxjs';
+import { ChatService } from './chat.service';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +41,11 @@ export class ChannelService implements OnDestroy {
    * Subscribes to the `selectedChannel$` observable to react to changes in the selected channel.
    * Then, updates the ChannelID and listens for changes (read) in the message list.
    */
-  constructor(private firestore: Firestore, private userService: UserService) {
+  constructor(
+    private firestore: Firestore,
+    private userService: UserService,
+    private chatService: ChatService
+  ) {
     this.selectedChannel$.subscribe((channel) => {
       if (channel) {
         this.setChannelId(channel);
@@ -175,7 +181,7 @@ export class ChannelService implements OnDestroy {
       list.forEach((message) => {
         const data = message.data();
         const currentMessage = this.setMessageObject(message.id, data);
-        this.setFirstMessageOfDay(currentMessage);
+        this.chatService.setFirstMessageOfDay(currentMessage);
         this.channelMessages.push(currentMessage);
       });
 
@@ -183,24 +189,6 @@ export class ChannelService implements OnDestroy {
       this.channelMessagesSubjects.next(this.channelMessages);
       console.log('Message received:', this.channelMessages);
     });
-  }
-
-  /**
-   * Determines if a message is the first of the day for the dividing line between days in the Chat.
-   * If the date is different or if no previous date is set, it marks the message as the first message. `previousDate` is updated to the date of the current message for the next comparison.
-   *
-   * @param {ChannelMessage} currentMessage - The message object to be checked and updated.
-   */
-  setFirstMessageOfDay(currentMessage: ChannelMessage) {
-    if (
-      this.previousDate === null ||
-      currentMessage.date !== this.previousDate
-    ) {
-      currentMessage.isFirstMessageOfDay = true;
-      this.previousDate = currentMessage.date;
-    } else {
-      currentMessage.isFirstMessageOfDay = false;
-    }
   }
 
   setMessageObject(id: string, data: any) {

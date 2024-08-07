@@ -2,7 +2,9 @@
   <div [ngClass]="{ 'my-message': isMyMessage }">
     <div *ngIf="channelMessage.isFirstMessageOfDay" class="divider-container">
       <mat-divider> </mat-divider>
-      <div class="message-date">{{ formatDate(channelMessage.date) }}</div>
+      <div class="message-date">
+        {{ chatService.formatDate(channelMessage.date) }}
+      </div>
     </div>
 
     <div class="message">
@@ -30,7 +32,9 @@
         <div class="message-details">
           <div class="user-wrapper">
             <div class="user-name">{{ channelMessage.authorName }}</div>
-            <div class="time">{{ formatTime(channelMessage.time) }} Uhr</div>
+            <div class="time">
+              {{ chatService.formatTime(channelMessage.time) }} Uhr
+            </div>
           </div>
 
           <div class="text-bubble">{{ channelMessage.text }}</div>
