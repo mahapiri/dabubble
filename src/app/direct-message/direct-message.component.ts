@@ -16,6 +16,7 @@ import { user } from '@angular/fire/auth';
 import { DirectMessageHeaderComponent } from './direct-message-header/direct-message-header.component';
 import { DirectMessageInfoComponent } from './direct-message-info/direct-message-info.component';
 import { DirectMessageNewMessageInputComponent } from './direct-message-new-message-input/direct-message-new-message-input.component';
+import { DirectMessageMessageComponent } from './direct-message-message/direct-message-message.component';
 @Component({
   selector: 'app-direct-message',
   standalone: true,
@@ -31,7 +32,8 @@ import { DirectMessageNewMessageInputComponent } from './direct-message-new-mess
     DmMessageComponent,
     DirectMessageHeaderComponent,
     DirectMessageInfoComponent,
-    DirectMessageNewMessageInputComponent
+    DirectMessageNewMessageInputComponent,
+    DirectMessageMessageComponent
   ],
   templateUrl: './direct-message.component.html',
   styleUrl: './direct-message.component.scss',
