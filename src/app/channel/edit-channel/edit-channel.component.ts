@@ -55,7 +55,6 @@ export class EditChannelComponent {
     });
   }
 
-
   async deleteUserFromChannel() {
     if (this.channel.channelID) {
       let allMember = this.channel.channelMember;
@@ -67,27 +66,24 @@ export class EditChannelComponent {
     }
   }
 
-
   edit() {
     this.editing = !this.editing;
     this.saveChanges();
   }
 
-
   async saveChanges() {
-
     if (this.channel.channelID) {
       await updateDoc(doc(this.firestore, 'channels', this.channel.channelID), {
         channelName: this.channelName,
         description: this.channelDescription
       });
     }
+    this.channelService.loadChannels();
   }
 
   closeChannel() {
     this.channelClosed.emit(false);
   }
-
 
   ngOnDestroy() {
     this.subscription.unsubscribe();

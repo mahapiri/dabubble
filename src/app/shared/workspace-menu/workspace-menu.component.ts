@@ -77,7 +77,7 @@ export class WorkspaceMenuComponent implements OnInit {
     await this.userService.getUserID();
     this.userService.getUserList();
     setTimeout(() => {
-      this.loadChannels();
+      this.channelService.loadChannels();
     }, 500);
     this.showFirstChannel();
   }
@@ -128,26 +128,7 @@ export class WorkspaceMenuComponent implements OnInit {
     this.clickedChannelChange.emit(this.clickedChannel);
   }
 
-  /**
-   * Loads the channels of the current user. Retrieves the channelIDs saved in the user via the user ref from the data base.
-   * Gets the Channel Data from the channel collection with the ChannelIds.
-   * Awaits all Promises, filters the channels for undefined channels and updates the Behavior Subject _userChannels.
-   */
-  async loadChannels() {
-    onSnapshot(this.userService.getUserRef(), async (doc) => {
-      const data = doc.data();
-      if (data) {
-        const channelIds = data['userChannels'] || [];
-        const channelPromises = channelIds.map((channelId: string) =>
-          this.channelService.getChannelById(channelId)
-        );
-        const channels = await Promise.all(channelPromises);
-        this.userService._userChannels.next(
-          channels.filter((channel) => channel !== undefined) as Channel[]
-        );
-      }
-    });
-  }
+
 
   openChannelsMenu() {
     this.openChannel = !this.openChannel;
