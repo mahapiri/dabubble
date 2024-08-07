@@ -1,9 +1,12 @@
 import {
+  AfterViewChecked,
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   Output,
+  ViewChild,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -44,9 +47,10 @@ import { Observable } from 'rxjs';
   styleUrl: './channel.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChannelComponent {
+export class ChannelComponent implements AfterViewChecked {
   @Input() channel!: Channel;
   @Output() clickedThreadChange = new EventEmitter<boolean>();
+  @ViewChild('mainChat') mainChat!: ElementRef;
 
   clickedEditChannel: boolean = false;
   clickedAddMembers: boolean = false;
@@ -58,12 +62,27 @@ export class ChannelComponent {
   channelMessages$: Observable<ChannelMessage[]> =
     this.channelService.channelMessages$;
 
-  constructor(private channelService: ChannelService) { }
+  constructor(private channelService: ChannelService) {}
 
-  editChannel() {    
+  ngOnInit() {
+    this.scrollToBottom();
+  }
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.mainChat.nativeElement.scrollTop =
+        this.mainChat.nativeElement.scrollHeight;
+    } catch (err) {}
+  }
+
+  editChannel() {
     this.clickedEditChannel = true;
   }
-  closeEditChannel(event: boolean){
+  closeEditChannel(event: boolean) {
     this.clickedEditChannel = event;
   }
 
@@ -85,7 +104,7 @@ export class ChannelComponent {
     this.clickedAddMembers = event;
   }
 
-  switchToAddMembers(event: boolean) {    
+  switchToAddMembers(event: boolean) {
     this.clickedAddMembers = event;
   }
 
