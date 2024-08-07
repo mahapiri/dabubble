@@ -1,0 +1,79 @@
+.main-chat {
+    font-family: "Nunito";
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 16px;
+    color: var(--black);
+    height: 100%;
+
+    mat-list-item {
+        font-family: "Nunito";
+        height: fit-content;
+        overflow: visible;
+        padding: 0;
+    }
+
+    .initial-info {
+        display: flex;
+        padding: 24px;
+
+        .user-info {
+            font-family: "Nunito";
+            display: flex;
+            align-items: flex-end;
+            gap: 25px;
+            margin-bottom: 24px;
+        }
+
+        .user-img {
+            height: 100px;
+            width: 100px;
+            border-radius: 100px;
+            object-fit: contain;
+        }
+
+        .chat-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--black);
+        }
+
+        span {
+            font-family: "Nunito";
+            font-size: 20px;
+            color: var(--gray);
+
+            .tag {
+                color: var(--purple-3);
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.info-bold {
+    font-family: Nunito;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 27.28px;
+    text-align: left;
+}
+
+.info-own-user {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    text-wrap: wrap;
+}
+
+app-dm-message {
+    display: contents;
+}

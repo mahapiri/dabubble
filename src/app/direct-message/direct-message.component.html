@@ -1,69 +1,12 @@
 <mat-card appearance="outlined">
-  <mat-card-header>
-    <div class="direct-message-info">
-      <button class="channel-btn">
-        <div class="profile-content">
-          <img src="{{ profile?.profileImage }}" alt="Character" class="profile-icon" />
-          <div class="status-icon" ngClass="{{ profile?.state }}"></div>
-        </div>
-        <span class="user-name">{{ profile?.username }}</span>
-        <span class="user-name" *ngIf="profile?.userId === userService.userID">(Du)</span>
-      </button>
-    </div>
-  </mat-card-header>
+  <app-direct-message-header></app-direct-message-header>
 
   <mat-card-content>
-    <div class="main-chat">
-      <mat-list>
-        <mat-list-item class="initial-info">
-          <div class="user-info">
-            <img class="user-img" src="{{ profile?.profileImage }}" />
-            <div style="display: flex; gap: 8px;">
-              <span class="user-name">{{ profile?.username }}</span>
-              <span class="user-name" *ngIf="profile?.userId === userService.userID">(Du)</span>
-            </div>
-          </div>
-
-          @if (profile?.userId === userService.userID) {
-            <div class="info-own-user">
-              <span class="info-bold">Dieser Raum ist nur für dich da.</span>
-              <span class="info">Mache dir Notizen, liste deine To-dos auf oder bewahre
-                Links und Dateien griffbereit auf. Du kannst hier auch gerne Dinge mit dir selbst besprechen.</span>
-            </div>
-          }
-
-          @else {
-            <span class="info">Diese Unterhaltung findet nur zwischen
-              <span class="tag">&#64;{{ profile?.username }}</span> und dir statt.</span>
-          }
-        </mat-list-item>
-      </mat-list>
-    </div>
-
+    <app-direct-message-info></app-direct-message-info>
     <app-dm-message></app-dm-message>
   </mat-card-content>
 
   <mat-card-footer>
-    <div class="new-message-container">
-      <input matInput #messageInput type="text" placeholder="Nachricht an {{ profile?.username }}" />
-
-      <div class="message-controls">
-        <div class="add-elements">
-          <button class="mini-fab-button" mat-mini-fab class="add-doc mini-fab-btn">
-            <mat-icon>add</mat-icon>
-          </button>
-          <div class="vertical-divider"></div>
-          <button mat-mini-fab class="emojis mini-fab-btn">
-            <mat-icon>sentiment_satisfied</mat-icon>
-          </button>
-          <button mat-mini-fab class="tag-person mini-fab-btn">
-            <mat-icon>alternate_email</mat-icon>
-          </button>
-        </div>
-        <button mat-mini-fab class="send-btn" (click)="createMessage(messageInput.value, messageInput, profile)">
-          <mat-icon>send</mat-icon>
-        </button>
-      </div>
-    </div>
+    <app-direct-message-new-message-input></app-direct-message-new-message-input>
   </mat-card-footer>
 </mat-card>

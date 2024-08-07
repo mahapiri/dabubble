@@ -55,7 +55,7 @@
   </mat-card-header>
 
   <mat-card-content>
-    <div class="main-chat">
+    <div #mainChat style="overflow: scroll; height: 100vh" class="main-chat">
       <mat-list>
         <app-channel-message
           (clickedAnswer)="handleThreadClick($event)"

@@ -15,6 +15,7 @@ export class User {
     this.state = obj ? obj.state : '';
     this.userChannels = obj ? obj.userChannels : '';
     this.profileImage = obj ? obj.profileImage : '';
+    this.chosenToChannel = obj ? obj.chosenToChannel : false;
   }
 
   getUserJson() {
@@ -25,6 +26,7 @@ export class User {
       state: this.state,
       userChannels: this.userChannels,
       profileImage: this.profileImage,
+      chosenToChannel: this.chosenToChannel,
     };
   }
 

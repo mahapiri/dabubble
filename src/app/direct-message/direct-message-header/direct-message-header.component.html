@@ -1,0 +1,12 @@
+<mat-card-header>
+    <div class="direct-message-info">
+        <button class="channel-btn">
+            <div class="profile-content">
+                <img src="{{ profile.profileImage }}" alt="Character" class="profile-icon" />
+                <div class="status-icon" ngClass="{{ profile.state }}"></div>
+            </div>
+            <span class="user-name">{{ profile.username }}</span>
+            <span class="user-name" *ngIf="profile.userId === userService.userID">(Du)</span>
+        </button>
+    </div>
+</mat-card-header>

@@ -1,9 +1,12 @@
 import {
+  AfterViewChecked,
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   Output,
+  ViewChild,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -44,31 +47,55 @@ import { Observable } from 'rxjs';
   styleUrl: './channel.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChannelComponent {
+export class ChannelComponent implements AfterViewChecked {
   @Input() channel!: Channel;
   @Output() clickedThreadChange = new EventEmitter<boolean>();
+  @ViewChild('mainChat') mainChat!: ElementRef;
 
   clickedEditChannel: boolean = false;
   clickedAddMembers: boolean = false;
   clickedMembers: boolean = false;
   clickedThread: boolean = false;
-  activeChannel: Channel = new Channel({})
+  activeChannel: Channel = new Channel({});
 
   selectedChannel$: Observable<Channel | null> =
     this.channelService.selectedChannel$;
   channelMessages$: Observable<ChannelMessage[]> =
     this.channelService.channelMessages$;
 
+<<<<<<< HEAD
   constructor(private channelService: ChannelService) { 
     this.selectedChannel$.subscribe(value => {
       this.activeChannel = new Channel(value)
     })
+=======
+  constructor(private channelService: ChannelService) {
+    this.selectedChannel$.subscribe((value) => {
+      this.activeChannel = new Channel(value);
+      console.log('active Channel is:', value);
+    });
+>>>>>>> 1edd2b66fa1633ae500eb806a30b1a0797adb68c
   }
 
-  editChannel() {    
+  ngOnInit() {
+    this.scrollToBottom();
+  }
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.mainChat.nativeElement.scrollTop =
+        this.mainChat.nativeElement.scrollHeight;
+    } catch (err) {}
+  }
+
+  editChannel() {
     this.clickedEditChannel = true;
   }
-  closeEditChannel(event: boolean){
+  closeEditChannel(event: boolean) {
     this.clickedEditChannel = event;
   }
 
@@ -90,7 +117,7 @@ export class ChannelComponent {
     this.clickedAddMembers = event;
   }
 
-  switchToAddMembers(event: boolean) {    
+  switchToAddMembers(event: boolean) {
     this.clickedAddMembers = event;
   }
 

@@ -1,0 +1,26 @@
+<div class="main-chat">
+    <mat-list>
+        <mat-list-item class="initial-info">
+            <div class="user-info">
+                <img class="user-img" src="{{ profile.profileImage }}" />
+                <div style="display: flex; gap: 8px;">
+                    <span class="user-name">{{ profile.username }}</span>
+                    <span class="user-name" *ngIf="profile?.userId === userService.userID">(Du)</span>
+                </div>
+            </div>
+
+            @if (profile.userId === userService.userID) {
+            <div class="info-own-user">
+                <span class="info-bold">Dieser Raum ist nur für dich da.</span>
+                <span class="info">Mache dir Notizen, liste deine To-dos auf oder bewahre
+                    Links und Dateien griffbereit auf. Du kannst hier auch gerne Dinge mit dir selbst besprechen.</span>
+            </div>
+            }
+
+            @else {
+            <span class="info">Diese Unterhaltung findet nur zwischen
+                <span class="tag">&#64;{{ profile.username }}</span> und dir statt.</span>
+            }
+        </mat-list-item>
+    </mat-list>
+</div>

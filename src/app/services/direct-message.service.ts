@@ -11,17 +11,24 @@ import { DmMessage } from '../../models/direct-message.class';
 export class DirectMessageService {
   private firestore: Firestore = inject(Firestore);
   private userService: UserService = inject(UserService);
+
   private userSubject = new BehaviorSubject<User | null>(null);
   public userSelected$ = this.userSubject.asObservable();
 
-  directMessageId: string | null = '';
   private messagesSubject = new BehaviorSubject<DmMessage[]>([]);
   public messages$ = this.messagesSubject.asObservable();
 
+  private clickedProfile = new BehaviorSubject<User |null>(null);
+  public clickedProfile$ = this.clickedProfile.asObservable();
+
+  directMessageId: string | null = '';
+
+  
   constructor() {}
 
   getActualProfile(profile: User) {
     this.userSubject.next(profile);
+    this.clickedProfile.next(profile);
   }
 
   async addDirectMessage(profile: User) {
@@ -126,13 +133,6 @@ export class DirectMessageService {
     await setDoc(docRef, messageData, { merge: true });
   }
 
-  async showDmMessages(profile: User) {
-    const currentUser = this.getCurrentUserID();
-    const messageRef = await this.addDirectMessage(profile);
-    console.log('Eingeloggter User:', currentUser, 'Auf Profil geklickt:', profile.userId, 'messageRef:', messageRef);
-    this.subscribeToMessages(messageRef);
-  }
-
   getMessageRefForId(directMessageId: string): CollectionReference<DocumentData> {
     return collection(this.firestore, `direct-messages/${directMessageId}/messages`);
   }
@@ -148,5 +148,19 @@ export class DirectMessageService {
 
       this.messagesSubject.next(messages);
     });
+  }
+
+
+
+  /// bearbeitet
+
+
+  async getProfileRef(profile: User) {
+    const currentUser = this.getCurrentUserID();
+    const messageRef = await this.addDirectMessage(profile);
+    console.log('Eingeloggter User:', currentUser, 'Auf Profil geklickt:', profile.userId, 'messageRef:', messageRef);
+    this.subscribeToMessages(messageRef);
+
+    this.clickedProfile.next(profile);
   }
 }
