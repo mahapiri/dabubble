@@ -52,13 +52,19 @@ export class ChannelComponent {
   clickedAddMembers: boolean = false;
   clickedMembers: boolean = false;
   clickedThread: boolean = false;
+  activeChannel: Channel = new Channel({})
 
   selectedChannel$: Observable<Channel | null> =
     this.channelService.selectedChannel$;
   channelMessages$: Observable<ChannelMessage[]> =
     this.channelService.channelMessages$;
 
-  constructor(private channelService: ChannelService) { }
+  constructor(private channelService: ChannelService) { 
+    this.selectedChannel$.subscribe(value => {
+      this.activeChannel = new Channel(value)
+      console.log("active Channel is:", value);
+    })
+  }
 
   editChannel() {    
     this.clickedEditChannel = true;

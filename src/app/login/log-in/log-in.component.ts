@@ -33,12 +33,17 @@ export class LogInComponent {
   })
 
   async onSubmit() {
-    this.email = this.userForm.value.userEmail || "";
-    this.password = this.userForm.value.userPassword || "";
-    await this.authService.logInUser(this.email, this.password);
-    this.userForm.reset();
-    this.router.navigate(['/main-window']);
-
+    this.email = this.userForm.value.userEmail || '';
+    this.password = this.userForm.value.userPassword || '';
+    await this.authService
+      .logInUser(this.email, this.password)
+      .then(() => {
+        this.userForm.reset();
+        this.router.navigate(['/main-window']);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   async logInAsGuest() {

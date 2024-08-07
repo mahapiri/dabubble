@@ -41,13 +41,6 @@ export class AuthService {
 
   async logInUser(mail: string, password: string) {
     await signInWithEmailAndPassword(this.auth, mail, password)
-      .then(() => {
-       // this.userService.getUserID();
-      })
-      .catch((error) => {
-        console.warn(error.message);
-      });
-
   }
 
   async logOut() {
