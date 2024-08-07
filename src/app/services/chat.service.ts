@@ -86,7 +86,7 @@ export class ChatService {
     return `${hours}:${minutes}`;
   }
 
-  /** sets the variable isMyMessage to true or false by comparing the authorId of the message with the UserId */
+  /** returns the true condition for the variable "isMyMessage" by comparing the authorId of the message with the UserId. Further used to change the styling of user and own messages. */
   setMyMessage(message: ChannelMessage | DmMessage): boolean {
     return message.authorId === this.userService.userID;
   }
