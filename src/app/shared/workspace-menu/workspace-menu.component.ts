@@ -142,13 +142,10 @@ export class WorkspaceMenuComponent implements OnInit {
     this.openDm = !this.openDm;
   }
 
-  async clickedProfile(i: number, profile: User) {
+  clickedProfile(i: number, profile: User) {
     this.selectedUserIndex = i;
     this.selectProfileChange.emit(true);
-    this.directMessage.getActualProfile(profile);
-    await this.directMessage.addDirectMessage(profile);
-    this.directMessage.getProfileRef(profile);
-
+    this.directMessage.openDmFromUser(profile);
   }
 
   editChannel(channel: string) { }

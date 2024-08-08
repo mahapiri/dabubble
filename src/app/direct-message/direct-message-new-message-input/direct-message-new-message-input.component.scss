@@ -12,6 +12,7 @@
     align-items: flex-start;
     gap: 40px;
     cursor: pointer;
+    user-select: none;
 
     &:hover {
         border: 1px solid var(--purple-2);
@@ -20,11 +21,16 @@
     input,
     select,
     textarea {
-        //font-family: "Nunito";
+        font-family: "Nunito";
         width: 100%;
         border: none;
         font-size: 18px;
+        line-height: 24.55px;
+        font-weight: 400;
         outline: none;
+        resize: none;
+        overflow: visible;
+        scrollbar-width: none;
     }
 
     .message-controls {

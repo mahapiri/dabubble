@@ -1,69 +1,86 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from './user.service';
 import { addDoc, collection, doc, Firestore, getDocs, setDoc, where, query, CollectionReference, DocumentData, onSnapshot } from '@angular/fire/firestore';
 import { User } from '../../models/user.class';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { DmMessage } from '../../models/direct-message.class';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DirectMessageService {
+export class DirectMessageService implements OnInit, OnDestroy {
   private firestore: Firestore = inject(Firestore);
   private userService: UserService = inject(UserService);
 
-  private userSubject = new BehaviorSubject<User | null>(null);
-  public userSelected$ = this.userSubject.asObservable();
+  private messages = new BehaviorSubject<DmMessage[]>([]);
+  public messages$ = this.messages.asObservable();
 
-  private messagesSubject = new BehaviorSubject<DmMessage[]>([]);
-  public messages$ = this.messagesSubject.asObservable();
-
-  private clickedProfile = new BehaviorSubject<User |null>(null);
+  private clickedProfile = new BehaviorSubject<User | null>(null);
   public clickedProfile$ = this.clickedProfile.asObservable();
 
-  directMessageId: string | null = '';
+  private currentUserSubscription: Subscription = new Subscription();
+  private profileSubscription: Subscription = new Subscription();
 
-  
-  constructor() {}
+  directMessageId: string | null = null;
+  currentUser: User | null = null;
+  currentClickedProfile: User | null = null;
+  currentMessageRef: string = '';
 
-  getActualProfile(profile: User) {
-    this.userSubject.next(profile);
-    this.clickedProfile.next(profile);
+
+  constructor() {
+    this.currentUserSubscription = this.userService.currentUser$.subscribe((user) => {
+      this.currentUser = user;
+    });
+    this.profileSubscription = this.clickedProfile$.subscribe((profile) => {
+      this.currentClickedProfile = profile;
+    });
   }
 
-  async addDirectMessage(profile: User) {
-    const currentUserId = this.getCurrentUserID();
-    const otherUserId = profile.userId;
 
-    let existingDmId: any;
+  ngOnInit() {
 
-    if (currentUserId === otherUserId) {
-      existingDmId = await this.handleSelfDm(currentUserId);
+  }
+
+
+  ngOnDestroy(): void {
+    this.currentUserSubscription.unsubscribe();
+    this.profileSubscription.unsubscribe();
+  }
+
+
+  async addDirectMessage() {
+    const currentUser = this.currentUser?.userId;
+    const profile = this.currentClickedProfile?.userId;
+
+    if (currentUser === profile) {
+      this.currentMessageRef = await this.handleSelfDm(currentUser);
     } else {
-      existingDmId = await this.handleUsertoUserDm(currentUserId, otherUserId);
+      this.currentMessageRef = await this.handleUsertoUserDm(currentUser, profile);
     }
 
-    return existingDmId;
+    return this.currentMessageRef;
   }
 
-  async handleSelfDm(userId: string) {
-    const existingOwnDmId = await this.proofExistingOwnDm(userId);
+
+  async handleSelfDm(currentUser: any) {
+    const existingOwnDmId = await this.proofExistingOwnDm(currentUser);
 
     if (!existingOwnDmId) {
       const messageRef = await addDoc(collection(this.firestore, 'direct-messages'), {
-        userIDs: [userId],
+        userIDs: [currentUser],
       });
       await this.setDirectMessageID(messageRef.id);
       this.directMessageId = messageRef.id;
       return messageRef.id;
     } else {
-      console.log('Own Channel exist already', existingOwnDmId);
+      // console.log('Own Channel exist already', existingOwnDmId);
       this.directMessageId = existingOwnDmId;
       return existingOwnDmId;
     }
   }
 
-  async handleUsertoUserDm(currentUserId: string, otherUserId: string) {
+
+  async handleUsertoUserDm(currentUserId: any, otherUserId: any) {
     const existingDmId = await this.proofExistingDm(currentUserId, otherUserId);
 
     if (!existingDmId) {
@@ -74,30 +91,12 @@ export class DirectMessageService {
       this.directMessageId = messageRef.id;
       return messageRef.id;
     } else {
-      console.log('Channel exist already', existingDmId);
+      // console.log('Channel exist already', existingDmId);
       this.directMessageId = existingDmId;
       return existingDmId;
     }
   }
 
-  async setDirectMessageID(id: string) {
-    const docRef = doc(this.getCollectionRef(), id);
-    await setDoc(docRef, {
-      directMessageID: id,
-    }, { merge: true });
-  }
-
-  getCollectionRef(): CollectionReference<DocumentData> {
-    return collection(this.firestore, 'direct-messages');
-  }
-
-  getMessageRef(): CollectionReference<DocumentData> {
-    return collection(this.firestore, `direct-messages/${this.directMessageId}/messages`);
-  }
-
-  getCurrentUserID() {
-    return this.userService.getUserRef().id;
-  }
 
   async proofExistingDm(currentUserId: string, otherUserId: string): Promise<string | null> {
     const directMessageRef = this.getCollectionRef();
@@ -113,6 +112,7 @@ export class DirectMessageService {
     return null;
   }
 
+
   async proofExistingOwnDm(userId: string): Promise<string | null> {
     const directMessageRef = this.getCollectionRef();
     const q = query(directMessageRef, where('userIDs', 'array-contains', userId));
@@ -127,17 +127,49 @@ export class DirectMessageService {
     return null;
   }
 
-  async createMessageToDm(messageData: any, profile: any) {
-    await this.addDirectMessage(profile);
-    const docRef = doc(this.getMessageRef());
-    await setDoc(docRef, messageData, { merge: true });
+
+  async openDmFromUser(profile: User) {
+    this.getActualProfile(profile);
+    await this.addDirectMessage();
+    // this.getDmInfo();
+    this.showMessages(this.currentMessageRef);
   }
+
+
+  getActualProfile(profile: User) {
+    this.clickedProfile.next(profile);
+  }
+
+
+  getDmInfo() {
+    console.log('\n','Eingeloggter User:',this.currentUser?.username,'\n','Auf Profil geklickt:',this.currentClickedProfile?.username,'\n','messageRef:', this.currentMessageRef);
+  }
+
+
+  async setDirectMessageID(id: string) {
+    const docRef = doc(this.getCollectionRef(), id);
+    await setDoc(docRef, {
+      directMessageID: id,
+    }, { merge: true });
+  }
+
+
+  getCollectionRef(): CollectionReference<DocumentData> {
+    return collection(this.firestore, 'direct-messages');
+  }
+
+
+  getMessageRef(): CollectionReference<DocumentData> {
+    return collection(this.firestore, `direct-messages/${this.directMessageId}/messages`);
+  }
+
 
   getMessageRefForId(directMessageId: string): CollectionReference<DocumentData> {
     return collection(this.firestore, `direct-messages/${directMessageId}/messages`);
   }
 
-  subscribeToMessages(directMessageId: string) {
+
+  showMessages(directMessageId: string) {
     const messageRef = this.getMessageRefForId(directMessageId);
 
     onSnapshot(messageRef, (snapshot) => {
@@ -146,21 +178,41 @@ export class DirectMessageService {
         messages.push(doc.data() as DmMessage);
       });
 
-      this.messagesSubject.next(messages);
+      this.messages.next(messages);
     });
   }
 
 
+  newDmMessage(message: string) {
+    const timeOptions = this.timeOption();
 
-  /// bearbeitet
+    const messageData = {
+      authorId: this.currentUser?.userId,
+      authorName: this.currentUser?.username,
+      time: new Date().toLocaleTimeString('de-DE', timeOptions),
+      date: new Date().toISOString().split('T')[0],
+      text: message,
+      reaction: [],
+      file: '',
+      profileImg: this.currentUser?.profileImage,
+    };
+
+    this.createMessageToDm(messageData);
+  }
 
 
-  async getProfileRef(profile: User) {
-    const currentUser = this.getCurrentUserID();
-    const messageRef = await this.addDirectMessage(profile);
-    console.log('Eingeloggter User:', currentUser, 'Auf Profil geklickt:', profile.userId, 'messageRef:', messageRef);
-    this.subscribeToMessages(messageRef);
+  async createMessageToDm(messageData: any) {
+    await this.addDirectMessage();
+    const docRef = doc(this.getMessageRef());
+    await setDoc(docRef, messageData, { merge: true });
+  }
 
-    this.clickedProfile.next(profile);
+
+  timeOption(): Intl.DateTimeFormatOptions {
+    return {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    };
   }
 }
