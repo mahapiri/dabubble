@@ -23,7 +23,7 @@ import { ChannelNewMessageInputComponent } from './channel-new-message-input/cha
 import { ChannelMessageComponent } from './channel-message/channel-message.component';
 import { Channel, ChannelMessage } from '../../../models/channel.class';
 import { ChannelService } from '../../services/channel.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-channel',
@@ -63,7 +63,9 @@ export class ChannelComponent implements AfterViewChecked {
   channelMessages$: Observable<ChannelMessage[]> =
     this.channelService.channelMessages$;
 
-  constructor(private channelService: ChannelService) {    
+  private subscription: Subscription = new Subscription();
+
+  constructor(private channelService: ChannelService) {
     this.selectedChannel$.subscribe((value) => {
       if (value) {
         this.activeChannel = new Channel(value);
@@ -118,5 +120,9 @@ export class ChannelComponent implements AfterViewChecked {
   handleThreadClick(event: boolean) {
     this.clickedThread = event;
     this.clickedThreadChange.emit(this.clickedThread);
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
