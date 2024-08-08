@@ -309,3 +309,25 @@
     font-weight: 700;
   }
 }
+
+input {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 50vw;
+  height: fit-content;
+  border-radius: 20px;
+  border: 1px solid var(--lines);
+  padding: 20px;
+  color: var(--gray);
+  font-family: "Nunito";
+}
+
+input:focus {
+  outline: none;
+  border: 1px solid var(--purple-2);
+}
+
+.bg-color {
+  background-color: var(--bg-color);
+}

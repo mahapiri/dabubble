@@ -50,5 +50,11 @@ export class ChannelMessageComponent {
     this.clickedAnswer.emit(true);
   }
 
-  editMessage() {}
+  openEdit() {
+    this.edit = true;
+  }
+
+  closeEdit() {
+    this.edit = false;
+  }
 }
