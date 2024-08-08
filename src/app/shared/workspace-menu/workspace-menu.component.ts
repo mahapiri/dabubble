@@ -18,7 +18,7 @@ import { CreateChannelComponent } from '../../channel/create-channel/create-chan
 import { ChannelService } from '../../services/channel.service';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Channel } from '../../../models/channel.class';
 import { onSnapshot } from '@angular/fire/firestore';
 import { User } from '../../../models/user.class';
@@ -61,7 +61,8 @@ export class WorkspaceMenuComponent implements OnInit {
   clickedMessage: boolean = false;
   openChannel: boolean = false;
   openDm: boolean = false;
-  selectedUserIndex: number | null = null; 
+  selectedUserIndex: number | null = null;
+  subscription: Subscription = new Subscription;
 
   readonly panelOpenState = signal(false);
 
@@ -71,13 +72,13 @@ export class WorkspaceMenuComponent implements OnInit {
     private channelService: ChannelService,
     public userService: UserService,
     private directMessage: DirectMessageService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     await this.userService.getUserID();
     this.userService.getUserList();
-    setTimeout(() => {
-      this.channelService.loadChannels();
+    setTimeout(async () => {
+      await this.channelService.loadChannels();
     }, 500);
     this.showFirstChannel();
   }
@@ -86,12 +87,13 @@ export class WorkspaceMenuComponent implements OnInit {
    * Upon page load, selects the first channel from the user's channel list and sets it as the currently active channel, shown in the main-window.
    */
   showFirstChannel() {
-    this.userChannels$.subscribe((channels) => {
+    this.subscription = this.userChannels$.subscribe((channels) => {
       if (channels.length > 0) {
         this.channel = channels[0];
         this.channelService.setSelectedChannel(this.channel);
       }
     });
+    this.subscription.unsubscribe()
   }
 
   /**
@@ -144,8 +146,8 @@ export class WorkspaceMenuComponent implements OnInit {
     this.directMessage.getActualProfile(profile);
     await this.directMessage.addDirectMessage(profile);
     this.directMessage.getProfileRef(profile);
-    
+
   }
 
-  editChannel(channel: string) {}
+  editChannel(channel: string) { }
 }

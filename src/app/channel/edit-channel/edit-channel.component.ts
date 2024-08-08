@@ -33,14 +33,15 @@ export class EditChannelComponent {
   @Output() channelClosed = new EventEmitter<boolean>();
   currentUser: User = new User();
   subscription: Subscription = new Subscription();
+  subscribeChannel: Subscription = new Subscription()
   activeChannel: Channel = new Channel({})
-  selectedChannel$: Observable<Channel | null> =  this.channelService.selectedChannel$;
+  selectedChannel$: Observable<Channel | null> = this.channelService.selectedChannel$;
 
   channelName: string = "";
   channelDescription: string = "";
 
-  constructor(private channelService: ChannelService) { 
-    this.selectedChannel$.subscribe(value => {
+  constructor(private channelService: ChannelService) {
+    this.subscribeChannel = this.selectedChannel$.subscribe(value => {
       this.activeChannel = new Channel(value)
       this.channelName = this.activeChannel.channelName
       this.channelDescription = this.activeChannel.description
@@ -87,5 +88,6 @@ export class EditChannelComponent {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.subscribeChannel.unsubscribe(); 
   }
 }
