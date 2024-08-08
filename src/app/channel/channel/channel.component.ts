@@ -63,10 +63,12 @@ export class ChannelComponent implements AfterViewChecked {
   channelMessages$: Observable<ChannelMessage[]> =
     this.channelService.channelMessages$;
 
-  constructor(private channelService: ChannelService) { 
-    this.selectedChannel$.subscribe(value => {
-      this.activeChannel = new Channel(value)
-    })
+  constructor(private channelService: ChannelService) {
+    this.selectedChannel$.subscribe((value) => {
+      if (value) {
+        this.activeChannel = new Channel(value);
+      }
+    });
   }
 
   ngOnInit() {
