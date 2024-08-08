@@ -25,6 +25,7 @@ export class DmMessage {
     file: string = '';
     id: string = '';
     profileImg: string = '';
+    isFirstMessageOfDay: boolean = false;
 
     constructor(obj: any) {
         this.authorId = obj.authorId || '';
@@ -36,6 +37,7 @@ export class DmMessage {
         this.file = obj.file || '';
         this.id = obj.id || '';
         this.profileImg = obj.profileImg || '';
+        this.isFirstMessageOfDay = obj.isFirstMessageOfDay || false;
     }
 
     getMessageJson() {
@@ -49,6 +51,7 @@ export class DmMessage {
             file: this.file,
             id: this.id,
             profileImg: this.profileImg,
+            isFirstMessageOfDay: this.isFirstMessageOfDay,
         }
     }
 }

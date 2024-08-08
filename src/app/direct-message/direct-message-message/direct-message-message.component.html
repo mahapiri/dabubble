@@ -1,6 +1,6 @@
 <div class="message-container">
   <div [ngClass]="{ 'my-message': isMyMessage }">
-    <div class="divider-container">
+    <div *ngIf="message.isFirstMessageOfDay" class="divider-container">
       <mat-divider> </mat-divider>
       <div class="message-date">
         {{ chatService.formatDate(message.date) }}

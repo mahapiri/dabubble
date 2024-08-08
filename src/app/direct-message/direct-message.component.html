@@ -3,7 +3,11 @@
 
   <mat-card-content>
     <app-direct-message-info></app-direct-message-info>
-    <app-direct-message-message *ngFor="let message of messages$ | async" [message]="message"></app-direct-message-message>
+    <mat-list>
+      <app-direct-message-message *ngFor="let message of messages$ | async"
+        [message]="message"></app-direct-message-message>
+    </mat-list>
+
   </mat-card-content>
 
   <mat-card-footer>

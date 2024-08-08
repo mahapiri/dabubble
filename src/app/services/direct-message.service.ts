@@ -1,9 +1,11 @@
 import { inject, Injectable, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from './user.service';
-import { addDoc, collection, doc, Firestore, getDocs, setDoc, where, query, CollectionReference, DocumentData, onSnapshot } from '@angular/fire/firestore';
+import { addDoc, collection, doc, Firestore, getDocs, setDoc, where, query, CollectionReference, DocumentData, onSnapshot, orderBy, limit } from '@angular/fire/firestore';
 import { User } from '../../models/user.class';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { DmMessage } from '../../models/direct-message.class';
+import { ChatService } from './chat.service';
+import { NumberFormatStyle } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +13,7 @@ import { DmMessage } from '../../models/direct-message.class';
 export class DirectMessageService implements OnInit, OnDestroy {
   private firestore: Firestore = inject(Firestore);
   private userService: UserService = inject(UserService);
+  private chatService: ChatService = inject(ChatService);
 
   private messages = new BehaviorSubject<DmMessage[]>([]);
   public messages$ = this.messages.asObservable();
@@ -21,10 +24,11 @@ export class DirectMessageService implements OnInit, OnDestroy {
   private currentUserSubscription: Subscription = new Subscription();
   private profileSubscription: Subscription = new Subscription();
 
-  directMessageId: string | null = null;
+  directMessageId: any;
   currentUser: User | null = null;
   currentClickedProfile: User | null = null;
-  currentMessageRef: string = '';
+  // currentMessageRef: string = '';
+  previousDate: string | null = null;
 
 
   constructor() {
@@ -53,12 +57,12 @@ export class DirectMessageService implements OnInit, OnDestroy {
     const profile = this.currentClickedProfile?.userId;
 
     if (currentUser === profile) {
-      this.currentMessageRef = await this.handleSelfDm(currentUser);
+      this.directMessageId = await this.handleSelfDm(currentUser);
     } else {
-      this.currentMessageRef = await this.handleUsertoUserDm(currentUser, profile);
+      this.directMessageId = await this.handleUsertoUserDm(currentUser, profile);
     }
 
-    return this.currentMessageRef;
+    return this.directMessageId;
   }
 
 
@@ -132,7 +136,7 @@ export class DirectMessageService implements OnInit, OnDestroy {
     this.getActualProfile(profile);
     await this.addDirectMessage();
     // this.getDmInfo();
-    this.showMessages(this.currentMessageRef);
+    this.showMessages(this.directMessageId);
   }
 
 
@@ -142,7 +146,7 @@ export class DirectMessageService implements OnInit, OnDestroy {
 
 
   getDmInfo() {
-    console.log('\n','Eingeloggter User:',this.currentUser?.username,'\n','Auf Profil geklickt:',this.currentClickedProfile?.username,'\n','messageRef:', this.currentMessageRef);
+    console.log('\n','Eingeloggter User:',this.currentUser?.username,'\n','Auf Profil geklickt:',this.currentClickedProfile?.username,'\n','messageRef:', this.directMessageId);
   }
 
 
@@ -172,13 +176,46 @@ export class DirectMessageService implements OnInit, OnDestroy {
   showMessages(directMessageId: string) {
     const messageRef = this.getMessageRefForId(directMessageId);
 
-    onSnapshot(messageRef, (snapshot) => {
+    const q = query(
+      messageRef,
+      orderBy('date', 'asc'),
+      orderBy('time', 'asc'),
+      limit(100)
+    );
+
+    onSnapshot(q, (snapshot) => {
       const messages: DmMessage[] = [];
+      this.previousDate = null;
+
       snapshot.forEach((doc) => {
-        messages.push(doc.data() as DmMessage);
+        const data = doc.data();
+        const currentMessage = this.setMessageObject(doc.id, data);
+
+        this.chatService.setFirstMessageOfDay(currentMessage);
+
+        messages.push(currentMessage);
       });
 
+      messages.reverse();
       this.messages.next(messages);
+
+      console.log(messages)
+    });
+  }
+
+
+  setMessageObject(id: string, data: any) {
+    return new DmMessage({
+      authorId: data['authorId'],
+      authorName: data['authorName'],
+      date: data['date'],
+      time: data['time'],
+      text: data['text'],
+      reaction: [],
+      file: '',
+      id: id,
+      profileImg: data['profileImg'],
+      isFirstMessageOfDay: false,
     });
   }
 
@@ -195,16 +232,21 @@ export class DirectMessageService implements OnInit, OnDestroy {
       reaction: [],
       file: '',
       profileImg: this.currentUser?.profileImage,
+      isFirstMessageOfDay: false,
     };
 
-    this.createMessageToDm(messageData);
+    this.saveMessage(messageData);
   }
 
 
-  async createMessageToDm(messageData: any) {
-    await this.addDirectMessage();
-    const docRef = doc(this.getMessageRef());
-    await setDoc(docRef, messageData, { merge: true });
+  async saveMessage(messageData: any) {
+    const docRef = await addDoc(this.getMessageRef(), messageData);
+
+    const currentMessage = this.setMessageObject(docRef.id, messageData);
+    console.log(messageData);
+    this.chatService.setFirstMessageOfDay(currentMessage);
+
+    this.showMessages(this.directMessageId);
   }
 
 

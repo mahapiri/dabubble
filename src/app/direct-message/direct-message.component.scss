@@ -116,3 +116,12 @@ mat-list-item {
 ::ng-deep mat-list-item .mdc-list-item__content {
   overflow: visible;
 }
+
+mat-list {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 8px;
+  color: var(--black);
+  height: 100%;
+}
