@@ -24,6 +24,14 @@
         <button (click)="openThread()" class="mini-fab-btn" mat-mini-fab>
           <mat-icon>comment</mat-icon>
         </button>
+        <button
+          *ngIf="isMyMessage"
+          (click)="editMessage()"
+          class="mini-fab-btn"
+          mat-mini-fab
+        >
+          <mat-icon>more_vert</mat-icon>
+        </button>
       </div>
 
       <div class="message-wrapper">

@@ -61,8 +61,8 @@ export class ChannelService implements OnDestroy {
   setSelectedChannel(channel: Channel) {
     if (channel.channelID != undefined) {
       onSnapshot(doc(this.firestore, 'channels', channel.channelID), (doc) => {
-        this.selectedChannel.next(new Channel(doc.data()))   
-      })
+        this.selectedChannel.next(new Channel(doc.data()));
+      });
 
       //this.setChannelId(channel.channelID);
     }
@@ -241,25 +241,24 @@ export class ChannelService implements OnDestroy {
     this.unsubMessages();
   }
 
-
-    /**
+  /**
    * Loads the channels of the current user. Retrieves the channelIDs saved in the user via the user ref from the data base.
    * Gets the Channel Data from the channel collection with the ChannelIds.
    * Awaits all Promises, filters the channels for undefined channels and updates the Behavior Subject _userChannels.
    */
-    async loadChannels() {
-      onSnapshot(this.userService.getUserRef(), async (doc) => {
-        const data = doc.data();
-        if (data) {
-          const channelIds = data['userChannels'] || [];
-          const channelPromises = channelIds.map((channelId: string) =>
-            this.getChannelById(channelId)
-          );
-          const channels = await Promise.all(channelPromises);
-          this.userService._userChannels.next(
-            channels.filter((channel) => channel !== undefined) as Channel[]
-          );
-        }
-      });
-    }
+  async loadChannels() {
+    onSnapshot(this.userService.getUserRef(), async (doc) => {
+      const data = doc.data();
+      if (data) {
+        const channelIds = data['userChannels'] || [];
+        const channelPromises = channelIds.map((channelId: string) =>
+          this.getChannelById(channelId)
+        );
+        const channels = await Promise.all(channelPromises);
+        this.userService._userChannels.next(
+          channels.filter((channel) => channel !== undefined) as Channel[]
+        );
+      }
+    });
+  }
 }

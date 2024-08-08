@@ -44,4 +44,6 @@ export class ChannelMessageComponent {
   openThread() {
     this.clickedAnswer.emit(true);
   }
+
+  editMessage() {}
 }
