@@ -107,3 +107,12 @@ mat-card-footer {
 app-dm-message {
   display: contents;
 }
+
+mat-list-item {
+  overflow: visible;
+  padding: 0;
+}
+
+::ng-deep mat-list-item .mdc-list-item__content {
+  overflow: visible;
+}

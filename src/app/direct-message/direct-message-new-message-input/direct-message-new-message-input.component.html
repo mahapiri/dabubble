@@ -1,5 +1,5 @@
 <div class="new-message-container">
-    <input matInput #messageInput type="text" placeholder="Nachricht an User" />
+    <textarea [(ngModel)]="messageText" matInput type="text" placeholder="Nachricht an User" rows="3"></textarea>
 
     <div class="message-controls">
         <div class="add-elements">
@@ -14,7 +14,7 @@
                 <mat-icon>alternate_email</mat-icon>
             </button>
         </div>
-        <button mat-mini-fab class="send-btn">
+        <button mat-mini-fab class="send-btn" (click)="createMessage()">
             <mat-icon>send</mat-icon>
         </button>
     </div>

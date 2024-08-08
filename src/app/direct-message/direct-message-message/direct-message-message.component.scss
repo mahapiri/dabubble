@@ -1,7 +1,13 @@
 @import "./../../../styles.scss";
 @import "./../../channel/channel/channel.component.scss";
 
+
+.message-container {
+    width: 100%;
+}
+
 .message {
+    width: 100%;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -11,10 +17,6 @@
 
         .text-bubble {
             background-color: var(--white);
-        }
-
-        .last-answer {
-            color: var(--black);
         }
 
         .reaction-bar {
@@ -47,8 +49,7 @@
         object-fit: contain;
     }
 
-    .user-wrapper,
-    .answer-wrapper {
+    .user-wrapper {
         display: flex;
         gap: 20px;
     }
@@ -63,18 +64,7 @@
         }
     }
 
-    .total-answers {
-        color: var(--purple-3);
-        font-size: 18px;
-
-        &:hover {
-            color: var(--purple-1);
-            font-weight: 700;
-        }
-    }
-
-    .time,
-    .last-answer {
+    .time {
         font-size: 14px;
         font-weight: 400;
     }
@@ -135,10 +125,6 @@
         .text-bubble {
             background-color: var(--purple-2);
         }
-
-        .last-answer {
-            color: var(--black);
-        }
     }
 }
 
@@ -174,7 +160,7 @@
     position: absolute;
     top: -24px;
     right: 90px;
-    width: 210px;
+    width: 160px;
     height: 46px;
     display: flex;
     justify-content: center;
@@ -269,8 +255,4 @@
         font-size: 18px;
         font-weight: 700;
     }
-}
-
-::ng-deep .message:hover {
-    background-color: var(--bg-color);
 }

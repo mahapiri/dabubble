@@ -1,80 +1,66 @@
-<mat-list-item>
-    <div [ngClass]="{ 'my-message': isMyMessage }">
-      <div class="divider-container">
-        <mat-divider> </mat-divider>
-        <div class="message-date">
-          Datum
-        </div>
+<div class="message-container">
+  <div [ngClass]="{ 'my-message': isMyMessage }">
+    <div class="divider-container">
+      <mat-divider> </mat-divider>
+      <div class="message-date">
+        {{ chatService.formatDate(message.date) }}
       </div>
-  
-      <div class="message">
-        <div id="reactionBar" class="reaction-bar">
-          <button class="mini-fab-btn" mat-mini-fab>
-            <img src="./../../../assets/emojis/check.png" alt="hands up" />
-          </button>
-          <button class="mini-fab-btn" mat-mini-fab>
-            <img
-              src="./../../../assets/emojis/raising-both-hands.svg"
-              alt="heart"
-            />
-          </button>
-          <button class="mini-fab-btn" mat-mini-fab>
-            <mat-icon>add_reaction</mat-icon>
-          </button>
-          <button (click)="openThread()" class="mini-fab-btn" mat-mini-fab>
-            <mat-icon>comment</mat-icon>
-          </button>
-        </div>
-  
-        <div class="message-wrapper">
-          <img
-            class="user-img"
-            src=""
-          />
-  
-          <div class="message-details">
-            <div class="user-wrapper">
-              <div class="user-name">authorName</div>
-              <div class="time">
-               time Uhr
-              </div>
+    </div>
+
+    <div class="message">
+      <div id="reactionBar" class="reaction-bar">
+        <button class="mini-fab-btn" mat-mini-fab>
+          <img src="./../../../assets/emojis/check.png" alt="hands up" />
+        </button>
+        <button class="mini-fab-btn" mat-mini-fab>
+          <img src="./../../../assets/emojis/raising-both-hands.svg" alt="heart" />
+        </button>
+        <button class="mini-fab-btn" mat-mini-fab>
+          <mat-icon>add_reaction</mat-icon>
+        </button>
+      </div>
+
+      <div class="message-wrapper">
+        <img class="user-img" src="./../../../{{ message.profileImg }}" />
+
+        <div class="message-details">
+          <div class="user-wrapper">
+            <div class="user-name">{{ message.authorName }}</div>
+            <div class="time">
+              {{ chatService.formatTime(message.time) }} Uhr
             </div>
-  
-            <div class="text-bubble">text</div>
-            <div *ngIf="!isMyMessage" class="answer-wrapper">
-              <div (click)="openThread()" class="total-answers">2 Antworten</div>
-              <div class="last-answer">Letzte Antwort 14:56</div>
-            </div>
-  
-            <div *ngIf="isMyMessage" class="reaction-container">
-              <div class="reactions-wrapper">
-                <button class="reaction-btn">
-                  <div class="reaction-info-menu">
-                    <img src="./../../../assets/emojis/rocket.svg" alt="nerd" />
-                    <span class="user">Noah Braun</span>
-                    <span>hat reagiert</span>
-                  </div>
-                  <img src="./../../../assets/emojis/rocket.svg" alt="check" />
-                  <span class="reaction-count">1</span>
-                </button>
-  
-                <button class="reaction-btn">
-                  <div class="reaction-info-menu">
-                    <img src="./../../../assets/emojis/check.png" alt="rocket" />
-                    <span class="user">Sofia Müller</span>
-                    <span>hat reagiert</span>
-                  </div>
-                  <img src="./../../../assets/emojis/check.png" alt="check" />
-                  <span class="reaction-count">1</span>
-                </button>
-                <button class="mini-fab-btn" mat-mini-fab>
-                  <mat-icon>add_reaction</mat-icon>
-                </button>
-              </div>
+          </div>
+
+          <div class="text-bubble">{{ message.text }}</div>
+
+          <div class="reaction-container">
+            <div class="reactions-wrapper">
+              <button class="reaction-btn">
+                <div class="reaction-info-menu">
+                  <img src="./../../../assets/emojis/rocket.svg" alt="nerd" />
+                  <span class="user">Noah Braun</span>
+                  <span>hat reagiert</span>
+                </div>
+                <img src="./../../../assets/emojis/rocket.svg" alt="check" />
+                <span class="reaction-count">1</span>
+              </button>
+
+              <button class="reaction-btn">
+                <div class="reaction-info-menu">
+                  <img src="./../../../assets/emojis/check.png" alt="rocket" />
+                  <span class="user">Sofia Müller</span>
+                  <span>hat reagiert</span>
+                </div>
+                <img src="./../../../assets/emojis/check.png" alt="check" />
+                <span class="reaction-count">1</span>
+              </button>
+              <button class="mini-fab-btn" mat-mini-fab>
+                <mat-icon>add_reaction</mat-icon>
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </mat-list-item>
-  
+  </div>
+</div>

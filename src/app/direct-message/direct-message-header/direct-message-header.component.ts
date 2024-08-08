@@ -4,6 +4,7 @@ import { MatCardHeader } from '@angular/material/card';
 import { UserService } from '../../services/user.service';
 import { User } from '../../../models/user.class';
 import { Subscription } from 'rxjs';
+import { DirectMessageService } from '../../services/direct-message.service';
 
 @Component({
   selector: 'app-direct-message-header',
@@ -18,28 +19,29 @@ import { Subscription } from 'rxjs';
 export class DirectMessageHeaderComponent implements OnInit, OnDestroy {
   public userService: UserService = inject(UserService);
   private userSubscription: Subscription = new Subscription();
+  public directMessageService: DirectMessageService = inject(DirectMessageService);
   profile: Partial<User> = {};
 
 
   /**
-   * subscribes the current user to get data for the direct message header component
+   * subscribes the clicke profile for the direct message UI
    *
    * @memberof DirectMessageHeaderComponent
    */
   ngOnInit() {
-    this.userSubscription = this.userService.currentUser$.subscribe((user) => {
+    this.userSubscription = this.directMessageService.clickedProfile$.subscribe((profile) => {
       this.profile = {
-        username: user?.username,
-        profileImage: user?.profileImage,
-        state: user?.state,
-        userId: user?.userId
+        username: profile?.username,
+        userId: profile?.userId,
+        profileImage: profile?.profileImage,
+        state: profile?.state
       };
     });
   }
 
 
 /**
- * unsubscribes the current user subsricption
+ * unsubscribes the profile service while it is not anymore in use
  *
  * @memberof DirectMessageHeaderComponent
  */
