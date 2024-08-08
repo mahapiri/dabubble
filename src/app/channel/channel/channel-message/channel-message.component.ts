@@ -8,6 +8,8 @@ import { CommonModule } from '@angular/common';
 import { Channel, ChannelMessage } from '../../../../models/channel.class';
 import { Observable } from 'rxjs';
 import { ChatService } from '../../../services/chat.service';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-channel-message',
@@ -18,6 +20,8 @@ import { ChatService } from '../../../services/chat.service';
     MatButtonModule,
     MatIconModule,
     MatDividerModule,
+    MatInputModule,
+    FormsModule,
   ],
   templateUrl: './channel-message.component.html',
   styleUrl: './channel-message.component.scss',
@@ -28,6 +32,7 @@ export class ChannelMessageComponent {
   @Output() clickedAnswer = new EventEmitter<boolean>();
 
   isMyMessage: boolean = false;
+  edit: boolean = false;
 
   channelMessages$: Observable<ChannelMessage[]> =
     this.channelService.channelMessages$;

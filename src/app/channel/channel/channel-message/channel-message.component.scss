@@ -125,6 +125,7 @@
   .reaction-bar {
     right: unset;
     left: 90px;
+    width: 255px;
   }
 
   .reactions-wrapper {
@@ -174,7 +175,7 @@
   position: absolute;
   top: -24px;
   right: 90px;
-  width: fit-content;
+  width: 210px;
   height: 46px;
   display: flex;
   justify-content: center;
@@ -198,6 +199,45 @@
     color: var(--black);
     &:hover {
       color: var(--purple-3);
+    }
+  }
+}
+
+.more-btn:hover + .edit-msg-bubble {
+  display: flex;
+}
+
+.edit-msg-bubble {
+  position: absolute;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  top: 20px;
+  left: 230px;
+  border-radius: 0 30px 30px 30px;
+  padding: 10px 20px 10px 20px;
+  background-color: white;
+  box-shadow: 0px 6px 14px 0px rgba(0, 0, 0, 0.2);
+  width: 310px;
+  height: 70px;
+  &:hover {
+    display: flex;
+  }
+
+  button {
+    font-family: "Nunito";
+    width: 270px;
+    height: 50px;
+    font-size: 24px;
+    padding: 10px 20px 10px 20px;
+    border-style: none;
+    border-radius: 100px;
+    background-color: white;
+    cursor: pointer;
+    &:hover {
+      background-color: var(--bg-color);
+      color: var(--purple-3);
+      font-weight: bold;
     }
   }
 }
