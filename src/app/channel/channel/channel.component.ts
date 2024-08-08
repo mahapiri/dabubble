@@ -66,7 +66,7 @@ export class ChannelComponent implements AfterViewChecked {
   private subscription: Subscription = new Subscription();
 
   constructor(private channelService: ChannelService) {
-    this.selectedChannel$.subscribe((value) => {
+    this.subscription = this.selectedChannel$.subscribe((value) => {
       if (value) {
         this.activeChannel = new Channel(value);
       }
