@@ -96,6 +96,8 @@ export class WorkspaceMenuComponent implements OnInit {
     this.subscription.unsubscribe()
   }
 
+  
+
   /**
    * When a channel is clicked, it gets set as the local `channel` property.
    * The `ChannelService` is notified to set the selected channel.
