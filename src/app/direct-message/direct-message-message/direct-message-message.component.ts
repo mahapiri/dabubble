@@ -7,6 +7,8 @@ import { MatListModule } from '@angular/material/list';
 import { ChatService } from '../../services/chat.service';
 import { DmMessage } from '../../../models/direct-message.class';
 import { UserService } from '../../services/user.service';
+import { ReactionContainerComponent } from '../../chat/reaction-container/reaction-container.component';
+import { ReactionBarComponent } from '../../chat/reaction-bar/reaction-bar.component';
 
 @Component({
   selector: 'app-direct-message-message',
@@ -16,7 +18,9 @@ import { UserService } from '../../services/user.service';
     MatListModule,
     MatButtonModule,
     MatIconModule,
-    MatDividerModule
+    MatDividerModule,
+    ReactionContainerComponent,
+    ReactionBarComponent
   ],
   templateUrl: './direct-message-message.component.html',
   styleUrl: './direct-message-message.component.scss'
