@@ -28,16 +28,16 @@ export class DmMessage {
     isFirstMessageOfDay: boolean = false;
 
     constructor(obj: any) {
-        this.authorId = obj.authorId || '';
-        this.authorName = obj.authorName || '';
-        this.date = obj.date || '';
-        this.time = obj.time || '';
-        this.text = obj.text || '';
-        this.reaction = obj.reaction || [];
-        this.file = obj.file || '';
-        this.id = obj.id || '';
-        this.profileImg = obj.profileImg || '';
-        this.isFirstMessageOfDay = obj.isFirstMessageOfDay || false;
+        this.authorId = obj ? obj.authorId : '';
+        this.authorName = obj ? obj.authorName : '';
+        this.date = obj ? obj.date : '';
+        this.time = obj ? obj.time : '';
+        this.text = obj ? obj.text : '';
+        this.reaction = obj ? obj.reaction : [];
+        this.file = obj ? obj.file : '';
+        this.id = obj ? obj.id : '';
+        this.profileImg = obj ? obj.profileImg : '';
+        this.isFirstMessageOfDay = obj ? obj.isFirstMessageOfDay || false : false;
     }
 
     getMessageJson() {

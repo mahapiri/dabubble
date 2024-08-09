@@ -23,32 +23,47 @@ export class DirectMessageService implements OnInit, OnDestroy {
 
   private currentUserSubscription: Subscription = new Subscription();
   private profileSubscription: Subscription = new Subscription();
+  private messagesSubscription: Subscription = new Subscription();
 
   directMessageId: any;
   currentUser: User | null = null;
   currentClickedProfile: User | null = null;
-  // currentMessageRef: string = '';
   previousDate: string | null = null;
 
 
   constructor() {
-    this.currentUserSubscription = this.userService.currentUser$.subscribe((user) => {
+    this.currentUserSubscription = this.userService.currentUser$.subscribe(
+      (user) => {
       this.currentUser = user;
     });
-    this.profileSubscription = this.clickedProfile$.subscribe((profile) => {
+    this.profileSubscription = this.clickedProfile$.subscribe(
+      (profile) => {
       this.currentClickedProfile = profile;
     });
   }
 
 
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
 
   ngOnDestroy(): void {
     this.currentUserSubscription.unsubscribe();
     this.profileSubscription.unsubscribe();
+    this.messagesSubscription.unsubscribe();
+  }
+
+
+  async openDmFromUser(profile: User) {
+    this.getActualProfile(profile);
+    await this.addDirectMessage();
+    // this.getDmInfo();
+    this.previousDate = null;
+    this.showMessages(this.directMessageId);
+  }
+
+
+  getActualProfile(profile: User) {
+    this.clickedProfile.next(profile);
   }
 
 
@@ -59,9 +74,10 @@ export class DirectMessageService implements OnInit, OnDestroy {
     if (currentUser === profile) {
       this.directMessageId = await this.handleSelfDm(currentUser);
     } else {
-      this.directMessageId = await this.handleUsertoUserDm(currentUser, profile);
+      this.directMessageId = await this.handleUsertoUserDm(
+        currentUser, profile
+      );
     }
-
     return this.directMessageId;
   }
 
@@ -70,14 +86,16 @@ export class DirectMessageService implements OnInit, OnDestroy {
     const existingOwnDmId = await this.proofExistingOwnDm(currentUser);
 
     if (!existingOwnDmId) {
-      const messageRef = await addDoc(collection(this.firestore, 'direct-messages'), {
-        userIDs: [currentUser],
-      });
+      const messageRef = await addDoc(
+        collection(this.firestore, 'direct-messages'), 
+        {
+          userIDs: [currentUser],
+        }
+      );
       await this.setDirectMessageID(messageRef.id);
       this.directMessageId = messageRef.id;
       return messageRef.id;
     } else {
-      // console.log('Own Channel exist already', existingOwnDmId);
       this.directMessageId = existingOwnDmId;
       return existingOwnDmId;
     }
@@ -85,17 +103,21 @@ export class DirectMessageService implements OnInit, OnDestroy {
 
 
   async handleUsertoUserDm(currentUserId: any, otherUserId: any) {
-    const existingDmId = await this.proofExistingDm(currentUserId, otherUserId);
+    const existingDmId = await this.proofExistingDm(
+      currentUserId, otherUserId
+    );
 
     if (!existingDmId) {
-      const messageRef = await addDoc(collection(this.firestore, 'direct-messages'), {
+      const messageRef = await addDoc(
+        collection(this.firestore, 'direct-messages'), 
+        {
         userIDs: [otherUserId, currentUserId],
-      });
+        }
+      );
       await this.setDirectMessageID(messageRef.id);
       this.directMessageId = messageRef.id;
       return messageRef.id;
     } else {
-      // console.log('Channel exist already', existingDmId);
       this.directMessageId = existingDmId;
       return existingDmId;
     }
@@ -104,12 +126,18 @@ export class DirectMessageService implements OnInit, OnDestroy {
 
   async proofExistingDm(currentUserId: string, otherUserId: string): Promise<string | null> {
     const directMessageRef = this.getCollectionRef();
-    const q = query(directMessageRef, where('userIDs', 'array-contains', currentUserId));
+    const q = query(
+      directMessageRef,
+      where('userIDs', 'array-contains', currentUserId)
+    );
     const querySnapshot = await getDocs(q);
 
     for (const doc of querySnapshot.docs) {
       const userIds = doc.data()['userIDs'] as string[];
-      if ((userIds.includes(otherUserId) && userIds.includes(currentUserId)) || (currentUserId === otherUserId && userIds.includes(currentUserId))) {
+      if (
+        (userIds.includes(otherUserId) && userIds.includes(currentUserId)) || 
+        (currentUserId === otherUserId && userIds.includes(currentUserId))
+      ) {
         return doc.id;
       }
     }
@@ -119,7 +147,10 @@ export class DirectMessageService implements OnInit, OnDestroy {
 
   async proofExistingOwnDm(userId: string): Promise<string | null> {
     const directMessageRef = this.getCollectionRef();
-    const q = query(directMessageRef, where('userIDs', 'array-contains', userId));
+    const q = query(
+      directMessageRef, 
+      where('userIDs', 'array-contains', userId)
+    );
     const querySnapshot = await getDocs(q);
 
     for (const document of querySnapshot.docs) {
@@ -132,19 +163,6 @@ export class DirectMessageService implements OnInit, OnDestroy {
   }
 
 
-  async openDmFromUser(profile: User) {
-    this.getActualProfile(profile);
-    await this.addDirectMessage();
-    // this.getDmInfo();
-    this.showMessages(this.directMessageId);
-  }
-
-
-  getActualProfile(profile: User) {
-    this.clickedProfile.next(profile);
-  }
-
-
   getDmInfo() {
     console.log('\n','Eingeloggter User:',this.currentUser?.username,'\n','Auf Profil geklickt:',this.currentClickedProfile?.username,'\n','messageRef:', this.directMessageId);
   }
@@ -152,9 +170,12 @@ export class DirectMessageService implements OnInit, OnDestroy {
 
   async setDirectMessageID(id: string) {
     const docRef = doc(this.getCollectionRef(), id);
-    await setDoc(docRef, {
-      directMessageID: id,
-    }, { merge: true });
+    await setDoc(
+      docRef, 
+      {
+        directMessageID: id,
+    }, 
+    { merge: true });
   }
 
 
@@ -191,15 +212,14 @@ export class DirectMessageService implements OnInit, OnDestroy {
         const data = doc.data();
         const currentMessage = this.setMessageObject(doc.id, data);
 
-        this.chatService.setFirstMessageOfDay(currentMessage);
+        currentMessage.isFirstMessageOfDay = currentMessage.date !== this.previousDate;
+        this.previousDate = currentMessage.date;
 
         messages.push(currentMessage);
       });
 
       messages.reverse();
       this.messages.next(messages);
-
-      console.log(messages)
     });
   }
 
@@ -234,18 +254,15 @@ export class DirectMessageService implements OnInit, OnDestroy {
       profileImg: this.currentUser?.profileImage,
       isFirstMessageOfDay: false,
     };
-
     this.saveMessage(messageData);
   }
 
 
   async saveMessage(messageData: any) {
     const docRef = await addDoc(this.getMessageRef(), messageData);
-
     const currentMessage = this.setMessageObject(docRef.id, messageData);
-    console.log(messageData);
-    this.chatService.setFirstMessageOfDay(currentMessage);
 
+    this.chatService.setFirstMessageOfDay(currentMessage);
     this.showMessages(this.directMessageId);
   }
 

@@ -27,7 +27,7 @@ export class DirectMessageNewMessageInputComponent {
     if (!this.messageText.trim()) {
       console.warn('The message field is empty. Please type a message!');
     } else {
-      this.directMessageService.newDmMessage(this.messageText);
+      await this.directMessageService.newDmMessage(this.messageText);
     }
     this.messageText = '';
   }
