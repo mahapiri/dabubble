@@ -32,6 +32,7 @@ export class ChannelMessageComponent {
   @Output() clickedAnswer = new EventEmitter<boolean>();
 
   isMyMessage: boolean = false;
+  answered: boolean = true;
   edit: boolean = false;
 
   channelMessages$: Observable<ChannelMessage[]> =
