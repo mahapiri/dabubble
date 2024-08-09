@@ -158,7 +158,10 @@ export class ChannelService implements OnDestroy {
           this.getMessageRef(),
           newMessage.getMessageJson()
         );
-        console.log('Message added:', messageRef.id);
+
+        newMessage.id = messageRef.id;
+
+        await updateDoc(messageRef, { id: newMessage.id });
       }
     });
   }
