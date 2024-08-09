@@ -9,6 +9,7 @@ import { DmMessage } from '../../../models/direct-message.class';
 import { UserService } from '../../services/user.service';
 import { ReactionContainerComponent } from '../../chat/reaction-container/reaction-container.component';
 import { ReactionBarComponent } from '../../chat/reaction-bar/reaction-bar.component';
+import { ReactionService } from '../../services/reaction.service';
 
 @Component({
   selector: 'app-direct-message-message',
@@ -28,6 +29,7 @@ import { ReactionBarComponent } from '../../chat/reaction-bar/reaction-bar.compo
 export class DirectMessageMessageComponent implements OnInit {
   public chatService: ChatService = inject(ChatService);
   public userService: UserService = inject(UserService);
+  public reactionService: ReactionService = inject(ReactionService);
   @Input() message!: DmMessage;
 
   isMyMessage: boolean = false;
@@ -39,4 +41,7 @@ export class DirectMessageMessageComponent implements OnInit {
     this.isMyMessage = this.chatService.setMyMessage(this.message);
   }
 
+  closeReactionMoreBtn() {
+    this.reactionService.moreBtn = false;
+  }
 }

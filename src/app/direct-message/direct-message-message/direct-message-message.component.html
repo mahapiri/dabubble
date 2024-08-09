@@ -11,24 +11,10 @@
     <div *ngIf="message.isFirstMessageOfDay === false" class="divider-container-none">
     </div>
 
-    <div class="message">
+    <div class="message" (mouseleave)="closeReactionMoreBtn()">
       <div id="reactionBar" class="reaction-bar">
         <app-reaction-bar></app-reaction-bar>
       </div>
-
-      <!--  -->
-      <!-- <div id="reactionBar" class="reaction-bar">
-        <button class="mini-fab-btn" mat-mini-fab>
-          <img src="./../../../assets/emojis/check.png" alt="hands up" />
-        </button>
-        <button class="mini-fab-btn" mat-mini-fab>
-          <img src="./../../../assets/emojis/raising-both-hands.svg" alt="heart" />
-        </button>
-        <button class="mini-fab-btn" mat-mini-fab>
-          <mat-icon>add_reaction</mat-icon>
-        </button>
-      </div> -->
-      <!--  -->
       <div class="message-wrapper">
         <img class="user-img" src="./../../../{{ message.profileImg }}" />
 

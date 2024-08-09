@@ -1,11 +1,20 @@
 <div class="reaction-bar-section">
   <button class="mini-fab-btn" mat-mini-fab>
-    <img src="./../../../assets/emojis/check.png" alt="hands up" />
+    <img src="./../../../assets/reaction/check.svg" alt="Check" />
   </button>
   <button class="mini-fab-btn" mat-mini-fab>
-    <img src="./../../../assets/emojis/raising-both-hands.svg" alt="heart" />
+    <img src="./../../../assets/reaction/clap.svg" alt="Clap" />
   </button>
-  <button class="mini-fab-btn" mat-mini-fab>
+  <ng-container *ngIf="reactionService.moreBtn">
+    <button class="mini-fab-btn" mat-mini-fab>
+      <img src="./../../../assets/reaction/nerd.svg" alt="Nerd" />
+    </button>
+    <button class="mini-fab-btn" mat-mini-fab>
+      <img src="./../../../assets/reaction/rocket.svg" alt="Rocket" />
+    </button>
+  </ng-container>
+
+  <button *ngIf="!reactionService.moreBtn" class="mini-fab-btn" mat-mini-fab (click)="showAllReactionBtn()">
     <mat-icon>add_reaction</mat-icon>
   </button>
 </div>

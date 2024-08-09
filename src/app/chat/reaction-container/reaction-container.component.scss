@@ -1,6 +1,6 @@
-.reactions-wrapper {
-    justify-content: flex-end;
-}
+// .reactions-wrapper {
+//     justify-content: flex-end;
+// }
 
 .reactions-wrapper {
     display: flex;
@@ -92,6 +92,10 @@
   
       .mat-icon {
         font-weight: bold;
+      }
+
+      .reaction-info-menu {
+        visibility: visible;
       }
     }
   }
