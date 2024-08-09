@@ -163,6 +163,15 @@ export class ChannelService implements OnDestroy {
     });
   }
 
+  async updateMessage(message: ChannelMessage) {
+    if (message.id) {
+      let docRef = this.getSingleMessageRef(message.id);
+      await updateDoc(docRef, message.getMessageJson()).catch((err) => {
+        console.log(err);
+      });
+    }
+  }
+
   /**
    * Subscribes to changes in the messages collection of the currently selected channel.
    * Fetches the latest list of messages and updates the channelMessagesSubjects BehaviorSubject.
@@ -235,6 +244,13 @@ export class ChannelService implements OnDestroy {
 
   getMessageRef() {
     return collection(this.firestore, `channels/${this.channelID}/messages`);
+  }
+
+  getSingleMessageRef(docId: string) {
+    return doc(
+      collection(this.firestore, `channels/${this.channelID}/messages`),
+      docId
+    );
   }
 
   ngOnDestroy() {

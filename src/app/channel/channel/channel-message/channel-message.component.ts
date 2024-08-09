@@ -58,4 +58,8 @@ export class ChannelMessageComponent {
   closeEdit() {
     this.edit = false;
   }
+
+  saveMessage() {
+    this.channelService.updateMessage(this.channelMessage);
+  }
 }
