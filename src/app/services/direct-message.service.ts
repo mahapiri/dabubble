@@ -233,7 +233,7 @@ export class DirectMessageService implements OnInit, OnDestroy {
       text: data['text'],
       reactionId: [],
       file: '',
-      id: '',
+      id: data['id'],
       profileImg: data['profileImg'],
       isFirstMessageOfDay: false,
     });
@@ -264,8 +264,9 @@ export class DirectMessageService implements OnInit, OnDestroy {
     const currentMessage = this.setMessageObject(docRef.id, messageData);
 
     this.chatService.setFirstMessageOfDay(currentMessage);
+    await this.setDirectMessageMessageID(docRef.id);
     this.showMessages(this.directMessageId);
-    this.setDirectMessageMessageID(docRef.id);
+
   }
 
 

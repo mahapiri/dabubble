@@ -3,6 +3,7 @@ import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactionService } from '../../services/reaction.service';
 import { ChatService } from '../../services/chat.service';
+import { DmMessage } from '../../../models/direct-message.class';
 
 @Component({
   selector: 'app-reaction-bar',
@@ -19,11 +20,13 @@ export class ReactionBarComponent implements OnInit, OnDestroy {
   public chatService: ChatService = inject(ChatService);
 
   @Input() isMyMessage: boolean = false;
+  @Input() message!: DmMessage;
 
   edit: boolean = false;
 
 
-  constructor() {}
+  constructor() {
+  }
 
 
   ngOnInit() {
@@ -49,4 +52,5 @@ export class ReactionBarComponent implements OnInit, OnDestroy {
   get isChannelMessage(): boolean {
     return this.chatService.isChannel;
   }
+
 }

@@ -1,5 +1,5 @@
 <div class="reaction-bar-section">
-  <button class="mini-fab-btn" mat-mini-fab>
+  <button class="mini-fab-btn" mat-mini-fab (click)="reactionService.setReaction('check', message!)">
     <img src="./../../../assets/reaction/check.svg" alt="Check" />
   </button>
   <button class="mini-fab-btn" mat-mini-fab>
