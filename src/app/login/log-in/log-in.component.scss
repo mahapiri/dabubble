@@ -1,9 +1,9 @@
 @import "./../login-style.scss";
-  
-  .header-link{
+
+.header-link {
     display: flex;
     flex-direction: column;
-  }
+}
 
 .wrapper {
     display: flex;
@@ -104,6 +104,11 @@ input {
             color: white;
         }
     }
+}
+
+.errormessage {
+    color: var(--rosa);
+    margin-block: -20px;
 }
 
 .show-button-container {
