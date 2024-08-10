@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,6 +10,7 @@ import { UserService } from '../../services/user.service';
 import { ReactionContainerComponent } from '../../chat/reaction-container/reaction-container.component';
 import { ReactionBarComponent } from '../../chat/reaction-bar/reaction-bar.component';
 import { ReactionService } from '../../services/reaction.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-direct-message-message',
@@ -26,20 +27,25 @@ import { ReactionService } from '../../services/reaction.service';
   templateUrl: './direct-message-message.component.html',
   styleUrl: './direct-message-message.component.scss'
 })
-export class DirectMessageMessageComponent implements OnInit {
+export class DirectMessageMessageComponent implements OnInit, OnDestroy {
   public chatService: ChatService = inject(ChatService);
-  public userService: UserService = inject(UserService);
   public reactionService: ReactionService = inject(ReactionService);
+
+
   @Input() message!: DmMessage;
 
   isMyMessage: boolean = false;
 
-  constructor() {}
+
+  constructor() { }
 
 
   ngOnInit() {
     this.isMyMessage = this.chatService.setMyMessage(this.message);
   }
+
+  ngOnDestroy(): void { }
+  
 
   closeReactionMoreBtn() {
     this.reactionService.moreBtn = false;

@@ -23,6 +23,7 @@ import { Channel } from '../../../models/channel.class';
 import { onSnapshot } from '@angular/fire/firestore';
 import { User } from '../../../models/user.class';
 import { DirectMessageService } from '../../services/direct-message.service';
+import { ChatService } from '../../services/chat.service';
 
 @Component({
   selector: 'app-workspace-menu',
@@ -68,11 +69,14 @@ export class WorkspaceMenuComponent implements OnInit {
 
   userList$ = this.userService.userList$;
 
+
   constructor(
     private channelService: ChannelService,
     public userService: UserService,
-    private directMessage: DirectMessageService
+    private directMessage: DirectMessageService,
+    private chatService: ChatService
   ) { }
+
 
   async ngOnInit() {
     await this.userService.getUserID();
@@ -82,6 +86,7 @@ export class WorkspaceMenuComponent implements OnInit {
     }, 500);
     this.showFirstChannel();
   }
+
 
   /**
    * Upon page load, selects the first channel from the user's channel list and sets it as the currently active channel, shown in the main-window.
@@ -96,7 +101,6 @@ export class WorkspaceMenuComponent implements OnInit {
     this.subscription.unsubscribe()
   }
 
-  
 
   /**
    * When a channel is clicked, it gets set as the local `channel` property.
@@ -107,7 +111,9 @@ export class WorkspaceMenuComponent implements OnInit {
     this.channel = channel;
     this.channelService.setSelectedChannel(channel);
     this.selectProfileChange.emit(false);
+    this.chatService.setIsChannel(true);
   }
+
 
   toggle() {
     this.drawer.toggle();
@@ -115,17 +121,21 @@ export class WorkspaceMenuComponent implements OnInit {
     this.hover = true;
   }
 
+
   hoverTrue() {
     this.hover = true;
   }
+
 
   hoverFalse() {
     this.hover = false;
   }
 
+
   newMessage() {
     this.clickedMessage = !this.clickedMessage;
   }
+
 
   createChannel() {
     this.clickedChannel = !this.clickedChannel;
@@ -133,20 +143,23 @@ export class WorkspaceMenuComponent implements OnInit {
   }
 
 
-
   openChannelsMenu() {
     this.openChannel = !this.openChannel;
   }
+
 
   openDirectMessages() {
     this.openDm = !this.openDm;
   }
 
+
   clickedProfile(i: number, profile: User) {
     this.selectedUserIndex = i;
     this.selectProfileChange.emit(true);
     this.directMessage.openDmFromUser(profile);
+    this.chatService.setIsChannel(false);
   }
+
 
   editChannel(channel: string) { }
 }

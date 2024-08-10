@@ -17,4 +17,16 @@
   <button *ngIf="!reactionService.moreBtn" class="mini-fab-btn" mat-mini-fab (click)="showAllReactionBtn()">
     <mat-icon>add_reaction</mat-icon>
   </button>
+  <button *ngIf="isChannelMessage" (click)="openThread()" class="mini-fab-btn" mat-mini-fab>
+    <mat-icon>comment</mat-icon>
+  </button>
+  <div *ngIf="isMyMessage" class="more-btn-container">
+    <button class="mini-fab-btn more-btn" mat-mini-fab>
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <div class="edit-msg-bubble">
+      <button (click)="openEdit()">Nachricht bearbeiten</button>
+    </div>
+  </div>
 </div>

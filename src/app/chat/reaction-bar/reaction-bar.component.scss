@@ -1,61 +1,102 @@
 .reaction-bar-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+img {
+  display: flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+}
+
+.mini-fab-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--white);
+  box-shadow: none;
+  color: var(--gray);
+  cursor: pointer;
+  border: none;
+  border-radius: 50%;
+  padding: 20px;
+  width: 24px;
+  height: 24px;
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: slideIn 0.5s forwards;
+
+  .mat-icon {
+    overflow: unset;
   }
-  
-  img {
-    display: flex;
-    width: 24px;
-    height: 24px;
-    align-items: center;
-  }
-  
-  .mini-fab-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--white);
+
+  &:hover {
+    color: var(--purple-3);
+    background-color: var(--bg-color);
+    --mat-fab-small-state-layer-color: var(--white);
     box-shadow: none;
-    color: var(--gray);
-    cursor: pointer;
-    border: none;
-    border-radius: 50%;
-    padding: 20px;
-    width: 24px;
-    height: 24px;
-    opacity: 0;
-    transform: translateX(-20px);
-    animation: slideIn 0.5s forwards;
-  
+
     .mat-icon {
-      overflow: unset;
-    }
-  
-    &:hover {
-      color: var(--purple-3);
-      background-color: var(--bg-color);
-      --mat-fab-small-state-layer-color: var(--white);
-      box-shadow: none;
-  
-      .mat-icon {
-        font-weight: bold;
-      }
+      font-weight: bold;
     }
   }
-  
-  @keyframes slideIn {
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-  
-  .reaction-bar-section > .mini-fab-btn:nth-child(1),
-  .reaction-bar-section > .mini-fab-btn:nth-child(2) {
-    opacity: 1; 
+}
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
     transform: translateX(0);
-    animation: none;
   }
-  
+}
+
+.reaction-bar-section>.mini-fab-btn:nth-child(1),
+.reaction-bar-section>.mini-fab-btn:nth-child(2) {
+  opacity: 1;
+  transform: translateX(0);
+  animation: none;
+}
+
+.more-btn-container {
+  position: relative;
+}
+
+.more-btn:hover+.edit-msg-bubble {
+  display: flex;
+}
+
+.edit-msg-bubble {
+  position: absolute;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  top: 20px;
+  left: 32px;
+  width: 280px;
+  height: 64px;
+  border-radius: 0 25px 25px 25px;
+  background-color: white;
+  box-shadow: 0px 6px 14px 0px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    display: flex;
+  }
+
+  button {
+    font-family: "Nunito";
+    font-size: 20px;
+    padding: 10px 20px 10px 20px;
+    border-style: none;
+    border-radius: 100px;
+    background-color: white;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--bg-color);
+      color: var(--purple-3);
+      font-weight: bold;
+    }
+  }
+}

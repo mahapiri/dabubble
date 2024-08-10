@@ -231,9 +231,9 @@ export class DirectMessageService implements OnInit, OnDestroy {
       date: data['date'],
       time: data['time'],
       text: data['text'],
-      reaction: [],
+      reactionId: [],
       file: '',
-      id: id,
+      id: '',
       profileImg: data['profileImg'],
       isFirstMessageOfDay: false,
     });
@@ -249,8 +249,9 @@ export class DirectMessageService implements OnInit, OnDestroy {
       time: new Date().toLocaleTimeString('de-DE', timeOptions),
       date: new Date().toISOString().split('T')[0],
       text: message,
-      reaction: [],
+      reactionId: [],
       file: '',
+      id: '',
       profileImg: this.currentUser?.profileImage,
       isFirstMessageOfDay: false,
     };
@@ -264,6 +265,19 @@ export class DirectMessageService implements OnInit, OnDestroy {
 
     this.chatService.setFirstMessageOfDay(currentMessage);
     this.showMessages(this.directMessageId);
+    this.setDirectMessageMessageID(docRef.id);
+  }
+
+
+  async setDirectMessageMessageID(id: string) {
+    const docRef = doc(this.getMessageRef(), id);
+
+    await setDoc(
+      docRef, 
+      {
+        id: docRef.id,
+    }, 
+    { merge: true });
   }
 
 

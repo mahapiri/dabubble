@@ -13,7 +13,7 @@
 
     <div class="message" (mouseleave)="closeReactionMoreBtn()">
       <div id="reactionBar" class="reaction-bar">
-        <app-reaction-bar></app-reaction-bar>
+        <app-reaction-bar [isMyMessage]="isMyMessage"></app-reaction-bar>
       </div>
       <div class="message-wrapper">
         <img class="user-img" src="./../../../{{ message.profileImg }}" />

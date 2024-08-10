@@ -9,6 +9,7 @@ import { ChannelMessage } from '../../models/channel.class';
 export class ChatService {
   previousDate: string | null = null;
   message!: ChannelMessage | DmMessage;
+  isChannel: boolean = false;
 
   constructor(private userService: UserService) {}
 
@@ -89,5 +90,16 @@ export class ChatService {
   /** returns the true condition for the variable "isMyMessage" by comparing the authorId of the message with the UserId. Further used to change the styling of user and own messages. */
   setMyMessage(message: ChannelMessage | DmMessage): boolean {
     return message.authorId === this.userService.userID;
+  }
+
+  /**
+   * Sets the isChannel variable to true when a channel is clicked and to false when a direct message profile is clicked. 
+   * This functionality allows the thread element to be shown or hidden accordingly.
+   *
+   * @param {boolean} status
+   * @memberof ChatService
+   */
+  setIsChannel(status: boolean) {
+    this.isChannel = status;
   }
 }
