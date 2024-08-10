@@ -19,7 +19,19 @@
                 <img (click)="setPicture('assets/img/character5.png')" src="./../../../assets/img/character5.png" alt="">
                 <img (click)="setPicture('assets/img/character6.png')" src="./../../../assets/img/character6.png" alt="">
             </div>
-            <span>eigenes Bild verwenden <button class="guest-login-button">Datei hochladen</button></span>
+
+
+
+
+            <span>eigenes Bild verwenden</span> <!-- <button class="guest-login-button"><input type="file" name="" id=""></button> --> 
+            <label for="file-upload" class="custom-file-upload">
+                Datei hochladen
+              </label>
+              <input id="file-upload" type="file" (change)="onFileSelected($event)" />
+
+
+
+
         </div>
         <div class="next-button-container">
             <button type="button" (click)="createUser()" [disabled]="!pictureChosen" class="next-button">Weiter</button>

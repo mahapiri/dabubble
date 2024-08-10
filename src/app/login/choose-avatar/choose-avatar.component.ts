@@ -3,7 +3,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-
+import { getStorage, ref, Storage, uploadBytes } from '@angular/fire/storage';
 
 
 @Component({
@@ -18,6 +18,8 @@ export class ChooseAvatarComponent {
   pictureChosen: boolean = false;
   constructor(private router: Router) { }
 
+  storage: Storage = inject(Storage)
+  storageRef = ref(this.storage, 'avatar');
 
   username: string = this.authService.username;
   imgURL: string = "assets/img/character-empty.png";
@@ -34,5 +36,15 @@ export class ChooseAvatarComponent {
     this.router.navigate(['/main-window']);
   }
 
+/*   uploadPicture(){
+    uploadBytes(this.storageRef, file).then((snapshot) => {
+      console.log('Uploaded a blob or file!');
+    })
+  } */
+
+    onFileSelected(event: Event){
+      console.log("Datei", event, "ausgewählt");
+      
+    }
 
 }
