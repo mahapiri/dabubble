@@ -6,24 +6,23 @@
         <button routerLink="/sign-up" class="arrow-back-button"><mat-icon class="icon">arrow_back</mat-icon></button>
         <h1>Wähle deinen Avatar</h1>
         <div class="avatar-container">
-            <img *ngIf="!imageUrl" class="profile-picture" [src]="'./../../../' + imgURL " alt="">
-            <img *ngIf="imageUrl" class="profile-picture" [src]="imageUrl">
+            <img class="profile-picture" [src]="imageUrl" alt="">
             <h2>{{username}}</h2>
         </div>
         <div class="choose-avatar-container">
             <span>Aus der Liste wählen</span>
             <div class="choose-picture-container">
-                <img (click)="setPicture('assets/img/character1.png')" src="./../../../assets/img/character1.png"
+                <img (click)="setPicture('./../../../assets/img/character1.png')" src="./../../../assets/img/character1.png"
                     alt="">
-                <img (click)="setPicture('assets/img/character2.png')" src="./../../../assets/img/character2.png"
+                <img (click)="setPicture('./../../../assets/img/character2.png')" src="./../../../assets/img/character2.png"
                     alt="">
-                <img (click)="setPicture('assets/img/character3.png')" src="./../../../assets/img/character3.png"
+                <img (click)="setPicture('./../../../assets/img/character3.png')" src="./../../../assets/img/character3.png"
                     alt="">
-                <img (click)="setPicture('assets/img/character4.png')" src="./../../../assets/img/character4.png"
+                <img (click)="setPicture('./../../../assets/img/character4.png')" src="./../../../assets/img/character4.png"
                     alt="">
-                <img (click)="setPicture('assets/img/character5.png')" src="./../../../assets/img/character5.png"
+                <img (click)="setPicture('./../../../assets/img/character5.png')" src="./../../../assets/img/character5.png"
                     alt="">
-                <img (click)="setPicture('assets/img/character6.png')" src="./../../../assets/img/character6.png"
+                <img (click)="setPicture('./../../../assets/img/character6.png')" src="./../../../assets/img/character6.png"
                     alt="">
             </div>
 
@@ -32,7 +31,6 @@
                 Datei hochladen
             </button>
             <input id="file-upload" type="file" (change)="onFileSelected($event)" [accept]="acceptedFileTypes" hidden />
-            <button (click)="uploadPicture()">upload</button>
 
         </div>
         <div class="next-button-container">

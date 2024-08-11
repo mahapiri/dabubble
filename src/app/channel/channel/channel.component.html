@@ -20,7 +20,7 @@
             <div class="img-container">
               <img
                 *ngFor="let member of activeChannel.channelMember"
-                src="./../../../{{ member.profileImage }}"
+                src="{{ member.profileImage }}"
                 alt="member"
               />
             </div>

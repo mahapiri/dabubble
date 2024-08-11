@@ -52,7 +52,7 @@ export class SignUpComponent {
     }
     else if (this.userForm.get('userPassword')?.invalid) {
       this.invalidPassword = true;
-         this.passwordErrorMessage = "Ihr Passwort sollte mindestens 6 Zeichen lang sein";
+      this.passwordErrorMessage = "Ihr Passwort sollte mindestens 6 Zeichen lang sein";
     }
   }
 

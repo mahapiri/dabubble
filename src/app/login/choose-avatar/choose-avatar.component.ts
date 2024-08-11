@@ -18,28 +18,28 @@ import { UserService } from '../../services/user.service';
 export class ChooseAvatarComponent {
   authService: AuthService = inject(AuthService)
   userService: UserService = inject(UserService)
+  storage: Storage = inject(Storage)
   pictureChosen: boolean = false;
+  uploadOwnPicture: boolean = false;
   file: any = "Datei hochladen";
   acceptedFileTypes: string = '.jpg, .jpeg, .png, .pdf';
-  imageUrl: string | ArrayBuffer | null = null;
-  constructor(private router: Router) { }
+  imageUrl: string | ArrayBuffer | null = "assets/img/character-empty.png";
   username: string = this.authService.username;
-  storage: Storage = inject(Storage)
   userSpecificPath: string = "";
   storageRef = ref(this.storage, this.userSpecificPath);
-  imgURL: string = "assets/img/character-empty.png";
+
+  constructor(private router: Router) { }
 
   setPicture(src: string) {
+    this.uploadOwnPicture = false;
     this.pictureChosen = true;
-    this.imgURL = src;
+    this.imageUrl = src;
     this.authService.profileImage = src;
   }
 
   async createUser() {
     await this.authService.createUser();
-    this.userSpecificPath = `uploads/${this.authService.userId}/${this.file.name}`
-    this.storageRef = ref(this.storage, this.userSpecificPath);
-    this.uploadPicture();
+    this.checkOwnPicture()
     this.pictureChosen = false;
     this.router.navigate(['/main-window']);
   }
@@ -59,8 +59,8 @@ export class ChooseAvatarComponent {
         const reader = new FileReader();
         reader.onload = () => {
           this.imageUrl = reader.result;
-          console.log(this.imageUrl);
-
+          this.authService.profileImage = reader.result;
+          this.uploadOwnPicture = true;
         };
         reader.readAsDataURL(this.file);
         this.pictureChosen = true;
@@ -70,11 +70,23 @@ export class ChooseAvatarComponent {
     }
   }
 
-  uploadPicture() {
-    uploadBytes(this.storageRef, this.file).then((snapshot) => {
-      console.log('Uploaded a blob or file!: ', snapshot);
+  checkOwnPicture() {
+    if (this.uploadOwnPicture) {
+      this.userSpecificPath = `uploads/${this.authService.userId}/${this.file.name}`
+      this.storageRef = ref(this.storage, this.userSpecificPath);
+      this.uploadPicture();
+    }
+  }
+
+  async uploadPicture() {
+
+
+    this.userSpecificPath = `uploads/${this.authService.userId}/${this.file.name}`
+    this.storageRef = ref(this.storage, this.userSpecificPath);
+    await uploadBytes(this.storageRef, this.file).then((snapshot) => {
+      console.log('Uploaded a blob or file!: ', snapshot.ref);
     })
   }
 
-
 }
+
