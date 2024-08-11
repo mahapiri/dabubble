@@ -100,3 +100,11 @@ img {
     }
   }
 }
+
+.mini-fab-btn.active-check {
+  background-color: green;
+
+  &:hover {
+    background-color: green;
+  }
+}

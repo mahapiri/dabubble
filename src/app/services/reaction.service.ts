@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { DirectMessageService } from './direct-message.service';
 import { ChatService } from './chat.service';
 import { UserService } from './user.service';
-import { addDoc, collection, doc, Firestore, updateDoc } from '@angular/fire/firestore';
+import { addDoc, collection, doc, Firestore, getDocs, onSnapshot, query, QuerySnapshot, updateDoc, where } from '@angular/fire/firestore';
 import { Reaction } from '../../models/reaction.class';
 import { User } from '../../models/user.class';
 import { DmMessage } from '../../models/direct-message.class';
@@ -16,12 +16,13 @@ export class ReactionService {
   private directMessageService: DirectMessageService = inject(DirectMessageService);
 
   reactionID: string = '';
+  currentMessageID: string | null = null;
 
   moreBtn: boolean = false;
 
 
   constructor() {
-
+    this.proofExistingReactions();
   }
 
   closeMoreBtn() {
@@ -41,12 +42,12 @@ export class ReactionService {
     )
 
     await this.updateReactionWithID(reactionRef.id);
-    await this.updateReactionWithArray();
+    // await this.updateReactionWithArray(reaction);
     await this.setReactionIdToDm(message.id);
   }
 
   getReactionRef() {
-    return collection(this.firestore, 'reactions');
+    return collection(this.firestore, 'reactions')
   }
 
 
@@ -70,25 +71,41 @@ export class ReactionService {
   }
   
 
-  getReactionArrayRef() {
-    return collection(this.firestore, `reactions/${this.reactionID}/reactionArray`);
-  }
+  // getReactionArrayRef() {
+  //   return collection(this.firestore, `reactions/${this.reactionID}/reactionArray`)
+  // }
 
 
-  async updateReactionWithArray() {
-    const reactionRef = this.getReactionArrayRef();
-    const arrayID = await addDoc(reactionRef, {'test': 0});
-    await updateDoc(arrayID, {id: arrayID.id});
-  }
+  // async updateReactionWithArray(reaction: string) {
+  //   const reactionRef = this.getReactionArrayRef();
+  //   const arrayID = await addDoc(reactionRef, {'reaction': reaction});
+  //   await updateDoc(arrayID, {id: arrayID.id});
+  // }
 
 
-  setReactionObject(authorID: string, reaction: string, messageId: string, profileID: string): Reaction {
+  setReactionObject(authorID: string, reaction: string, messageID: string, profileID: string): Reaction {
     return new Reaction({
       authorID: authorID ||'',
       profileID: profileID || '',
       reaction: reaction || '',
-      messageId: messageId || '',
+      messageID: messageID || '',
       id: '',  
     })
   }
+
+async proofExistingReactions() {
+  const reactionRef = this.getReactionRef();
+  const q = query(reactionRef, where("reaction", "==", "check"));
+
+  onSnapshot(q, (querySnapshot: QuerySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      const ref = doc.data();
+      this.currentMessageID = ref['messageID'];
+
+      
+
+      // console.log(`Änderung erkannt: ${ref['messageID']}`);
+    });
+  });
+}
 }
