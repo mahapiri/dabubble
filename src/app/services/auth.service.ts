@@ -17,12 +17,14 @@ export class AuthService {
   userpassword: string = "";
   profileImage: string = "";
   state: string = "";
+  userId: string = "";
 
   constructor(private auth: Auth) { }
 
   async createUser() {
     await createUserWithEmailAndPassword(this.auth, this.usermail, this.userpassword).then((userCredential) => {
       this.saveUserInDocument(userCredential.user.uid);
+      this.userId = userCredential.user.uid;
     })
   }
 
