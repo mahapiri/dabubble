@@ -3,7 +3,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { getStorage, ref, Storage, uploadBytes } from '@angular/fire/storage';
+import { getDownloadURL, getStorage, ref, Storage, uploadBytes } from '@angular/fire/storage';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user.service';
 
@@ -39,7 +39,9 @@ export class ChooseAvatarComponent {
 
   async createUser() {
     await this.authService.createUser();
-    this.checkOwnPicture()
+    await this.checkOwnPicture()
+    await this.authService.setStartingChannels();
+    await this.authService.saveUserInDocument();
     this.pictureChosen = false;
     this.router.navigate(['/main-window']);
   }
@@ -59,7 +61,6 @@ export class ChooseAvatarComponent {
         const reader = new FileReader();
         reader.onload = () => {
           this.imageUrl = reader.result;
-          this.authService.profileImage = reader.result;
           this.uploadOwnPicture = true;
         };
         reader.readAsDataURL(this.file);
@@ -70,21 +71,18 @@ export class ChooseAvatarComponent {
     }
   }
 
-  checkOwnPicture() {
+  async checkOwnPicture() {
     if (this.uploadOwnPicture) {
       this.userSpecificPath = `uploads/${this.authService.userId}/${this.file.name}`
       this.storageRef = ref(this.storage, this.userSpecificPath);
-      this.uploadPicture();
+      await this.uploadPicture();
     }
   }
 
   async uploadPicture() {
-
-
-    this.userSpecificPath = `uploads/${this.authService.userId}/${this.file.name}`
-    this.storageRef = ref(this.storage, this.userSpecificPath);
-    await uploadBytes(this.storageRef, this.file).then((snapshot) => {
-      console.log('Uploaded a blob or file!: ', snapshot.ref);
+    await uploadBytes(this.storageRef, this.file).then(async (snapshot) => {
+      const downloadURL = await getDownloadURL(this.storageRef);
+      this.authService.profileImage = downloadURL;
     })
   }
 

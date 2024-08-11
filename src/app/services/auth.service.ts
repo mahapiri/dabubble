@@ -24,22 +24,20 @@ export class AuthService {
   async createUser() {
     await createUserWithEmailAndPassword(this.auth, this.usermail, this.userpassword).then(async (userCredential) => {
       this.userId = userCredential.user.uid;
-      await this.saveUserInDocument(userCredential.user.uid);
-      await this.setStartingChannels(userCredential.user.uid)
     })
   }
 
-  async saveUserInDocument(id: string) {
+  async saveUserInDocument() {
     this.userService.getUserID();
-    await setDoc(doc(this.firestore, "users", id), this.setUser(id));
+    await setDoc(doc(this.firestore, "users", this.userId), this.setUser());
   }
 
-  async setStartingChannels(id: string) {
+  async setStartingChannels() {
     await updateDoc(doc(this.firestore, 'channels', 'HRyA2fYZpKKap6d1sJS0'), {
-      channelMember: arrayUnion(this.setUser(id))
+      channelMember: arrayUnion(this.setUser())
     });
     await updateDoc(doc(this.firestore, 'channels', '3cxTzZ2xWpatlmxNOpbf'), {
-      channelMember: arrayUnion(this.setUser(id))
+      channelMember: arrayUnion(this.setUser())
     });
   }
 
@@ -54,14 +52,16 @@ export class AuthService {
     this.userService.getUserID();
   }
 
-  setUser(id: string) {
+  setUser() {
     return {
       username: this.username,
       email: this.usermail,
       profileImage: this.profileImage,
       userChannels: ["HRyA2fYZpKKap6d1sJS0", "3cxTzZ2xWpatlmxNOpbf"],
       state: this.state,
-      userId: id
+      userId: this.userId
     }
   }
+
+
 }
