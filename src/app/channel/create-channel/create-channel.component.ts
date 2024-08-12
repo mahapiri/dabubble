@@ -48,9 +48,7 @@ export class CreateChannelComponent {
  */
   onRadioChange(event: any): void {
     this.someUsersChecked = event.target.checked;
-    this.allUsersChecked = !this.someUsersChecked;
-    console.log("some:", this.someUsersChecked,"all:", this.allUsersChecked);
-    
+    this.allUsersChecked = !this.someUsersChecked;   
   }
 
   /**

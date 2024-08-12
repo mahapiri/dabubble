@@ -28,13 +28,7 @@ export class ChannelService {
    * Subscribes to the `selectedChannel$` observable to react to changes in the selected channel.
    * Then, updates the ChannelID and listens for changes (read) in the message list.
    */
-  constructor(private firestore: Firestore, private userService: UserService) {
-    /* this.selectedChannel$.subscribe((channel) => {
-      if (channel) {
-        this.setChannelId(channel);
-      }
-    }); */
-  }
+  constructor(private firestore: Firestore, private userService: UserService) {}
 
   /**
    * Sets the currently selected channel. It updates the `BehaviorSubject` `selectedChannel`, notifying all subscribers of the change.
@@ -45,8 +39,6 @@ export class ChannelService {
       onSnapshot(doc(this.firestore, 'channels', channel.channelID), (doc) => {
         this.selectedChannel.next(new Channel(doc.data()));
       });
-
-      //this.setChannelId(channel.channelID);
     }
   }
   /**

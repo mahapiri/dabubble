@@ -10,6 +10,7 @@ import { ChatService } from '../../../services/chat.service';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { ChannelMessageService } from '../../../services/channel-message.service';
+import { ThreadService } from '../../../services/thread.service';
 
 @Component({
   selector: 'app-channel-message',
@@ -40,7 +41,8 @@ export class ChannelMessageComponent {
 
   constructor(
     public chatService: ChatService,
-    private channelMessageService: ChannelMessageService
+    private channelMessageService: ChannelMessageService,
+    private threadService: ThreadService
   ) {}
 
   ngOnInit() {
@@ -49,6 +51,7 @@ export class ChannelMessageComponent {
 
   openThread() {
     this.clickedAnswer.emit(true);
+    this.threadService.setSelectedMessage(this.channelMessage);
   }
 
   openEdit() {
