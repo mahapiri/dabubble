@@ -6,7 +6,6 @@ import {
   Output,
   EventEmitter,
   Input,
-  inject,
   OnInit,
 } from '@angular/core';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
@@ -20,7 +19,6 @@ import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { Observable, Subscription } from 'rxjs';
 import { Channel } from '../../../models/channel.class';
-import { onSnapshot } from '@angular/fire/firestore';
 import { User } from '../../../models/user.class';
 import { DirectMessageService } from '../../services/direct-message.service';
 import { ChatService } from '../../services/chat.service';
@@ -63,20 +61,18 @@ export class WorkspaceMenuComponent implements OnInit {
   openChannel: boolean = false;
   openDm: boolean = false;
   selectedUserIndex: number | null = null;
-  subscription: Subscription = new Subscription;
+  subscription: Subscription = new Subscription();
 
   readonly panelOpenState = signal(false);
 
   userList$ = this.userService.userList$;
-
 
   constructor(
     private channelService: ChannelService,
     public userService: UserService,
     private directMessage: DirectMessageService,
     private chatService: ChatService
-  ) { }
-
+  ) {}
 
   async ngOnInit() {
     await this.userService.getUserID();
@@ -86,7 +82,6 @@ export class WorkspaceMenuComponent implements OnInit {
     }, 500);
     this.showFirstChannel();
   }
-
 
   /**
    * Upon page load, selects the first channel from the user's channel list and sets it as the currently active channel, shown in the main-window.
@@ -98,9 +93,8 @@ export class WorkspaceMenuComponent implements OnInit {
         this.channelService.setSelectedChannel(this.channel);
       }
     });
-    this.subscription.unsubscribe()
+    this.subscription.unsubscribe();
   }
-
 
   /**
    * When a channel is clicked, it gets set as the local `channel` property.
@@ -114,44 +108,36 @@ export class WorkspaceMenuComponent implements OnInit {
     this.chatService.setIsChannel(true);
   }
 
-
   toggle() {
     this.drawer.toggle();
     this.open = !this.open;
     this.hover = true;
   }
 
-
   hoverTrue() {
     this.hover = true;
   }
-
 
   hoverFalse() {
     this.hover = false;
   }
 
-
   newMessage() {
     this.clickedMessage = !this.clickedMessage;
   }
-
 
   createChannel() {
     this.clickedChannel = !this.clickedChannel;
     this.clickedChannelChange.emit(this.clickedChannel);
   }
 
-
   openChannelsMenu() {
     this.openChannel = !this.openChannel;
   }
 
-
   openDirectMessages() {
     this.openDm = !this.openDm;
   }
-
 
   clickedProfile(i: number, profile: User) {
     this.selectedUserIndex = i;
@@ -160,6 +146,5 @@ export class WorkspaceMenuComponent implements OnInit {
     this.chatService.setIsChannel(false);
   }
 
-
-  editChannel(channel: string) { }
+  editChannel(channel: string) {}
 }
