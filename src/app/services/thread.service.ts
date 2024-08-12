@@ -1,45 +1,62 @@
 import { Injectable } from '@angular/core';
-import { Firestore, addDoc, collection } from '@angular/fire/firestore';
+import {
+  Firestore,
+  addDoc,
+  collection,
+  updateDoc,
+} from '@angular/fire/firestore';
 import { Thread } from '../../models/thread.class';
-import { ChannelMessage } from '../../models/channel.class';
 import { ChannelMessageService } from './channel-message.service';
-import { BehaviorSubject } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ThreadService {
-  private threadSubject = new BehaviorSubject<Thread | null>(null);
-  thread$ = this.threadSubject.asObservable();
-
   threadID?: string = '';
 
-  constructor(private firestore: Firestore) {}
+  private channelMessageSubscription: Subscription = new Subscription();
+
+  constructor(
+    private firestore: Firestore,
+    private channelMessageService: ChannelMessageService
+  ) {}
 
   async addThread() {
-    let selectedMessage: ChannelMessage | null = null;
+    this.channelMessageSubscription =
+      this.channelMessageService.selectedChannelMessage$.subscribe(
+        async (selectedMessage) => {
+          if (selectedMessage) {
+            const newThread: Thread = this.setThreadObject(
+              selectedMessage.getMessageJson()
+            );
+            const threadsRef = await addDoc(
+              this.getThreadsRef(),
+              newThread.getThreadJson()
+            );
 
-    if (selectedMessage) {
-      const newThread: Thread = this.setThreadObject(selectedMessage);
-      const threadsRef = await addDoc(
-        this.getThreadsRef(),
-        newThread.getThreadJson()
+            this.threadID = threadsRef.id;
+            await updateDoc(threadsRef, { threadID: threadsRef.id });
+            console.log('new Thread created:', newThread);
+          }
+        }
       );
-
-      this.threadID = threadsRef.id;
-      console.log('new Thread created:', newThread);
-    }
   }
 
-  setThreadObject(message: ChannelMessage): Thread {
+  setThreadObject(messageJson: any): Thread {
     return new Thread({
       threadID: this.threadID || '',
       channelName: '',
-      replyToMessage: [message],
+      replyToMessage: [messageJson],
     });
   }
 
   getThreadsRef() {
     return collection(this.firestore, 'threads');
+  }
+
+  ngOnDestroy(): void {
+    this.channelMessageSubscription.unsubscribe();
+    //this.messagesSubscription.unsubscribe();
   }
 }

@@ -8,7 +8,6 @@ import { MatListModule } from '@angular/material/list';
 import { EditChannelComponent } from '../channel/edit-channel/edit-channel.component';
 import { CommonModule } from '@angular/common';
 import { MemberComponent } from '../users/member/member.component';
-import { ChannelService } from '../services/channel.service';
 import { Observable } from 'rxjs';
 import { ThreadService } from '../services/thread.service';
 import { Thread } from '../../models/thread.class';
@@ -35,24 +34,7 @@ import { ChannelMessage } from '../../models/channel.class';
 export class ThreadComponent {
   @Output() clickedCloseThread = new EventEmitter<boolean>();
 
-  selectedMessage$: Observable<ChannelMessage | null>;
-  thread$: Observable<Thread | null>;
-
-  constructor(
-    private threadService: ThreadService,
-    private channelMessageService: ChannelMessageService
-  ) {
-    this.selectedMessage$ = this.channelMessageService.selectedChannelMessage$;
-    this.thread$ = this.threadService.thread$;
-  }
-
-  ngOnInit(): void {
-    this.selectedMessage$.subscribe((message) => {
-      if (message) {
-        console.log('Selected Message:', message);
-      }
-    });
-  }
+  constructor() {}
 
   closeThread() {
     this.clickedCloseThread.emit(false);

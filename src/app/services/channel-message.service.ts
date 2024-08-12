@@ -57,8 +57,8 @@ export class ChannelMessageService {
    * Sets the selected message, when clicked to answer.
    * @param message The selected message
    */
-  setSelectedMessage(message: ChannelMessage | null) {
-    this.selectedChannelMessage.next(message);
+  setSelectedMessage(selectedMessage: ChannelMessage | null) {
+    this.selectedChannelMessage.next(selectedMessage);
   }
 
   /**

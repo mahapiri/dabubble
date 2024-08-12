@@ -35,9 +35,6 @@ export class ChannelMessageComponent {
   answered: boolean = true;
   edit: boolean = false;
 
-  /*  channelMessages$: Observable<ChannelMessage[]> =
-    this.channelMessageService.channelMessages$; */
-
   constructor(
     public chatService: ChatService,
     private channelMessageService: ChannelMessageService,
