@@ -24,6 +24,11 @@ export class ChannelMessageService {
   private channelMessagesSubjects = new BehaviorSubject<ChannelMessage[]>([]);
   channelMessages$ = this.channelMessagesSubjects.asObservable();
 
+  private selectedChannelMessage = new BehaviorSubject<ChannelMessage | null>(
+    null
+  );
+  selectedChannelMessage$ = this.selectedChannelMessage.asObservable();
+
   previousDate: string | null = null;
 
   channelMessages: ChannelMessage[] = [];
@@ -46,6 +51,15 @@ export class ChannelMessageService {
         this.unsubMessages = this.subMessageList();
       }
     });
+  }
+
+  /**
+   * Sets the selected message, when clicked to answer.
+   * @param message The selected message
+   */
+  // Sets the selected message
+  setSelectedMessage(message: ChannelMessage | null) {
+    this.selectedChannelMessage.next(message);
   }
 
   /**

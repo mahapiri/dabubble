@@ -12,6 +12,8 @@ import { ChannelService } from '../services/channel.service';
 import { Observable } from 'rxjs';
 import { ThreadService } from '../services/thread.service';
 import { Thread } from '../../models/thread.class';
+import { ChannelMessageService } from '../services/channel-message.service';
+import { ChannelMessage } from '../../models/channel.class';
 
 @Component({
   selector: 'app-thread',
@@ -33,22 +35,24 @@ import { Thread } from '../../models/thread.class';
 export class ThreadComponent {
   @Output() clickedCloseThread = new EventEmitter<boolean>();
 
-  //threadMessages$: Observable<Thread | null>;
+  selectedMessage$: Observable<ChannelMessage | null>;
 
-  channelService: ChannelService = inject(ChannelService);
-
-  constructor(private threadService: ThreadService) {
-    //this.threadMessages$ = this.threadService.selectedMessage$;
+  constructor(
+    private threadService: ThreadService,
+    private channelService: ChannelService,
+    private channelMessageService: ChannelMessageService
+  ) {
+    this.selectedMessage$ = this.channelMessageService.selectedChannelMessage$;
   }
 
   ngOnInit(): void {
     // Hier können Sie die Nachricht, auf die geantwortet wird, anzeigen
-    /* this.threadMessages$.subscribe((thread) => {
-      if (thread) {
-        console.log('Thread loaded:', thread);
-        // Zeigen Sie die Antwort-Nachricht und die anderen Nachrichten im Thread an
+    this.selectedMessage$.subscribe((message) => {
+      if (message) {
+        console.log('Selected Message:', message);
+        // Logik zum Anzeigen der Nachricht und der anderen Nachrichten im Thread
       }
-    }); */
+    });
   }
 
   closeThread() {

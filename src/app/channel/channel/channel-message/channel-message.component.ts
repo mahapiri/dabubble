@@ -51,7 +51,7 @@ export class ChannelMessageComponent {
 
   openThread() {
     this.clickedAnswer.emit(true);
-    this.threadService.setSelectedMessage(this.channelMessage);
+    this.channelMessageService.setSelectedMessage(this.channelMessage);
   }
 
   openEdit() {

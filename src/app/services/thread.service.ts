@@ -1,24 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Firestore, addDoc, collection } from '@angular/fire/firestore';
 import { Thread } from '../../models/thread.class';
-import { BehaviorSubject } from 'rxjs';
 import { ChannelMessage } from '../../models/channel.class';
+import { ChannelMessageService } from './channel-message.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ThreadService {
-  private selectedChannelMessage = new BehaviorSubject<ChannelMessage | null>(
-    null
-  );
-  selectedMessage$ = this.selectedChannelMessage.asObservable();
-
   threadID?: string = '';
 
-  constructor(private firestore: Firestore) {}
+  constructor(
+    private firestore: Firestore,
+    private channelMessageService: ChannelMessageService
+  ) {}
 
   async addThread(name: string) {
-    const selectedMessage = this.selectedChannelMessage.getValue();
+    let selectedMessage: ChannelMessage | null = null;
 
     if (selectedMessage) {
       const newThread: Thread = this.setThreadObject(name, selectedMessage);
@@ -37,10 +35,6 @@ export class ThreadService {
       channelName: name,
       replyToMessage: [message],
     });
-  }
-
-  setSelectedMessage(message: ChannelMessage) {
-    this.selectedChannelMessage.next(message);
   }
 
   getThreadsRef() {
