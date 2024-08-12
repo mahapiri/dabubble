@@ -20,12 +20,14 @@ import { Subscription } from 'rxjs';
 })
 export class ReactionContainerComponent implements OnInit, OnDestroy {
   private reactionService: ReactionService = inject(ReactionService);
+  private userService: UserService = inject(UserService);
   private reactionSubscription = new Subscription();
   private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
   @Input() message!: DmMessage;
 
   reactions: any;
+  userNames: { [userId: string]: Promise<string> } = {};
 
   constructor() {}
 
@@ -33,8 +35,9 @@ export class ReactionContainerComponent implements OnInit, OnDestroy {
     if (this.message && this.message.id) {
       this.reactionService.loadReactionsForMessage(this.message.id);
 
-      this.reactionSubscription = this.reactionService.reactions$.subscribe((reactions) => {
+      this.reactionSubscription = this.reactionService.reactions$.subscribe(async (reactions) => {
         this.reactions = reactions[this.message.id];
+        await this.loadUserNames();
         this.cdr.detectChanges();
       });
     }
@@ -42,5 +45,22 @@ export class ReactionContainerComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.reactionSubscription.unsubscribe();
+  }
+
+
+  private async loadUserNames(): Promise<void> {
+    if (this.reactions) {
+      for (let reaction of this.reactions) {
+        for (let userId of reaction.authorIDs) {
+          if (!this.userNames[userId]) {
+            this.userNames[userId] = this.reactionService.getUsername(userId);
+          }
+        }
+      }
+    }
+  }
+
+  getUserName(userId: string): Promise<string> {
+    return this.userNames[userId] || Promise.resolve('Unknown');
   }
 }

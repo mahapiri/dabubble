@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, doc, updateDoc, getDocs, query, where, deleteDoc, onSnapshot } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, doc, updateDoc, getDocs, query, where, deleteDoc, onSnapshot, getDoc } from '@angular/fire/firestore';
 import { BehaviorSubject } from 'rxjs';
 import { Reaction } from '../../models/reaction.class';
 import { UserService } from './user.service';
@@ -161,4 +161,20 @@ export class ReactionService {
     });
   }
 
+
+  async getUsername(userID: string): Promise<string> {
+    try {
+      const userRef = doc(this.firestore, 'users', userID);
+      const userDoc = await getDoc(userRef);
+      
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        return userData['username'] || 'Unknown';
+      } else {
+        return 'Unknown';
+      }
+    } catch (error) {
+      return 'Unknown';
+    }
+  }
 }

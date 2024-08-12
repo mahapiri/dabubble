@@ -4,15 +4,20 @@
       <ng-container *ngFor="let reaction of reactions">
         <button class="reaction-btn">
           <div class="reaction-info-menu">
-            <img [src]="'./../../../assets/reaction/' + reaction.reactionType + '.svg'"
-                 [alt]="reaction.reactionType" />
-            <span class="user" *ngFor="let author of reaction.authorIDs">
-              {{ author }}
-            </span>
+            <img [src]="'./../../../assets/reaction/' + reaction.reactionType + '.svg'" [alt]="reaction.reactionType" />
+            <div class="user-container">
+              <ng-container *ngFor="let author of reaction.authorIDs; let last = last">
+                <span class="user">
+                  {{ getUserName(author) | async }}
+                </span>
+                <ng-container *ngIf="!last">
+                  und
+                </ng-container>
+              </ng-container>
+            </div>
             <span>hat reagiert</span>
           </div>
-          <img [src]="'./../../../assets/reaction/' + reaction.reactionType + '.svg'"
-               [alt]="reaction.reactionType" />
+          <img [src]="'./../../../assets/reaction/' + reaction.reactionType + '.svg'" [alt]="reaction.reactionType" />
           <span class="reaction-count">{{ reaction.count }}</span>
         </button>
       </ng-container>
