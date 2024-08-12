@@ -106,7 +106,7 @@ export class ReactionService {
       id: '',
     });
   }
-  
+
 
   isReactionActive(messageID: string, reaction: string): boolean {
     return this.activeReactions[messageID] === reaction;
@@ -116,32 +116,49 @@ export class ReactionService {
   loadReactionsForMessage(messageID: string) {
     const reactionRef = this.getReactionRef();
     const q = query(reactionRef, where('messageID', '==', messageID));
-
+  
     onSnapshot(q, (querySnapshot) => {
-      const messageReactions: { [reactionType: string]: number } = {};
+      const messageReactions: { reactionType: string; count: number; authorIDs: string[] }[] = [];
+      const reactionCounts: { [reactionType: string]: { count: number; authorIDs: string[] } } = {};
+  
       let userReaction = '';
-
+  
       querySnapshot.forEach((doc) => {
         const data = doc.data();
         const reactionType = data['reaction'];
-
-        if (!messageReactions[reactionType]) {
-          messageReactions[reactionType] = 0;
+        const authorID = data['authorID'];
+  
+        if (!reactionCounts[reactionType]) {
+          reactionCounts[reactionType] = { count: 0, authorIDs: [] };
         }
-        messageReactions[reactionType]++;
-
-        if (data['authorID'] === this.userService.userID) {
+  
+        reactionCounts[reactionType].count++;
+  
+        if (!reactionCounts[reactionType].authorIDs.includes(authorID)) {
+          reactionCounts[reactionType].authorIDs.push(authorID);
+        }
+  
+        if (authorID === this.userService.userID) {
           userReaction = reactionType;
         }
       });
-
-
+  
+      for (const reactionType in reactionCounts) {
+        messageReactions.push({
+          reactionType: reactionType,
+          count: reactionCounts[reactionType].count,
+          authorIDs: reactionCounts[reactionType].authorIDs,
+        });
+      }
+  
+      this.activeReactions[messageID] = userReaction;
+  
       this.reactionsSubject.next({
         ...this.reactionsSubject.getValue(),
         [messageID]: messageReactions,
       });
-
-      this.activeReactions[messageID] = userReaction;
+      console.log(`Updated reactions for message ${messageID}:`, this.reactionsSubject.getValue()[messageID]);
     });
   }
+
 }

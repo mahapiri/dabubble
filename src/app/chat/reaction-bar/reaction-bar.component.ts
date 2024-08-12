@@ -37,11 +37,11 @@ export class ReactionBarComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (this.message && this.message.id) {
       this.reactionService.loadReactionsForMessage(this.message.id);
-      this.reactionSubscription = this.reactionService.reactions$.subscribe(() => {
+      this.reactionSubscription = this.reactionService.reactions$.subscribe((reaction) => {
+        this.reactions$ = reaction
         this.cdr.detectChanges();
       });
     }
-    console.log(this.reactions$)
   }
 
   ngOnDestroy(): void {
