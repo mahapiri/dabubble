@@ -1,16 +1,22 @@
 <div class="reaction-container">
   <div class="reactions-wrapper">
-      <ng-container>
+    <ng-container *ngIf="reactions">
+      <ng-container *ngFor="let reaction of reactions">
         <button class="reaction-btn">
           <div class="reaction-info-menu">
-            <img [src]="'./../../../assets/reaction/check.svg'" [alt]="'check'" />
-            <span class="user">Noah Braun</span>
+            <img [src]="'./../../../assets/reaction/' + reaction.reactionType + '.svg'"
+                 [alt]="reaction.reactionType" />
+            <span class="user" *ngFor="let author of reaction.authorIDs">
+              {{ author }}
+            </span>
             <span>hat reagiert</span>
           </div>
-          <img [src]="'./../../../assets/reaction/check.svg'" [alt]="'check'" />
-          <span class="reaction-count">1</span>
+          <img [src]="'./../../../assets/reaction/' + reaction.reactionType + '.svg'"
+               [alt]="reaction.reactionType" />
+          <span class="reaction-count">{{ reaction.count }}</span>
         </button>
       </ng-container>
+    </ng-container>
 
     <button class="mini-fab-btn" mat-mini-fab>
       <div class="reaction-info-menu reaction-menu">

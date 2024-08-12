@@ -18,7 +18,8 @@ export class ReactionService {
   reactions$ = this.reactionsSubject.asObservable();
 
   activeReactions: { [messageID: string]: string } = {};
-  reactionCounts: { [messageID: string]: { [reactionType: string]: number } } = {};
+  reactionCounts: { [messageID: string]: { [reactionType: string]: { count: number; authorIDs: string[] } } } = {};
+
   moreBtn: boolean = false;
 
   constructor() {
@@ -116,33 +117,33 @@ export class ReactionService {
   loadReactionsForMessage(messageID: string) {
     const reactionRef = this.getReactionRef();
     const q = query(reactionRef, where('messageID', '==', messageID));
-  
+
     onSnapshot(q, (querySnapshot) => {
       const messageReactions: { reactionType: string; count: number; authorIDs: string[] }[] = [];
       const reactionCounts: { [reactionType: string]: { count: number; authorIDs: string[] } } = {};
-  
+
       let userReaction = '';
-  
+
       querySnapshot.forEach((doc) => {
         const data = doc.data();
         const reactionType = data['reaction'];
         const authorID = data['authorID'];
-  
+
         if (!reactionCounts[reactionType]) {
           reactionCounts[reactionType] = { count: 0, authorIDs: [] };
         }
-  
+
         reactionCounts[reactionType].count++;
-  
+
         if (!reactionCounts[reactionType].authorIDs.includes(authorID)) {
           reactionCounts[reactionType].authorIDs.push(authorID);
         }
-  
+
         if (authorID === this.userService.userID) {
           userReaction = reactionType;
         }
       });
-  
+
       for (const reactionType in reactionCounts) {
         messageReactions.push({
           reactionType: reactionType,
@@ -150,9 +151,9 @@ export class ReactionService {
           authorIDs: reactionCounts[reactionType].authorIDs,
         });
       }
-  
+
       this.activeReactions[messageID] = userReaction;
-  
+
       this.reactionsSubject.next({
         ...this.reactionsSubject.getValue(),
         [messageID]: messageReactions,
