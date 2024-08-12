@@ -1,6 +1,20 @@
 import { inject, Injectable, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from './user.service';
-import { addDoc, collection, doc, Firestore, getDocs, setDoc, where, query, CollectionReference, DocumentData, onSnapshot, orderBy, limit } from '@angular/fire/firestore';
+import {
+  addDoc,
+  collection,
+  doc,
+  Firestore,
+  getDocs,
+  setDoc,
+  where,
+  query,
+  CollectionReference,
+  DocumentData,
+  onSnapshot,
+  orderBy,
+  limit,
+} from '@angular/fire/firestore';
 import { User } from '../../models/user.class';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { DmMessage } from '../../models/direct-message.class';
@@ -8,7 +22,7 @@ import { ChatService } from './chat.service';
 import { NumberFormatStyle } from '@angular/common';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DirectMessageService implements OnInit, OnDestroy {
   private firestore: Firestore = inject(Firestore);
@@ -30,28 +44,24 @@ export class DirectMessageService implements OnInit, OnDestroy {
   currentClickedProfile: User | null = null;
   previousDate: string | null = null;
 
-
   constructor() {
     this.currentUserSubscription = this.userService.currentUser$.subscribe(
       (user) => {
-      this.currentUser = user;
-    });
-    this.profileSubscription = this.clickedProfile$.subscribe(
-      (profile) => {
+        this.currentUser = user;
+      }
+    );
+    this.profileSubscription = this.clickedProfile$.subscribe((profile) => {
       this.currentClickedProfile = profile;
     });
   }
 
-
   ngOnInit() {}
-
 
   ngOnDestroy(): void {
     this.currentUserSubscription.unsubscribe();
     this.profileSubscription.unsubscribe();
     this.messagesSubscription.unsubscribe();
   }
-
 
   async openDmFromUser(profile: User) {
     this.getActualProfile(profile);
@@ -61,11 +71,9 @@ export class DirectMessageService implements OnInit, OnDestroy {
     this.showMessages(this.directMessageId);
   }
 
-
   getActualProfile(profile: User) {
     this.clickedProfile.next(profile);
   }
-
 
   async addDirectMessage() {
     const currentUser = this.currentUser?.userId;
@@ -75,19 +83,19 @@ export class DirectMessageService implements OnInit, OnDestroy {
       this.directMessageId = await this.handleSelfDm(currentUser);
     } else {
       this.directMessageId = await this.handleUsertoUserDm(
-        currentUser, profile
+        currentUser,
+        profile
       );
     }
     return this.directMessageId;
   }
-
 
   async handleSelfDm(currentUser: any) {
     const existingOwnDmId = await this.proofExistingOwnDm(currentUser);
 
     if (!existingOwnDmId) {
       const messageRef = await addDoc(
-        collection(this.firestore, 'direct-messages'), 
+        collection(this.firestore, 'direct-messages'),
         {
           userIDs: [currentUser],
         }
@@ -101,17 +109,14 @@ export class DirectMessageService implements OnInit, OnDestroy {
     }
   }
 
-
   async handleUsertoUserDm(currentUserId: any, otherUserId: any) {
-    const existingDmId = await this.proofExistingDm(
-      currentUserId, otherUserId
-    );
+    const existingDmId = await this.proofExistingDm(currentUserId, otherUserId);
 
     if (!existingDmId) {
       const messageRef = await addDoc(
-        collection(this.firestore, 'direct-messages'), 
+        collection(this.firestore, 'direct-messages'),
         {
-        userIDs: [otherUserId, currentUserId],
+          userIDs: [otherUserId, currentUserId],
         }
       );
       await this.setDirectMessageID(messageRef.id);
@@ -123,8 +128,10 @@ export class DirectMessageService implements OnInit, OnDestroy {
     }
   }
 
-
-  async proofExistingDm(currentUserId: string, otherUserId: string): Promise<string | null> {
+  async proofExistingDm(
+    currentUserId: string,
+    otherUserId: string
+  ): Promise<string | null> {
     const directMessageRef = this.getCollectionRef();
     const q = query(
       directMessageRef,
@@ -135,7 +142,7 @@ export class DirectMessageService implements OnInit, OnDestroy {
     for (const doc of querySnapshot.docs) {
       const userIds = doc.data()['userIDs'] as string[];
       if (
-        (userIds.includes(otherUserId) && userIds.includes(currentUserId)) || 
+        (userIds.includes(otherUserId) && userIds.includes(currentUserId)) ||
         (currentUserId === otherUserId && userIds.includes(currentUserId))
       ) {
         return doc.id;
@@ -144,11 +151,10 @@ export class DirectMessageService implements OnInit, OnDestroy {
     return null;
   }
 
-
   async proofExistingOwnDm(userId: string): Promise<string | null> {
     const directMessageRef = this.getCollectionRef();
     const q = query(
-      directMessageRef, 
+      directMessageRef,
       where('userIDs', 'array-contains', userId)
     );
     const querySnapshot = await getDocs(q);
@@ -162,37 +168,50 @@ export class DirectMessageService implements OnInit, OnDestroy {
     return null;
   }
 
-
   getDmInfo() {
-    console.log('\n','Eingeloggter User:',this.currentUser?.username,'\n','Auf Profil geklickt:',this.currentClickedProfile?.username,'\n','messageRef:', this.directMessageId);
+    console.log(
+      '\n',
+      'Eingeloggter User:',
+      this.currentUser?.username,
+      '\n',
+      'Auf Profil geklickt:',
+      this.currentClickedProfile?.username,
+      '\n',
+      'messageRef:',
+      this.directMessageId
+    );
   }
-
 
   async setDirectMessageID(id: string) {
     const docRef = doc(this.getCollectionRef(), id);
     await setDoc(
-      docRef, 
+      docRef,
       {
         directMessageID: id,
-    }, 
-    { merge: true });
+      },
+      { merge: true }
+    );
   }
-
 
   getCollectionRef(): CollectionReference<DocumentData> {
     return collection(this.firestore, 'direct-messages');
   }
 
-
-  getMessageRef(): CollectionReference<DocumentData> {
-    return collection(this.firestore, `direct-messages/${this.directMessageId}/messages`);
+  getMessagesRef(): CollectionReference<DocumentData> {
+    return collection(
+      this.firestore,
+      `direct-messages/${this.directMessageId}/messages`
+    );
   }
 
-
-  getMessageRefForId(directMessageId: string): CollectionReference<DocumentData> {
-    return collection(this.firestore, `direct-messages/${directMessageId}/messages`);
+  getMessageRefForId(
+    directMessageId: string
+  ): CollectionReference<DocumentData> {
+    return collection(
+      this.firestore,
+      `direct-messages/${directMessageId}/messages`
+    );
   }
-
 
   showMessages(directMessageId: string) {
     const messageRef = this.getMessageRefForId(directMessageId);
@@ -212,7 +231,8 @@ export class DirectMessageService implements OnInit, OnDestroy {
         const data = doc.data();
         const currentMessage = this.setMessageObject(doc.id, data);
 
-        currentMessage.isFirstMessageOfDay = currentMessage.date !== this.previousDate;
+        currentMessage.isFirstMessageOfDay =
+          currentMessage.date !== this.previousDate;
         this.previousDate = currentMessage.date;
 
         messages.push(currentMessage);
@@ -222,7 +242,6 @@ export class DirectMessageService implements OnInit, OnDestroy {
       this.messages.next(messages);
     });
   }
-
 
   setMessageObject(id: string, data: any) {
     return new DmMessage({
@@ -238,7 +257,6 @@ export class DirectMessageService implements OnInit, OnDestroy {
       isFirstMessageOfDay: false,
     });
   }
-
 
   newDmMessage(message: string) {
     const timeOptions = this.timeOption();
@@ -258,29 +276,26 @@ export class DirectMessageService implements OnInit, OnDestroy {
     this.saveMessage(messageData);
   }
 
-
   async saveMessage(messageData: any) {
-    const docRef = await addDoc(this.getMessageRef(), messageData);
+    const docRef = await addDoc(this.getMessagesRef(), messageData);
     const currentMessage = this.setMessageObject(docRef.id, messageData);
 
     this.chatService.setFirstMessageOfDay(currentMessage);
     await this.setDirectMessageMessageID(docRef.id);
     this.showMessages(this.directMessageId);
-
   }
-
 
   async setDirectMessageMessageID(id: string) {
-    const docRef = doc(this.getMessageRef(), id);
+    const docRef = doc(this.getMessagesRef(), id);
 
     await setDoc(
-      docRef, 
+      docRef,
       {
         id: docRef.id,
-    }, 
-    { merge: true });
+      },
+      { merge: true }
+    );
   }
-
 
   timeOption(): Intl.DateTimeFormatOptions {
     return {

@@ -3,13 +3,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { ChannelService } from '../../../services/channel.service';
 import { CommonModule } from '@angular/common';
 import { Channel, ChannelMessage } from '../../../../models/channel.class';
 import { Observable } from 'rxjs';
 import { ChatService } from '../../../services/chat.service';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { ChannelMessageService } from '../../../services/channel-message.service';
 
 @Component({
   selector: 'app-channel-message',
@@ -36,11 +36,11 @@ export class ChannelMessageComponent {
   edit: boolean = false;
 
   channelMessages$: Observable<ChannelMessage[]> =
-    this.channelService.channelMessages$;
+    this.channelMessageService.channelMessages$;
 
   constructor(
-    private channelService: ChannelService,
-    public chatService: ChatService
+    public chatService: ChatService,
+    private channelMessageService: ChannelMessageService
   ) {}
 
   ngOnInit() {
@@ -60,6 +60,6 @@ export class ChannelMessageComponent {
   }
 
   saveMessage() {
-    this.channelService.updateMessage(this.channelMessage);
+    this.channelMessageService.updateMessage(this.channelMessage);
   }
 }
