@@ -3,6 +3,7 @@ import {
   Firestore,
   addDoc,
   collection,
+  onSnapshot,
   updateDoc,
 } from '@angular/fire/firestore';
 import { Thread } from '../../models/thread.class';
@@ -15,15 +16,20 @@ import { ChannelService } from './channel.service';
 })
 export class ThreadService {
   threadID?: string = '';
+  threads: Thread[] = [];
 
   private channelMessageSubscription: Subscription = new Subscription();
   private channelNameSubscription: Subscription = new Subscription();
+
+  unsubThreads!: () => void;
 
   constructor(
     private firestore: Firestore,
     private channelService: ChannelService,
     private channelMessageService: ChannelMessageService
-  ) {}
+  ) {
+    this.unsubThreads = this.subThreadList();
+  }
 
   async addThread() {
     this.channelMessageSubscription =
@@ -57,6 +63,18 @@ export class ThreadService {
       );
   }
 
+  subThreadList() {
+    return onSnapshot(this.getThreadsRef(), (list) => {
+      this.threads = [];
+      list.forEach((thread) => {
+        const currentThread = this.setThreadObject(thread.data(), thread.id);
+        this.threads.push(currentThread);
+      });
+
+      console.log('Thread received:', this.threads);
+    });
+  }
+
   setThreadObject(messageJson: any, channelName: string): Thread {
     return new Thread({
       threadID: this.threadID || '',
@@ -71,6 +89,7 @@ export class ThreadService {
 
   ngOnDestroy(): void {
     this.channelMessageSubscription.unsubscribe();
-    //this.messagesSubscription.unsubscribe();
+    this.channelNameSubscription.unsubscribe();
+    this.unsubThreads();
   }
 }
