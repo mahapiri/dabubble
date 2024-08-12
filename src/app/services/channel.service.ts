@@ -41,6 +41,7 @@ export class ChannelService {
       });
     }
   }
+
   /**
    * Updates the channelID variable based on the selected Channel.
    * @param channel Channel Object

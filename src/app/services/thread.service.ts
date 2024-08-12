@@ -3,12 +3,13 @@ import {
   Firestore,
   addDoc,
   collection,
+  doc,
   onSnapshot,
   updateDoc,
 } from '@angular/fire/firestore';
 import { Thread } from '../../models/thread.class';
 import { ChannelMessageService } from './channel-message.service';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { ChannelService } from './channel.service';
 
 @Injectable({
@@ -18,8 +19,15 @@ export class ThreadService {
   threadID?: string = '';
   threads: Thread[] = [];
 
+  private threadsSubject = new BehaviorSubject<Thread[]>([]);
+  threads$ = this.threadsSubject.asObservable();
+
+  private selectedThread = new BehaviorSubject<Thread | null>(null);
+  selectedThread$ = this.selectedThread.asObservable();
+
   private channelMessageSubscription: Subscription = new Subscription();
   private channelNameSubscription: Subscription = new Subscription();
+  private selectedThreadsSubscription: Subscription = new Subscription();
 
   unsubThreads!: () => void;
 
@@ -55,12 +63,21 @@ export class ThreadService {
                     this.threadID = threadsRef.id;
                     await updateDoc(threadsRef, { threadID: threadsRef.id });
                     console.log('new Thread created:', newThread);
+                    this.setSelectedThread(this.threadID);
                   }
                 }
               );
           }
         }
       );
+  }
+
+  setSelectedThread(threadID: string) {
+    if (threadID != undefined) {
+      onSnapshot(doc(this.firestore, 'threads', threadID), (doc) => {
+        this.selectedThread.next(new Thread(doc.data()));
+      });
+    }
   }
 
   subThreadList() {
@@ -70,7 +87,7 @@ export class ThreadService {
         const currentThread = this.setThreadObject(thread.data(), thread.id);
         this.threads.push(currentThread);
       });
-
+      this.threadsSubject.next(this.threads);
       console.log('Thread received:', this.threads);
     });
   }

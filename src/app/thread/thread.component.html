@@ -1,11 +1,14 @@
-<mat-card appearance="outlined">
+<mat-card
+  *ngIf="selectedThread$ | async as selectedThread"
+  appearance="outlined"
+>
   <mat-card-header>
     <div class="thread-header">
       <div class="thread-info">
         <h2>Thread</h2>
         <div class="channel-name">
           <mat-icon class="tag">tag</mat-icon>
-          <span>Channel Name</span>
+          <span>{{ selectedThread.channelName }}</span>
         </div>
       </div>
 

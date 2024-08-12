@@ -34,7 +34,11 @@ import { ChannelMessage } from '../../models/channel.class';
 export class ThreadComponent {
   @Output() clickedCloseThread = new EventEmitter<boolean>();
 
-  constructor() {}
+  selectedThread$: Observable<Thread | null>;
+
+  constructor(private threadService: ThreadService) {
+    this.selectedThread$ = this.threadService.selectedThread$;
+  }
 
   closeThread() {
     this.clickedCloseThread.emit(false);

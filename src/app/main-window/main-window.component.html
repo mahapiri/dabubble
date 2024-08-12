@@ -14,9 +14,7 @@
     *ngIf="!selectProfile && clickedThread"
     (clickedCloseThread)="handleThreadClick($event)"
   ></app-thread>
-  <app-direct-message
-    *ngIf="selectProfile"
-  ></app-direct-message>
+  <app-direct-message *ngIf="selectProfile"></app-direct-message>
 </div>
 <app-create-channel
   class="create-section"
