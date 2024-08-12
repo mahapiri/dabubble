@@ -8,6 +8,7 @@ import {
 import { Thread } from '../../models/thread.class';
 import { ChannelMessageService } from './channel-message.service';
 import { Subscription } from 'rxjs';
+import { ChannelService } from './channel.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,9 +17,11 @@ export class ThreadService {
   threadID?: string = '';
 
   private channelMessageSubscription: Subscription = new Subscription();
+  private channelNameSubscription: Subscription = new Subscription();
 
   constructor(
     private firestore: Firestore,
+    private channelService: ChannelService,
     private channelMessageService: ChannelMessageService
   ) {}
 
@@ -27,26 +30,37 @@ export class ThreadService {
       this.channelMessageService.selectedChannelMessage$.subscribe(
         async (selectedMessage) => {
           if (selectedMessage) {
-            const newThread: Thread = this.setThreadObject(
-              selectedMessage.getMessageJson()
-            );
-            const threadsRef = await addDoc(
-              this.getThreadsRef(),
-              newThread.getThreadJson()
-            );
+            const messageJson = selectedMessage.getMessageJson();
 
-            this.threadID = threadsRef.id;
-            await updateDoc(threadsRef, { threadID: threadsRef.id });
-            console.log('new Thread created:', newThread);
+            this.channelNameSubscription =
+              this.channelService.selectedChannel$.subscribe(
+                async (selectedChannel) => {
+                  if (selectedChannel) {
+                    const channelName = selectedChannel.channelName;
+                    const newThread: Thread = this.setThreadObject(
+                      messageJson,
+                      channelName
+                    );
+                    const threadsRef = await addDoc(
+                      this.getThreadsRef(),
+                      newThread.getThreadJson()
+                    );
+
+                    this.threadID = threadsRef.id;
+                    await updateDoc(threadsRef, { threadID: threadsRef.id });
+                    console.log('new Thread created:', newThread);
+                  }
+                }
+              );
           }
         }
       );
   }
 
-  setThreadObject(messageJson: any): Thread {
+  setThreadObject(messageJson: any, channelName: string): Thread {
     return new Thread({
       threadID: this.threadID || '',
-      channelName: '',
+      channelName: channelName || '',
       replyToMessage: [messageJson],
     });
   }
