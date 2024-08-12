@@ -83,19 +83,27 @@
     padding: 0;
     border-radius: 50%;
 
-  
-    &:hover {
-      color: var(--purple-3);
-      background-color: var(--bg-color);
-      --mat-fab-small-state-layer-color: var(--white);
-      box-shadow: none;
-  
-      .mat-icon {
-        font-weight: bold;
-      }
 
-      .reaction-info-menu {
-        visibility: visible;
-      }
+    &:hover {
+        color: var(--purple-3);
+        background-color: var(--bg-color);
+        --mat-fab-small-state-layer-color: var(--white);
+        box-shadow: none;
+
+        .mat-icon {
+            font-weight: bold;
+        }
+
+        .reaction-info-menu {
+            visibility: visible;
+        }
     }
-  }
+}
+
+.reaction-menu {
+    width: unset;
+    height: unset;
+    top: unset;
+    left: 16px;
+    bottom: 100%;
+}

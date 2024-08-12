@@ -1,60 +1,86 @@
 import { inject, Injectable } from '@angular/core';
-import { DirectMessageService } from './direct-message.service';
-import { ChatService } from './chat.service';
-import { UserService } from './user.service';
-import { addDoc, collection, doc, Firestore, getDocs, onSnapshot, query, QuerySnapshot, updateDoc, where } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, doc, updateDoc, getDocs, query, where, deleteDoc, onSnapshot } from '@angular/fire/firestore';
+import { BehaviorSubject } from 'rxjs';
 import { Reaction } from '../../models/reaction.class';
-import { User } from '../../models/user.class';
+import { UserService } from './user.service';
+import { DirectMessageService } from './direct-message.service';
 import { DmMessage } from '../../models/direct-message.class';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ReactionService {
   private firestore: Firestore = inject(Firestore);
   private userService: UserService = inject(UserService);
   private directMessageService: DirectMessageService = inject(DirectMessageService);
 
-  reactionID: string = '';
-  currentMessageID: string | null = null;
+  private reactionsSubject = new BehaviorSubject<any>({});
+  reactions$ = this.reactionsSubject.asObservable();
 
+  activeReactions: { [messageID: string]: string } = {};
+  reactionCounts: { [messageID: string]: { [reactionType: string]: number } } = {};
   moreBtn: boolean = false;
 
-
   constructor() {
-    this.proofExistingReactions();
   }
+
 
   closeMoreBtn() {
     this.moreBtn = false;
   }
 
+
   async setReaction(reaction: string, message: DmMessage) {
     const messageID = message.id;
-    const profilID = message.authorId;
+    const userID = this.userService.userID;
 
-    
-    const docRef = this.getReactionRef();
-    const newReaction: Reaction = this.setReactionObject(this.userService.userID, reaction, messageID, profilID);
-    const reactionRef = await addDoc(
-      docRef,
-      newReaction.getJson()
-    )
+    if (this.activeReactions[messageID]) {
+      const currentReaction = this.activeReactions[messageID];
+      if (currentReaction === reaction) {
+        await this.removeReaction(reaction, messageID, userID);
+        return;
+      } else {
+        await this.removeReaction(currentReaction, messageID, userID);
+      }
+    }
 
-    await this.updateReactionWithID(reactionRef.id);
-    // await this.updateReactionWithArray(reaction);
-    await this.setReactionIdToDm(message.id);
+    this.activeReactions[messageID] = reaction;
+
+    try {
+      const docRef = this.getReactionRef();
+      const newReaction: Reaction = this.setReactionObject(userID, reaction, messageID, message.authorId);
+      const reactionRef = await addDoc(docRef, newReaction.getJson());
+
+      await this.updateReactionWithID(reactionRef.id);
+      await this.setReactionIdToDm(message.id, reactionRef.id);
+    } catch (error) {
+      console.warn("Error", error);
+      delete this.activeReactions[messageID];
+    }
   }
 
+
+  async removeReaction(reaction: string, messageID: string, userID: string) {
+    const reactionRef = this.getReactionRef();
+    const q = query(reactionRef, where('reaction', '==', reaction), where('messageID', '==', messageID), where('authorID', '==', userID));
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach(async (doc) => {
+      await deleteDoc(doc.ref);
+    });
+
+    delete this.activeReactions[messageID];
+  }
+
+
   getReactionRef() {
-    return collection(this.firestore, 'reactions')
+    return collection(this.firestore, 'reactions');
   }
 
 
   async updateReactionWithID(reactionID: string) {
     const reactionRef = doc(this.firestore, 'reactions', reactionID);
-    await updateDoc(reactionRef, {id: reactionID});
-    this.reactionID = reactionID;
+    await updateDoc(reactionRef, { id: reactionID });
   }
 
 
@@ -63,49 +89,59 @@ export class ReactionService {
   }
 
 
-  async setReactionIdToDm(id: string) {
+  async setReactionIdToDm(id: string, reactionID: string) {
     const dmRef = this.getDirectMessageRef(id);
     await updateDoc(dmRef, {
-      reactionID: this.reactionID
-    })
+      reactionID: reactionID,
+    });
   }
-  
-
-  // getReactionArrayRef() {
-  //   return collection(this.firestore, `reactions/${this.reactionID}/reactionArray`)
-  // }
-
-
-  // async updateReactionWithArray(reaction: string) {
-  //   const reactionRef = this.getReactionArrayRef();
-  //   const arrayID = await addDoc(reactionRef, {'reaction': reaction});
-  //   await updateDoc(arrayID, {id: arrayID.id});
-  // }
 
 
   setReactionObject(authorID: string, reaction: string, messageID: string, profileID: string): Reaction {
     return new Reaction({
-      authorID: authorID ||'',
+      authorID: authorID || '',
       profileID: profileID || '',
       reaction: reaction || '',
       messageID: messageID || '',
-      id: '',  
-    })
+      id: '',
+    });
+  }
+  
+
+  isReactionActive(messageID: string, reaction: string): boolean {
+    return this.activeReactions[messageID] === reaction;
   }
 
-async proofExistingReactions() {
-  const reactionRef = this.getReactionRef();
-  const q = query(reactionRef, where("reaction", "==", "check"));
 
-  onSnapshot(q, (querySnapshot: QuerySnapshot) => {
-    querySnapshot.forEach((doc) => {
-      const ref = doc.data();
-      this.currentMessageID = ref['messageID'];
+  loadReactionsForMessage(messageID: string) {
+    const reactionRef = this.getReactionRef();
+    const q = query(reactionRef, where('messageID', '==', messageID));
 
-      
+    onSnapshot(q, (querySnapshot) => {
+      const messageReactions: { [reactionType: string]: number } = {};
+      let userReaction = '';
 
-      // console.log(`Änderung erkannt: ${ref['messageID']}`);
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const reactionType = data['reaction'];
+
+        if (!messageReactions[reactionType]) {
+          messageReactions[reactionType] = 0;
+        }
+        messageReactions[reactionType]++;
+
+        if (data['authorID'] === this.userService.userID) {
+          userReaction = reactionType;
+        }
+      });
+
+
+      this.reactionsSubject.next({
+        ...this.reactionsSubject.getValue(),
+        [messageID]: messageReactions,
+      });
+
+      this.activeReactions[messageID] = userReaction;
     });
-  });
-}
+  }
 }

@@ -1,31 +1,22 @@
 <div class="reaction-container">
-    <div class="reactions-wrapper">
+  <div class="reactions-wrapper">
+      <ng-container>
         <button class="reaction-btn">
-            <div class="reaction-info-menu">
-                <img src="./../../../assets/reaction/rocket.svg" alt="Rocket" />
-                <span class="user">Noah Braun</span>
-                <span>hat reagiert</span>
-            </div>
-            <img src="./../../../assets/reaction/rocket.svg" alt="Rocket" />
-            <span class="reaction-count">1</span>
+          <div class="reaction-info-menu">
+            <img [src]="'./../../../assets/reaction/check.svg'" [alt]="'check'" />
+            <span class="user">Noah Braun</span>
+            <span>hat reagiert</span>
+          </div>
+          <img [src]="'./../../../assets/reaction/check.svg'" [alt]="'check'" />
+          <span class="reaction-count">1</span>
         </button>
+      </ng-container>
 
-        <button class="reaction-btn">
-            <div class="reaction-info-menu">
-                <img src="./../../../assets/reaction/check.svg" alt="Check" />
-                <span class="user">Sofia Müller</span>
-                <span>hat reagiert</span>
-            </div>
-            <img src="./../../../assets/reaction/check.svg" alt="Check" />
-            <span class="reaction-count">1</span>
-        </button>
-        <button class="mini-fab-btn" mat-mini-fab>
-            <div class="reaction-info-menu">
-                <img src="./../../../assets/reaction/check.svg" alt="Check" />
-                <span class="user">Sofia Müller</span>
-                <span>hat reagiert</span>
-            </div>
-            <mat-icon>add_reaction</mat-icon>
-        </button>
-    </div>
+    <button class="mini-fab-btn" mat-mini-fab>
+      <div class="reaction-info-menu reaction-menu">
+        <app-reaction-bar [message]="message" [isFromReactionContainer]="true"></app-reaction-bar>
+      </div>
+      <mat-icon>add_reaction</mat-icon>
+    </button>
+  </div>
 </div>

@@ -1,17 +1,19 @@
-<div class="reaction-bar-section">
-  <button class="mini-fab-btn" mat-mini-fab 
-    [ngClass]="{'active-check': reactionService.currentMessageID === message!.id}" 
-    (click)="reactionService.setReaction('check', message!)">
+<div class="reaction-bar-section" [ngClass]="{'reaction-bar-section': true, 'flex-column': isFromReactionContainer}">
+  <button class="mini-fab-btn" mat-mini-fab [ngClass]="{'active-reaction': getReaction(message.id, 'check')}"
+    (click)="setReaction('check', message!)">
     <img src="./../../../assets/reaction/check.svg" alt="Check" />
   </button>
-  <button class="mini-fab-btn" mat-mini-fab (click)="reactionService.setReaction('clap', message!)">
+  <button class="mini-fab-btn" mat-mini-fab [ngClass]="{'active-reaction': getReaction(message.id, 'clap')}"
+    (click)="setReaction('clap', message!)">
     <img src="./../../../assets/reaction/clap.svg" alt="Clap" />
   </button>
   <ng-container *ngIf="reactionService.moreBtn">
-    <button class="mini-fab-btn" mat-mini-fab>
+    <button class="mini-fab-btn" mat-mini-fab [ngClass]="{'active-reaction': getReaction(message.id, 'nerd')}"
+      (click)="setReaction('nerd', message!)">
       <img src="./../../../assets/reaction/nerd.svg" alt="Nerd" />
     </button>
-    <button class="mini-fab-btn" mat-mini-fab>
+    <button class="mini-fab-btn" mat-mini-fab [ngClass]="{'active-reaction': getReaction(message.id, 'rocket')}"
+      (click)="setReaction('rocket', message!)">
       <img src="./../../../assets/reaction/rocket.svg" alt="Rocket" />
     </button>
   </ng-container>

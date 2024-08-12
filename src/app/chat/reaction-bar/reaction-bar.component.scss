@@ -28,6 +28,7 @@ img {
   opacity: 0;
   transform: translateX(-20px);
   animation: slideIn 0.5s forwards;
+  user-select: none;
 
   .mat-icon {
     overflow: unset;
@@ -101,10 +102,15 @@ img {
   }
 }
 
-.mini-fab-btn.active-check {
-  background-color: green;
+.mini-fab-btn.active-reaction {
+  background-color: var(--bg-color);
 
   &:hover {
-    background-color: green;
+    background-color: var(--purple-3);
   }
+}
+
+
+.flex-column {
+  flex-direction: column;
 }

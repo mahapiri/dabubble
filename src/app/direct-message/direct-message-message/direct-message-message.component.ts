@@ -37,7 +37,9 @@ export class DirectMessageMessageComponent implements OnInit, OnDestroy {
   isMyMessage: boolean = false;
 
 
-  constructor() { }
+  constructor() { 
+
+  }
 
 
   ngOnInit() {
