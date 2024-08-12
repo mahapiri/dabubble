@@ -48,7 +48,12 @@ export class ChannelMessageService {
     });
   }
 
-  //aufrufen wenn nachricht geschrieben wurde
+  /**
+   * Adds a new message to the current channel by subscribing to the current user and adding it to the Firestore.
+   * Its ID is stored in the object.
+   * @param {string} text - Content of the message.
+   * @returns {Promise<void>} - A promise that resolves when the message has been added and its ID has been updated.
+   */
   async addMessage(text: string) {
     this.userService.currentUser$.subscribe(async (currentUser) => {
       if (currentUser) {
@@ -68,6 +73,11 @@ export class ChannelMessageService {
     });
   }
 
+  /**
+   * Updates an existing message and its contents in the database.
+   * @param {ChannelMessage} message - The message object.
+   * @returns {Promise<void>} - A promise that resolves when the message has been updated.
+   */
   async updateMessage(message: ChannelMessage) {
     if (message.id) {
       let docRef = this.getSingleMessageRef(message.id);
@@ -109,6 +119,12 @@ export class ChannelMessageService {
     });
   }
 
+  /**
+   * Creates a new `ChannelMessage` object from the provided data.
+   * @param {string} id - id of the message.
+   * @param {any} data - object with the message data, including text, time, date, author information, etc.
+   * @returns {ChannelMessage} - A new `ChannelMessage` object with the provided data.
+   */
   setMessageObject(id: string, data: any) {
     return new ChannelMessage({
       id: id,
@@ -122,6 +138,14 @@ export class ChannelMessageService {
     });
   }
 
+  /**
+   * Creates a new `ChannelMessage` object using the provided text and user information.
+   * This method generates the current date and time, then constructs a `ChannelMessage`
+   * instance with the given text and the user's details, such as username, user ID, and profile image.
+   * @param {string} text - The content of the message
+   * @param {User} user - The user object with the info about the message author
+   * @returns {ChannelMessage} - A new `ChannelMessage` object with the provided text, user information, and the current date and time.
+   */
   setMessageWithUser(text: string, user: User): ChannelMessage {
     const now = new Date();
 
@@ -143,6 +167,10 @@ export class ChannelMessageService {
     });
   }
 
+  /**
+   * Gets a reference to the firestore messages collection for the currently selected channel.
+   * @returns {CollectionReference} - reference to the Firestore collection
+   */
   getMessagesRef() {
     return collection(
       this.firestore,
@@ -150,6 +178,11 @@ export class ChannelMessageService {
     );
   }
 
+  /**
+   * Gets the reference to a specific message document in the firesore messages collection.
+   * @param {string} docId - the message document
+   * @returns {DocumentReference} - reference to the Firestore document
+   */
   getSingleMessageRef(docId: string) {
     return doc(
       collection(
@@ -160,6 +193,9 @@ export class ChannelMessageService {
     );
   }
 
+  /**
+   * Unsubscribes from the messages listener.
+   */
   ngOnDestroy() {
     this.unsubMessages();
   }
