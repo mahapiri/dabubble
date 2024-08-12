@@ -5,7 +5,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
 import { Channel, ChannelMessage } from '../../../../models/channel.class';
-import { Observable } from 'rxjs';
 import { ChatService } from '../../../services/chat.service';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
@@ -36,8 +35,8 @@ export class ChannelMessageComponent {
   answered: boolean = true;
   edit: boolean = false;
 
-  channelMessages$: Observable<ChannelMessage[]> =
-    this.channelMessageService.channelMessages$;
+  /*  channelMessages$: Observable<ChannelMessage[]> =
+    this.channelMessageService.channelMessages$; */
 
   constructor(
     public chatService: ChatService,
@@ -52,6 +51,7 @@ export class ChannelMessageComponent {
   openThread() {
     this.clickedAnswer.emit(true);
     this.channelMessageService.setSelectedMessage(this.channelMessage);
+    this.threadService.addThread();
   }
 
   openEdit() {

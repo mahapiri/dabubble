@@ -36,21 +36,20 @@ export class ThreadComponent {
   @Output() clickedCloseThread = new EventEmitter<boolean>();
 
   selectedMessage$: Observable<ChannelMessage | null>;
+  thread$: Observable<Thread | null>;
 
   constructor(
     private threadService: ThreadService,
-    private channelService: ChannelService,
     private channelMessageService: ChannelMessageService
   ) {
     this.selectedMessage$ = this.channelMessageService.selectedChannelMessage$;
+    this.thread$ = this.threadService.thread$;
   }
 
   ngOnInit(): void {
-    // Hier können Sie die Nachricht, auf die geantwortet wird, anzeigen
     this.selectedMessage$.subscribe((message) => {
       if (message) {
         console.log('Selected Message:', message);
-        // Logik zum Anzeigen der Nachricht und der anderen Nachrichten im Thread
       }
     });
   }
