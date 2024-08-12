@@ -1,12 +1,14 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { Channel } from '../../../models/channel.class';
+import { Channel, ChannelMember } from '../../../models/channel.class';
 import {
   arrayRemove,
   deleteField,
   doc,
   FieldValue,
   Firestore,
+  runTransaction,
+  setDoc,
   updateDoc,
 } from '@angular/fire/firestore';
 import { FormsModule } from '@angular/forms';
@@ -58,13 +60,23 @@ export class EditChannelComponent {
 
   async deleteUserFromChannel() {
     if (this.channel.channelID) {
-      let allMember = this.channel.channelMember;
-      allMember.forEach((member, index) => {
-        if (member.userId === this.currentUser.userId) {
-          allMember.splice(index, 1);
-        }
+      let reducedArray = this.createArrayWithoutUser();
+      const channelRef = doc(this.firestore, "channels", this.channel.channelID);
+      const userRef = doc(this.firestore, "users", this.currentUser.userId);
+
+      await runTransaction(this.firestore, async (transaction) => {
+        transaction.update(channelRef, {
+          channelMember: reducedArray
+        });
+        transaction.update(userRef, {
+          userChannels: arrayRemove(this.channel.channelID)
+        });
       });
     }
+  }
+
+  createArrayWithoutUser() {
+    return this.channel.channelMember.filter(member => member.userId !== this.currentUser.userId);
   }
 
   edit() {
@@ -88,6 +100,6 @@ export class EditChannelComponent {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-    this.subscribeChannel.unsubscribe(); 
+    this.subscribeChannel.unsubscribe();
   }
 }
