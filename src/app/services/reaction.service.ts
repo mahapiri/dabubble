@@ -157,7 +157,6 @@ export class ReactionService {
         ...this.reactionsSubject.getValue(),
         [messageID]: messageReactions,
       });
-      console.log(`Updated reactions for message ${messageID}:`, this.reactionsSubject.getValue()[messageID]);
     });
   }
 
