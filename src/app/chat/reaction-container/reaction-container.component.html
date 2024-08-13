@@ -6,16 +6,26 @@
           <div class="reaction-info-menu">
             <img [src]="'./../../../assets/reaction/' + reaction.reactionType + '.svg'" [alt]="reaction.reactionType" />
             <div class="user-container">
-              <ng-container *ngFor="let author of reaction.authorIDs; let last = last">
+              <ng-container *ngFor="let author of getSortedAuthors(reaction.authorIDs); let last = last">
                 <span class="user">
-                  {{ getUserName(author) | async }}
+                  {{ getUserName(author) }}
                 </span>
                 <ng-container *ngIf="!last">
                   und
                 </ng-container>
               </ng-container>
             </div>
-            <span>hat reagiert</span>
+            <span *ngIf="reaction.authorIDs.length === 1 && isCurrentUser(reaction.authorIDs[0]); else checkMultiple">
+              hast reagiert
+            </span>
+            <ng-template #checkMultiple>
+              <span *ngIf="reaction.authorIDs.length > 1; else checkSingle">
+                haben reagiert
+              </span>
+              <ng-template #checkSingle>
+                <span>hat reagiert</span>
+              </ng-template>
+            </ng-template>
           </div>
           <img [src]="'./../../../assets/reaction/' + reaction.reactionType + '.svg'" [alt]="reaction.reactionType" />
           <span class="reaction-count">{{ reaction.count }}</span>
