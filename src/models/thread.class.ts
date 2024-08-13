@@ -1,19 +1,23 @@
 export class Thread {
   threadID?: string = '';
   channelName: string = '';
-  replyToMessage: replyToMessage[] = [];
+  replyToMessage?: replyToMessage;
 
   constructor(obj: any) {
     this.threadID = obj.threadID || '';
     this.channelName = obj.channelName || '';
-    this.replyToMessage = obj.replyToMessage || [];
+    this.replyToMessage = obj.replyToMessage
+      ? new replyToMessage(obj.replyToMessage)
+      : undefined;
   }
 
   getThreadJson() {
     return {
       threadID: this.threadID,
       channelName: this.channelName,
-      replyToMessage: this.replyToMessage,
+      replyToMessage: this.replyToMessage
+        ? this.replyToMessage.getMessageJson()
+        : null,
     };
   }
 }

@@ -4,12 +4,15 @@ import {
   addDoc,
   collection,
   doc,
+  getDocs,
   onSnapshot,
+  query,
   updateDoc,
+  where,
 } from '@angular/fire/firestore';
 import { Thread } from '../../models/thread.class';
 import { ChannelMessageService } from './channel-message.service';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription, take } from 'rxjs';
 import { ChannelService } from './channel.service';
 
 @Injectable({
@@ -27,9 +30,8 @@ export class ThreadService {
 
   private channelMessageSubscription: Subscription = new Subscription();
   private channelNameSubscription: Subscription = new Subscription();
-  private selectedThreadsSubscription: Subscription = new Subscription();
-
-  unsubThreads!: () => void;
+  private unsubSelectedThreads?: () => void;
+  private unsubThreads!: () => void;
 
   constructor(
     private firestore: Firestore,
@@ -41,43 +43,75 @@ export class ThreadService {
 
   async addThread() {
     this.channelMessageSubscription =
-      this.channelMessageService.selectedChannelMessage$.subscribe(
-        async (selectedMessage) => {
+      this.channelMessageService.selectedChannelMessage$
+        .pipe(take(1))
+        .subscribe(async (selectedMessage) => {
           if (selectedMessage) {
             const messageJson = selectedMessage.getMessageJson();
 
-            this.channelNameSubscription =
-              this.channelService.selectedChannel$.subscribe(
-                async (selectedChannel) => {
-                  if (selectedChannel) {
-                    const channelName = selectedChannel.channelName;
-                    const newThread: Thread = this.setThreadObject(
-                      messageJson,
-                      channelName
-                    );
-                    const threadsRef = await addDoc(
-                      this.getThreadsRef(),
-                      newThread.getThreadJson()
-                    );
+            const existingThread = await this.findThreadByMessageId(
+              messageJson.id
+            );
 
-                    this.threadID = threadsRef.id;
-                    await updateDoc(threadsRef, { threadID: threadsRef.id });
-                    console.log('new Thread created:', newThread);
-                    this.setSelectedThread(this.threadID);
-                  }
-                }
-              );
+            if (existingThread) {
+              const thread = existingThread.docs[0];
+              this.threadID = thread.id;
+              console.log('Thread existiert bereits:', this.threadID);
+              if (this.unsubSelectedThreads) {
+                this.unsubSelectedThreads(); // Vorheriges Abonnement beenden
+              }
+              this.unsubSelectedThreads = this.subSelectedThread(this.threadID);
+            } else {
+              this.channelNameSubscription =
+                this.channelService.selectedChannel$
+                  .pipe(take(1))
+                  .subscribe(async (selectedChannel) => {
+                    if (selectedChannel) {
+                      const channelName = selectedChannel.channelName;
+                      const newThread: Thread = this.setThreadObject(
+                        messageJson,
+                        channelName
+                      );
+                      const threadsRef = await addDoc(
+                        this.getThreadsRef(),
+                        newThread.getThreadJson()
+                      );
+
+                      this.threadID = threadsRef.id;
+                      await updateDoc(threadsRef, { threadID: threadsRef.id });
+                      console.log('new Thread created:', newThread);
+                      if (this.unsubSelectedThreads) {
+                        this.unsubSelectedThreads(); // Vorheriges Abonnement beenden
+                      }
+                      this.unsubSelectedThreads = this.subSelectedThread(
+                        this.threadID
+                      );
+                    }
+                  });
+            }
           }
-        }
-      );
+        });
   }
 
-  setSelectedThread(threadID: string) {
-    if (threadID != undefined) {
-      onSnapshot(doc(this.firestore, 'threads', threadID), (doc) => {
-        this.selectedThread.next(new Thread(doc.data()));
-      });
-    }
+  /**
+   * Checks if a Thread already exists for the clicked Message. Searches for a thread collection that contains the given MessageID.
+   * @param messageId ID of the message
+   * @returns a promise with the thread that contains the given message ID in their `replyToMessage` array.
+   */
+  async findThreadByMessageId(messageId: string) {
+    const q = query(
+      this.getThreadsRef(),
+      where('replyToMessage.id', '==', messageId)
+    );
+    const querySnapshot = await getDocs(q);
+
+    return querySnapshot;
+  }
+
+  subSelectedThread(threadID: string) {
+    return onSnapshot(doc(this.firestore, 'threads', threadID), (doc) => {
+      this.selectedThread.next(new Thread(doc.data()));
+    });
   }
 
   subThreadList() {
@@ -96,7 +130,7 @@ export class ThreadService {
     return new Thread({
       threadID: this.threadID || '',
       channelName: channelName || '',
-      replyToMessage: [messageJson],
+      replyToMessage: messageJson,
     });
   }
 
@@ -107,6 +141,11 @@ export class ThreadService {
   ngOnDestroy(): void {
     this.channelMessageSubscription.unsubscribe();
     this.channelNameSubscription.unsubscribe();
-    this.unsubThreads();
+    if (this.unsubSelectedThreads) {
+      this.unsubSelectedThreads();
+    }
+    if (this.unsubThreads) {
+      this.unsubThreads();
+    }
   }
 }
