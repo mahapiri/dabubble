@@ -3,8 +3,6 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { AuthService } from './../../services/auth.service';
 import { Firestore } from '@angular/fire/firestore';
-import { User } from '../../../models/user.class';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
@@ -81,6 +79,13 @@ export class LogInComponent {
     await this.authService.logInUser("gast@googlemail.com", "123456")
     this.userForm.reset();
     this.router.navigate(['/main-window']);
+  }
+
+  async loginWithGoogle() {
+    await this.authService.googleLogin().then(() => {
+      this.userForm.reset();
+      this.router.navigate(['/main-window']);
+    })
   }
 
   showPassword() {

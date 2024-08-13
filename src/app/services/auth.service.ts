@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { User } from '../../models/user.class';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
 import { UserService } from './user.service';
-import { arrayUnion, doc, Firestore, setDoc, updateDoc } from '@angular/fire/firestore';
+import { arrayUnion, collection, doc, Firestore, getDoc, setDoc, updateDoc } from '@angular/fire/firestore';
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ export class AuthService {
 
   currentUser: User = new User;
   userService: UserService = inject(UserService);
-  firestore: Firestore = inject(Firestore)
+  firestore: Firestore = inject(Firestore);
+  provider = new GoogleAuthProvider();
   usermail: string = "";
   username: string = "";
   userpassword: string = "";
@@ -52,6 +54,42 @@ export class AuthService {
     this.userService.getUserID();
   }
 
+  async googleLogin() {
+    await signInWithPopup(this.auth, this.provider).then((result) => {
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      if (credential) {
+        const user = result.user;
+        this.setGoogleUser(user);
+      }
+    }).catch((error) => {
+      // Handle Errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // The email of the user's account used.
+      const email = error.customData.email;
+      // The AuthCredential type that was used.
+      const credential = GoogleAuthProvider.credentialFromError(error);
+      // ...
+    });
+  }
+
+  setGoogleUser(user: any) {
+    this.username = user.displayName;
+    this.usermail = user.email;
+    this.profileImage = user.photoURL ?? "assets/img/character-empty.png";
+    this.userId = user.uid
+    this.lookForGoogleUserInDatabase(user.uid)
+  }
+
+
+  async lookForGoogleUserInDatabase(userid: string) {
+    const userdoc = await getDoc(doc(this.firestore, "users", userid))
+    if (!userdoc.exists()) {
+      await this.saveUserInDocument()
+      await this.setStartingChannels()
+    }
+  }
+
   setUser() {
     return {
       username: this.username,
@@ -62,6 +100,4 @@ export class AuthService {
       userId: this.userId
     }
   }
-
-
 }
