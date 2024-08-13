@@ -32,10 +32,19 @@
             <img class="user-img" src="./../../../assets/img/character4.png" />
             <div class="message-details">
               <div class="user-wrapper">
-                <div class="user-name">Noah Braun</div>
-                <div class="time">14:25 Uhr</div>
+                <div class="user-name">
+                  {{ selectedThread.replyToMessage?.authorName }}
+                </div>
+                <div class="time">
+                  {{
+                    chatService.formatTime(selectedThread.replyToMessage!.time)
+                  }}
+                  Uhr
+                </div>
               </div>
-              <div class="text-bubble">Hallo Welt!</div>
+              <div class="text-bubble">
+                {{ selectedThread.replyToMessage?.text }}
+              </div>
               <div class="reaction-wrapper"></div>
             </div>
           </div>

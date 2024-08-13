@@ -13,6 +13,7 @@ import { ThreadService } from '../services/thread.service';
 import { Thread } from '../../models/thread.class';
 import { ChannelMessageService } from '../services/channel-message.service';
 import { ChannelMessage } from '../../models/channel.class';
+import { ChatService } from '../services/chat.service';
 
 @Component({
   selector: 'app-thread',
@@ -36,7 +37,10 @@ export class ThreadComponent {
 
   selectedThread$: Observable<Thread | null>;
 
-  constructor(private threadService: ThreadService) {
+  constructor(
+    private threadService: ThreadService,
+    public chatService: ChatService
+  ) {
     this.selectedThread$ = this.threadService.selectedThread$;
   }
 
