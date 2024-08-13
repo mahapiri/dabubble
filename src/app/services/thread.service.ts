@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   Firestore,
+  QuerySnapshot,
   addDoc,
   collection,
   doc,
@@ -12,8 +13,9 @@ import {
 } from '@angular/fire/firestore';
 import { Thread } from '../../models/thread.class';
 import { ChannelMessageService } from './channel-message.service';
-import { BehaviorSubject, Subscription, take } from 'rxjs';
+import { BehaviorSubject, Observable, firstValueFrom, take } from 'rxjs';
 import { ChannelService } from './channel.service';
+import { Channel, ChannelMessage } from '../../models/channel.class';
 
 @Injectable({
   providedIn: 'root',
@@ -28,8 +30,6 @@ export class ThreadService {
   private selectedThread = new BehaviorSubject<Thread | null>(null);
   selectedThread$ = this.selectedThread.asObservable();
 
-  private channelMessageSubscription: Subscription = new Subscription();
-  private channelNameSubscription: Subscription = new Subscription();
   private unsubSelectedThreads?: () => void;
   private unsubThreads!: () => void;
 
@@ -41,62 +41,60 @@ export class ThreadService {
     this.unsubThreads = this.subThreadList();
   }
 
-  async addThread() {
-    this.channelMessageSubscription =
-      this.channelMessageService.selectedChannelMessage$
-        .pipe(take(1))
-        .subscribe(async (selectedMessage) => {
-          if (selectedMessage) {
-            const messageJson = selectedMessage.getMessageJson();
+  async handleThread() {
+    const selectedMessage = await this.getSelectedChannelMessage();
 
-            const existingThread = await this.findThreadByMessageId(
-              messageJson.id
-            );
+    const existingThread = await this.findThreadByMessageId(
+      selectedMessage!.id
+    );
 
-            if (existingThread) {
-              const thread = existingThread.docs[0];
-              this.threadID = thread.id;
-              console.log('Thread existiert bereits:', this.threadID);
-              if (this.unsubSelectedThreads) {
-                this.unsubSelectedThreads(); // Vorheriges Abonnement beenden
-              }
-              this.unsubSelectedThreads = this.subSelectedThread(this.threadID);
-            } else {
-              this.channelNameSubscription =
-                this.channelService.selectedChannel$
-                  .pipe(take(1))
-                  .subscribe(async (selectedChannel) => {
-                    if (selectedChannel) {
-                      const channelName = selectedChannel.channelName;
-                      const newThread: Thread = this.setThreadObject(
-                        messageJson,
-                        channelName
-                      );
-                      const threadsRef = await addDoc(
-                        this.getThreadsRef(),
-                        newThread.getThreadJson()
-                      );
+    existingThread
+      ? this.openExistingThread(existingThread)
+      : await this.handleNewThread(selectedMessage!);
+  }
 
-                      this.threadID = threadsRef.id;
-                      await updateDoc(threadsRef, { threadID: threadsRef.id });
-                      console.log('new Thread created:', newThread);
-                      if (this.unsubSelectedThreads) {
-                        this.unsubSelectedThreads(); // Vorheriges Abonnement beenden
-                      }
-                      this.unsubSelectedThreads = this.subSelectedThread(
-                        this.threadID
-                      );
-                    }
-                  });
-            }
-          }
-        });
+  // Holt die ausgewählte Nachricht
+  async getSelectedChannelMessage(): Promise<ChannelMessage | null> {
+    return firstValueFrom(
+      this.channelMessageService.selectedChannelMessage$.pipe(take(1))
+    );
+  }
+
+  // Holt den ausgewählten Kanal
+  async getSelectedChannel(): Promise<Channel | null> {
+    return firstValueFrom(this.channelService.selectedChannel$.pipe(take(1)));
+  }
+
+  // Existiert ein Thread bereits wird dieser geöffnet
+  openExistingThread(existingThread: QuerySnapshot) {
+    this.threadID = existingThread.docs[0].id;
+    console.log('Thread existiert bereits:', this.threadID);
+    this.unsubSelectedThreads = this.subSelectedThread(this.threadID);
+  }
+
+  async handleNewThread(selectedMessage: ChannelMessage) {
+    const selectedChannel = await this.getSelectedChannel();
+    await this.createNewThread(selectedChannel!.channelName, selectedMessage);
+  }
+
+  // Erstellt einen neuen Thread
+  private async createNewThread(channelName: string, messageJson: any) {
+    const newThread: Thread = this.setThreadObject(messageJson, channelName);
+    const threadsRef = await addDoc(
+      this.getThreadsRef(),
+      newThread.getThreadJson()
+    );
+
+    this.threadID = threadsRef.id;
+    await updateDoc(threadsRef, { threadID: threadsRef.id });
+    console.log('New Thread created:', newThread);
+    this.unsubSelectedThreads = this.subSelectedThread(this.threadID);
   }
 
   /**
    * Checks if a Thread already exists for the clicked Message. Searches for a thread collection that contains the given MessageID.
    * @param messageId ID of the message
-   * @returns a promise with the thread that contains the given message ID in their `replyToMessage` array.
+   * @returns the existing thread or null if no thread exists with that message Id.
    */
   async findThreadByMessageId(messageId: string) {
     const q = query(
@@ -104,8 +102,7 @@ export class ThreadService {
       where('replyToMessage.id', '==', messageId)
     );
     const querySnapshot = await getDocs(q);
-
-    return querySnapshot;
+    return !querySnapshot.empty ? querySnapshot : null;
   }
 
   subSelectedThread(threadID: string) {
@@ -139,8 +136,6 @@ export class ThreadService {
   }
 
   ngOnDestroy(): void {
-    this.channelMessageSubscription.unsubscribe();
-    this.channelNameSubscription.unsubscribe();
     if (this.unsubSelectedThreads) {
       this.unsubSelectedThreads();
     }
