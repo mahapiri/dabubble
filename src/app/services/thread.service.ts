@@ -13,7 +13,7 @@ import {
 } from '@angular/fire/firestore';
 import { Thread } from '../../models/thread.class';
 import { ChannelMessageService } from './channel-message.service';
-import { BehaviorSubject, Observable, firstValueFrom, take } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, take } from 'rxjs';
 import { ChannelService } from './channel.service';
 import { Channel, ChannelMessage } from '../../models/channel.class';
 

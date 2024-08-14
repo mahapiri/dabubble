@@ -152,7 +152,12 @@
 
   <mat-card-footer>
     <div class="new-message-container">
-      <input matInput type="text" placeholder="Antworten..." />
+      <input
+        [(ngModel)]="messageText"
+        matInput
+        type="text"
+        placeholder="Antworten..."
+      />
 
       <div class="message-controls">
         <div class="add-elements">
@@ -171,7 +176,7 @@
             <mat-icon>alternate_email</mat-icon>
           </button>
         </div>
-        <button mat-mini-fab class="send-btn">
+        <button (click)="sendMessage()" mat-mini-fab class="send-btn">
           <mat-icon>send</mat-icon>
         </button>
       </div>
