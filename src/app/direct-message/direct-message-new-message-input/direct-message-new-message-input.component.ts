@@ -5,9 +5,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { DirectMessageService } from '../../services/direct-message.service';
-import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+/* import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
-
+ */
 @Component({
   selector: 'app-direct-message-new-message-input',
   standalone: true,
@@ -17,14 +17,15 @@ import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
     MatButtonModule,
     MatInputModule,
     FormsModule,
-    PickerComponent,
-    EmojiComponent
+    /*  PickerComponent,
+    EmojiComponent */
   ],
   templateUrl: './direct-message-new-message-input.component.html',
-  styleUrl: './direct-message-new-message-input.component.scss'
+  styleUrl: './direct-message-new-message-input.component.scss',
 })
 export class DirectMessageNewMessageInputComponent {
-  private directMessageService: DirectMessageService = inject(DirectMessageService);
+  private directMessageService: DirectMessageService =
+    inject(DirectMessageService);
   messageText: string = '';
 
   isEmoji: boolean = false;
