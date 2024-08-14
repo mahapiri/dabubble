@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,28 +27,29 @@ import { Subscription } from 'rxjs';
   templateUrl: './direct-message-message.component.html',
   styleUrl: './direct-message-message.component.scss'
 })
-export class DirectMessageMessageComponent implements OnInit, OnDestroy {
+export class DirectMessageMessageComponent implements OnInit {
   public chatService: ChatService = inject(ChatService);
   public reactionService: ReactionService = inject(ReactionService);
 
 
   @Input() message!: DmMessage;
-
   isMyMessage: boolean = false;
 
 
-  constructor() { 
-
-  }
+  constructor() { }
 
 
+  /**
+   * checks all available messages to get the right container style for your message or from another profile
+   */
   ngOnInit() {
     this.isMyMessage = this.chatService.setMyMessage(this.message);
   }
 
-  ngOnDestroy(): void { }
-  
 
+  /**
+   * close the Smiley Emoticons for More Reactions
+   */
   closeReactionMoreBtn() {
     this.reactionService.moreBtn = false;
   }

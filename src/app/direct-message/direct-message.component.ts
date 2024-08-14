@@ -38,6 +38,9 @@ export class DirectMessageComponent {
   public directMessageService : DirectMessageService = inject(DirectMessageService);
   messages$: Observable<DmMessage[]>;
 
+  /**
+   * get the messages
+   */
   constructor() {
     this.messages$ = this.directMessageService.messages$;
   }

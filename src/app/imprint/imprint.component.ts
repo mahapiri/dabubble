@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './imprint.component.scss'
 })
 export class ImprintComponent {
-  back() {
-    
-  }
+
+
+  back() { }
 }

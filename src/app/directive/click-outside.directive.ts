@@ -9,6 +9,9 @@ export class ClickOutsideDirective {
 
   constructor(private elementRef: ElementRef) {}
 
+  /**
+   * click outside the container to close
+   */
   @HostListener('document:click', ['$event.target'])
   public onClick(targetElement: HTMLElement): void {
     const clickedInside = this.elementRef.nativeElement.contains(targetElement);

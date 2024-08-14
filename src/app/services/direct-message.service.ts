@@ -1,4 +1,4 @@
-import { inject, Injectable, OnDestroy, OnInit } from '@angular/core';
+import { inject, Injectable, OnDestroy } from '@angular/core';
 import { UserService } from './user.service';
 import {
   addDoc,
@@ -24,7 +24,7 @@ import { NumberFormatStyle } from '@angular/common';
 @Injectable({
   providedIn: 'root',
 })
-export class DirectMessageService implements OnInit, OnDestroy {
+export class DirectMessageService implements OnDestroy {
   private firestore: Firestore = inject(Firestore);
   private userService: UserService = inject(UserService);
   private chatService: ChatService = inject(ChatService);
@@ -37,13 +37,16 @@ export class DirectMessageService implements OnInit, OnDestroy {
 
   private currentUserSubscription: Subscription = new Subscription();
   private profileSubscription: Subscription = new Subscription();
-  private messagesSubscription: Subscription = new Subscription();
 
   directMessageId: any;
   currentUser: User | null = null;
   currentClickedProfile: User | null = null;
   previousDate: string | null = null;
 
+
+  /**
+   * Subscribes to the current user and the clicked profile.
+   */
   constructor() {
     this.currentUserSubscription = this.userService.currentUser$.subscribe(
       (user) => {
@@ -55,14 +58,18 @@ export class DirectMessageService implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit() {}
 
+  /**
+   * Unsubscribes from the current user and profile subscriptions when the service is destroyed.
+   */
   ngOnDestroy(): void {
     this.currentUserSubscription.unsubscribe();
     this.profileSubscription.unsubscribe();
-    this.messagesSubscription.unsubscribe();
   }
 
+  /**
+   * Opens the direct messages from the clicked profile.
+   */
   async openDmFromUser(profile: User) {
     this.getActualProfile(profile);
     await this.addDirectMessage();
@@ -71,10 +78,18 @@ export class DirectMessageService implements OnInit, OnDestroy {
     this.showMessages(this.directMessageId);
   }
 
+
+  /**
+   * Updates the current clicked profile
+   */
   getActualProfile(profile: User) {
     this.clickedProfile.next(profile);
   }
 
+
+  /**
+   * Adds a new direct message or retrieves an existing one between the current user and the clicked profile.
+   */
   async addDirectMessage() {
     const currentUser = this.currentUser?.userId;
     const profile = this.currentClickedProfile?.userId;
@@ -90,6 +105,9 @@ export class DirectMessageService implements OnInit, OnDestroy {
     return this.directMessageId;
   }
 
+  /**
+   * Handles direct messages sent by a user to themselves.
+   */
   async handleSelfDm(currentUser: any) {
     const existingOwnDmId = await this.proofExistingOwnDm(currentUser);
 
@@ -109,6 +127,9 @@ export class DirectMessageService implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Handles direct messages sent between two different users.
+   */
   async handleUsertoUserDm(currentUserId: any, otherUserId: any) {
     const existingDmId = await this.proofExistingDm(currentUserId, otherUserId);
 
@@ -128,6 +149,10 @@ export class DirectMessageService implements OnInit, OnDestroy {
     }
   }
 
+
+  /**
+   * Checks if a direct message already exists between two users.
+   */
   async proofExistingDm(
     currentUserId: string,
     otherUserId: string
@@ -151,6 +176,10 @@ export class DirectMessageService implements OnInit, OnDestroy {
     return null;
   }
 
+
+  /**
+ * Checks if a user has an existing direct message with themselves.
+ */
   async proofExistingOwnDm(userId: string): Promise<string | null> {
     const directMessageRef = this.getCollectionRef();
     const q = query(
@@ -168,6 +197,10 @@ export class DirectMessageService implements OnInit, OnDestroy {
     return null;
   }
 
+
+  /**
+  * Logs the information about the current user and the clicked profile.
+  */
   getDmInfo() {
     console.log(
       '\n',
@@ -182,6 +215,10 @@ export class DirectMessageService implements OnInit, OnDestroy {
     );
   }
 
+
+  /**
+   * Sets the direct message ID in Firestore.
+   */
   async setDirectMessageID(id: string) {
     const docRef = doc(this.getCollectionRef(), id);
     await setDoc(
@@ -193,10 +230,18 @@ export class DirectMessageService implements OnInit, OnDestroy {
     );
   }
 
+
+  /**
+   * Retrieves a reference to the direct messages collection in Firestore.
+   */
   getCollectionRef(): CollectionReference<DocumentData> {
     return collection(this.firestore, 'direct-messages');
   }
 
+
+  /**
+   * Retrieves a reference to the messages sub-collection for the current direct message ID in Firestore.
+   */
   getMessagesRef(): CollectionReference<DocumentData> {
     return collection(
       this.firestore,
@@ -204,6 +249,10 @@ export class DirectMessageService implements OnInit, OnDestroy {
     );
   }
 
+
+  /**
+   * Retrieves a reference to the messages sub-collection for a specific direct message ID in Firestore.
+   */
   getMessageRefForId(
     directMessageId: string
   ): CollectionReference<DocumentData> {
@@ -213,6 +262,10 @@ export class DirectMessageService implements OnInit, OnDestroy {
     );
   }
 
+
+  /**
+   * Retrieves and displays the messages for the specified direct message ID.
+   */
   showMessages(directMessageId: string) {
     const messageRef = this.getMessageRefForId(directMessageId);
 
@@ -243,6 +296,10 @@ export class DirectMessageService implements OnInit, OnDestroy {
     });
   }
 
+
+  /**
+   * Creates a message object from Firestore data.
+   */
   setMessageObject(id: string, data: any) {
     return new DmMessage({
       authorId: data['authorId'],
@@ -258,6 +315,10 @@ export class DirectMessageService implements OnInit, OnDestroy {
     });
   }
 
+
+  /**
+  * Creates a new direct message with the provided text content.
+  */
   newDmMessage(message: string) {
     const timeOptions = this.timeOption();
 
@@ -276,6 +337,10 @@ export class DirectMessageService implements OnInit, OnDestroy {
     this.saveMessage(messageData);
   }
 
+
+  /**
+  * Saves the provided message data to Firestore and updates the message list.
+  */
   async saveMessage(messageData: any) {
     const docRef = await addDoc(this.getMessagesRef(), messageData);
     const currentMessage = this.setMessageObject(docRef.id, messageData);
@@ -285,6 +350,10 @@ export class DirectMessageService implements OnInit, OnDestroy {
     this.showMessages(this.directMessageId);
   }
 
+
+  /**
+   * Sets the message ID for the newly saved direct message in Firestore.
+   */
   async setDirectMessageMessageID(id: string) {
     const docRef = doc(this.getMessagesRef(), id);
 
@@ -297,6 +366,10 @@ export class DirectMessageService implements OnInit, OnDestroy {
     );
   }
 
+
+  /**
+   * Returns the time format options for displaying the message time.
+   */
   timeOption(): Intl.DateTimeFormatOptions {
     return {
       hour: '2-digit',
