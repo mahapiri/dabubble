@@ -1,18 +1,37 @@
 <div class="new-message-container">
     <textarea [(ngModel)]="messageText" matInput type="text" placeholder="Nachricht an User" rows="3"></textarea>
-
     <div class="message-controls">
         <div class="add-elements">
             <button class="mini-fab-button" mat-mini-fab class="add-doc mini-fab-btn">
                 <mat-icon>add</mat-icon>
             </button>
             <div class="vertical-divider"></div>
-            <button mat-mini-fab class="emojis mini-fab-btn">
+            <button mat-mini-fab class="emojis mini-fab-btn" (click)="openEmojiSet()">
                 <mat-icon>sentiment_satisfied</mat-icon>
+                <div *ngIf="isEmoji" class="emoji-container">
+                    <emoji-mart
+                    [set]="'google'"
+                    [style]="{ position: 'relative' }"
+                    (emojiSelect)="addEmoji($event)"
+                    [showPreview]="false" 
+                    [emojiSize]="32"
+                    [perLine]="5"
+                    [totalFrequentLines]="1"
+                    [autoFocus]="true"
+                    [isNative]="false"
+                    [sheetSize]="64"
+                    [showPreview]="false"
+                    [enableSearch]="true"
+                    [useButton]="true"
+                    [showSingleCategory]="false"
+                    >
+                    
+                </emoji-mart>
+                </div>
             </button>
-            <button mat-mini-fab class="tag-person mini-fab-btn">
+            <!-- <button mat-mini-fab class="tag-person mini-fab-btn">
                 <mat-icon>alternate_email</mat-icon>
-            </button>
+            </button> -->
         </div>
         <button mat-mini-fab class="send-btn" (click)="createMessage()">
             <mat-icon>send</mat-icon>
