@@ -23,6 +23,8 @@ export class DirectMessageNewMessageInputComponent {
   private directMessageService: DirectMessageService = inject(DirectMessageService);
   messageText: string = '';
 
+  isEmoji: boolean = false;
+
   async createMessage() {
     if (!this.messageText.trim()) {
       console.warn('The message field is empty. Please type a message!');
@@ -30,5 +32,9 @@ export class DirectMessageNewMessageInputComponent {
       await this.directMessageService.newDmMessage(this.messageText);
     }
     this.messageText = '';
+  }
+
+  openEmojiSet() {
+    this.isEmoji = !this.isEmoji;
   }
 }

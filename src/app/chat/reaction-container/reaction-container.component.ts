@@ -6,7 +6,6 @@ import { CommonModule } from '@angular/common';
 import { DmMessage } from '../../../models/direct-message.class';
 import { ReactionBarComponent } from '../reaction-bar/reaction-bar.component';
 import { Subscription } from 'rxjs';
-import { user } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-reaction-container',
