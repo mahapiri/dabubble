@@ -41,6 +41,9 @@ export class ChannelMessageComponent {
     private threadService: ThreadService
   ) {}
 
+  /**
+   * The `isMyMessage` property is set by checking if the `channelMessage` belongs to the current user.
+   */
   ngOnInit() {
     this.isMyMessage = this.chatService.setMyMessage(this.channelMessage);
   }
@@ -61,5 +64,7 @@ export class ChannelMessageComponent {
 
   saveMessage() {
     this.channelMessageService.updateMessage(this.channelMessage);
+    this.threadService.updateReplyToMesageInThreadObject(this.channelMessage);
+    this.closeEdit();
   }
 }

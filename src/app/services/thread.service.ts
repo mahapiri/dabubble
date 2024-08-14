@@ -67,9 +67,13 @@ export class ThreadService {
 
   // Existiert ein Thread bereits wird dieser geöffnet
   openExistingThread(existingThread: QuerySnapshot) {
-    this.threadID = existingThread.docs[0].id;
+    this.threadID = this.getThreadIdFromSnapshot(existingThread);
     console.log('Thread existiert bereits:', this.threadID);
-    this.unsubSelectedThreads = this.subSelectedThread(this.threadID);
+    this.unsubSelectedThreads = this.subSelectedThread(this.threadID!);
+  }
+
+  getThreadIdFromSnapshot(existingThread: QuerySnapshot) {
+    return existingThread.docs[0].id;
   }
 
   async handleNewThread(selectedMessage: ChannelMessage) {
@@ -123,6 +127,23 @@ export class ThreadService {
     });
   }
 
+  async updateReplyToMesageInThreadObject(message: ChannelMessage) {
+    // übergibt das geänderte Message Objekt
+    // checken, ob zu dieser Message ein Thread besteht
+    // falls ja, dann gehe in den Thread mit der id und update Feld "replyToMessage" mit dem message Objekt.
+    const existingThread = await this.findThreadByMessageId(message.id);
+    if (existingThread) {
+      this.threadID = this.getThreadIdFromSnapshot(existingThread);
+      let threadRef = this.getSingleThreadRef(this.threadID);
+      await updateDoc(threadRef, {
+        replyToMessage: message.getMessageJson(),
+      }).catch((err) => {
+        console.log(err);
+      });
+      console.log('Thread updated:', this.threads);
+    }
+  }
+
   setThreadObject(messageJson: any, channelName: string): Thread {
     return new Thread({
       threadID: this.threadID || '',
@@ -133,6 +154,15 @@ export class ThreadService {
 
   getThreadsRef() {
     return collection(this.firestore, 'threads');
+  }
+
+  /**
+   * Gets the reference to a specific thread document in the firesore threads collection.
+   * @param {string} docId - the thread document
+   * @returns {DocumentReference} - reference to the Firestore document
+   */
+  getSingleThreadRef(docId: string) {
+    return doc(collection(this.firestore, 'threads'), docId);
   }
 
   ngOnDestroy(): void {
