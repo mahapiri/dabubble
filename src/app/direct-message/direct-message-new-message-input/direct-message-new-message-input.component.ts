@@ -5,6 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { DirectMessageService } from '../../services/direct-message.service';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 
 @Component({
   selector: 'app-direct-message-new-message-input',
@@ -14,7 +16,9 @@ import { DirectMessageService } from '../../services/direct-message.service';
     MatIconModule,
     MatButtonModule,
     MatInputModule,
-    FormsModule
+    FormsModule,
+    PickerComponent,
+    EmojiComponent
   ],
   templateUrl: './direct-message-new-message-input.component.html',
   styleUrl: './direct-message-new-message-input.component.scss'
@@ -36,5 +40,9 @@ export class DirectMessageNewMessageInputComponent {
 
   openEmojiSet() {
     this.isEmoji = !this.isEmoji;
+  }
+
+  addEmoji(event: any) {
+    this.messageText += event.emoji.native;
   }
 }

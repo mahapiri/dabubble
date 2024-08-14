@@ -66,3 +66,22 @@
         }
     }
 }
+
+.emoji-container {
+    position: absolute;
+    bottom: 100%;
+}
+
+.emoji-mart-category {
+    cursor: pointer;
+}
+
+button {
+    cursor: pointer;
+}
+
+emoji-mart {
+    .emoji-mart-emoji {
+        cursor: pointer;
+    }
+}
