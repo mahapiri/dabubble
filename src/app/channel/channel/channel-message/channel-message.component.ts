@@ -48,20 +48,35 @@ export class ChannelMessageComponent {
     this.isMyMessage = this.chatService.setMyMessage(this.channelMessage);
   }
 
+  /**
+   * Emits an event to open a Thread to the current message when the user clicks on "answer".
+   * Sets the current message as the selected message.
+   * Initiates handling of the thread in the `ThreadService`: opens existing thread or creates a new one.
+   */
   openThread() {
     this.clickedAnswer.emit(true);
     this.channelMessageService.setSelectedMessage(this.channelMessage);
     this.threadService.handleThread();
   }
 
+  /**
+   * Sets edit property to true to enable edit mode
+   */
   openEdit() {
     this.edit = true;
   }
 
+  /**
+   * Sets edit property to false to exit edit mode
+   */
   closeEdit() {
     this.edit = false;
   }
 
+  /**
+   * Calls two methods: to update the message in the firestore in the channel collection and in the thread collection in the message belonging to the thread.
+   * Exits edit mode.
+   */
   saveMessage() {
     this.channelMessageService.updateMessage(this.channelMessage);
     this.threadService.updateReplyToMesageInThreadObject(this.channelMessage);

@@ -41,48 +41,80 @@ export class ThreadService {
     this.unsubThreads = this.subThreadList();
   }
 
+  /**
+   * Handles the thread: Opens an existing one or creates a new one based on the selected message.
+   * Retrieves the selected message and checks if a thread exists for the selected message by its ID.
+   * If an existing thread is found, initates opening it. If not, initiates a thread creation.
+   */
   async handleThread() {
     const selectedMessage = await this.getSelectedChannelMessage();
-
     const existingThread = await this.findThreadByMessageId(
       selectedMessage!.id
     );
 
     existingThread
-      ? this.openExistingThread(existingThread)
+      ? this.handleExistingThread(existingThread)
       : await this.handleNewThread(selectedMessage!);
   }
 
-  // Holt die ausgewählte Nachricht
+  /**
+   * Retrieves the currently selected ChannelMessage by listening to the Observable.
+   * @returns {Promise<ChannelMessage | null>} A promise that resolves with the selected channel message or null
+   */
   async getSelectedChannelMessage(): Promise<ChannelMessage | null> {
     return firstValueFrom(
       this.channelMessageService.selectedChannelMessage$.pipe(take(1))
     );
   }
 
-  // Holt den ausgewählten Kanal
+  /**
+   * Retrieves the currently selected Channel by listening to the Observable.
+   * @returns {Promise<Channel | null>} A promise that resolves with the selected channel or null
+   */
   async getSelectedChannel(): Promise<Channel | null> {
     return firstValueFrom(this.channelService.selectedChannel$.pipe(take(1)));
   }
 
-  // Existiert ein Thread bereits wird dieser geöffnet
-  openExistingThread(existingThread: QuerySnapshot) {
+  /**
+   * Checks if a thread already exists by extracting the thread ID from the provided `QuerySnapshot`.
+   * If a thread is found, it updates the `threadID` property and subscribes to updates for that specific thread.
+   * @param {QuerySnapshot} existingThread - A Firestore query snapshot that contains the existing thread.
+   */
+  handleExistingThread(existingThread: QuerySnapshot) {
     this.threadID = this.getThreadIdFromSnapshot(existingThread);
     console.log('Thread existiert bereits:', this.threadID);
     this.unsubSelectedThreads = this.subSelectedThread(this.threadID!);
   }
 
+  /**
+   * Retrieves the thread ID from the first document in the provided query snapshot.
+   * @param existingThread A Firestore query snapshot that contains the documents of the existing thread.
+   * @returns The ID of the first thread in the snapshot
+   */
   getThreadIdFromSnapshot(existingThread: QuerySnapshot) {
     return existingThread.docs[0].id;
   }
 
+  /**
+   * Handles the creation of a new thread for the provided message.
+   * Retrieves the currently selected channel, then creates new thread
+   * @param selectedMessage
+   */
   async handleNewThread(selectedMessage: ChannelMessage) {
     const selectedChannel = await this.getSelectedChannel();
     await this.createNewThread(selectedChannel!.channelName, selectedMessage);
   }
 
-  // Erstellt einen neuen Thread
-  private async createNewThread(channelName: string, messageJson: any) {
+  /**
+   * Constructs a new thread object and adds it to the Firestore database. Updates the thread with its ID, and sets up a subscription for real-time updates on this new thread.
+   * @param {string} channelName - channel where the new thread belongs to
+   * @param {any} messageJson - The JSON of the message with the new thread.
+   * @returns {Promise<void>} - A promise that resolves when the new thread has been successfully created and updated.
+   */
+  private async createNewThread(
+    channelName: string,
+    messageJson: any
+  ): Promise<void> {
     const newThread: Thread = this.setThreadObject(messageJson, channelName);
     const threadsRef = await addDoc(
       this.getThreadsRef(),
@@ -109,12 +141,21 @@ export class ThreadService {
     return !querySnapshot.empty ? querySnapshot : null;
   }
 
+  /**
+   * Subscribes to real-time updates for the selected thread in the Firestore database.
+   * @param {string} threadID ID of the thread
+   * @returns {Function} - A function that, when called, unsubscribes from the real-time updates for the thread.
+   */
   subSelectedThread(threadID: string) {
-    return onSnapshot(doc(this.firestore, 'threads', threadID), (doc) => {
+    return onSnapshot(this.getSingleThreadRef(threadID), (doc) => {
       this.selectedThread.next(new Thread(doc.data()));
     });
   }
 
+  /**
+   * Subscribes to real-time updates for the list of threads in the Firestore database.
+   * @returns  {Function} - A function that, when called, unsubscribes from the real-time updates for the threads collection.
+   */
   subThreadList() {
     return onSnapshot(this.getThreadsRef(), (list) => {
       this.threads = [];
@@ -127,10 +168,12 @@ export class ThreadService {
     });
   }
 
+  /**
+   * Updates the `replyToMessage` field in the thread object associated with a given message.
+   * Hands over the message Object to be updated. Checks, if a thread exists for this message. If yes, updates the message Object in the replyToMessage field of this thread document.
+   * @param {ChannelMessage} message - The message object with the updated info.
+   */
   async updateReplyToMesageInThreadObject(message: ChannelMessage) {
-    // übergibt das geänderte Message Objekt
-    // checken, ob zu dieser Message ein Thread besteht
-    // falls ja, dann gehe in den Thread mit der id und update Feld "replyToMessage" mit dem message Objekt.
     const existingThread = await this.findThreadByMessageId(message.id);
     if (existingThread) {
       this.threadID = this.getThreadIdFromSnapshot(existingThread);
@@ -144,6 +187,12 @@ export class ThreadService {
     }
   }
 
+  /**
+   * Creates a new `Thread` object with the given message data and channel name.
+   * @param messageJson The JSON of the message
+   * @param channelName The name of the channel of the thread
+   * @returns {Thread} - A new `Thread` instance
+   */
   setThreadObject(messageJson: any, channelName: string): Thread {
     return new Thread({
       threadID: this.threadID || '',
@@ -152,19 +201,24 @@ export class ThreadService {
     });
   }
 
+  /**
+   * Retrieves and returns a reference to the `threads` collection in Firestore.
+   */
   getThreadsRef() {
     return collection(this.firestore, 'threads');
   }
 
   /**
-   * Gets the reference to a specific thread document in the firesore threads collection.
+   * Retrieves and returns the reference to a specific thread document in the firesore threads collection.
    * @param {string} docId - the thread document
-   * @returns {DocumentReference} - reference to the Firestore document
    */
   getSingleThreadRef(docId: string) {
     return doc(collection(this.firestore, 'threads'), docId);
   }
 
+  /**
+   * Cleans up subscriptions when the service is destroyed.
+   */
   ngOnDestroy(): void {
     if (this.unsubSelectedThreads) {
       this.unsubSelectedThreads();
