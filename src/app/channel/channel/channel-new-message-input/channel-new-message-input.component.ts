@@ -29,7 +29,6 @@ export class ChannelNewMessageInputComponent {
 
   /** Sends the text in the input field to the Channel Collection in the Backend. Trims the message from whitespace, ensures input is not empty, clears the input field after send */
   async sendMessage() {
-    console.log('Message text:', this.messageText);
     if (this.messageText.trim()) {
       await this.channelMessageService.addMessage(this.messageText);
       this.messageText = '';

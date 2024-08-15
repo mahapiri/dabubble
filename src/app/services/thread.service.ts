@@ -13,7 +13,7 @@ import {
 } from '@angular/fire/firestore';
 import { Thread } from '../../models/thread.class';
 import { ChannelMessageService } from './channel-message.service';
-import { BehaviorSubject, firstValueFrom, take } from 'rxjs';
+import { BehaviorSubject, Subscription, firstValueFrom, take } from 'rxjs';
 import { ChannelService } from './channel.service';
 import { Channel, ChannelMessage } from '../../models/channel.class';
 
@@ -30,15 +30,20 @@ export class ThreadService {
   private selectedThread = new BehaviorSubject<Thread | null>(null);
   selectedThread$ = this.selectedThread.asObservable();
 
-  private unsubSelectedThreads?: () => void;
-  private unsubThreads!: () => void;
+  private subscriptions = new Subscription();
 
   constructor(
     private firestore: Firestore,
     private channelService: ChannelService,
     private channelMessageService: ChannelMessageService
   ) {
-    this.unsubThreads = this.subThreadList();
+    this.subscriptions.add(this.subThreadList());
+
+    this.subscriptions.add(
+      this.selectedThread$.subscribe((thread) => {
+        this.threadID = thread?.threadID;
+      })
+    );
   }
 
   /**
@@ -83,7 +88,7 @@ export class ThreadService {
   handleExistingThread(existingThread: QuerySnapshot) {
     this.threadID = this.getThreadIdFromSnapshot(existingThread);
     console.log('Thread existiert bereits:', this.threadID);
-    this.unsubSelectedThreads = this.subSelectedThread(this.threadID!);
+    this.subscriptions.add(this.subSelectedThread(this.threadID!));
   }
 
   /**
@@ -122,9 +127,14 @@ export class ThreadService {
     );
 
     this.threadID = threadsRef.id;
-    await updateDoc(threadsRef, { threadID: threadsRef.id });
+    this.addThreadIdToThread(threadsRef.id);
     console.log('New Thread created:', newThread);
-    this.unsubSelectedThreads = this.subSelectedThread(this.threadID);
+    this.subscriptions.add(this.subSelectedThread(this.threadID!));
+  }
+
+  /** Updates the Thread by adding the Id to the Thread Object in the Firestore */
+  async addThreadIdToThread(threadsRef: any) {
+    await updateDoc(threadsRef, { threadID: threadsRef.id });
   }
 
   /**
@@ -220,11 +230,6 @@ export class ThreadService {
    * Cleans up subscriptions when the service is destroyed.
    */
   ngOnDestroy(): void {
-    if (this.unsubSelectedThreads) {
-      this.unsubSelectedThreads();
-    }
-    if (this.unsubThreads) {
-      this.unsubThreads();
-    }
+    this.subscriptions.unsubscribe();
   }
 }

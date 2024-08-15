@@ -1,0 +1,351 @@
+@import "./../../../styles.scss";
+@import "./../../channel/channel/channel.component.scss";
+
+.message {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    background-color: var(--bg-color);
+
+    .text-bubble {
+      background-color: var(--white);
+    }
+
+    .last-answer {
+      color: var(--black);
+    }
+
+    .reaction-bar {
+      opacity: 1;
+      right: 24px;
+      transition: right 0.15s ease-out, opacity 0.15s ease-out;
+    }
+  }
+}
+
+.message-wrapper {
+  font-family: "Nunito";
+  display: flex;
+  color: var(--gray);
+  gap: 24px;
+  padding: 10px 0 10px 24px;
+  overflow: visible;
+  cursor: pointer;
+
+  .message-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .user-img {
+    height: 70px;
+    width: 70px;
+    border-radius: 40px;
+    object-fit: contain;
+  }
+
+  .user-wrapper,
+  .answer-wrapper {
+    display: flex;
+    gap: 20px;
+  }
+
+  .user-name {
+    color: var(--black);
+    font-size: 18px;
+    font-weight: 700;
+
+    &:hover {
+      color: var(--purple-1);
+    }
+  }
+
+  .total-answers {
+    color: var(--purple-3);
+    font-size: 18px;
+
+    &:hover {
+      color: var(--purple-1);
+      font-weight: 700;
+    }
+  }
+
+  .time,
+  .last-answer {
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .text-bubble {
+    width: fit-content;
+    font-size: 18px;
+    padding: 15px;
+    border-radius: 0 30px 30px 30px;
+    background-color: var(--bg-color);
+    color: var(--black);
+  }
+}
+
+.my-message {
+  .message {
+    position: relative;
+    justify-content: flex-end;
+    padding: 10px 24px 10px 24px;
+
+    &:hover {
+      .reaction-bar {
+        opacity: 1;
+        left: 24px;
+        transition: left 0.15s ease-out, opacity 0.15s ease-out;
+      }
+    }
+  }
+
+  .message-wrapper {
+    flex-direction: row-reverse;
+  }
+
+  .message-details {
+    align-items: flex-end;
+  }
+
+  .user-wrapper {
+    justify-content: flex-end;
+  }
+
+  .text-bubble {
+    border-radius: 30px 0 30px 30px;
+    background-color: var(--purple-2);
+    color: var(--white);
+  }
+
+  .reaction-bar {
+    right: unset;
+    left: 90px;
+    width: 255px;
+  }
+
+  .reactions-wrapper {
+    justify-content: flex-end;
+  }
+
+  &:hover {
+    .text-bubble {
+      background-color: var(--purple-2);
+    }
+
+    .last-answer {
+      color: var(--black);
+    }
+  }
+}
+
+.divider-container {
+  position: relative;
+  margin: 32px 20px 32px 20px;
+
+  mat-divider {
+    border-top-color: var(--lines);
+  }
+
+  .message-date {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 36px;
+    width: fit-content;
+    border: 1px solid var(--lines);
+    border-radius: 30px;
+    padding: 5px 15px 5px 15px;
+    background-color: var(--white);
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--black);
+  }
+}
+
+.reaction-bar {
+  position: absolute;
+  top: -24px;
+  right: 90px;
+  width: 210px;
+  height: 46px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid var(--lines);
+  border-radius: 25px 25px 0 25px;
+  padding: 3px 15px 3px 20px;
+  background-color: var(--white);
+  opacity: 0;
+  cursor: pointer;
+
+  img {
+    display: flex;
+    width: 20px;
+    height: 20px;
+    align-items: center;
+  }
+
+  .mini-fab-btn {
+    color: var(--black);
+    &:hover {
+      color: var(--purple-3);
+    }
+  }
+}
+
+.more-btn:hover + .edit-msg-bubble {
+  display: flex;
+}
+
+.edit-msg-bubble {
+  position: absolute;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  top: 20px;
+  left: 230px;
+  width: 280px;
+  height: 64px;
+  border-radius: 0 25px 25px 25px;
+  background-color: white;
+  box-shadow: 0px 6px 14px 0px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    display: flex;
+  }
+
+  button {
+    font-family: "Nunito";
+    font-size: 20px;
+    padding: 10px 20px 10px 20px;
+    border-style: none;
+    border-radius: 100px;
+    background-color: white;
+    cursor: pointer;
+    &:hover {
+      background-color: var(--bg-color);
+      color: var(--purple-3);
+      font-weight: bold;
+    }
+  }
+}
+
+.reactions-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .reaction-btn {
+    position: relative;
+    width: fit-content;
+    height: 34px;
+    background-color: var(--white);
+    border: 1px solid var(--lines);
+    border-radius: 20px;
+    padding: 5px 10px 5px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+
+    &:hover {
+      border: 1px solid var(--purple-1);
+
+      .reaction-info-menu {
+        visibility: visible;
+      }
+    }
+
+    img {
+      display: flex;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .mini-fab-btn {
+    height: 34px;
+    width: 34px;
+  }
+}
+
+.reaction-info-menu {
+  position: absolute;
+  width: 158px;
+  height: 112px;
+  left: 50%;
+  top: -112px;
+  border-radius: 30px 30px 30px 0;
+  padding: 15px 8px 15px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  background-color: var(--purple-1);
+  color: white;
+  font-size: 16px;
+  z-index: 1;
+  visibility: hidden;
+
+  img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .user {
+    font-size: 18px;
+    font-weight: 700;
+  }
+}
+
+.edit-textbox {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: fit-content;
+  border-radius: 20px;
+  border: 1px solid var(--lines);
+  padding: 20px;
+  gap: 16px;
+  background-color: var(--white);
+
+  textarea {
+    border: none;
+    color: var(--gray);
+    font-family: "Nunito";
+    font-size: 18px;
+    padding: 0;
+    margin: 0;
+    resize: none;
+  }
+
+  textarea:focus {
+    outline: none;
+  }
+
+  &:focus-within {
+    border: 1px solid var(--purple-2);
+  }
+
+  .edit-options-wrapper {
+    width: 50vw;
+    height: 49px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.bg-color {
+  background-color: var(--bg-color);
+}

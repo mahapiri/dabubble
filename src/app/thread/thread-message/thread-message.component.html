@@ -1,0 +1,85 @@
+<mat-list-item>
+  <div [ngClass]="{ 'my-message': isMyMessage }">
+    <div class="message" [ngClass]="{ 'bg-color': edit }">
+      <div *ngIf="!edit" id="reactionBar" class="reaction-bar">
+        <button class="mini-fab-btn" mat-mini-fab>
+          <mat-icon>add_reaction</mat-icon>
+        </button>
+        <div *ngIf="isMyMessage">
+          <button class="mini-fab-btn more-btn" mat-mini-fab>
+            <mat-icon>more_vert</mat-icon>
+          </button>
+
+          <div class="edit-msg-bubble">
+            <button (click)="openEdit()">Nachricht bearbeiten</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="message-wrapper">
+        <img
+          class="user-img"
+          src="./../../../{{ threadMessage.profileImage }}"
+        />
+
+        <div class="message-details">
+          <div *ngIf="!edit" class="user-wrapper">
+            <div class="user-name">{{ threadMessage.authorName }}</div>
+            <div class="time">
+              {{ chatService.formatTime(threadMessage.time) }} Uhr
+            </div>
+          </div>
+
+          <div *ngIf="edit" class="edit-textbox">
+            <textarea
+              [(ngModel)]="threadMessage.text"
+              type="text"
+              rows="3"
+            ></textarea>
+            <div *ngIf="edit" class="edit-options-wrapper">
+              <button class="mini-fab-btn" mat-mini-fab>
+                <mat-icon>sentiment_satisfied</mat-icon>
+              </button>
+              <div class="d-flex gap-32">
+                <button (click)="closeEdit()" class="btn-default btn-secondary">
+                  Abbrechen
+                </button>
+                <button (click)="saveMessage()" class="btn-default btn-primary">
+                  Speichern
+                </button>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="!edit" class="text-bubble">{{ threadMessage.text }}</div>
+
+          <div *ngIf="isMyMessage && !edit" class="reaction-container">
+            <div class="reactions-wrapper">
+              <button class="reaction-btn">
+                <div class="reaction-info-menu">
+                  <img src="./../../../assets/emojis/rocket.svg" alt="nerd" />
+                  <span class="user">Noah Braun</span>
+                  <span>hat reagiert</span>
+                </div>
+                <img src="./../../../assets/emojis/rocket.svg" alt="check" />
+                <span class="reaction-count">1</span>
+              </button>
+
+              <button class="reaction-btn">
+                <div class="reaction-info-menu">
+                  <img src="./../../../assets/emojis/check.png" alt="rocket" />
+                  <span class="user">Sofia Müller</span>
+                  <span>hat reagiert</span>
+                </div>
+                <img src="./../../../assets/emojis/check.png" alt="check" />
+                <span class="reaction-count">1</span>
+              </button>
+              <button class="mini-fab-btn" mat-mini-fab>
+                <mat-icon>add_reaction</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-list-item>

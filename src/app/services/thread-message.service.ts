@@ -5,29 +5,46 @@ import {
   Firestore,
   addDoc,
   collection,
+  limit,
+  onSnapshot,
+  orderBy,
+  query,
   updateDoc,
 } from '@angular/fire/firestore';
 import { UserService } from './user.service';
-import { ChannelService } from './channel.service';
 import { ThreadService } from './thread.service';
 import { User } from '../../models/user.class';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ThreadMessageService {
-  threads: Thread[] = [];
+  private threadMessagesSubjects = new BehaviorSubject<ThreadMessage[]>([]);
+  threadMessages$ = this.threadMessagesSubjects.asObservable();
 
-  unsubMessages!: () => void;
-  unsubUser: any;
+  threads: Thread[] = [];
+  threadMessages: ThreadMessage[] = [];
+
+  previousDate: string | null = null;
+
+  unsubThreadMessages!: () => void;
+  unsubUser!: Subscription;
+  selectedThreadSubscription: Subscription;
 
   constructor(
     private firestore: Firestore,
     private chatService: ChatService,
     private userService: UserService,
-    private channelService: ChannelService,
     private threadService: ThreadService
-  ) {}
+  ) {
+    this.selectedThreadSubscription =
+      this.threadService.selectedThread$.subscribe((thread) => {
+        if (thread) {
+          this.unsubThreadMessages = this.subThreadMessageList();
+        }
+      });
+  }
 
   /**
    * Adds a new message to the current thread by subscribing to the current user and adding it to the Firestore.
@@ -35,7 +52,7 @@ export class ThreadMessageService {
    * @param {string} text - Content of the message.
    * @returns {Promise<void>} - A promise that resolves when the message has been added and its ID has been updated.
    */
-  async addThreadMessage(text: string) {
+  async addThreadMessage(text: string): Promise<void> {
     this.unsubUser = this.userService.currentUser$.subscribe(
       async (currentUser) => {
         if (currentUser) {
@@ -44,7 +61,7 @@ export class ThreadMessageService {
             currentUser
           );
           const messageRef = await addDoc(
-            this.getThreadMessageRef(),
+            this.getThreadMessagesRef(),
             newMessage.getMessageJson()
           );
           newMessage.id = messageRef.id;
@@ -53,6 +70,57 @@ export class ThreadMessageService {
         }
       }
     );
+  }
+
+  /**
+   * Subscribes to changes in the messages collection of the currently selected thread.
+   * Fetches the latest list of messages and updates the threadMessagesSubjects BehaviorSubject.
+   * Orders the messages by the "date" and "time" they are written in ascending order first to be able to call the isFirstMessageOfDay Function to determine which message is the first one of the day.
+   * Then reverses the Order, so older messages are shown higher up in the chat and the latest messages are shown at the bottom.
+   * @returns - the unsubscribe function for the onSnapshot listener.
+   */
+  subThreadMessageList() {
+    const q = query(
+      this.getThreadMessagesRef(),
+      orderBy('date', 'asc'),
+      orderBy('time', 'asc'),
+      limit(20)
+    );
+
+    return onSnapshot(q, (list) => {
+      this.threadMessages = [];
+      this.previousDate = null;
+
+      list.forEach((message) => {
+        const data = message.data();
+        const currentMessage = this.setMessageObject(message.id, data);
+        this.chatService.setFirstMessageOfDay(currentMessage);
+        this.threadMessages.push(currentMessage);
+      });
+
+      this.threadMessages.reverse();
+      this.threadMessagesSubjects.next(this.threadMessages);
+      console.log('Message received:', this.threadMessages);
+    });
+  }
+
+  /**
+   * Creates a new `ThreadMessage` object from the provided data.
+   * @param {string} id - id of the message.
+   * @param {any} data - object with the message data, including text, time, date, author information, etc.
+   * @returns {ThreadMessage} - A new `ThreadMessage` object with the provided data.
+   */
+  setMessageObject(id: string, data: any): ThreadMessage {
+    return new ThreadMessage({
+      id: id,
+      text: data['text'],
+      time: data['time'],
+      date: data['date'],
+      authorName: data['authorName'],
+      authorId: data['authorId'],
+      profileImage: data['profileImage'],
+      isFirstMessageOfDay: false,
+    });
   }
 
   /**
@@ -84,7 +152,12 @@ export class ThreadMessageService {
     });
   }
 
-  getThreadMessageRef() {
+  getThreadMessagesRef() {
+    if (!this.threadService.threadID) {
+      throw new Error(
+        'threadID is undefined or empty. Cannot construct Firestore path.'
+      );
+    }
     return collection(
       this.firestore,
       `threads/${this.threadService.threadID}/messages`
@@ -92,6 +165,8 @@ export class ThreadMessageService {
   }
 
   ngOnDestroy(): void {
-    this.unsubUser();
+    this.selectedThreadSubscription.unsubscribe();
+    this.unsubUser.unsubscribe();
+    this.unsubThreadMessages();
   }
 }

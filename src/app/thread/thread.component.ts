@@ -10,12 +10,11 @@ import { CommonModule } from '@angular/common';
 import { MemberComponent } from '../users/member/member.component';
 import { Observable } from 'rxjs';
 import { ThreadService } from '../services/thread.service';
-import { Thread } from '../../models/thread.class';
-import { ChannelMessageService } from '../services/channel-message.service';
-import { ChannelMessage } from '../../models/channel.class';
+import { Thread, ThreadMessage } from '../../models/thread.class';
 import { ChatService } from '../services/chat.service';
 import { ThreadMessageService } from '../services/thread-message.service';
 import { FormsModule } from '@angular/forms';
+import { ThreadMessageComponent } from './thread-message/thread-message.component';
 
 @Component({
   selector: 'app-thread',
@@ -28,6 +27,7 @@ import { FormsModule } from '@angular/forms';
     MatInputModule,
     MatListModule,
     EditChannelComponent,
+    ThreadMessageComponent,
     CommonModule,
     MemberComponent,
     FormsModule,
@@ -42,6 +42,7 @@ export class ThreadComponent {
   messageText: string = '';
 
   selectedThread$: Observable<Thread | null>;
+  threadMessages$: Observable<ThreadMessage[]>;
 
   constructor(
     private threadService: ThreadService,
@@ -49,15 +50,15 @@ export class ThreadComponent {
     public chatService: ChatService
   ) {
     this.selectedThread$ = this.threadService.selectedThread$;
+    this.threadMessages$ = this.threadMessageService.threadMessages$;
   }
 
   closeThread() {
     this.clickedCloseThread.emit(false);
   }
 
-  /** Sends the text in the input field to the Channel Collection in the Backend. Trims the message from whitespace, ensures input is not empty, clears the input field after send */
+  /** Sends the text in the input field to the Thread Collection in the Backend. Trims the message from whitespace, ensures input is not empty, clears the input field after send */
   async sendMessage() {
-    console.log('Message text:', this.messageText);
     if (this.messageText.trim()) {
       await this.threadMessageService.addThreadMessage(this.messageText);
       this.messageText = '';

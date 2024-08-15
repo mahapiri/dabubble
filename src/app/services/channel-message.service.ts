@@ -67,7 +67,7 @@ export class ChannelMessageService {
    * @param {string} text - Content of the message.
    * @returns {Promise<void>} - A promise that resolves when the message has been added and its ID has been updated.
    */
-  async addMessage(text: string) {
+  async addMessage(text: string): Promise<void> {
     this.userService.currentUser$.subscribe(async (currentUser) => {
       if (currentUser) {
         const newMessage: ChannelMessage = this.setMessageWithUser(
