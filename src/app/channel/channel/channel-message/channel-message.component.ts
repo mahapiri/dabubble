@@ -82,4 +82,18 @@ export class ChannelMessageComponent {
     this.threadService.updateReplyToMesageInThreadObject(this.channelMessage);
     this.closeEdit();
   }
+
+  isImageUrl(url: string): boolean {
+    // Einfache URL-Prüfung, um zu sehen, ob es ein Bild sein könnte
+    if (url.startsWith('https://firebasestorage.googleapis.com/')) {
+      console.log("img erkannt");
+      
+       return true
+       
+    }else{
+      console.log("kein img erkannt");
+      
+      return false
+    }
+  }
 }

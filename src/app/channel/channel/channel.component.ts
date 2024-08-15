@@ -89,10 +89,15 @@ export class ChannelComponent implements AfterViewChecked {
     try {
       this.mainChat.nativeElement.scrollTop =
         this.mainChat.nativeElement.scrollHeight;
-    } catch (err) {}
+    } catch (err) { }
   }
 
-  editChannel() {
+  editChannel(event: Event) {
+    if (this.clickedMembers || this.clickedAddMembers) {
+      this.clickedMembers = false;
+      this.clickedAddMembers = false;
+    }
+    event.stopPropagation();
     this.clickedEditChannel = true;
   }
   closeEditChannel(event: boolean) {
@@ -100,11 +105,19 @@ export class ChannelComponent implements AfterViewChecked {
   }
 
   openMembers(event: Event) {
+    if (this.clickedAddMembers || this.clickedEditChannel) {
+      this.clickedAddMembers = false;
+      this.clickedEditChannel = false;
+    }
     event.stopPropagation();
     this.clickedMembers = true;
   }
 
   openAddMembers(event: Event) {
+    if (this.clickedMembers || this.clickedEditChannel) {
+      this.clickedMembers = false;
+      this.clickedEditChannel = false;
+    }
     event.stopPropagation();
     this.clickedAddMembers = true;
   }

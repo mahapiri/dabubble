@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { User } from '../../models/user.class';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
 import { UserService } from './user.service';
-import { arrayUnion, collection, doc, Firestore, getDoc, setDoc, updateDoc } from '@angular/fire/firestore';
+import { arrayUnion, doc, Firestore, getDoc, setDoc, updateDoc } from '@angular/fire/firestore';
 
 
 @Injectable({
@@ -58,8 +58,8 @@ export class AuthService {
     await signInWithPopup(this.auth, this.provider).then((result) => {
       const credential = GoogleAuthProvider.credentialFromResult(result);
       if (credential) {
-        const user = result.user;
-        this.setGoogleUser(user);
+        this.userId = result.user.uid;
+        this.setGoogleUser(result.user);
       }
     }).catch((error) => {
       // Handle Errors here.
@@ -77,7 +77,6 @@ export class AuthService {
     this.username = user.displayName;
     this.usermail = user.email;
     this.profileImage = user.photoURL ?? "assets/img/character-empty.png";
-    this.userId = user.uid
     this.lookForGoogleUserInDatabase(user.uid)
   }
 
@@ -85,8 +84,8 @@ export class AuthService {
   async lookForGoogleUserInDatabase(userid: string) {
     const userdoc = await getDoc(doc(this.firestore, "users", userid))
     if (!userdoc.exists()) {
-      await this.saveUserInDocument()
       await this.setStartingChannels()
+      await this.saveUserInDocument()
     }
   }
 

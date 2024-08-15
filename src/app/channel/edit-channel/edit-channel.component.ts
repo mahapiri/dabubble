@@ -18,12 +18,13 @@ import { __values } from 'tslib';
 import { Observable, Subscription } from 'rxjs';
 import { User } from '../../../models/user.class';
 import { ChannelService } from '../../services/channel.service';
+import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 
 
 @Component({
   selector: 'app-edit-channel',
   standalone: true,
-  imports: [MatIconModule, FormsModule, CommonModule],
+  imports: [MatIconModule, FormsModule, CommonModule, ClickOutsideDirective],
   templateUrl: './edit-channel.component.html',
   styleUrl: './edit-channel.component.scss',
 })

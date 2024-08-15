@@ -2,7 +2,7 @@
   <mat-card-header>
     <div class="channel-info">
       <div class="channel-info-content">
-        <button class="channel-btn" (click)="editChannel()">
+        <button class="channel-btn" (click)="editChannel($event)">
           <mat-icon class="icon tag">tag</mat-icon>
           <span class="n-h3">{{ activeChannel.channelName }}</span>
           <mat-icon class="icon arrow">keyboard_arrow_down</mat-icon>

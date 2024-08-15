@@ -72,14 +72,14 @@ export class WorkspaceMenuComponent implements OnInit {
     public userService: UserService,
     private directMessage: DirectMessageService,
     private chatService: ChatService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     await this.userService.getUserID();
     this.userService.getUserList();
     setTimeout(async () => {
       await this.channelService.loadChannels();
-    }, 500);
+    }, 1000);
     this.showFirstChannel();
   }
 
@@ -146,5 +146,5 @@ export class WorkspaceMenuComponent implements OnInit {
     this.chatService.setIsChannel(false);
   }
 
-  editChannel(channel: string) {}
+  editChannel(channel: string) { }
 }

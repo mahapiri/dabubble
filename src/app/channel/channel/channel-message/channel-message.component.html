@@ -69,7 +69,13 @@
               </div>
             </div>
           </div>
-          <div *ngIf="!edit" class="text-bubble">{{ channelMessage.text }}</div>
+          <div *ngIf="!edit" class="text-bubble">
+            @if (this.isImageUrl(channelMessage.text)) {
+              <img class="channel-upload" [src]="channelMessage.text" alt="">
+            }@else {
+                   {{ channelMessage.text }}
+            }       
+          </div>
 
           <div *ngIf="!edit && answered" class="answer-wrapper">
             <div (click)="openThread()" class="total-answers">2 Antworten</div>

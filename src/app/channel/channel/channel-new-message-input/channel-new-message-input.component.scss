@@ -13,6 +13,11 @@
   gap: 40px;
   cursor: pointer;
 
+  img{
+    height: 50px;
+    width: 50px;
+  }
+
   &:hover {
     border: 1px solid var(--purple-2);
   }
@@ -59,3 +64,8 @@
     }
   }
 }
+
+.link{
+  text-decoration: underline;
+}
+
