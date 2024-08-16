@@ -81,6 +81,8 @@
 
   .text-bubble {
     width: fit-content;
+    word-wrap: break-word;
+    white-space: normal;
     font-size: 18px;
     padding: 15px;
     border-radius: 0 30px 30px 30px;
@@ -350,7 +352,7 @@
   background-color: var(--bg-color);
 }
 
-.channel-upload{
+.channel-upload {
   height: 70px;
   width: 70px;
 }
