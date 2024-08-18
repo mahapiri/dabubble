@@ -5,13 +5,11 @@ import {
   Firestore,
   addDoc,
   collection,
-  getDocs,
   limit,
   onSnapshot,
   orderBy,
   query,
   updateDoc,
-  where,
 } from '@angular/fire/firestore';
 import { UserService } from './user.service';
 import { ThreadService } from './thread.service';

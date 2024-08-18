@@ -12,8 +12,8 @@ import { ChannelMessageService } from '../../../services/channel-message.service
 import { ThreadService } from '../../../services/thread.service';
 import { ThreadMessageService } from '../../../services/thread-message.service';
 import { ThreadMessage } from '../../../../models/thread.class';
-import { Observable, map, of } from 'rxjs';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
+import { Observable, Subscription, map, of } from 'rxjs';
+import { collectionData } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-channel-message',
@@ -37,14 +37,15 @@ export class ChannelMessageComponent {
   @Output() clickedAnswer = new EventEmitter<boolean>();
 
   threadMessages$!: Observable<ThreadMessage[]>;
+  threadMessages: ThreadMessage[] = [];
 
   //threadMessageCount: number = 0;
+  private subscription: Subscription = new Subscription();
 
   isMyMessage: boolean = false;
   edit: boolean = false;
 
   constructor(
-    private firestore: Firestore,
     public chatService: ChatService,
     private channelMessageService: ChannelMessageService,
     private threadService: ThreadService,
@@ -56,30 +57,8 @@ export class ChannelMessageComponent {
    */
   ngOnInit() {
     this.isMyMessage = this.chatService.setMyMessage(this.channelMessage);
-    //this.loadThreadMessageCounts(this.channelMessage);
+    this.subscription.add(this.threadService.subThreadList());
   }
-
-  /* /**
-   * Lädt die Anzahl der Nachrichten für alle ChannelMessages.
-   
-  async loadThreadMessageCounts(channelMessage: ChannelMessage): Promise<void> {
-    const threadsRef = collection(this.firestore, 'threads');
-    const q = query(
-      threadsRef,
-      where('replyToMessage.id', '==', channelMessage.id)
-    );
-    const querySnapshot = await getDocs(q);
-
-    if (!querySnapshot.empty) {
-      const threadId = querySnapshot.docs[0].id; // Nimm den ersten gefundenen Thread
-      const count = await this.threadMessageService.getThreadMessageCountById(
-        threadId
-      );
-      this.threadMessageCount = count;
-    } else {
-      this.threadMessageCount = 0;
-    }
-  } */
 
   /* getThreadMessageCount(channelMessageId: string) {
     let threadMessageCount = 0;
@@ -94,23 +73,28 @@ export class ChannelMessageComponent {
   } */
 
   getThreadMessageCount(channelMessageId: string): Observable<number> {
-    // Suche nach dem Thread, der zu dieser ChannelMessage gehört
+    /* // Suche nach dem Thread, der zu dieser ChannelMessage gehört
     const thread = this.threadService.allThreadsList.find(
       (t: any) => t.replyToMessage.id === channelMessageId
     );
 
     if (thread) {
-      const threadMessagesRef = collection(
-        this.firestore,
-        `threads/${thread.threadID}/messages`
+      const threadID = thread.threadID;
+      this.subscription.add(this.threadService.subSelectedThread(threadID));
+
+      return collectionData(
+        this.threadMessageService.getThreadMessagesRef()
+      ).pipe(
+        map((messages) => {
+          console.log('Messages Array:', messages);
+          console.log('Messages Length:', messages.length);
+          return messages.length;
+        })
       );
-      return collectionData(threadMessagesRef).pipe(
-        map((messages) => messages.length)
-      );
-    } else {
-      // Falls kein Thread existiert, gibt es keine Nachrichten
-      return of(0);
-    }
+    } else { */
+    // Falls kein Thread existiert, gibt es keine Nachrichten
+    return of(0);
+    //}
   }
 
   /**
@@ -159,5 +143,9 @@ export class ChannelMessageComponent {
 
       return false;
     }
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

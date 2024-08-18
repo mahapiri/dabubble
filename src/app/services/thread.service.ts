@@ -11,7 +11,7 @@ import {
   updateDoc,
   where,
 } from '@angular/fire/firestore';
-import { Thread } from '../../models/thread.class';
+import { Thread, replyToMessage } from '../../models/thread.class';
 import { ChannelMessageService } from './channel-message.service';
 import { BehaviorSubject, Subscription, firstValueFrom, take } from 'rxjs';
 import { ChannelService } from './channel.service';
@@ -28,10 +28,10 @@ export class ThreadService {
   private threadsSubject = new BehaviorSubject<Thread[]>([]);
   threads$ = this.threadsSubject.asObservable();
 
-  private selectedThread = new BehaviorSubject<Thread | null>(null);
+  public selectedThread = new BehaviorSubject<Thread | null>(null);
   selectedThread$ = this.selectedThread.asObservable();
 
-  private subscriptions = new Subscription();
+  private subscription: Subscription = new Subscription();
 
   unsubAllThreads;
 
@@ -40,26 +40,15 @@ export class ThreadService {
     private channelService: ChannelService,
     private channelMessageService: ChannelMessageService
   ) {
-    this.subscriptions.add(this.subThreadList());
+    this.subscription.add(this.subThreadList());
 
-    this.subscriptions.add(
+    this.subscription.add(
       this.selectedThread$.subscribe((thread) => {
         this.threadID = thread?.threadID;
       })
     );
 
     this.unsubAllThreads = this.subAllThreadsList();
-  }
-
-  subAllThreadsList() {
-    this.allThreadsList = [];
-    return onSnapshot(this.getThreadsRef(), (list) => {
-      const threadsArray: any[] = [];
-      list.forEach((thread) => {
-        threadsArray.push(this.setThreadObject(thread.data(), thread.id));
-      });
-      this.allThreadsList = this.sortArray(threadsArray);
-    });
   }
 
   sortArray(array: any[]) {
@@ -119,7 +108,7 @@ export class ThreadService {
   handleExistingThread(existingThread: QuerySnapshot) {
     this.threadID = this.getThreadIdFromSnapshot(existingThread);
     console.log('Thread existiert bereits:', this.threadID);
-    this.subscriptions.add(this.subSelectedThread(this.threadID!));
+    this.subscription.add(this.subSelectedThread(this.threadID!));
   }
 
   /**
@@ -151,7 +140,10 @@ export class ThreadService {
     channelName: string,
     messageJson: any
   ): Promise<void> {
-    const newThread: Thread = this.setThreadObject(messageJson, channelName);
+    const newThread: Thread = this.setThreadObjectCreateThread(
+      channelName,
+      messageJson
+    );
     const threadsRef = await addDoc(
       this.getThreadsRef(),
       newThread.getThreadJson()
@@ -160,7 +152,7 @@ export class ThreadService {
     this.threadID = threadsRef.id;
     this.addThreadIdToThread(threadsRef.id);
     console.log('New Thread created:', newThread);
-    this.subscriptions.add(this.subSelectedThread(this.threadID!));
+    this.subscription.add(this.subSelectedThread(this.threadID!));
   }
 
   /** Updates the Thread by adding the Id to the Thread Object in the Firestore */
@@ -201,11 +193,28 @@ export class ThreadService {
     return onSnapshot(this.getThreadsRef(), (list) => {
       this.threads = [];
       list.forEach((thread) => {
-        const currentThread = this.setThreadObject(thread.data(), thread.id);
+        const currentThread = this.setThreadObjectReadChannel(
+          thread.data(),
+          thread.id
+        );
         this.threads.push(currentThread);
       });
       this.threadsSubject.next(this.threads);
       console.log('Thread received:', this.threads);
+    });
+  }
+
+  subAllThreadsList() {
+    this.allThreadsList = [];
+    return onSnapshot(this.getThreadsRef(), (list) => {
+      const threadsArray: any[] = [];
+      list.forEach((thread) => {
+        threadsArray.push(
+          this.setThreadObjectReadChannel(thread.data(), thread.id)
+        );
+      });
+      this.allThreadsList = this.sortArray(threadsArray);
+      console.log('AllThreadList received:', this.allThreadsList);
     });
   }
 
@@ -234,11 +243,25 @@ export class ThreadService {
    * @param channelName The name of the channel of the thread
    * @returns {Thread} - A new `Thread` instance
    */
-  setThreadObject(messageJson: any, channelName: string): Thread {
+  setThreadObjectCreateThread(
+    channelName: string,
+    messageJson: any,
+    threadID?: string
+  ): Thread {
     return new Thread({
-      threadID: this.threadID || '',
-      channelName: channelName || '',
-      replyToMessage: messageJson,
+      threadID: threadID || '',
+      channelName: channelName,
+      replyToMessage: new replyToMessage(messageJson),
+    });
+  }
+
+  setThreadObjectReadChannel(threadData: any, threadID: string): Thread {
+    return new Thread({
+      threadID: threadID,
+      channelName: threadData.channelName,
+      replyToMessage: threadData.replyToMessage
+        ? new replyToMessage(threadData.replyToMessage)
+        : undefined,
     });
   }
 
@@ -261,6 +284,6 @@ export class ThreadService {
    * Cleans up subscriptions when the service is destroyed.
    */
   ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
+    this.subscription.unsubscribe();
   }
 }
