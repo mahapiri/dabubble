@@ -25,6 +25,7 @@ import { Channel, ChannelMessage } from '../../../models/channel.class';
 import { ChannelService } from '../../services/channel.service';
 import { Observable, Subscription } from 'rxjs';
 import { ChannelMessageService } from '../../services/channel-message.service';
+import { ThreadService } from '../../services/thread.service';
 
 @Component({
   selector: 'app-channel',
@@ -50,6 +51,7 @@ import { ChannelMessageService } from '../../services/channel-message.service';
 })
 export class ChannelComponent implements AfterViewChecked {
   @Input() channel!: Channel;
+  @Input() channelMessage!: ChannelMessage;
   @Output() clickedThreadChange = new EventEmitter<boolean>();
   @ViewChild('mainChat') mainChat!: ElementRef;
 
@@ -68,7 +70,8 @@ export class ChannelComponent implements AfterViewChecked {
 
   constructor(
     private channelService: ChannelService,
-    private channelMessageService: ChannelMessageService
+    private channelMessageService: ChannelMessageService,
+    private threadService: ThreadService
   ) {
     this.subscription = this.selectedChannel$.subscribe((value) => {
       if (value) {
@@ -89,7 +92,7 @@ export class ChannelComponent implements AfterViewChecked {
     try {
       this.mainChat.nativeElement.scrollTop =
         this.mainChat.nativeElement.scrollHeight;
-    } catch (err) { }
+    } catch (err) {}
   }
 
   editChannel(event: Event) {

@@ -23,6 +23,7 @@ import { Channel, ChannelMessage } from '../../models/channel.class';
 export class ThreadService {
   threadID?: string = '';
   threads: Thread[] = [];
+  allThreadsList: any = [];
 
   private threadsSubject = new BehaviorSubject<Thread[]>([]);
   threads$ = this.threadsSubject.asObservable();
@@ -31,6 +32,8 @@ export class ThreadService {
   selectedThread$ = this.selectedThread.asObservable();
 
   private subscriptions = new Subscription();
+
+  unsubAllThreads;
 
   constructor(
     private firestore: Firestore,
@@ -44,6 +47,34 @@ export class ThreadService {
         this.threadID = thread?.threadID;
       })
     );
+
+    this.unsubAllThreads = this.subAllThreadsList();
+  }
+
+  subAllThreadsList() {
+    this.allThreadsList = [];
+    return onSnapshot(this.getThreadsRef(), (list) => {
+      const threadsArray: any[] = [];
+      list.forEach((thread) => {
+        threadsArray.push(this.setThreadObject(thread.data(), thread.id));
+      });
+      this.allThreadsList = this.sortArray(threadsArray);
+    });
+  }
+
+  sortArray(array: any[]) {
+    return array.sort(function (x: any, y: any) {
+      const dateX = new Date(x.date).getTime();
+      const dateY = new Date(y.date).getTime();
+      const timeX = new Date(x.time).getTime();
+      const timeY = new Date(y.time).getTime();
+
+      if (dateX === dateY) {
+        return timeX - timeY;
+      } else {
+        return dateX - dateY;
+      }
+    });
   }
 
   /**

@@ -4,10 +4,12 @@ import {
   addDoc,
   collection,
   doc,
+  getDocs,
   limit,
   onSnapshot,
   orderBy,
   updateDoc,
+  where,
 } from '@angular/fire/firestore';
 import { UserService } from './user.service';
 import { User } from '../../models/user.class';

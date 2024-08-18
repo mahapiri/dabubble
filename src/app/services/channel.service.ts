@@ -35,7 +35,7 @@ export class ChannelService {
    * @param channel - The `Channel` object to be set as the currently selected channel.
    */
   setSelectedChannel(channel: Channel) {
-    if (channel.channelID != undefined) {
+    if (channel.channelID!) {
       onSnapshot(doc(this.firestore, 'channels', channel.channelID), (doc) => {
         this.selectedChannel.next(new Channel(doc.data()));
       });

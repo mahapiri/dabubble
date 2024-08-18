@@ -5,11 +5,13 @@ import {
   Firestore,
   addDoc,
   collection,
+  getDocs,
   limit,
   onSnapshot,
   orderBy,
   query,
   updateDoc,
+  where,
 } from '@angular/fire/firestore';
 import { UserService } from './user.service';
 import { ThreadService } from './thread.service';
@@ -66,7 +68,6 @@ export class ThreadMessageService {
           );
           newMessage.id = messageRef.id;
           await updateDoc(messageRef, { id: newMessage.id });
-          console.log('new ThreadMessage added to Firestore:', newMessage);
         }
       }
     );
@@ -80,6 +81,8 @@ export class ThreadMessageService {
    * @returns - the unsubscribe function for the onSnapshot listener.
    */
   subThreadMessageList() {
+    this.threadMessages = [];
+
     const q = query(
       this.getThreadMessagesRef(),
       orderBy('date', 'asc'),
@@ -92,8 +95,10 @@ export class ThreadMessageService {
       this.previousDate = null;
 
       list.forEach((message) => {
-        const data = message.data();
-        const currentMessage = this.setMessageObject(message.id, data);
+        const currentMessage = this.setMessageObject(
+          message.id,
+          message.data()
+        );
         this.chatService.setFirstMessageOfDay(currentMessage);
         this.threadMessages.push(currentMessage);
       });
@@ -152,12 +157,41 @@ export class ThreadMessageService {
     });
   }
 
-  getThreadMessagesRef() {
-    if (!this.threadService.threadID) {
-      throw new Error(
-        'threadID is undefined or empty. Cannot construct Firestore path.'
-      );
+  /*  async getThreadMessageCount(channelMessageId: string): Promise<number> {
+    const existingThreadSnapshot =
+      await this.threadService.findThreadByMessageId(channelMessageId);
+    if (!existingThreadSnapshot) {
+      return 0;
     }
+    const threadId = this.threadService.getThreadIdFromSnapshot(
+      existingThreadSnapshot
+    );
+
+    // Jetzt die Thread-Messages für diesen Thread zählen
+    const threadMessagesRef = collection(
+      this.firestore,
+      `threads/${threadId}/messages`
+    );
+    const threadMessagesSnapshot = await getDocs(threadMessagesRef);
+
+    return threadMessagesSnapshot.size;
+  } */
+
+  /*   /**
+   * Zählt die Nachrichten in einem bestimmten Thread basierend auf der Thread-ID.
+   * @param threadId - Die ID des Threads, dessen Nachrichten gezählt werden sollen.
+   * @returns Die Anzahl der Nachrichten im Thread.
+   
+  async getThreadMessageCountById(threadId: string): Promise<number> {
+    const threadMessagesRef = collection(
+      this.firestore,
+      `threads/${threadId}/messages`
+    );
+    const threadMessagesSnapshot = await getDocs(threadMessagesRef);
+    return threadMessagesSnapshot.size;
+  } */
+
+  getThreadMessagesRef() {
     return collection(
       this.firestore,
       `threads/${this.threadService.threadID}/messages`
