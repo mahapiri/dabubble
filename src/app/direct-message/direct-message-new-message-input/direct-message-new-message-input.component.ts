@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { DirectMessageService } from '../../services/direct-message.service';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 
 @Component({
   selector: 'app-direct-message-new-message-input',
@@ -18,7 +19,8 @@ import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
     MatInputModule,
     FormsModule,
     PickerComponent,
-    EmojiComponent
+    EmojiComponent,
+    ClickOutsideDirective
   ],
   templateUrl: './direct-message-new-message-input.component.html',
   styleUrl: './direct-message-new-message-input.component.scss',
@@ -29,6 +31,7 @@ export class DirectMessageNewMessageInputComponent {
 
   messageText: string = '';
   isEmoji: boolean = false;
+  notOpen: boolean = true;
 
 
   /**
@@ -45,10 +48,23 @@ export class DirectMessageNewMessageInputComponent {
 
 
   /**
-   * toggle the Emoji Container
+   * open the Emoji Container
    */
-  openEmojiSet() {
-    this.isEmoji = !this.isEmoji;
+  openEmojiSet(event: Event) {
+    event.stopPropagation();
+    if(this.notOpen) {
+      this.isEmoji = true;
+    }
+
+  }
+
+  /**
+   * open the Emoji Container
+   */
+  closeEmojiSet() {
+      this.isEmoji = false;
+      this.notOpen = false;
+      setTimeout(() => this.notOpen = true, 1000);
   }
 
 
@@ -57,5 +73,6 @@ export class DirectMessageNewMessageInputComponent {
    */
   addEmoji(event: any) {
     this.messageText += event.emoji.native;
+    this.closeEmojiSet();
   }
 }

@@ -18,7 +18,6 @@ import { MyProfileComponent } from '../../users/my-profile/my-profile.component'
 export class HeaderComponent implements OnInit {
   clickedUser: boolean = false; 
   clickedProfile: boolean = false;
-  ignoreNextClick: boolean = false;
   authService: AuthService = inject(AuthService);
   userService: UserService = inject(UserService);
   currentUser: User | null = null;
@@ -34,13 +33,13 @@ export class HeaderComponent implements OnInit {
   
   openPopup(event: Event) {
     event.stopPropagation();
-    this.ignoreNextClick = true;
     this.clickedUser = !this.clickedUser;
-    setTimeout(() => this.ignoreNextClick = false, 0);
   }
 
   closePopup() {
-    this.clickedUser = false;
+    if (this.clickedUser) {
+      this.clickedUser = false;
+    }
   }
 
   openProfile() {

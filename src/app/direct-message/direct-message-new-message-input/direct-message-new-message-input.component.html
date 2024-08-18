@@ -12,16 +12,16 @@
         <mat-icon>add</mat-icon>
       </button>
       <div class="vertical-divider"></div>
-      <button mat-mini-fab class="emojis mini-fab-btn" (click)="openEmojiSet()">
+      <button mat-mini-fab class="emojis mini-fab-btn" (click)="openEmojiSet($event)">
         <mat-icon>sentiment_satisfied</mat-icon>
-        <div *ngIf="isEmoji" class="emoji-container">
+        <div *ngIf="isEmoji" class="emoji-container" appClickOutside (clickOutside)="closeEmojiSet()">
           <emoji-mart
                     [set]="'google'"
                     [style]="{ position: 'relative' }"
                     (emojiSelect)="addEmoji($event)"
                     [showPreview]="false" 
                     [emojiSize]="32"
-                    [perLine]="5"
+                    [perLine]="6"
                     [totalFrequentLines]="1"
                     [autoFocus]="true"
                     [isNative]="false"
@@ -31,7 +31,6 @@
                     [useButton]="true"
                     [showSingleCategory]="false"
                     >
-                    
                 </emoji-mart>
         </div>
       </button>

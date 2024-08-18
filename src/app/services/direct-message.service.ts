@@ -319,7 +319,7 @@ export class DirectMessageService implements OnDestroy {
   /**
   * Creates a new direct message with the provided text content.
   */
-  newDmMessage(message: string) {
+  async newDmMessage(message: string) {
     const timeOptions = this.timeOption();
 
     const messageData = {

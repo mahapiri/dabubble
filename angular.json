@@ -26,8 +26,8 @@
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "@angular/material/prebuilt-themes/pink-bluegrey.css",
-              "src/styles.scss",
-              "node_modules/@ctrl/ngx-emoji-mart/picker.css"
+              "node_modules/@ctrl/ngx-emoji-mart/picker.css",
+              "src/styles.scss"
             ],
             "scripts": []
           },
