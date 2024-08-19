@@ -54,7 +54,7 @@
                 Abbrechen
               </button>
               <button (click)="saveMessage()" class="btn-default btn-primary">
-                Speichern
+                {{ messageText.trim().length === 0 ? 'Löschen' : 'Speichern' }}
               </button>
             </div>
           </div>
