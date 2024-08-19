@@ -23,7 +23,8 @@ import { UploadService } from '../../services/upload.service';
     PickerComponent,
     EmojiComponent,
     ClickOutsideDirective,
-    EmojiPickerComponent
+    EmojiPickerComponent,
+    ClickOutsideDirective
   ],
   templateUrl: './direct-message-new-message-input.component.html',
   styleUrl: './direct-message-new-message-input.component.scss',
@@ -38,6 +39,13 @@ export class DirectMessageNewMessageInputComponent {
   messageText: string = '';
   isEmoji: boolean = false;
   notOpen: boolean = true;
+
+
+
+  //// add member
+
+  searchMember: string = "";
+  isTag: boolean = false;
 
 
   /**
@@ -101,5 +109,23 @@ export class DirectMessageNewMessageInputComponent {
     this.uploadService.uploadPicture();
     this.messageText = this.uploadService.downloadURL;
     await this.createMessage();
+  }
+
+
+
+
+/// add member
+
+
+  addMembers(event: Event) {
+    event?.stopPropagation();
+    this.isTag = true;
+  }
+
+  showMember() {}
+
+
+  closeWindow() {
+    this.isTag = false;
   }
 }

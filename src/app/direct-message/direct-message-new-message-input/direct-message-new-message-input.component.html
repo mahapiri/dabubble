@@ -1,20 +1,14 @@
 <div class="new-message-container">
-  <textarea
-    [(ngModel)]="messageText"
-    matInput
-    type="text"
-    placeholder="Nachricht an User"
-    rows="3"
-    (keydown)="onKeyDown($event)"
-  ></textarea>
+  <textarea [(ngModel)]="messageText" matInput type="text" placeholder="Nachricht an User" rows="3"
+    (keydown)="onKeyDown($event)"></textarea>
   <div class="message-controls">
     <div class="add-elements">
       <button (click)="this.uploadService.triggerFileInput()" class="mini-fab-button" mat-mini-fab
-      class="add-doc mini-fab-btn">
-      <input id="file-upload" type="file" (change)="chooseFile($event)" [accept]="uploadService.acceptedFileTypes"
-        hidden />
-      <mat-icon>add</mat-icon>
-    </button>
+        class="add-doc mini-fab-btn">
+        <input id="file-upload" type="file" (change)="chooseFile($event)" [accept]="uploadService.acceptedFileTypes"
+          hidden />
+        <mat-icon>add</mat-icon>
+      </button>
       <div class="vertical-divider"></div>
       <button mat-mini-fab class="emojis mini-fab-btn" (click)="openEmojiSet($event)">
         <mat-icon>sentiment_satisfied</mat-icon>
@@ -22,13 +16,29 @@
           <app-emoji-picker (emojiSelected)="onEmojiSelected($event)"></app-emoji-picker>
         </div>
       </button>
-      <!-- <button mat-mini-fab class="tag-person mini-fab-btn">
-                <mat-icon>alternate_email</mat-icon>
-            </button> -->
+
+
+      <div>
+        <button mat-mini-fab class="tag-person mini-fab-btn" (click)="addMembers($event)">
+          <mat-icon>alternate_email</mat-icon>
+        </button>
+        <div *ngIf="isTag" class="popup-container tag-person-container" appClickOutside (clickOutside)="closeWindow()">
+          <div class="title-content">
+            <h4 class="n-h4">Leute erwähnen</h4>
+            <div class="icon-container">
+              <mat-icon class="close-icon" (click)="closeWindow()">close</mat-icon>
+            </div>
+          </div>
+          <input [(ngModel)]="searchMember" (ngModelChange)="showMember()" (click)="showMember()" type="text"
+            placeholder="Name eingeben">
+        </div>
+      </div>
+
+
+
+
     </div>
-    <button class="send-btn" 
-      [ngClass]="{'send-btn-valid': messageText.trim().length > 0}"
-      (click)="createMessage()">
+    <button class="send-btn" [ngClass]="{'send-btn-valid': messageText.trim().length > 0}" (click)="createMessage()">
       <mat-icon>send</mat-icon>
     </button>
   </div>
