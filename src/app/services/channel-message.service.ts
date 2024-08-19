@@ -16,7 +16,7 @@ import { User } from '../../models/user.class';
 import { ChatService } from './chat.service';
 import { ChannelService } from './channel.service';
 import { ChannelMessage } from '../../models/channel.class';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { query } from '@angular/fire/firestore';
 
 @Injectable({
@@ -34,7 +34,7 @@ export class ChannelMessageService {
   previousDate: string | null = null;
 
   channelMessages: ChannelMessage[] = [];
-
+  selectedChannel: Subscription;
   unsubMessages!: () => void;
 
   /**
@@ -47,12 +47,14 @@ export class ChannelMessageService {
     private chatService: ChatService,
     private channelService: ChannelService
   ) {
-    this.channelService.selectedChannel$.subscribe((channel) => {
-      if (channel) {
-        this.channelService.setChannelId(channel);
-        this.unsubMessages = this.subMessageList();
+    this.selectedChannel = this.channelService.selectedChannel$.subscribe(
+      (channel) => {
+        if (channel) {
+          this.channelService.setChannelId(channel);
+          this.unsubMessages = this.subMessageList();
+        }
       }
-    });
+    );
   }
 
   /**
@@ -213,5 +215,6 @@ export class ChannelMessageService {
    */
   ngOnDestroy() {
     this.unsubMessages();
+    this.selectedChannel.unsubscribe();
   }
 }
