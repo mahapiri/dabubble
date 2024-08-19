@@ -10,7 +10,7 @@
     <div class="add-elements">
       <button (click)="this.uploadService.triggerFileInput()" class="mini-fab-button" mat-mini-fab
         class="add-doc mini-fab-btn">
-        <input id="file-upload" type="file" (change)="chooseFile('channel', $event)"
+        <input id="file-upload" type="file" (change)="chooseFile($event)"
           [accept]="uploadService.acceptedFileTypes" hidden />
         <mat-icon>add</mat-icon>
       </button>

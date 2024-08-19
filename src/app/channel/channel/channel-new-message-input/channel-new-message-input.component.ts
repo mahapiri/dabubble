@@ -40,8 +40,8 @@ export class ChannelNewMessageInputComponent {
     }
   }
 
-  async chooseFile(path: string, event: Event) {
-    this.uploadService.onFileSelected(path, event)
+  async chooseFile(event: Event) {
+    this.uploadService.onFileSelected(event)
   }
 
   async checkPictureUpload() {

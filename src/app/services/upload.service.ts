@@ -34,7 +34,7 @@ export class UploadService {
     }
   }
 
-  onFileSelected(path: string, event: Event): void {
+  onFileSelected(event: Event): void {
       const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.file = input.files[0];
@@ -43,7 +43,7 @@ export class UploadService {
         reader.onload = () => {
           this.currentImg.next(reader.result);
           this.fileChosen = true;
-          this.userSpecificPath = `${path}/${this.userService.userID}/${this.file.name}`
+          this.userSpecificPath = `/${this.userService.userID}/${this.file.name}`
           this.storageRef = ref(this.storage, this.userSpecificPath);
         };
         reader.readAsDataURL(this.file);
