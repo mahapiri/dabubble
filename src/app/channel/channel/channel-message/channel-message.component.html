@@ -78,22 +78,20 @@
           </div>
 
           <div *ngIf="!edit" class="answer-wrapper">
-            <ng-container
-              *ngIf="getThreadMessageCount(channelMessage.id) | async as count"
-            >
+            <ng-container>
               <div
-                *ngIf="count === 1"
+                *ngIf="getThreadMessageCount() === 1"
                 (click)="openThread()"
                 class="total-answers"
               >
                 1 Antwort
               </div>
               <div
-                *ngIf="count > 1"
+                *ngIf="getThreadMessageCount() > 1"
                 (click)="openThread()"
                 class="total-answers"
               >
-                {{ count }} Antworten
+                {{ getThreadMessageCount() }} Antworten
               </div>
             </ng-container>
 
