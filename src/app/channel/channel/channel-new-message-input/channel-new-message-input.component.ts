@@ -33,16 +33,21 @@ export class ChannelNewMessageInputComponent {
 
   /** Sends the text in the input field to the Channel Collection in the Backend. Trims the message from whitespace, ensures input is not empty, clears the input field after send */
   async sendMessage() {
+    await this.checkPictureUpload();
     if (this.messageText.trim()) {
       await this.channelMessageService.addMessage(this.messageText);
       this.messageText = '';
     }
   }
 
-  async chooseFile(event: Event) {
-    this.uploadService.onFileSelected(event)
-    this.uploadService.uploadPicture();
-    this.messageText = this.uploadService.downloadURL;
-    await this.sendMessage();
+  async chooseFile(path: string, event: Event) {
+    this.uploadService.onFileSelected(path, event)
+  }
+
+  async checkPictureUpload() {
+    if (this.uploadService.fileChosen) {
+      await this.uploadService.uploadPicture();
+      this.messageText = this.uploadService.downloadURL;
+    }
   }
 }

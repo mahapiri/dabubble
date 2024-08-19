@@ -50,7 +50,7 @@ export class ChannelMessageComponent {
     private channelMessageService: ChannelMessageService,
     private threadService: ThreadService,
     public threadMessageService: ThreadMessageService
-  ) {}
+  ) { }
 
   /**
    * The `isMyMessage` property is set by checking if the `channelMessage` belongs to the current user.
@@ -133,16 +133,7 @@ export class ChannelMessageComponent {
   }
 
   isImageUrl(url: string): boolean {
-    // Einfache URL-Prüfung, um zu sehen, ob es ein Bild sein könnte
-    if (url.startsWith('https://firebasestorage.googleapis.com/')) {
-      console.log('img erkannt');
-
-      return true;
-    } else {
-      console.log('kein img erkannt');
-
-      return false;
-    }
+    return url.startsWith('https://firebasestorage.googleapis.com/')
   }
 
   ngOnDestroy() {
