@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactionService } from '../../services/reaction.service';
 import { ChatService } from '../../services/chat.service';
@@ -25,6 +25,7 @@ export class ReactionBarComponent implements OnInit, OnDestroy {
   @Input() isMyMessage: boolean = false;
   @Input() message!: DmMessage;
   @Input() isFromReactionContainer: boolean = false;
+  @Output() editSelected: EventEmitter<void> = new EventEmitter<void>();
 
   reactions$: Observable<any>;
 
@@ -56,7 +57,9 @@ export class ReactionBarComponent implements OnInit, OnDestroy {
     this.edit = true;
   }
 
-  openEdit() {}
+  openEdit() {
+    this.editSelected.emit();
+  }
 
   get isChannelMessage(): boolean {
     return this.chatService.isChannel;

@@ -1,0 +1,16 @@
+<div class="emoji-container" (click)="$event.stopPropagation()">
+  <emoji-mart
+    [set]="'google'"
+    [emojiSize]="32"
+    [perLine]="6"
+    [totalFrequentLines]="1"
+    [autoFocus]="true"
+    [isNative]="false"
+    [sheetSize]="64"
+    [showPreview]="false"
+    [enableSearch]="true"
+    [useButton]="true"
+    [showSingleCategory]="false"
+    (emojiSelect)="onEmojiSelect($event)">
+  </emoji-mart>
+</div>

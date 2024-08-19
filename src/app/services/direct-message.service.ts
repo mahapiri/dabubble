@@ -19,7 +19,6 @@ import { User } from '../../models/user.class';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { DmMessage } from '../../models/direct-message.class';
 import { ChatService } from './chat.service';
-import { NumberFormatStyle } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -294,6 +293,11 @@ export class DirectMessageService implements OnDestroy {
       messages.reverse();
       this.messages.next(messages);
     });
+  }
+
+
+  isImage(url: string): boolean {
+    return url.startsWith('https://firebasestorage.googleapis.com/');
   }
 
 
