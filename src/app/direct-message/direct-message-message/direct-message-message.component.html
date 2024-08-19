@@ -11,22 +11,53 @@
     <div *ngIf="message.isFirstMessageOfDay === false" class="divider-container-none">
     </div>
 
-    <div class="message" (mouseleave)="closeReactionMoreBtn()">
-      <div id="reactionBar" class="reaction-bar">
-        <app-reaction-bar [isMyMessage]="isMyMessage" [message]="message"></app-reaction-bar>
-      </div>
-      <div class="message-wrapper">
-        <img class="user-img" src="./../../../{{ message.profileImg }}" />
+    <div class="message" [ngClass]="{ 'bg-color': edit }">
+      <div *ngIf="!edit" class="message" (mouseleave)="closeReactionMoreBtn()">
+        <div id="reactionBar" class="reaction-bar">
+          <app-reaction-bar [isMyMessage]="isMyMessage" [message]="message"
+            (editSelected)="openEdit()"></app-reaction-bar>
+        </div>
+        <div class="message-wrapper">
+          <img class="user-img" src="./../../../{{ message.profileImg }}" />
 
-        <div class="message-details">
-          <div class="user-wrapper">
-            <div class="user-name">{{ message.authorName }}</div>
-            <div class="time">
-              {{ chatService.formatTime(message.time) }} Uhr
+          <div class="message-details">
+            <div class="user-wrapper">
+              <div class="user-name">{{ message.authorName }}</div>
+              <div class="time">
+                {{ chatService.formatTime(message.time) }} Uhr
+              </div>
+            </div>
+            <div class="text-bubble">{{ message.text }}</div>
+            <app-reaction-container [message]="message"></app-reaction-container>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="edit" class="message-wrapper">
+        <img class="user-img" src="./../../../{{ message.profileImg }}" />
+        <div class="edit-textbox">
+          <textarea 
+            type="text" 
+            rows="3" 
+            matInput
+            [(ngModel)]="messageText"
+            ></textarea>
+          <div class="edit-options-wrapper">
+            <button mat-mini-fab class="emojis mini-fab-btn" (click)="openEmojiSet($event)">
+              <mat-icon>sentiment_satisfied</mat-icon>
+              <div *ngIf="isEmoji" class="emoji-container" appClickOutside (clickOutside)="closeEmojiSet()">
+                <app-emoji-picker (emojiSelected)="onEmojiSelected($event)"></app-emoji-picker>
+              </div>
+            </button>
+            <div class="d-flex gap-32">
+              <button (click)="closeEdit()" class="btn-default btn-secondary">
+                Abbrechen
+              </button>
+              <button (click)="saveMessage()" class="btn-default btn-primary">
+                Speichern
+              </button>
             </div>
           </div>
-          <div class="text-bubble">{{ message.text }}</div>
-          <app-reaction-container [message]="message"></app-reaction-container>
         </div>
       </div>
     </div>

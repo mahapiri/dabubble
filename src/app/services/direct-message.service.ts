@@ -19,7 +19,6 @@ import { User } from '../../models/user.class';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { DmMessage } from '../../models/direct-message.class';
 import { ChatService } from './chat.service';
-import { NumberFormatStyle } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
