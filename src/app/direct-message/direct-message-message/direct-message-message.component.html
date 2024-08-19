@@ -27,7 +27,12 @@
                 {{ chatService.formatTime(message.time) }} Uhr
               </div>
             </div>
-            <div class="text-bubble">{{ message.text }}</div>
+            <div class="text-bubble">
+              <ng-container *ngIf="directMessageService.isImage(message.text); else textContent">
+                <img [src]="message.text" alt="Image" class="message-image" />
+              </ng-container>
+              <ng-template #textContent>{{ message.text }}</ng-template>
+            </div>
             <app-reaction-container [message]="message"></app-reaction-container>
           </div>
         </div>

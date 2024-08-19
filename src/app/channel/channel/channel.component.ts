@@ -25,8 +25,6 @@ import { Channel, ChannelMessage } from '../../../models/channel.class';
 import { ChannelService } from '../../services/channel.service';
 import { Observable, Subscription } from 'rxjs';
 import { ChannelMessageService } from '../../services/channel-message.service';
-import { ThreadService } from '../../services/thread.service';
-import { ThreadMessageService } from '../../services/thread-message.service';
 
 @Component({
   selector: 'app-channel',
@@ -71,15 +69,11 @@ export class ChannelComponent implements AfterViewChecked {
 
   constructor(
     private channelService: ChannelService,
-    private channelMessageService: ChannelMessageService,
-    private threadService: ThreadService,
-    private threadMessageService: ThreadMessageService
+    private channelMessageService: ChannelMessageService
   ) {
     this.subscription = this.selectedChannel$.subscribe((value) => {
       if (value) {
         this.activeChannel = new Channel(value);
-        this.subscription.add(this.threadService.subThreadList());
-        this.subscription.add(this.threadMessageService.subThreadMessageList());
       }
     });
   }

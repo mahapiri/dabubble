@@ -296,6 +296,11 @@ export class DirectMessageService implements OnDestroy {
   }
 
 
+  isImage(url: string): boolean {
+    return url.startsWith('https://firebasestorage.googleapis.com/');
+  }
+
+
   /**
    * Creates a message object from Firestore data.
    */

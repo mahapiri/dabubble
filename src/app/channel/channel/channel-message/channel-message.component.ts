@@ -12,8 +12,7 @@ import { ChannelMessageService } from '../../../services/channel-message.service
 import { ThreadService } from '../../../services/thread.service';
 import { ThreadMessageService } from '../../../services/thread-message.service';
 import { ThreadMessage } from '../../../../models/thread.class';
-import { Observable, Subscription, map, of } from 'rxjs';
-import { collectionData } from '@angular/fire/firestore';
+import { Observable, Subscription, map, of, throttleTime } from 'rxjs';
 
 @Component({
   selector: 'app-channel-message',
@@ -36,11 +35,14 @@ export class ChannelMessageComponent {
   @Input() channelMessages: ChannelMessage[] = [];
   @Output() clickedAnswer = new EventEmitter<boolean>();
 
+  selectedChannelMessage$!: Observable<ChannelMessage>;
   threadMessages$!: Observable<ThreadMessage[]>;
-  threadMessages: ThreadMessage[] = [];
 
-  //threadMessageCount: number = 0;
+  threadMessageCount: number = 0;
+
   private subscription: Subscription = new Subscription();
+
+  //unsubThreadMessages!: () => void;
 
   isMyMessage: boolean = false;
   edit: boolean = false;
@@ -57,45 +59,43 @@ export class ChannelMessageComponent {
    */
   ngOnInit() {
     this.isMyMessage = this.chatService.setMyMessage(this.channelMessage);
-    this.subscription.add(this.threadService.subThreadList());
+    //this.subscription.add(this.threadService.subThreadList());
+    //this.threadMessageCount = this.threadMessageService.getThreadMessageCount();
   }
 
-  /* getThreadMessageCount(channelMessageId: string) {
+  getThreadMessageCount() {
     let threadMessageCount = 0;
-    let allThreadsList = this.threadService.allThreadsList;
+    let threadMessageList = this.threadMessageService.threadMessages;
 
-    allThreadsList.forEach((thread: any) => {
-      if (thread.id == channelMessageId) {
-        thread[i].messages.length = threadMessageCount;
-      }
+    threadMessageList.forEach(() => {
+      threadMessageCount++;
     });
     return threadMessageCount;
-  } */
+  }
 
-  getThreadMessageCount(channelMessageId: string): Observable<number> {
-    /* // Suche nach dem Thread, der zu dieser ChannelMessage gehört
+  /* getThreadMessageCount(channelMessage: ChannelMessage): Observable<number> {
+    // Suche nach dem Thread, der zu dieser ChannelMessage gehört
     const thread = this.threadService.allThreadsList.find(
-      (t: any) => t.replyToMessage.id === channelMessageId
+      (t: any) => t.replyToMessage.id === channelMessage.id
     );
 
     if (thread) {
-      const threadID = thread.threadID;
-      this.subscription.add(this.threadService.subSelectedThread(threadID));
+      this.unsubThreadMessages =
+        this.threadMessageService.subThreadMessageList();
 
-      return collectionData(
-        this.threadMessageService.getThreadMessagesRef()
-      ).pipe(
-        map((messages) => {
-          console.log('Messages Array:', messages);
-          console.log('Messages Length:', messages.length);
-          return messages.length;
-        })
+      return this.threadMessageService.threadMessages$.pipe(
+        map((threadMessages) => {
+          console.log('Messages Array:', threadMessages);
+          console.log('Messages Length:', threadMessages.length);
+          return threadMessages.length;
+        }),
+        throttleTime(50)
       );
-    } else { */
-    // Falls kein Thread existiert, gibt es keine Nachrichten
-    return of(0);
-    //}
-  }
+    } else {
+      // Falls kein Thread existiert, gibt es keine Nachrichten
+      return of(0);
+    }
+  } */
 
   /**
    * Emits an event to open a Thread to the current message when the user clicks on "answer".
@@ -138,5 +138,6 @@ export class ChannelMessageComponent {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    //this.unsubThreadMessages();
   }
 }

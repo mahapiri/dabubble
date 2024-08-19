@@ -9,6 +9,7 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 import { EmojiPickerComponent } from '../../chat/emoji-picker/emoji-picker.component';
+import { UploadService } from '../../services/upload.service';
 
 @Component({
   selector: 'app-direct-message-new-message-input',
@@ -22,7 +23,8 @@ import { EmojiPickerComponent } from '../../chat/emoji-picker/emoji-picker.compo
     PickerComponent,
     EmojiComponent,
     ClickOutsideDirective,
-    EmojiPickerComponent
+    EmojiPickerComponent,
+    ClickOutsideDirective
   ],
   templateUrl: './direct-message-new-message-input.component.html',
   styleUrl: './direct-message-new-message-input.component.scss',
@@ -30,12 +32,20 @@ import { EmojiPickerComponent } from '../../chat/emoji-picker/emoji-picker.compo
 
 export class DirectMessageNewMessageInputComponent {
   private directMessageService: DirectMessageService = inject(DirectMessageService);
+  public uploadService: UploadService = inject(UploadService);
 
   @Output() messageCreated: EventEmitter<void> = new EventEmitter<void>();
 
   messageText: string = '';
   isEmoji: boolean = false;
   notOpen: boolean = true;
+
+
+
+  //// add member
+
+  searchMember: string = "";
+  isTag: boolean = false;
 
 
   /**
@@ -91,5 +101,31 @@ export class DirectMessageNewMessageInputComponent {
       event.preventDefault();
       this.createMessage();
     }
+  }
+
+
+  async chooseFile(event: Event) {
+    this.uploadService.onFileSelected(event)
+    this.uploadService.uploadPicture();
+    this.messageText = this.uploadService.downloadURL;
+    await this.createMessage();
+  }
+
+
+
+
+/// add member
+
+
+  addMembers(event: Event) {
+    event?.stopPropagation();
+    this.isTag = true;
+  }
+
+  showMember() {}
+
+
+  closeWindow() {
+    this.isTag = false;
   }
 }

@@ -123,6 +123,6 @@ mat-list {
   justify-content: flex-end;
   gap: 8px;
   color: var(--black);
-  overflow-y: auto;
+  overflow-y: unset;
   // height: 100%;
 }
