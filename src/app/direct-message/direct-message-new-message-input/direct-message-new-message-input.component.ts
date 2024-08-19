@@ -9,6 +9,7 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 import { EmojiPickerComponent } from '../../chat/emoji-picker/emoji-picker.component';
+import { UploadService } from '../../services/upload.service';
 
 @Component({
   selector: 'app-direct-message-new-message-input',
@@ -30,6 +31,7 @@ import { EmojiPickerComponent } from '../../chat/emoji-picker/emoji-picker.compo
 
 export class DirectMessageNewMessageInputComponent {
   private directMessageService: DirectMessageService = inject(DirectMessageService);
+  public uploadService: UploadService = inject(UploadService);
 
   @Output() messageCreated: EventEmitter<void> = new EventEmitter<void>();
 
@@ -91,5 +93,13 @@ export class DirectMessageNewMessageInputComponent {
       event.preventDefault();
       this.createMessage();
     }
+  }
+
+
+  async chooseFile(event: Event) {
+    this.uploadService.onFileSelected(event)
+    this.uploadService.uploadPicture();
+    this.messageText = this.uploadService.downloadURL;
+    await this.createMessage();
   }
 }
