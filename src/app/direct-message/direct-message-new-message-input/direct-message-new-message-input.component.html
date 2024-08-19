@@ -38,7 +38,9 @@
                 <mat-icon>alternate_email</mat-icon>
             </button> -->
     </div>
-    <button mat-mini-fab class="send-btn" (click)="createMessage()">
+    <button class="send-btn" 
+      [ngClass]="{'send-btn-valid': messageText.trim().length > 0}"
+      (click)="createMessage()">
       <mat-icon>send</mat-icon>
     </button>
   </div>

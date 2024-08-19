@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,6 +29,8 @@ import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 export class DirectMessageNewMessageInputComponent {
   private directMessageService: DirectMessageService = inject(DirectMessageService);
 
+  @Output() messageCreated: EventEmitter<void> = new EventEmitter<void>();
+
   messageText: string = '';
   isEmoji: boolean = false;
   notOpen: boolean = true;
@@ -42,6 +44,7 @@ export class DirectMessageNewMessageInputComponent {
       console.warn('The message field is empty. Please type a message!');
     } else {
       await this.directMessageService.newDmMessage(this.messageText);
+      this.messageCreated.emit();
     }
     this.messageText = '';
   }
@@ -53,7 +56,7 @@ export class DirectMessageNewMessageInputComponent {
   openEmojiSet(event: Event) {
     event.stopPropagation();
     if(this.notOpen) {
-      this.isEmoji = true;
+      this.isEmoji = !this.isEmoji;
     }
 
   }

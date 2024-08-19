@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
@@ -31,7 +31,6 @@ export class DirectMessageMessageComponent implements OnInit {
   public chatService: ChatService = inject(ChatService);
   public reactionService: ReactionService = inject(ReactionService);
 
-
   @Input() message!: DmMessage;
   isMyMessage: boolean = false;
 
@@ -44,7 +43,7 @@ export class DirectMessageMessageComponent implements OnInit {
    */
   ngOnInit() {
     this.isMyMessage = this.chatService.setMyMessage(this.message);
-  }
+  }  
 
 
   /**

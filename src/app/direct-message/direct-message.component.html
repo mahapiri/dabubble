@@ -1,7 +1,7 @@
 <mat-card appearance="outlined">
   <app-direct-message-header></app-direct-message-header>
 
-  <mat-card-content>
+  <mat-card-content #messageContainer>
     <app-direct-message-info></app-direct-message-info>
     <mat-list>
       <app-direct-message-message *ngFor="let message of messages$ | async"
@@ -11,6 +11,6 @@
   </mat-card-content>
 
   <mat-card-footer>
-    <app-direct-message-new-message-input></app-direct-message-new-message-input>
+    <app-direct-message-new-message-input (messageCreated)="onMessageCreated()"></app-direct-message-new-message-input>
   </mat-card-footer>
 </mat-card>
