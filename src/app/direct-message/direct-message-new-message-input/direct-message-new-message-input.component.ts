@@ -8,6 +8,7 @@ import { DirectMessageService } from '../../services/direct-message.service';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { ClickOutsideDirective } from '../../directive/click-outside.directive';
+import { EmojiPickerComponent } from '../../chat/emoji-picker/emoji-picker.component';
 
 @Component({
   selector: 'app-direct-message-new-message-input',
@@ -20,7 +21,8 @@ import { ClickOutsideDirective } from '../../directive/click-outside.directive';
     FormsModule,
     PickerComponent,
     EmojiComponent,
-    ClickOutsideDirective
+    ClickOutsideDirective,
+    EmojiPickerComponent
   ],
   templateUrl: './direct-message-new-message-input.component.html',
   styleUrl: './direct-message-new-message-input.component.scss',
@@ -55,7 +57,7 @@ export class DirectMessageNewMessageInputComponent {
    */
   openEmojiSet(event: Event) {
     event.stopPropagation();
-    if(this.notOpen) {
+    if (this.notOpen) {
       this.isEmoji = !this.isEmoji;
     }
 
@@ -65,17 +67,29 @@ export class DirectMessageNewMessageInputComponent {
    * open the Emoji Container
    */
   closeEmojiSet() {
-      this.isEmoji = false;
-      this.notOpen = false;
-      setTimeout(() => this.notOpen = true, 1000);
+    this.isEmoji = false;
+    this.notOpen = false;
+    setTimeout(() => this.notOpen = true, 1000);
   }
 
 
   /**
-   * add Emoticons zu the textfield
-   */
-  addEmoji(event: any) {
-    this.messageText += event.emoji.native;
+  * handles emoji selection from the EmojiPickerComponent
+  */
+  onEmojiSelected(emoji: string) {
+    this.messageText += emoji;
     this.closeEmojiSet();
+  }
+
+
+  /**
+  * sends the message if the message is valid and the Enter key is pressed
+  * when Shift+Enter is pressed, a line break is inserted instead
+  */
+  onKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.createMessage();
+    }
   }
 }

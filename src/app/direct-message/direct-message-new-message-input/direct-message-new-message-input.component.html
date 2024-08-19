@@ -5,6 +5,7 @@
     type="text"
     placeholder="Nachricht an User"
     rows="3"
+    (keydown)="onKeyDown($event)"
   ></textarea>
   <div class="message-controls">
     <div class="add-elements">
@@ -15,23 +16,7 @@
       <button mat-mini-fab class="emojis mini-fab-btn" (click)="openEmojiSet($event)">
         <mat-icon>sentiment_satisfied</mat-icon>
         <div *ngIf="isEmoji" class="emoji-container" appClickOutside (clickOutside)="closeEmojiSet()">
-          <emoji-mart
-                    [set]="'google'"
-                    [style]="{ position: 'relative' }"
-                    (emojiSelect)="addEmoji($event)"
-                    [showPreview]="false" 
-                    [emojiSize]="32"
-                    [perLine]="6"
-                    [totalFrequentLines]="1"
-                    [autoFocus]="true"
-                    [isNative]="false"
-                    [sheetSize]="64"
-                    [showPreview]="false"
-                    [enableSearch]="true"
-                    [useButton]="true"
-                    [showSingleCategory]="false"
-                    >
-                </emoji-mart>
+          <app-emoji-picker (emojiSelected)="onEmojiSelected($event)"></app-emoji-picker>
         </div>
       </button>
       <!-- <button mat-mini-fab class="tag-person mini-fab-btn">
