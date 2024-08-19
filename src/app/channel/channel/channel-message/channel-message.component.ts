@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { ChannelMessageService } from '../../../services/channel-message.service';
 import { ThreadService } from '../../../services/thread.service';
 import { ThreadMessageService } from '../../../services/thread-message.service';
-import { ThreadMessage } from '../../../../models/thread.class';
+import { Thread, ThreadMessage } from '../../../../models/thread.class';
 import { Observable, Subscription, map, of, throttleTime } from 'rxjs';
 
 @Component({
@@ -36,7 +36,9 @@ export class ChannelMessageComponent {
   @Output() clickedAnswer = new EventEmitter<boolean>();
 
   selectedChannelMessage$!: Observable<ChannelMessage>;
-  threadMessages$!: Observable<ThreadMessage[]>;
+
+  selectedThread$: Observable<Thread | null>;
+  threadMessages$: Observable<ThreadMessage[]>;
 
   threadMessageCount: number = 0;
 
@@ -52,17 +54,30 @@ export class ChannelMessageComponent {
     private channelMessageService: ChannelMessageService,
     private threadService: ThreadService,
     public threadMessageService: ThreadMessageService
-  ) { }
+  ) {
+    this.selectedThread$ = this.threadService.selectedThread$;
+    this.threadMessages$ = this.threadMessageService.threadMessages$;
+  }
 
   /**
    * The `isMyMessage` property is set by checking if the `channelMessage` belongs to the current user.
    */
   ngOnInit() {
     this.isMyMessage = this.chatService.setMyMessage(this.channelMessage);
+    this.loadThreadMessageCount();
     //this.subscription.add(this.threadService.subThreadList());
     //this.threadMessageCount = this.threadMessageService.getThreadMessageCount();
   }
 
+  loadThreadMessageCount() {
+    this.subscription.add(
+      this.threadMessageService.getThreadMessageCount().subscribe((count) => {
+        this.threadMessageCount = count;
+      })
+    );
+  }
+
+  /* 
   getThreadMessageCount() {
     let threadMessageCount = 0;
     let threadMessageList = this.threadMessageService.threadMessages;
@@ -71,7 +86,7 @@ export class ChannelMessageComponent {
       threadMessageCount++;
     });
     return threadMessageCount;
-  }
+  } */
 
   /* getThreadMessageCount(channelMessage: ChannelMessage): Observable<number> {
     // Suche nach dem Thread, der zu dieser ChannelMessage gehört
@@ -133,7 +148,7 @@ export class ChannelMessageComponent {
   }
 
   isImageUrl(url: string): boolean {
-    return url.startsWith('https://firebasestorage.googleapis.com/')
+    return url.startsWith('https://firebasestorage.googleapis.com/');
   }
 
   ngOnDestroy() {

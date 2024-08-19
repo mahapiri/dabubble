@@ -80,18 +80,18 @@
           <div *ngIf="!edit" class="answer-wrapper">
             <ng-container>
               <div
-                *ngIf="getThreadMessageCount() === 1"
+                *ngIf="threadMessageCount === 1"
                 (click)="openThread()"
                 class="total-answers"
               >
                 1 Antwort
               </div>
               <div
-                *ngIf="getThreadMessageCount() > 1"
+                *ngIf="threadMessageCount > 1"
                 (click)="openThread()"
                 class="total-answers"
               >
-                {{ getThreadMessageCount() }} Antworten
+                {{ threadMessageCount }} Antworten
               </div>
             </ng-container>
 

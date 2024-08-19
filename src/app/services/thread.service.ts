@@ -88,8 +88,10 @@ export class ThreadService {
    */
   handleExistingThread(existingThread: QuerySnapshot) {
     this.threadID = this.getThreadIdFromSnapshot(existingThread);
-    console.log('Thread existiert bereits:', this.threadID);
-    this.subscription.add(this.subSelectedThread(this.threadID!));
+    if (this.threadID) {
+      console.log('Thread existiert bereits:', this.threadID);
+      this.subscription.add(this.subSelectedThread(this.threadID!));
+    }
   }
 
   /**
@@ -121,17 +123,14 @@ export class ThreadService {
     channelName: string,
     messageJson: any
   ): Promise<void> {
-    const newThread: Thread = this.setThreadObjectCreateThread(
-      channelName,
-      messageJson
-    );
+    const newThread: Thread = this.setThreadObject(channelName, messageJson);
     const threadsRef = await addDoc(
       this.getThreadsRef(),
       newThread.getThreadJson()
     );
 
     this.threadID = threadsRef.id;
-    this.addThreadIdToThread(threadsRef.id);
+    this.addThreadIdToThread(threadsRef);
     console.log('New Thread created:', newThread);
     this.subscription.add(this.subSelectedThread(this.threadID!));
   }
@@ -174,9 +173,11 @@ export class ThreadService {
     return onSnapshot(this.getThreadsRef(), (list) => {
       this.threads = [];
       list.forEach((thread) => {
-        const currentThread = this.setThreadObjectReadChannel(
-          thread.data(),
-          thread.id
+        const currentThread = this.setThreadObject(
+          thread.data()['channelName'],
+          undefined,
+          thread.id,
+          thread.data()
         );
         this.threads.push(currentThread);
       });
@@ -205,29 +206,25 @@ export class ThreadService {
   }
 
   /**
-   * Creates a new `Thread` object with the given message data and channel name.
-   * @param messageJson The JSON of the message
+   * Creates a new `Thread` object with the given data.
    * @param channelName The name of the channel of the thread
+   * @param messageJson Optional - The JSON of the message, used to create a `replyToMessage`
+   * @param threadID Optional - The ID of the thread, if available
    * @returns {Thread} - A new `Thread` instance
    */
-  setThreadObjectCreateThread(
+  setThreadObject(
     channelName: string,
-    messageJson: any,
-    threadID?: string
+    messageJson?: any,
+    threadID: string = '',
+    threadData?: any
   ): Thread {
     return new Thread({
-      threadID: threadID || '',
-      channelName: channelName,
-      replyToMessage: new replyToMessage(messageJson),
-    });
-  }
-
-  setThreadObjectReadChannel(threadData: any, threadID: string): Thread {
-    return new Thread({
       threadID: threadID,
-      channelName: threadData.channelName,
-      replyToMessage: threadData.replyToMessage
-        ? new replyToMessage(threadData.replyToMessage)
+      channelName: channelName,
+      replyToMessage: messageJson
+        ? new replyToMessage(messageJson)
+        : threadData?.['replyToMessage']
+        ? new replyToMessage(threadData['replyToMessage'])
         : undefined,
     });
   }

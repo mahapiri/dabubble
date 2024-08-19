@@ -38,7 +38,7 @@ export class ThreadMessageService {
 
   unsubThreadMessages!: () => void;
   unsubUser!: Subscription;
-  selectedThreadSubscription: Subscription;
+  selectedThread: Subscription;
 
   constructor(
     private firestore: Firestore,
@@ -46,12 +46,18 @@ export class ThreadMessageService {
     private userService: UserService,
     private threadService: ThreadService
   ) {
-    this.selectedThreadSubscription =
-      this.threadService.selectedThread$.subscribe((thread) => {
-        if (thread) {
-          this.unsubThreadMessages = this.subThreadMessageList();
-        }
+    this.selectedThread = this.threadService.selectedThread$.subscribe(() => {
+      this.unsubThreadMessages = this.subThreadMessageList();
+    });
+  }
+
+  getThreadMessageCount(): Observable<number> {
+    return new Observable<number>((observer) => {
+      const messagesRef = this.getThreadMessagesRef();
+      return onSnapshot(messagesRef, (snapshot) => {
+        observer.next(snapshot.size);
       });
+    });
   }
 
   /**
@@ -225,7 +231,7 @@ export class ThreadMessageService {
   }
 
   ngOnDestroy(): void {
-    this.selectedThreadSubscription.unsubscribe();
+    this.selectedThread.unsubscribe();
     this.unsubUser.unsubscribe();
     this.unsubThreadMessages();
   }
