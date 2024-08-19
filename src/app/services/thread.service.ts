@@ -33,8 +33,6 @@ export class ThreadService {
 
   private subscription: Subscription = new Subscription();
 
-  unsubAllThreads;
-
   constructor(
     private firestore: Firestore,
     private channelService: ChannelService,
@@ -47,23 +45,6 @@ export class ThreadService {
         this.threadID = thread?.threadID;
       })
     );
-
-    this.unsubAllThreads = this.subAllThreadsList();
-  }
-
-  sortArray(array: any[]) {
-    return array.sort(function (x: any, y: any) {
-      const dateX = new Date(x.date).getTime();
-      const dateY = new Date(y.date).getTime();
-      const timeX = new Date(x.time).getTime();
-      const timeY = new Date(y.time).getTime();
-
-      if (dateX === dateY) {
-        return timeX - timeY;
-      } else {
-        return dateX - dateY;
-      }
-    });
   }
 
   /**
@@ -201,20 +182,6 @@ export class ThreadService {
       });
       this.threadsSubject.next(this.threads);
       console.log('Thread received:', this.threads);
-    });
-  }
-
-  subAllThreadsList() {
-    this.allThreadsList = [];
-    return onSnapshot(this.getThreadsRef(), (list) => {
-      const threadsArray: any[] = [];
-      list.forEach((thread) => {
-        threadsArray.push(
-          this.setThreadObjectReadChannel(thread.data(), thread.id)
-        );
-      });
-      this.allThreadsList = this.sortArray(threadsArray);
-      console.log('AllThreadList received:', this.allThreadsList);
     });
   }
 

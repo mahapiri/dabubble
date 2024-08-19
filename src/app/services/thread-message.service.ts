@@ -14,7 +14,15 @@ import {
 import { UserService } from './user.service';
 import { ThreadService } from './thread.service';
 import { User } from '../../models/user.class';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subscription,
+  map,
+  of,
+  switchMap,
+} from 'rxjs';
+import { ChannelMessage } from '../../models/channel.class';
 
 @Injectable({
   providedIn: 'root',
@@ -155,26 +163,6 @@ export class ThreadMessageService {
     });
   }
 
-  /*  async getThreadMessageCount(channelMessageId: string): Promise<number> {
-    const existingThreadSnapshot =
-      await this.threadService.findThreadByMessageId(channelMessageId);
-    if (!existingThreadSnapshot) {
-      return 0;
-    }
-    const threadId = this.threadService.getThreadIdFromSnapshot(
-      existingThreadSnapshot
-    );
-
-    // Jetzt die Thread-Messages für diesen Thread zählen
-    const threadMessagesRef = collection(
-      this.firestore,
-      `threads/${threadId}/messages`
-    );
-    const threadMessagesSnapshot = await getDocs(threadMessagesRef);
-
-    return threadMessagesSnapshot.size;
-  } */
-
   /*   /**
    * Zählt die Nachrichten in einem bestimmten Thread basierend auf der Thread-ID.
    * @param threadId - Die ID des Threads, dessen Nachrichten gezählt werden sollen.
@@ -187,6 +175,46 @@ export class ThreadMessageService {
     );
     const threadMessagesSnapshot = await getDocs(threadMessagesRef);
     return threadMessagesSnapshot.size;
+  } 
+  */
+
+  /* getThreadMessageCount(channelMessage: ChannelMessage): Observable<number> {
+    return this.threadService.selectedThread$.pipe(
+      // Wenn sich der Thread ändert, führe den nächsten Block aus
+      switchMap((thread) => {
+        if (thread && thread.replyToMessage?.id === channelMessage.id) {
+          // Falls der Thread existiert, überwache die Nachrichten
+          return this.threadMessageService.threadMessages$.pipe(
+            map((threadMessages) => {
+              console.log('Filtered Messages Array:', threadMessages);
+              console.log('Filtered Messages Length:', threadMessages.length);
+              return threadMessages.length;
+            })
+          );
+        } else {
+          // Wenn kein Thread existiert oder die IDs nicht übereinstimmen
+          return of(0);
+        }
+      })
+    );
+  } */
+
+  /* getThreadMessageCount(): number {
+    let threadMessageCount = 0;
+
+    this.selectedThreadSubscription =
+      this.threadService.selectedThread$.subscribe((thread) => {
+        if (thread) {
+          this.unsubThreadMessages = this.subThreadMessageList();
+          this.threadMessages$.subscribe((threadMessages) => {
+            threadMessageCount = threadMessages.length;
+            console.log('ThreadMessages Array:', threadMessages);
+            console.log('ThreadMessages Length:', threadMessageCount);
+          });
+        }
+      });
+
+    return threadMessageCount;
   } */
 
   getThreadMessagesRef() {
