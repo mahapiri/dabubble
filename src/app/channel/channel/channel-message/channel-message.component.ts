@@ -62,18 +62,7 @@ export class ChannelMessageComponent {
   ngOnInit() {
     this.isMyMessage = this.chatService.setMyMessage(this.channelMessage);
     this.answerCount$ = this.threadMessageService.answerCount$;
-
-    //this.loadAnswerCount();
   }
-
-  /* loadAnswerCount() {
-    this.answerCount$ = this.threadMessageService
-      .getAnswerCount()
-      .then((count) => {
-        this.threadMessageService.updateAnswerCount(count);
-        return count;
-      });
-  } */
 
   /**
    * Emits an event to open a Thread to the current message when the user clicks on "answer".

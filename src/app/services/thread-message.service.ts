@@ -44,32 +44,18 @@ export class ThreadMessageService {
     this.selectedThread = this.threadService.selectedThread$.subscribe(
       async () => {
         await this.getThreadMessageList();
-        const count = await this.getAnswerCount();
-        this.updateAnswerCount(count);
+        const count = this.getAnswerCount();
       }
     );
   }
 
-  /* getAnswerCount() {
-    const answerCount = await getCountFromServer(this.getThreadMessagesRef());
-    return answerCount.data().count;
-  } */
-
-  /* getAnswerCount() {
+  getAnswerCount() {
     const q = query(this.getThreadMessagesRef());
 
     onSnapshot(q, async () => {
       const countSnapshot = await getCountFromServer(q);
       const answerCount = countSnapshot.data().count;
       this.updateAnswerCount(answerCount);
-    });
-  } */
-
-  getAnswerCount(): Promise<number> {
-    const q = query(this.getThreadMessagesRef());
-
-    return getCountFromServer(q).then((countSnapshot) => {
-      return countSnapshot.data().count;
     });
   }
 
