@@ -5,15 +5,23 @@
       <mat-icon class="close-icon" (click)="closeWindow()">close</mat-icon>
     </div>
   </div>
-  <input [(ngModel)]="searchMember" (ngModelChange)="showMember()" (click)="showMember()" type="text"
+  <input [(ngModel)]="searchText" (ngModelChange)="searchMember()" (click)="searchMember()" type="text"
     placeholder="Name eingeben">
-</div>
-@for (member of showUser; track $index) {
-<div class="profile-container" [ngClass]=" member.chosenToChannel ? 'selected' : '' " (click)="selectMember(member)">
-  <div class="profile-content">
-    <img src="{{ member.profileImage }}" alt="Character" class="profile-icon" />
-    <div class="status-icon" ngClass="{{ member.state }}"></div>
+
+  <div class="profile-container">
+    @for (member of this.taggingService.currentChannelMember; track $index) {
+
+
+    <div class="profile-content" (click)="selectMember(member)">
+      <div class="profile">
+        <img src="{{ member.profileImage }}" alt="Character" class="profile-icon">
+        <div class="status-icon online" ngClass="{{ member.state }}"></div>
+      </div>
+      <p class="n-p">{{ member.username }}</p>
+    </div>
+
+
+    }
   </div>
-  <p class="n-p">{{member.username}}</p>
+
 </div>
-}

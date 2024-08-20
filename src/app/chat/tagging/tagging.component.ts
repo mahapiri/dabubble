@@ -1,9 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { User } from '../../../models/user.class';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ClickOutsideDirective } from '../../directive/click-outside.directive';
+import { TaggingService } from '../../services/tagging.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-tagging',
@@ -19,18 +21,20 @@ import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 })
 export class TaggingComponent {
   @Input() showUser: User[] = [];
-  @Output() memberSelected: EventEmitter<User> = new EventEmitter<User>();
   @Output() closePopup: EventEmitter<void> = new EventEmitter<void>();
+  public taggingService: TaggingService = inject(TaggingService);
 
-  searchMember: string = '';
 
+  searchText: string = '';
 
-  showMember() {
+  searchMember() {
+
   }
 
 
   selectMember(member: User) {
-    this.memberSelected.emit(member);
+    this.taggingService.selectMember(member);
+    this.closeWindow();
   }
 
   closeWindow() {

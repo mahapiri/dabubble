@@ -15,6 +15,7 @@ import { DmMessage } from '../../../models/direct-message.class';
 import { TaggingComponent } from '../../chat/tagging/tagging.component';
 import { DirectMessageHeaderComponent } from '../direct-message-header/direct-message-header.component';
 import { Subscription } from 'rxjs';
+import { TaggingService } from '../../services/tagging.service';
 
 @Component({
   selector: 'app-direct-message-new-message-input',
@@ -41,6 +42,8 @@ export class DirectMessageNewMessageInputComponent implements OnInit, OnDestroy 
   private directMessageService: DirectMessageService = inject(DirectMessageService);
   public uploadService: UploadService = inject(UploadService);
   private userSubscription: Subscription = new Subscription();
+  public taggingService: TaggingService = inject(TaggingService);
+  private taggingSubscription: Subscription = new Subscription();
 
   profile: Partial<User> = {};
   @Output() messageCreated: EventEmitter<void> = new EventEmitter<void>();
@@ -51,11 +54,8 @@ export class DirectMessageNewMessageInputComponent implements OnInit, OnDestroy 
   @Input() message!: DmMessage;
 
 
-
-  //// add member
-
   isTag: boolean = false;
-  showUser: User[] = [];
+  members: string[] = [];
 
   
   /**
@@ -70,6 +70,16 @@ export class DirectMessageNewMessageInputComponent implements OnInit, OnDestroy 
         state: profile?.state
       };
     });
+    this.taggingSubscription = this.taggingService.memberSelected$.subscribe((member) => {
+      this.addMemberToMessage(member.username);
+    });
+  }
+
+  addMemberToMessage(username: string) {
+    const mention = `@${username} `;
+    if (!this.messageText.includes(mention)) {
+      this.messageText += ` ${mention}`; 
+    }
   }
 
 
@@ -78,6 +88,7 @@ export class DirectMessageNewMessageInputComponent implements OnInit, OnDestroy 
    */
   ngOnDestroy(): void {
     this.userSubscription.unsubscribe();
+    this.taggingSubscription.unsubscribe();
   }
 
 
@@ -145,11 +156,6 @@ export class DirectMessageNewMessageInputComponent implements OnInit, OnDestroy 
   }
 
 
-
-
-  /// add member
-
-
   openPopup(event: Event) {
     event?.stopPropagation();
     this.isTag = !this.isTag;
@@ -158,8 +164,5 @@ export class DirectMessageNewMessageInputComponent implements OnInit, OnDestroy 
 
   closePopup() {
     this.isTag = false;
-  }
-
-  selectMember(user: User) {
   }
 }
