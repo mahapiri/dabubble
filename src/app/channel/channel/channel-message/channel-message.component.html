@@ -21,11 +21,7 @@
         <button class="mini-fab-btn" mat-mini-fab>
           <mat-icon>add_reaction</mat-icon>
         </button>
-        <button
-          (click)="openThread(); loadAnswerCount()"
-          class="mini-fab-btn"
-          mat-mini-fab
-        >
+        <button (click)="openThread()" class="mini-fab-btn" mat-mini-fab>
           <mat-icon>comment</mat-icon>
         </button>
         <div *ngIf="isMyMessage">
@@ -79,7 +75,7 @@
           </div>
 
           <div *ngIf="!edit" class="answer-wrapper">
-            <ng-container>
+            <ng-container *ngIf="answerCount$ | async as answerCount">
               <div
                 *ngIf="answerCount === 1"
                 (click)="openThread()"
@@ -92,7 +88,7 @@
                 (click)="openThread()"
                 class="total-answers"
               >
-                {{ loadAnswerCount() }} Antworten
+                {{ answerCount }} Antworten
               </div>
             </ng-container>
 

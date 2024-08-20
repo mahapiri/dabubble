@@ -24,8 +24,8 @@ export class ThreadMessageService {
   private threadMessagesSubjects = new BehaviorSubject<ThreadMessage[]>([]);
   threadMessages$ = this.threadMessagesSubjects.asObservable();
 
-  private answerCountSource = new BehaviorSubject<number>(0);
-  answerCount = this.answerCountSource.asObservable();
+  private answerCountSubject = new BehaviorSubject<number>(0);
+  answerCount$ = this.answerCountSubject.asObservable();
 
   threads: Thread[] = [];
   threadMessages: ThreadMessage[] = [];
@@ -50,13 +50,31 @@ export class ThreadMessageService {
     );
   }
 
-  async getAnswerCount() {
+  /* getAnswerCount() {
     const answerCount = await getCountFromServer(this.getThreadMessagesRef());
     return answerCount.data().count;
+  } */
+
+  /* getAnswerCount() {
+    const q = query(this.getThreadMessagesRef());
+
+    onSnapshot(q, async () => {
+      const countSnapshot = await getCountFromServer(q);
+      const answerCount = countSnapshot.data().count;
+      this.updateAnswerCount(answerCount);
+    });
+  } */
+
+  getAnswerCount(): Promise<number> {
+    const q = query(this.getThreadMessagesRef());
+
+    return getCountFromServer(q).then((countSnapshot) => {
+      return countSnapshot.data().count;
+    });
   }
 
   updateAnswerCount(count: number) {
-    this.answerCountSource.next(count);
+    this.answerCountSubject.next(count);
   }
 
   /**

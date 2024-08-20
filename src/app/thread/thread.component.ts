@@ -56,7 +56,7 @@ export class ThreadComponent {
   }
 
   ngOnInit() {
-    this.threadMessageService.answerCount.subscribe((count) => {
+    this.threadMessageService.answerCount$.subscribe((count) => {
       this.answerCount = count;
     });
   }
