@@ -16,6 +16,7 @@ export class UploadService {
 
   acceptedFileTypes: string = '.jpg, .jpeg, .png, .pdf';
   file: any = "Datei hochladen";
+  uploadPath: string = ''
   userSpecificPath: string = "";
   storageRef = ref(this.storage, this.userSpecificPath);
   downloadURL: string = ""
@@ -43,7 +44,7 @@ export class UploadService {
         reader.onload = () => {
           this.currentImg.next(reader.result);
           this.fileChosen = true;
-          this.userSpecificPath = `/${this.userService.userID}/${this.file.name}`
+          this.userSpecificPath = `${this.uploadPath}/${this.userService.userID}/${this.file.name}`
           this.storageRef = ref(this.storage, this.userSpecificPath);
         };
         reader.readAsDataURL(this.file);

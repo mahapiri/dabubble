@@ -24,6 +24,7 @@ import { UploadService } from '../../../services/upload.service';
 export class ChannelNewMessageInputComponent {
   @Input() channel!: Channel;
   uploadService: UploadService = inject(UploadService);
+  uploadPath: string = 'channel'
 
 
   messageText: string = '';
@@ -42,6 +43,7 @@ export class ChannelNewMessageInputComponent {
 
   async chooseFile(event: Event) {
     this.uploadService.onFileSelected(event)
+    this.uploadService.uploadPath = this.uploadPath;
   }
 
   async checkPictureUpload() {
