@@ -5,6 +5,7 @@ import {
   Firestore,
   addDoc,
   collection,
+  getCountFromServer,
   limit,
   onSnapshot,
   orderBy,
@@ -14,15 +15,7 @@ import {
 import { UserService } from './user.service';
 import { ThreadService } from './thread.service';
 import { User } from '../../models/user.class';
-import {
-  BehaviorSubject,
-  Observable,
-  Subscription,
-  map,
-  of,
-  switchMap,
-} from 'rxjs';
-import { ChannelMessage } from '../../models/channel.class';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -31,12 +24,14 @@ export class ThreadMessageService {
   private threadMessagesSubjects = new BehaviorSubject<ThreadMessage[]>([]);
   threadMessages$ = this.threadMessagesSubjects.asObservable();
 
+  private answerCountSource = new BehaviorSubject<number>(0);
+  answerCount = this.answerCountSource.asObservable();
+
   threads: Thread[] = [];
   threadMessages: ThreadMessage[] = [];
 
   previousDate: string | null = null;
 
-  unsubThreadMessages!: () => void;
   unsubUser!: Subscription;
   selectedThread: Subscription;
 
@@ -46,18 +41,22 @@ export class ThreadMessageService {
     private userService: UserService,
     private threadService: ThreadService
   ) {
-    this.selectedThread = this.threadService.selectedThread$.subscribe(() => {
-      this.unsubThreadMessages = this.subThreadMessageList();
-    });
+    this.selectedThread = this.threadService.selectedThread$.subscribe(
+      async () => {
+        await this.getThreadMessageList();
+        const count = await this.getAnswerCount();
+        this.updateAnswerCount(count);
+      }
+    );
   }
 
-  getThreadMessageCount(): Observable<number> {
-    return new Observable<number>((observer) => {
-      const messagesRef = this.getThreadMessagesRef();
-      return onSnapshot(messagesRef, (snapshot) => {
-        observer.next(snapshot.size);
-      });
-    });
+  async getAnswerCount() {
+    const answerCount = await getCountFromServer(this.getThreadMessagesRef());
+    return answerCount.data().count;
+  }
+
+  updateAnswerCount(count: number) {
+    this.answerCountSource.next(count);
   }
 
   /**
@@ -92,7 +91,7 @@ export class ThreadMessageService {
    * Then reverses the Order, so older messages are shown higher up in the chat and the latest messages are shown at the bottom.
    * @returns - the unsubscribe function for the onSnapshot listener.
    */
-  subThreadMessageList() {
+  getThreadMessageList(): Promise<void> {
     this.threadMessages = [];
 
     const q = query(
@@ -102,22 +101,26 @@ export class ThreadMessageService {
       limit(20)
     );
 
-    return onSnapshot(q, (list) => {
-      this.threadMessages = [];
-      this.previousDate = null;
+    return new Promise((resolve) => {
+      const unsubscribe = onSnapshot(q, (list) => {
+        this.threadMessages = [];
+        this.previousDate = null;
 
-      list.forEach((message) => {
-        const currentMessage = this.setMessageObject(
-          message.id,
-          message.data()
-        );
-        this.chatService.setFirstMessageOfDay(currentMessage);
-        this.threadMessages.push(currentMessage);
+        list.forEach((message) => {
+          const currentMessage = this.setMessageObject(
+            message.id,
+            message.data()
+          );
+          this.chatService.setFirstMessageOfDay(currentMessage);
+          this.threadMessages.push(currentMessage);
+        });
+
+        this.threadMessages.reverse();
+        this.threadMessagesSubjects.next(this.threadMessages);
+        console.log('Thread Message received:', this.threadMessages);
+
+        resolve();
       });
-
-      this.threadMessages.reverse();
-      this.threadMessagesSubjects.next(this.threadMessages);
-      console.log('Message received:', this.threadMessages);
     });
   }
 
@@ -169,60 +172,6 @@ export class ThreadMessageService {
     });
   }
 
-  /*   /**
-   * Zählt die Nachrichten in einem bestimmten Thread basierend auf der Thread-ID.
-   * @param threadId - Die ID des Threads, dessen Nachrichten gezählt werden sollen.
-   * @returns Die Anzahl der Nachrichten im Thread.
-   
-  async getThreadMessageCountById(threadId: string): Promise<number> {
-    const threadMessagesRef = collection(
-      this.firestore,
-      `threads/${threadId}/messages`
-    );
-    const threadMessagesSnapshot = await getDocs(threadMessagesRef);
-    return threadMessagesSnapshot.size;
-  } 
-  */
-
-  /* getThreadMessageCount(channelMessage: ChannelMessage): Observable<number> {
-    return this.threadService.selectedThread$.pipe(
-      // Wenn sich der Thread ändert, führe den nächsten Block aus
-      switchMap((thread) => {
-        if (thread && thread.replyToMessage?.id === channelMessage.id) {
-          // Falls der Thread existiert, überwache die Nachrichten
-          return this.threadMessageService.threadMessages$.pipe(
-            map((threadMessages) => {
-              console.log('Filtered Messages Array:', threadMessages);
-              console.log('Filtered Messages Length:', threadMessages.length);
-              return threadMessages.length;
-            })
-          );
-        } else {
-          // Wenn kein Thread existiert oder die IDs nicht übereinstimmen
-          return of(0);
-        }
-      })
-    );
-  } */
-
-  /* getThreadMessageCount(): number {
-    let threadMessageCount = 0;
-
-    this.selectedThreadSubscription =
-      this.threadService.selectedThread$.subscribe((thread) => {
-        if (thread) {
-          this.unsubThreadMessages = this.subThreadMessageList();
-          this.threadMessages$.subscribe((threadMessages) => {
-            threadMessageCount = threadMessages.length;
-            console.log('ThreadMessages Array:', threadMessages);
-            console.log('ThreadMessages Length:', threadMessageCount);
-          });
-        }
-      });
-
-    return threadMessageCount;
-  } */
-
   getThreadMessagesRef() {
     return collection(
       this.firestore,
@@ -233,6 +182,5 @@ export class ThreadMessageService {
   ngOnDestroy(): void {
     this.selectedThread.unsubscribe();
     this.unsubUser.unsubscribe();
-    this.unsubThreadMessages();
   }
 }

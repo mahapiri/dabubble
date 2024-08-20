@@ -21,7 +21,11 @@
         <button class="mini-fab-btn" mat-mini-fab>
           <mat-icon>add_reaction</mat-icon>
         </button>
-        <button (click)="openThread()" class="mini-fab-btn" mat-mini-fab>
+        <button
+          (click)="openThread(); loadAnswerCount()"
+          class="mini-fab-btn"
+          mat-mini-fab
+        >
           <mat-icon>comment</mat-icon>
         </button>
         <div *ngIf="isMyMessage">
@@ -36,10 +40,7 @@
       </div>
 
       <div class="message-wrapper">
-        <img
-          class="user-img"
-          src="{{ channelMessage.profileImage }}"
-        />
+        <img class="user-img" src="{{ channelMessage.profileImage }}" />
 
         <div class="message-details">
           <div *ngIf="!edit" class="user-wrapper">
@@ -80,18 +81,18 @@
           <div *ngIf="!edit" class="answer-wrapper">
             <ng-container>
               <div
-                *ngIf="threadMessageCount === 1"
+                *ngIf="answerCount === 1"
                 (click)="openThread()"
                 class="total-answers"
               >
                 1 Antwort
               </div>
               <div
-                *ngIf="threadMessageCount > 1"
+                *ngIf="answerCount > 1"
                 (click)="openThread()"
                 class="total-answers"
               >
-                {{ threadMessageCount }} Antworten
+                {{ loadAnswerCount() }} Antworten
               </div>
             </ng-container>
 

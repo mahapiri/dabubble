@@ -52,8 +52,14 @@
             </div>
           </div>
         </mat-list-item>
-        <div class="divider-container">
-          <div class="total-answers">2 Antworten</div>
+        <div *ngIf="answerCount && answerCount > 0" class="divider-container">
+          <div *ngIf="answerCount == 1" class="total-answers">1 Antwort</div>
+          <div *ngIf="answerCount > 1" class="total-answers">
+            {{ answerCount }} Antworten
+          </div>
+          <div *ngIf="answerCount > 50" class="total-answers">
+            50+ Antworten
+          </div>
           <mat-divider> </mat-divider>
         </div>
       </div>

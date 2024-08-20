@@ -44,6 +44,8 @@ export class ThreadComponent {
   selectedThread$: Observable<Thread | null>;
   threadMessages$: Observable<ThreadMessage[]>;
 
+  public answerCount: number = 0;
+
   constructor(
     private threadService: ThreadService,
     private threadMessageService: ThreadMessageService,
@@ -51,6 +53,12 @@ export class ThreadComponent {
   ) {
     this.selectedThread$ = this.threadService.selectedThread$;
     this.threadMessages$ = this.threadMessageService.threadMessages$;
+  }
+
+  ngOnInit() {
+    this.threadMessageService.answerCount.subscribe((count) => {
+      this.answerCount = count;
+    });
   }
 
   closeThread() {
