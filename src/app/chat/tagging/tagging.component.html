@@ -1,0 +1,19 @@
+<div class="popup-container tag-person-container" appClickOutside (clickOutside)="closeWindow()">
+  <div class="title-content">
+    <h4 class="n-h4">Leute erwähnen</h4>
+    <div class="icon-container">
+      <mat-icon class="close-icon" (click)="closeWindow()">close</mat-icon>
+    </div>
+  </div>
+  <input [(ngModel)]="searchMember" (ngModelChange)="showMember()" (click)="showMember()" type="text"
+    placeholder="Name eingeben">
+</div>
+@for (member of showUser; track $index) {
+<div class="profile-container" [ngClass]=" member.chosenToChannel ? 'selected' : '' " (click)="selectMember(member)">
+  <div class="profile-content">
+    <img src="{{ member.profileImage }}" alt="Character" class="profile-icon" />
+    <div class="status-icon" ngClass="{{ member.state }}"></div>
+  </div>
+  <p class="n-p">{{member.username}}</p>
+</div>
+}

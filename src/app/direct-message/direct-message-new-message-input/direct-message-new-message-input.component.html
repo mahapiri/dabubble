@@ -1,5 +1,5 @@
 <div class="new-message-container">
-  <textarea [(ngModel)]="messageText" matInput type="text" placeholder="Nachricht an User" rows="3"
+  <textarea [(ngModel)]="messageText" matInput type="text" placeholder="Nachricht an {{ profile.username }}" rows="3"
     (keydown)="onKeyDown($event)"></textarea>
   <div class="message-controls">
     <div class="add-elements">
@@ -19,19 +19,12 @@
 
 
       <div>
-        <button mat-mini-fab class="tag-person mini-fab-btn" (click)="addMembers($event)">
+        <button mat-mini-fab class="tag-person mini-fab-btn" (click)="openPopup($event)">
           <mat-icon>alternate_email</mat-icon>
         </button>
-        <div *ngIf="isTag" class="popup-container tag-person-container" appClickOutside (clickOutside)="closeWindow()">
-          <div class="title-content">
-            <h4 class="n-h4">Leute erwähnen</h4>
-            <div class="icon-container">
-              <mat-icon class="close-icon" (click)="closeWindow()">close</mat-icon>
-            </div>
-          </div>
-          <input [(ngModel)]="searchMember" (ngModelChange)="showMember()" (click)="showMember()" type="text"
-            placeholder="Name eingeben">
-        </div>
+        <app-tagging *ngIf="isTag" [showUser]="showUser" (closePopup)="closePopup()"
+          (memberSelected)="selectMember($event)">
+        </app-tagging>
       </div>
 
 

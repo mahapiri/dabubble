@@ -1,0 +1,37 @@
+.tag-person {
+    position: relative;
+}
+
+.tag-person-container {
+    position: absolute;
+    bottom: 100%;
+    border-radius: 30px 30px 30px 0px !important;
+    font-family: "Nunito" !important;
+    font-weight: 400 !important;
+    font-size: 18px !important;
+    line-height: 24.55px !important;
+    padding: 20px;
+
+    input {
+        width: 234px;
+        display: flex;
+        padding: 10px 16px;
+        border: 1px solid var(--lines);
+        border-radius: 40px;
+        font-family: "Nunito" !important;
+        font-weight: 400 !important;
+        font-size: 18px !important;
+        line-height: 24.55px !important;
+
+        &:focus-visible {
+            outline: none;
+            border: 1px solid var(--purple-2);
+        }
+    }
+
+    .title-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
