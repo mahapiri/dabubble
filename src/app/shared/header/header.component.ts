@@ -7,11 +7,13 @@ import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 import { CommonModule } from '@angular/common';
 import { User } from '../../../models/user.class';
 import { MyProfileComponent } from '../../users/my-profile/my-profile.component';
+import { SearchService } from '../../services/search.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [MatIconModule, ClickOutsideDirective, CommonModule, MyProfileComponent],
+  imports: [MatIconModule, ClickOutsideDirective, CommonModule, MyProfileComponent, FormsModule, ClickOutsideDirective],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
@@ -20,7 +22,9 @@ export class HeaderComponent implements OnInit {
   clickedProfile: boolean = false;
   authService: AuthService = inject(AuthService);
   userService: UserService = inject(UserService);
-  currentUser: User | null = null;
+  searchService: SearchService = inject(SearchService);
+  currentUser: any = '';
+  isResults: boolean = false;
 
   constructor(private router: Router) {}
 
@@ -29,6 +33,14 @@ export class HeaderComponent implements OnInit {
     this.userService.currentUser$.subscribe((user) => {
       this.currentUser = user;
     });
+  }
+
+  openResults() {
+    this.isResults = true;
+  }
+
+  closeResults() {
+    this.isResults = false;
   }
   
   openPopup(event: Event) {
