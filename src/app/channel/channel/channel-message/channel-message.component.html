@@ -74,23 +74,21 @@
             }
           </div>
 
-          <div *ngIf="!edit" class="answer-wrapper">
-            <ng-container *ngIf="answerCount > 0">
-              <div
-                *ngIf="answerCount === 1"
-                (click)="openThread()"
-                class="total-answers"
-              >
-                1 Antwort
-              </div>
-              <div
-                *ngIf="answerCount > 1"
-                (click)="openThread()"
-                class="total-answers"
-              >
-                {{ answerCount }} Antworten
-              </div>
-            </ng-container>
+          <div *ngIf="!edit && answerCount > 0" class="answer-wrapper">
+            <div
+              *ngIf="answerCount === 1"
+              (click)="openThread()"
+              class="total-answers"
+            >
+              1 Antwort
+            </div>
+            <div
+              *ngIf="answerCount > 1"
+              (click)="openThread()"
+              class="total-answers"
+            >
+              {{ answerCount }} Antworten
+            </div>
 
             <div class="last-answer">Letzte Antwort 14:56</div>
           </div>
