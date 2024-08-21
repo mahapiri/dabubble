@@ -1,11 +1,12 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { User } from '../../../models/user.class';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 import { TaggingService } from '../../services/tagging.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-tagging',
@@ -19,21 +20,43 @@ import { BehaviorSubject } from 'rxjs';
   templateUrl: './tagging.component.html',
   styleUrl: './tagging.component.scss'
 })
-export class TaggingComponent implements OnInit {
+export class TaggingComponent implements OnInit, OnDestroy {
   @Input() showUser: User[] = [];
   @Output() closePopup: EventEmitter<void> = new EventEmitter<void>();
   public taggingService: TaggingService = inject(TaggingService);
+  private userService: UserService = inject(UserService);
+  private userSubscription: Subscription = new Subscription();
 
 
   searchText: string = '';
   filteredMembers: User[] = [];
+  currentUser: any;
 
   
+  /**
+   * subscribes the current user
+   */
+  constructor() {
+    this.userService.currentUser$.subscribe((user) => {
+      this.currentUser = user?.username;
+      console.log(this.currentUser)
+    });
+  }
+
+
   /**
   * get all user from current channel
   */
   ngOnInit() {
     this.filteredMembers = this.taggingService.currentChannelMember;
+  }
+
+
+  /**
+   * unsubscribes the current user
+   */
+  ngOnDestroy(): void {
+      this.userSubscription.unsubscribe();
   }
 
 

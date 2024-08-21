@@ -19,7 +19,10 @@
           <img [src]="member.profileImage" alt="Character" class="profile-icon">
           <div class="status-icon online" [ngClass]="member.state"></div>
         </div>
-        <p class="n-p">{{ member.username }}</p>
+        <p class="n-p">
+          {{ member.username }}
+          <span *ngIf="member.username === currentUser">(Du)</span>
+        </p>
       </div>
     </div>
   </div>
