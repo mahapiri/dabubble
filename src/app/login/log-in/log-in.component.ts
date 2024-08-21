@@ -7,6 +7,7 @@ import { MatIcon } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
+import { Auth, signInAnonymously } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-log-in',
@@ -27,7 +28,7 @@ export class LogInComponent {
   invalidPassword: boolean = false;
   password: string = "";
   passwordVisible: boolean = false;
-  constructor(private router: Router) { }
+  constructor(private router: Router, private auth: Auth) { }
 
 
   userForm = this.formbuilder.group({
@@ -75,11 +76,24 @@ export class LogInComponent {
       });
   }
 
+  /*    async logInAsGuest() {
+      await this.authService.logInUser("gast@googlemail.com", "123456")
+      this.userForm.reset();
+      this.router.navigate(['/main-window']);
+    }  */
+
   async logInAsGuest() {
-    await this.authService.logInUser("gast@googlemail.com", "123456")
-    this.userForm.reset();
+    await signInAnonymously(this.auth).then((login) => {
+      this.authService.userId = login.user.uid
+      this.authService.loggedInAsGuest = true;
+      this.userForm.reset();
+    }
+    )
+    await this.authService.setStartingChannels();
+    await this.authService.saveUserInDocument();
     this.router.navigate(['/main-window']);
   }
+
 
   async loginWithGoogle() {
     await this.authService.googleLogin().then(() => {
