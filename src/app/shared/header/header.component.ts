@@ -9,11 +9,14 @@ import { User } from '../../../models/user.class';
 import { MyProfileComponent } from '../../users/my-profile/my-profile.component';
 import { SearchService } from '../../services/search.service';
 import { FormsModule } from '@angular/forms';
+import { ChatService } from '../../services/chat.service';
+import { MatDividerModule } from '@angular/material/divider';
+import { DirectMessageService } from '../../services/direct-message.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [MatIconModule, ClickOutsideDirective, CommonModule, MyProfileComponent, FormsModule, ClickOutsideDirective],
+  imports: [MatIconModule, ClickOutsideDirective, CommonModule, MyProfileComponent, FormsModule, ClickOutsideDirective, MatDividerModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
@@ -22,6 +25,8 @@ export class HeaderComponent implements OnInit {
   clickedProfile: boolean = false;
   authService: AuthService = inject(AuthService);
   userService: UserService = inject(UserService);
+  chatService: ChatService = inject(ChatService);
+  directMessageService: DirectMessageService = inject(DirectMessageService);
   searchService: SearchService = inject(SearchService);
   currentUser: any = '';
   isResults: boolean = false;
@@ -37,6 +42,7 @@ export class HeaderComponent implements OnInit {
 
   openResults() {
     this.isResults = true;
+    this.searchService.getAllDM();
   }
 
   closeResults() {
@@ -67,5 +73,13 @@ export class HeaderComponent implements OnInit {
     event.preventDefault();
     await this.authService.logOut();
     this.router.navigate(['/']);
+  }
+
+  openChannel(){
+
+  }
+
+  openDM() {
+
   }
 }

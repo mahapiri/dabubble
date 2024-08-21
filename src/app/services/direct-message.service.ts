@@ -329,13 +329,18 @@ export class DirectMessageService implements OnDestroy {
     const messageData = {
       authorId: this.currentUser?.userId,
       authorName: this.currentUser?.username,
+      authorImg: this.currentUser?.profileImage,
+      authorstate: this.currentUser?.state,
+      profileId: this.currentClickedProfile?.userId,
+      profileName: this.currentClickedProfile?.username,
+      profileImg: this.currentClickedProfile?.profileImage,
+      profileState: this.currentClickedProfile?.state,
       time: new Date().toLocaleTimeString('de-DE', timeOptions),
       date: new Date().toISOString().split('T')[0],
       text: message,
       reactionId: [],
       file: '',
       id: '',
-      profileImg: this.currentUser?.profileImage,
       isFirstMessageOfDay: false,
     };
     this.saveMessage(messageData);
