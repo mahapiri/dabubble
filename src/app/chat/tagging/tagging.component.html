@@ -9,19 +9,18 @@
     placeholder="Name eingeben">
 
   <div class="profile-container">
-    @for (member of this.taggingService.currentChannelMember; track $index) {
-
-
-    <div class="profile-content" (click)="selectMember(member)">
-      <div class="profile">
-        <img src="{{ member.profileImage }}" alt="Character" class="profile-icon">
-        <div class="status-icon online" ngClass="{{ member.state }}"></div>
-      </div>
-      <p class="n-p">{{ member.username }}</p>
+    <div *ngIf="filteredMembers.length === 0">
+      <p class="n-p">Keine User gefunden</p>
     </div>
 
-
-    }
+    <div *ngFor="let member of filteredMembers; let i = index" (click)="selectMember(member)">
+      <div class="profile-content">
+        <div class="profile">
+          <img [src]="member.profileImage" alt="Character" class="profile-icon">
+          <div class="status-icon online" [ngClass]="member.state"></div>
+        </div>
+        <p class="n-p">{{ member.username }}</p>
+      </div>
+    </div>
   </div>
-
 </div>

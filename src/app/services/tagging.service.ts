@@ -16,6 +16,10 @@ export class TaggingService implements OnInit, OnDestroy {
   currentChannelID: string = '';
   currentChannelMember: any;
 
+
+  /**
+  * subscribes the selected channel
+  */
   constructor() {
     this.channelSubscription = this.channelService.selectedChannel$.subscribe((channel) => {
       this.currentChannelID = channel?.channelID || '';
@@ -24,21 +28,21 @@ export class TaggingService implements OnInit, OnDestroy {
   }
 
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void { }
 
 
+  /**
+  * unsubscribes the channel subscription to get the selected channel
+  */
   ngOnDestroy(): void {
     this.channelSubscription.unsubscribe();
     console.log('unsub');
   }
 
 
-  getMemberList() {
-
-  }
-
+  /**
+  * get the selected member
+  */
   selectMember(member: User) {
     this.memberSelected.next(member);
   }
