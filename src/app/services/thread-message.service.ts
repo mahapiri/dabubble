@@ -15,7 +15,7 @@ import {
 import { UserService } from './user.service';
 import { ThreadService } from './thread.service';
 import { User } from '../../models/user.class';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +25,7 @@ export class ThreadMessageService {
   threadMessages$ = this.threadMessagesSubjects.asObservable();
 
   private answerCountSubject = new BehaviorSubject<number>(0);
-  answerCount$ = this.answerCountSubject.asObservable();
+  public answerCount$ = this.answerCountSubject.asObservable();
 
   threads: Thread[] = [];
   threadMessages: ThreadMessage[] = [];
@@ -44,7 +44,7 @@ export class ThreadMessageService {
     this.selectedThread = this.threadService.selectedThread$.subscribe(
       async () => {
         await this.getThreadMessageList();
-        const count = this.getAnswerCount();
+        this.getAnswerCount();
       }
     );
   }
@@ -61,6 +61,40 @@ export class ThreadMessageService {
 
   updateAnswerCount(count: number) {
     this.answerCountSubject.next(count);
+  }
+
+  getAnswerCountForChannelMessage(
+    channelMessageId: string
+  ): Observable<number> {
+    return new Observable<number>((observer) => {
+      this.threadService
+        .findThreadByMessageId(channelMessageId)
+        .then((existingThread) => {
+          if (existingThread) {
+            const threadID =
+              this.threadService.getThreadIdFromSnapshot(existingThread);
+            if (threadID) {
+              const threadMessagesRef = collection(
+                this.firestore,
+                `threads/${threadID}/messages`
+              );
+
+              onSnapshot(threadMessagesRef, async () => {
+                const countSnapshot = await getCountFromServer(
+                  threadMessagesRef
+                );
+                const answerCount = countSnapshot.data().count;
+                observer.next(answerCount);
+                console.log('received AnswerCount:', answerCount);
+                this.updateAnswerCount(answerCount);
+              });
+            }
+          } else {
+            observer.next(0);
+            this.updateAnswerCount(0);
+          }
+        });
+    });
   }
 
   /**

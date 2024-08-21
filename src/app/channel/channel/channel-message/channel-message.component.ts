@@ -41,7 +41,6 @@ export class ChannelMessageComponent {
   threadMessages$: Observable<ThreadMessage[]>;
 
   public answerCount: number = 0;
-  answerCount$!: Observable<number>;
 
   isMyMessage: boolean = false;
   edit: boolean = false;
@@ -61,7 +60,12 @@ export class ChannelMessageComponent {
    */
   ngOnInit() {
     this.isMyMessage = this.chatService.setMyMessage(this.channelMessage);
-    this.answerCount$ = this.threadMessageService.answerCount$;
+
+    this.threadMessageService
+      .getAnswerCountForChannelMessage(this.channelMessage.id)
+      .subscribe((count) => {
+        this.answerCount = count;
+      });
   }
 
   /**

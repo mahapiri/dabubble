@@ -59,8 +59,6 @@ export class ThreadComponent {
     this.threadMessageService.answerCount$.subscribe((count) => {
       this.answerCount = count;
     });
-
-    this.threadMessageService.getAnswerCount();
   }
 
   closeThread() {
