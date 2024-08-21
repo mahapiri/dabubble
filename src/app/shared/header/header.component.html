@@ -1,8 +1,48 @@
 <header>
     <img src="../../../assets/img/logo-with-font.png" alt="Logo Dabubble" class="logo">
     <div class="searchfield-container">
-        <input type="text" placeholder="Code learning durchsuchen" class="searchfield">
-        <mat-icon class="search-icon">search</mat-icon>
+        <div class="searchfield-content">
+            <input #search type="text" placeholder="Code learning durchsuchen" class="searchfield active"
+                [ngClass]="{'active': isResults}" (click)="openResults()" (ngModelChange)="openResults()"
+                appClickOutside (clickOutside)="closeResults()">
+            <mat-icon class="search-icon" (click)="openResults()">search</mat-icon>
+
+
+
+
+            <div *ngIf="isResults" class="result-container">
+                <div class="result-channel-container">
+                    <h4 class="n-h4">Channel</h4>
+
+                </div>
+                <div class="result-user-container">
+                    <h4 class="n-h4">User</h4>
+                    <div *ngFor="let user of this.searchService.userList; let i = index" (click)="openProfile()">
+                        <div class="profile-content">
+                            <div class="profile">
+                                <img [src]="user.profileImage" alt="Character" class="profile-icon">
+                                <div class="result-status-icon online" [ngClass]="user.state"></div>
+                            </div>
+                            <p class="n-p">
+                                {{ user.username }}
+                                <span *ngIf="user.username === this.currentUser">(Du)</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+        </div>
+
+
+
+
     </div>
     <div class="user-div">
         <div class="user-container" (click)="openPopup($event)">
@@ -21,4 +61,5 @@
         </div>
     </div>
 </header>
-<app-my-profile *ngIf="clickedProfile" [clickedProfile]="clickedProfile" (clickedProfileChange)="profileClosed()"></app-my-profile>
+<app-my-profile *ngIf="clickedProfile" [clickedProfile]="clickedProfile"
+    (clickedProfileChange)="profileClosed()"></app-my-profile>

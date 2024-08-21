@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth, onAuthStateChanged } from '@angular/fire/auth';
+import { Auth, deleteUser, onAuthStateChanged } from '@angular/fire/auth';
 import {
   arrayUnion,
   collection,
@@ -8,9 +8,10 @@ import {
   onSnapshot,
   updateDoc,
 } from '@angular/fire/firestore';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { User } from '../../models/user.class';
 import { Channel } from '../../models/channel.class';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +29,8 @@ export class UserService {
 
   userID: string = '';
   userArray: User[] = [];
+
+  private unsubscribeSnapshot: (() => void) | undefined;
 
   constructor(private auth: Auth) {}
 
@@ -59,11 +62,11 @@ export class UserService {
   }
 
   getCurrentUser() {
-    onSnapshot(
+    this.unsubscribeSnapshot = onSnapshot(
       this.getUserRef(),
       (user) => {
         if (user.exists()) {
-          this.currentUser.next(new User(user.data()));
+          this.currentUser.next(new User(user.data()));         
         }
       },
       (error) => {
@@ -92,5 +95,11 @@ export class UserService {
         userChannels: arrayUnion(channelID),
       });
     });
+  }
+
+  unsubscribe() {
+    if (this.unsubscribeSnapshot) {
+      this.unsubscribeSnapshot();
+    }
   }
 }

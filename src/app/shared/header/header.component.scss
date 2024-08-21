@@ -23,8 +23,13 @@ header {
   align-items: center;
 }
 
+.searchfield-content {
+  width: 100%;
+}
+
 .searchfield {
   // max-width: 989px;
+  width: 100%;
   flex-grow: 1;
   display: flex;
   justify-content: space-between;
@@ -32,6 +37,7 @@ header {
   padding: 16px 45px;
   border-radius: 42px;
   border: 1px solid var(--white);
+  outline: none;
 
   &::placeholder {
     font-weight: 400;
@@ -40,8 +46,12 @@ header {
     color: var(--gray);
   }
 
-  &:focus {
-    border: 1px solid red;
+  &:focus-visible {
+    border-color: var(--purple-2);
+  }
+
+  &:hover {
+    border-color: var(--purple-2);
   }
 }
 
@@ -55,10 +65,6 @@ input[type="text"] {
   line-height: 32.74px;
   color: var(--gray);
   text-align: left;
-
-  &:focus {
-    border: white;
-  }
 }
 
 .search-icon {
@@ -66,13 +72,61 @@ input[type="text"] {
   height: 35px;
   color: var(--gray);
   position: absolute;
-  top: 25px;
+  top: 23px;
   right: 29px;
   cursor: pointer;
 }
 
+.searchfield-container:hover .active {
+  border-color: unset;
+  border-top-color: var(--purple-2);
+  border-right-color: var(--purple-2);
+  border-bottom-color: var(--white);
+  border-left-color: var(--purple-2);
+}
+
+.searchfield-container:hover .searchfield:not(.active) {
+  border-color: var(--purple-2);
+}
+
 .user-div {
   position: relative;
+}
+
+.result-container {
+  width: 100%;
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--white);
+  border-radius: 0px 0px 30px 30px;
+  padding: 0px 30px 16px 30px;
+  gap: 15px;
+  transition: all 100ms ease-in-out;
+  box-shadow: 0px 6px 10px -4px rgba(0, 0, 0, 0.2);
+  border: 1px solid;
+  border-top-color: var(--white);
+  border-right-color: var(--purple-2);
+  border-bottom-color: var(--purple-2);
+  border-left-color: var(--purple-2);
+}
+
+.active {
+  border-radius: 42px 42px 0px 0px !important;
+  border-color: unset;
+  border-top-color: var(--purple-2);
+  border-right-color: var(--purple-2);
+  border-bottom-color: var(--white);
+  border-left-color: var(--purple-2);
+
+  &:focus-visible {
+    border-color: unset;
+    border-top-color: var(--purple-2);
+    border-right-color: var(--purple-2);
+    border-bottom-color: var(--white);
+    border-left-color: var(--purple-2);
+  }
 }
 
 .user-container {
@@ -83,6 +137,7 @@ input[type="text"] {
   cursor: pointer;
 
   &:hover {
+
     .user-name,
     .arrow-icon {
       color: var(--purple-3);
@@ -163,4 +218,57 @@ a {
 
 .d-none {
   display: none;
+}
+
+
+
+.profile-content {
+  display: flex;
+  align-items: center;
+  border-radius: 35px;
+  padding: 4px 20px;
+  gap: 15px;
+  cursor: pointer;
+
+  &:hover {
+      background-color: var(--bg-color);
+      border-radius: 35px;
+      color: var(--black);
+  }
+}
+
+.profile {
+  display: flex;
+  position: relative;
+
+  img {
+      height: 50px;
+      width: 50px;
+  }
+}
+
+.profile-icon {
+  border-radius: 30px;
+}
+
+.result-status-icon {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--white);
+  border-radius: 50%;
+  position: absolute;
+  top: 38px;
+  left: 34px;
+}
+
+.n-h4 {
+  padding-left: 16px;
+}
+
+
+.result-user-container,
+.result-channel-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }

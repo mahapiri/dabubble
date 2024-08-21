@@ -18,9 +18,13 @@
       <button mat-mini-fab class="emojis mini-fab-btn">
         <mat-icon>sentiment_satisfied</mat-icon>
       </button>
-      <button mat-mini-fab class="tag-person mini-fab-btn">
-        <mat-icon>alternate_email</mat-icon>
-      </button>
+      <div>
+        <button mat-mini-fab class="tag-person mini-fab-btn" (click)="openPopup($event)">
+          <mat-icon>alternate_email</mat-icon>
+        </button>
+        <app-tagging *ngIf="isTag" (closePopup)="closePopup()">
+        </app-tagging>
+      </div>
     </div>
     <button (click)="sendMessage()" mat-mini-fab class="send-btn">
       <mat-icon>send</mat-icon>
