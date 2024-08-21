@@ -12,7 +12,8 @@ import { ChannelMessageService } from '../../../services/channel-message.service
 import { ThreadService } from '../../../services/thread.service';
 import { ThreadMessageService } from '../../../services/thread-message.service';
 import { Thread, ThreadMessage } from '../../../../models/thread.class';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-channel-message',
@@ -32,15 +33,16 @@ import { Observable } from 'rxjs';
 export class ChannelMessageComponent {
   @Input() channel!: Channel;
   @Input() channelMessage!: ChannelMessage;
-  @Input() channelMessages: ChannelMessage[] = [];
+  //@Input() channelMessages: ChannelMessage[] = [];
   @Output() clickedAnswer = new EventEmitter<boolean>();
 
   selectedChannelMessage$!: Observable<ChannelMessage>;
 
-  selectedThread$: Observable<Thread | null>;
-  threadMessages$: Observable<ThreadMessage[]>;
+  //selectedThread$: Observable<Thread | null>;
+  //threadMessages$: Observable<ThreadMessage[]>;
 
   public answerCount: number = 0;
+  private answerCountSubscription!: Subscription;
 
   isMyMessage: boolean = false;
   edit: boolean = false;
@@ -49,10 +51,11 @@ export class ChannelMessageComponent {
     public chatService: ChatService,
     private channelMessageService: ChannelMessageService,
     private threadService: ThreadService,
-    public threadMessageService: ThreadMessageService
+    public threadMessageService: ThreadMessageService,
+    private cdRef: ChangeDetectorRef
   ) {
-    this.selectedThread$ = this.threadService.selectedThread$;
-    this.threadMessages$ = this.threadMessageService.threadMessages$;
+    //this.selectedThread$ = this.threadService.selectedThread$;
+    //this.threadMessages$ = this.threadMessageService.threadMessages$;
   }
 
   /**
@@ -61,10 +64,11 @@ export class ChannelMessageComponent {
   ngOnInit() {
     this.isMyMessage = this.chatService.setMyMessage(this.channelMessage);
 
-    this.threadMessageService
+    this.answerCountSubscription = this.threadMessageService
       .getAnswerCountForChannelMessage(this.channelMessage.id)
       .subscribe((count) => {
         this.answerCount = count;
+        this.cdRef.detectChanges();
       });
   }
 
@@ -105,5 +109,9 @@ export class ChannelMessageComponent {
 
   isImageUrl(url: string): boolean {
     return url.startsWith('https://firebasestorage.googleapis.com/');
+  }
+
+  ngOnDestroy() {
+    this.answerCountSubscription.unsubscribe();
   }
 }

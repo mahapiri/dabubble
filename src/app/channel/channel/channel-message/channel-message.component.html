@@ -75,7 +75,7 @@
           </div>
 
           <div *ngIf="!edit" class="answer-wrapper">
-            <ng-container *ngIf="answerCount">
+            <ng-container *ngIf="answerCount > 0">
               <div
                 *ngIf="answerCount === 1"
                 (click)="openThread()"

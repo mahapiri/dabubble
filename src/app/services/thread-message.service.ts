@@ -16,6 +16,7 @@ import { UserService } from './user.service';
 import { ThreadService } from './thread.service';
 import { User } from '../../models/user.class';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { ChannelService } from './channel.service';
 
 @Injectable({
   providedIn: 'root',
@@ -66,35 +67,31 @@ export class ThreadMessageService {
   getAnswerCountForChannelMessage(
     channelMessageId: string
   ): Observable<number> {
-    return new Observable<number>((observer) => {
-      this.threadService
-        .findThreadByMessageId(channelMessageId)
-        .then((existingThread) => {
-          if (existingThread) {
-            const threadID =
-              this.threadService.getThreadIdFromSnapshot(existingThread);
-            if (threadID) {
-              const threadMessagesRef = collection(
-                this.firestore,
-                `threads/${threadID}/messages`
-              );
+    const answerCountSubject = new BehaviorSubject<number>(0);
 
-              onSnapshot(threadMessagesRef, async () => {
-                const countSnapshot = await getCountFromServer(
-                  threadMessagesRef
-                );
-                const answerCount = countSnapshot.data().count;
-                observer.next(answerCount);
-                console.log('received AnswerCount:', answerCount);
-                this.updateAnswerCount(answerCount);
-              });
-            }
-          } else {
-            observer.next(0);
-            this.updateAnswerCount(0);
-          }
-        });
-    });
+    this.threadService
+      .findThreadByMessageId(channelMessageId)
+      .then((existingThread) => {
+        if (existingThread) {
+          const threadID =
+            this.threadService.getThreadIdFromSnapshot(existingThread);
+
+          const threadMessagesRef = collection(
+            this.firestore,
+            `threads/${threadID}/messages`
+          );
+
+          onSnapshot(threadMessagesRef, async () => {
+            const countSnapshot = await getCountFromServer(threadMessagesRef);
+            const answerCount = countSnapshot.data().count;
+            answerCountSubject.next(answerCount);
+          });
+        } else {
+          answerCountSubject.next(0);
+        }
+      });
+
+    return answerCountSubject.asObservable();
   }
 
   /**
