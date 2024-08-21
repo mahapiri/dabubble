@@ -32,14 +32,13 @@ export class TaggingComponent implements OnInit, OnDestroy {
   filteredMembers: User[] = [];
   currentUser: any;
 
-  
+
   /**
    * subscribes the current user
    */
   constructor() {
     this.userService.currentUser$.subscribe((user) => {
       this.currentUser = user?.username;
-      console.log(this.currentUser)
     });
   }
 

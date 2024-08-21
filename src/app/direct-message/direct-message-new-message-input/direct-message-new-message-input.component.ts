@@ -42,8 +42,7 @@ export class DirectMessageNewMessageInputComponent implements OnInit, OnDestroy 
   private directMessageService: DirectMessageService = inject(DirectMessageService);
   public uploadService: UploadService = inject(UploadService);
   private userSubscription: Subscription = new Subscription();
-  public taggingService: TaggingService = inject(TaggingService);
-  private taggingSubscription: Subscription = new Subscription();
+
 
   profile: Partial<User> = {};
   @Output() messageCreated: EventEmitter<void> = new EventEmitter<void>();
@@ -53,8 +52,6 @@ export class DirectMessageNewMessageInputComponent implements OnInit, OnDestroy 
   notOpen: boolean = true;
   @Input() message!: DmMessage;
 
-
-  isTag: boolean = false;
   members: string[] = [];
 
   
@@ -70,16 +67,6 @@ export class DirectMessageNewMessageInputComponent implements OnInit, OnDestroy 
         state: profile?.state
       };
     });
-    this.taggingSubscription = this.taggingService.memberSelected$.subscribe((member) => {
-      this.addMemberToMessage(member.username);
-    });
-  }
-
-  addMemberToMessage(username: string) {
-    const mention = `@${username} `;
-    if (!this.messageText.includes(mention)) {
-      this.messageText += ` ${mention}`; 
-    }
   }
 
 
@@ -88,7 +75,6 @@ export class DirectMessageNewMessageInputComponent implements OnInit, OnDestroy 
    */
   ngOnDestroy(): void {
     this.userSubscription.unsubscribe();
-    this.taggingSubscription.unsubscribe();
   }
 
 
@@ -153,16 +139,5 @@ export class DirectMessageNewMessageInputComponent implements OnInit, OnDestroy 
     this.uploadService.uploadPicture();
     this.messageText = this.uploadService.downloadURL;
     await this.createMessage();
-  }
-
-
-  openPopup(event: Event) {
-    event?.stopPropagation();
-    this.isTag = !this.isTag;
-  }
-
-
-  closePopup() {
-    this.isTag = false;
   }
 }
