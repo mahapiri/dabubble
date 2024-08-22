@@ -71,6 +71,10 @@ export class MainWindowComponent implements OnInit {
 
   ngOnDestroy(){
     this.userService.authStateSubscription?.unsubscribe()
+    if (this.channelMessagesService.messageListUnsubscribe) {
+          this.channelMessagesService.messageListUnsubscribe()
+    }
+
   }
   
 }

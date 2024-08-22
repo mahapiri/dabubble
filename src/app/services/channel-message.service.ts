@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   Firestore,
+  Unsubscribe,
   addDoc,
   collection,
   doc,
@@ -33,7 +34,7 @@ export class ChannelMessageService {
 
   channelMessages: ChannelMessage[] = [];
   selectedChannel: Subscription;
-  unsubMessages!: () => void;
+  public messageListUnsubscribe: Unsubscribe | undefined;
 
   /**
    * Subscribes to the `selectedChannel$` observable to react to changes in the selected channel.
@@ -49,7 +50,7 @@ export class ChannelMessageService {
       (channel) => {
         if (channel) {
           this.channelService.setChannelId(channel);
-          this.unsubMessages = this.subMessageList();
+          this.subMessageList();
         }
       }
     );
@@ -117,7 +118,7 @@ export class ChannelMessageService {
       limit(100)
     );
 
-    return onSnapshot(q, (list) => {
+    this.messageListUnsubscribe = onSnapshot(q, (list) => {
       this.channelMessages = [];
       this.previousDate = null;
 
@@ -212,7 +213,6 @@ export class ChannelMessageService {
    * Unsubscribes from the messages listener.
    */
   ngOnDestroy() {
-    this.unsubMessages();
     this.selectedChannel.unsubscribe();
   }
 }

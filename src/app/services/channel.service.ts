@@ -135,9 +135,9 @@ export class ChannelService {
           this.getChannelById(channelId)
         );
         const channels = await Promise.all(channelPromises);
-        this.userService._userChannels.next(
+         this.userService._userChannels.next(
           channels.filter((channel) => channel !== undefined) as Channel[]
-        );
+        );        
       }
     });
   }

@@ -75,25 +75,27 @@ export class WorkspaceMenuComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    //await this.userService.getUserID();
     this.userService.getUserList();
     setTimeout(async () => {
       await this.channelService.loadChannels();
+      this.showFirstChannel();
     }, 1000);
-    this.showFirstChannel();
   }
 
   /**
    * Upon page load, selects the first channel from the user's channel list and sets it as the currently active channel, shown in the main-window.
    */
   showFirstChannel() {
-    this.subscription = this.userChannels$.subscribe((channels) => {
-      if (channels.length > 0) {
-        this.channel = channels[0];
-        this.channelService.setSelectedChannel(this.channel);
-      }
-    });
-    this.subscription.unsubscribe();
+    setTimeout(() => {
+      this.subscription = this.userChannels$.subscribe((channels) => {
+        if (channels.length > 0) {
+          this.channel = channels[0];
+          this.channelService.setSelectedChannel(this.channel);
+        }
+      });
+      this.subscription.unsubscribe();
+    }, 500);
+
   }
 
   /**
