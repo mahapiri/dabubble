@@ -29,13 +29,14 @@ export class UserService {
 
   userID: string = '';
   userArray: User[] = [];
-
+  public authStateSubscription: Subscription | undefined;
   private unsubscribeSnapshot: (() => void) | undefined;
 
   constructor(private auth: Auth) {}
 
   async getUserID() {
-    onAuthStateChanged(this.auth, (user) => {
+    this.authStateSubscription = new Subscription();
+    const authStateChangeHandler = onAuthStateChanged(this.auth, (user) => {
       if (user) {
         this.userID = user.uid;
         console.log('User', this.userID, 'is logged in');
@@ -48,6 +49,7 @@ export class UserService {
         this.currentUser.next(null);
       }
     });
+    this.authStateSubscription.add(authStateChangeHandler);
   }
 
   getUserList() {

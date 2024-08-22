@@ -34,7 +34,7 @@ export class HeaderComponent implements OnInit {
   constructor(private router: Router) {}
 
   async ngOnInit() {
-    await this.userService.getUserID();
+   // await this.userService.getUserID();
     this.userService.currentUser$.subscribe((user) => {
       this.currentUser = user;
     });

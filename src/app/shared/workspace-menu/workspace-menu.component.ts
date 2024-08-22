@@ -75,7 +75,7 @@ export class WorkspaceMenuComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    await this.userService.getUserID();
+    //await this.userService.getUserID();
     this.userService.getUserList();
     setTimeout(async () => {
       await this.channelService.loadChannels();

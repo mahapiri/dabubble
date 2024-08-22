@@ -20,7 +20,7 @@ export class MyProfileComponent implements OnInit {
   constructor() {}
 
   async ngOnInit() {
-    await this.userService.getUserID();
+   // await this.userService.getUserID();
     this.userService.currentUser$.subscribe((user) => {
       this.currentUser = user;
     });

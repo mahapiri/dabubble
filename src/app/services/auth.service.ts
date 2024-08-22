@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, HostListener } from '@angular/core';
 import { User } from '../../models/user.class';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, deleteUser } from '@angular/fire/auth';
 import { UserService } from './user.service';
@@ -40,7 +40,7 @@ export class AuthService {
   }
 
   async setStartingChannels() {
-    const user = this.setUser();
+    const user = this.setUser();   
     const updates = [
       updateDoc(doc(this.firestore, 'channels', 'HRyA2fYZpKKap6d1sJS0'), {
         channelMember: arrayUnion(user)
@@ -58,14 +58,12 @@ export class AuthService {
   }
 
   async logOut() {
-    //this.userService.getUserID();
     if (this.loggedInAsGuest) {
       this.deleteGuestUser();
       this.loggedInAsGuest = false;
     }
     this.userService.unsubscribe()
     await signOut(this.auth);
-    //this.userService.getUserID();
   }
 
   async googleLogin() {
@@ -149,4 +147,10 @@ export class AuthService {
   createArrayWithoutUser(channel: Channel) {
     return channel.channelMember.filter(member => member.userId !== this.userId);
   }
+
+  @HostListener('window:beforeunload', ['$event'])
+  async unloadNotification($event: any): Promise<void> {
+   this.logOut()
+  }
+
 }

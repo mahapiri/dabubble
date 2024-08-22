@@ -10,6 +10,8 @@ import { PrivacyPolicyComponent } from '../privacy-policy/privacy-policy.compone
 import { DirectMessageComponent } from '../direct-message/direct-message.component';
 import { Channel } from '../../models/channel.class';
 import { ChannelService } from '../services/channel.service';
+import { UserService } from '../services/user.service';
+import { ChannelMessageService } from '../services/channel-message.service';
 
 @Component({
   selector: 'app-main-window',
@@ -29,6 +31,8 @@ import { ChannelService } from '../services/channel.service';
   styleUrl: './main-window.component.scss',
 })
 export class MainWindowComponent implements OnInit {
+  userService: UserService = inject(UserService)
+  channelMessagesService: ChannelMessageService = inject(ChannelMessageService)
   channel: Channel = new Channel({
     channelID: '',
     channelName: '',
@@ -43,6 +47,7 @@ export class MainWindowComponent implements OnInit {
   constructor(private channelService: ChannelService) {}
 
   ngOnInit() {
+    this.userService.getUserID();
     this.channelService.selectedChannel$.subscribe((channel) => {
       if (channel) {
         this.channel = channel;
@@ -62,6 +67,10 @@ export class MainWindowComponent implements OnInit {
     this.selectProfile = event;
     this.clickedChannel = false;
     this.clickedThread = false;
+  }
+
+  ngOnDestroy(){
+    this.userService.authStateSubscription?.unsubscribe()
   }
   
 }
