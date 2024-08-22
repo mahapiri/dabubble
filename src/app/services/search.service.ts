@@ -22,11 +22,16 @@ export class SearchService implements OnInit, OnDestroy {
   private currentUserChannelsSubscription: Subscription = new Subscription();
   private dmSubscription: Subscription = new Subscription();
 
-  userList: User[] = [];
-  channelList: Channel[] = [];
+
   currentUserID: string = '';
+  channelList: Channel[] = [];
+  userList: User[] = [];
   directMessage: DmMessage[] = [];
   channelMessage: ChannelMessage[] = [];
+
+  resultDM: DmMessage[] = [];
+  resultUser: User[] = [];
+  resultChannel: ChannelMessage[] = [];
 
 
   constructor() {
@@ -132,7 +137,52 @@ export class SearchService implements OnInit, OnDestroy {
       }
 
       this.channelMessage.push(message);
-      console.log(this.channelMessage)
+      // console.log(this.channelMessage)
     })
+  }
+
+  search(searchInputValue: string) {
+    this.resultDM = [];
+    this.resultUser = [];
+    this.resultChannel = [];
+
+    if (!searchInputValue || searchInputValue.trim() === '') {
+      console.log('leer');
+      return;
+    }
+
+    const searchWord = searchInputValue.trim().toLowerCase();
+
+    this.searchDM(searchWord);
+    this.searchUser(searchWord);
+    this.searchChannel(searchWord);
+  }
+
+
+  async searchDM(searchWord: string) {
+    this.directMessage.forEach((message) => {
+      const text = message.text || '';
+      if (text.toLowerCase().includes(searchWord)) {
+        this.resultDM.push(message);
+      }
+    });
+  }
+
+  async searchUser(searchWord: string) {
+    this.userList.forEach((user) => {
+      const profile = user.username || '';
+      if (profile.toLowerCase().includes(searchWord)) {
+        this.resultUser.push(user);
+      }
+    });
+  }
+
+  async searchChannel(searchWord: string) {
+    this.channelMessage.forEach((channel) => {
+      const message = channel.text || '';
+      if (message.toLowerCase().includes(searchWord)) {
+        this.resultChannel.push(channel);
+      }
+    });
   }
 }

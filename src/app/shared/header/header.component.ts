@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
@@ -30,6 +30,7 @@ export class HeaderComponent implements OnInit {
   searchService: SearchService = inject(SearchService);
   currentUser: any = '';
   isResults: boolean = false;
+  searchInputValue: string = '';
 
   constructor(private router: Router) {}
 
@@ -44,6 +45,7 @@ export class HeaderComponent implements OnInit {
     this.isResults = true;
     await this.searchService.getAllDM();
     await this.searchService.getAllChannel();
+    await this.searchService.search(this.searchInputValue);
   }
 
   closeResults() {

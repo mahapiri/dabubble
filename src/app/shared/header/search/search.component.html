@@ -1,8 +1,15 @@
 <div class="result-container">
+
     <div class="result-channel-container">
-        <h4 class="n-h4">Channel</h4>
+        <h4 class="n-h4">Channels</h4>
+
+        <div *ngIf="this.searchService.resultChannel.length === 0" class="no-message-container">
+            <p class="n-p">Keine Channels gefunden</p>
+        </div>
+
+
         <div *ngFor="let channel of this.searchService.channelList; let i = index" (click)="openChannel()">
-            <ng-container *ngFor="let message of this.searchService.channelMessage; let i = index">
+            <ng-container *ngFor="let message of this.searchService.resultChannel; let i = index">
                 <div class="profile-content dm-content">
                     <div class="profile-left">
                         <div class="channels-section">
@@ -26,7 +33,6 @@
                                 <div class="message-wrapper">
                                     <div class="profile-img">
                                         <img class="user-img" src="{{ message.profileImage }}" />
-                                        <!-- <div class="result-status-icon"></div> -->
                                     </div>
 
 
@@ -58,7 +64,13 @@
 
     <div class="result-dm-container">
         <h4 class="n-h4">Direktnachrichten</h4>
-        <div *ngFor="let dm of this.searchService.directMessage; let i = index" (click)="openDM()">
+
+        <div *ngIf="this.searchService.resultDM.length === 0" class="no-message-container">
+            <p class="n-p">Keine Direktnachrichten gefunden</p>
+        </div>
+
+
+        <div *ngFor="let dm of this.searchService.resultDM; let i = index" (click)="openDM()">
             <div class="profile-content dm-content">
                 <div class="profile-left">
                     <div class="profile">
@@ -111,7 +123,12 @@
 
     <div class="result-user-container">
         <h4 class="n-h4">User</h4>
-        <div *ngFor="let user of this.searchService.userList; let i = index" (click)="openProfile()">
+
+        <div *ngIf="this.searchService.resultUser.length === 0" class="no-message-container">
+            <p class="n-p">Keine User gefunden</p>
+        </div>
+
+        <div *ngFor="let user of this.searchService.resultUser; let i = index" (click)="openProfile()">
             <div class="profile-content">
                 <div class="profile">
                     <img [src]="user.profileImage" alt="Character" class="profile-icon">
