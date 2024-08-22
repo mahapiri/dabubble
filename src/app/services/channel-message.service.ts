@@ -33,7 +33,6 @@ export class ChannelMessageService {
   previousDate: string | null = null;
 
   channelMessages: ChannelMessage[] = [];
-  selectedChannel: Subscription;
   public messageListUnsubscribe: Unsubscribe | undefined;
 
   /**
@@ -46,15 +45,18 @@ export class ChannelMessageService {
     private chatService: ChatService,
     private channelService: ChannelService
   ) {
-    this.selectedChannel = this.channelService.selectedChannel$.subscribe(
+ /*    this.selectedChannel = this.channelService.selectedChannel$.subscribe(
       (channel) => {
         if (channel) {
+          
           this.channelService.setChannelId(channel);
           this.subMessageList();
         }
       }
-    );
+    ); */
   }
+
+  
 
   /**
    * Sets the selected message, when clicked to answer.
@@ -207,12 +209,5 @@ export class ChannelMessageService {
       ),
       docId
     );
-  }
-
-  /**
-   * Unsubscribes from the messages listener.
-   */
-  ngOnDestroy() {
-    this.selectedChannel.unsubscribe();
   }
 }

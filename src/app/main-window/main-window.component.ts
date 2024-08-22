@@ -12,6 +12,7 @@ import { Channel } from '../../models/channel.class';
 import { ChannelService } from '../services/channel.service';
 import { UserService } from '../services/user.service';
 import { ChannelMessageService } from '../services/channel-message.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-main-window',
@@ -43,14 +44,18 @@ export class MainWindowComponent implements OnInit {
   clickedChannel: boolean = false;
   clickedThread: boolean = false;
   selectProfile: boolean = false;
+  selectedChannel: Subscription | undefined;
+
 
   constructor(private channelService: ChannelService) {}
 
   ngOnInit() {
     this.userService.getUserID();
-    this.channelService.selectedChannel$.subscribe((channel) => {
+    this.selectedChannel = this.channelService.selectedChannel$.subscribe((channel) => {
       if (channel) {
         this.channel = channel;
+        this.channelService.setChannelId(channel);
+        this.channelMessagesService.subMessageList();
       }
     });
   }
@@ -71,6 +76,7 @@ export class MainWindowComponent implements OnInit {
 
   ngOnDestroy(){
     this.userService.authStateSubscription?.unsubscribe()
+    this.selectedChannel?.unsubscribe()
     if (this.channelMessagesService.messageListUnsubscribe) {
           this.channelMessagesService.messageListUnsubscribe()
     }

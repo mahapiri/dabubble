@@ -40,7 +40,7 @@ export class AuthService {
   }
 
   async setStartingChannels() {
-    const user = this.setUser();   
+    const user = this.setUser();
     const updates = [
       updateDoc(doc(this.firestore, 'channels', 'HRyA2fYZpKKap6d1sJS0'), {
         channelMember: arrayUnion(user)
@@ -58,12 +58,20 @@ export class AuthService {
   }
 
   async logOut() {
+    this.unsubFromMessageList();
+    this.userService.unsubscribe()
     if (this.loggedInAsGuest) {
       this.deleteGuestUser();
       this.loggedInAsGuest = false;
     }
-    this.userService.unsubscribe()
     await signOut(this.auth);
+  }
+
+  unsubFromMessageList() {
+    if (this.channelMessageService.messageListUnsubscribe) {
+      this.channelMessageService.messageListUnsubscribe()
+      console.log("successfully unsubscribed");
+    }
   }
 
   async googleLogin() {
@@ -150,7 +158,7 @@ export class AuthService {
 
   @HostListener('window:beforeunload', ['$event'])
   async unloadNotification($event: any): Promise<void> {
-   this.logOut()
+    this.logOut()
   }
 
 }
