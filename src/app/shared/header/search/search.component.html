@@ -4,61 +4,61 @@
         <h4 class="n-h4">Channels</h4>
 
         <div *ngIf="this.searchService.resultChannel.length === 0" class="no-message-container">
-            <p class="n-p">Keine Channels gefunden</p>
+            <p class="n-p">Keine Channels mit Nachrichten gefunden</p>
         </div>
 
-
-        <div *ngFor="let channel of this.searchService.channelList; let i = index" (click)="openChannel()">
-            <ng-container *ngFor="let message of this.searchService.resultChannel; let i = index">
-                <div class="profile-content dm-content">
-                    <div class="profile-left">
-                        <div class="channels-section">
-                            <div class="channels-header">
-                                <div class="channels-title">
-                                    <mat-icon class="channel-icon">tag</mat-icon>
-                                    <p class="n-p">{{ channel.channelName }}</p>
+        <ng-container *ngIf="this.searchService.resultChannel.length > 0">
+            <div *ngFor="let channel of this.searchService.channelList; let i = index" (click)="openChannel()">
+                <ng-container *ngFor="let message of this.searchService.resultChannel; let i = index">
+                    <div class="profile-content dm-content">
+                        <div class="profile-left">
+                            <div class="channels-section">
+                                <div class="channels-header">
+                                    <div class="channels-title">
+                                        <mat-icon class="channel-icon">tag</mat-icon>
+                                        <p class="n-p">{{ channel.channelName }}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="profile-right">
-                        <div class="profile-up">
-                            <mat-divider> </mat-divider>
-                            <div class="message-date">
-                                {{ chatService.formatDate(message.date) }}
+                        <div class="profile-right">
+                            <div class="profile-up">
+                                <mat-divider> </mat-divider>
+                                <div class="message-date">
+                                    {{ chatService.formatDate(message.date) }}
+                                </div>
                             </div>
-                        </div>
-                        <div class="profile-down">
-                            <div class="my-message">
-                                <div class="message-wrapper">
-                                    <div class="profile-img">
-                                        <img class="user-img" src="{{ message.profileImage }}" />
-                                    </div>
+                            <div class="profile-down">
+                                <div class="my-message">
+                                    <div class="message-wrapper">
+                                        <div class="profile-img">
+                                            <img class="user-img" src="{{ message.profileImage }}" />
+                                        </div>
 
 
-                                    <div class="message-details">
-                                        <div class="user-wrapper">
-                                            <div class="user-name">{{ message.authorName }}</div>
-                                            <div class="time">
-                                                {{ chatService.formatTime(message.time) }} Uhr
+                                        <div class="message-details">
+                                            <div class="user-wrapper">
+                                                <div class="user-name">{{ message.authorName }}</div>
+                                                <div class="time">
+                                                    {{ chatService.formatTime(message.time) }} Uhr
+                                                </div>
+                                            </div>
+                                            <div class="text-bubble">
+                                                <ng-container
+                                                    *ngIf="directMessageService.isImage(message.text); else textContent">
+                                                    <img [src]="message.text" alt="Image" class="message-image" />
+                                                </ng-container>
+                                                <ng-template #textContent>{{ message.text }}</ng-template>
                                             </div>
                                         </div>
-                                        <div class="text-bubble">
-                                            <ng-container
-                                                *ngIf="directMessageService.isImage(message.text); else textContent">
-                                                <img [src]="message.text" alt="Image"
-                                                    class="message-image" />
-                                            </ng-container>
-                                            <ng-template #textContent>{{ message.text }}</ng-template>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </ng-container>
-        </div>
+                </ng-container>
+            </div>
+        </ng-container>
     </div>
 
 

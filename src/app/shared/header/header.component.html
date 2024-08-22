@@ -8,11 +8,11 @@
             <mat-icon class="search-icon" (click)="openResults()">search</mat-icon>
 
 
-
-            <div *ngIf="isResults">
-                <app-search></app-search>
-            </div>
-
+            <ng-container *ngIf="searchInputValue.length > 0">
+                <div *ngIf="isResults">
+                    <app-search></app-search>
+                </div>
+            </ng-container>
 
         </div>
 

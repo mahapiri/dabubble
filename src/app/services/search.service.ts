@@ -147,7 +147,6 @@ export class SearchService implements OnInit, OnDestroy {
     this.resultChannel = [];
 
     if (!searchInputValue || searchInputValue.trim() === '') {
-      console.log('leer');
       return;
     }
 
