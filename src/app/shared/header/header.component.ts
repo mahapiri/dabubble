@@ -5,18 +5,18 @@ import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 import { CommonModule } from '@angular/common';
-import { User } from '../../../models/user.class';
 import { MyProfileComponent } from '../../users/my-profile/my-profile.component';
 import { SearchService } from '../../services/search.service';
 import { FormsModule } from '@angular/forms';
 import { ChatService } from '../../services/chat.service';
 import { MatDividerModule } from '@angular/material/divider';
 import { DirectMessageService } from '../../services/direct-message.service';
+import { SearchComponent } from '../header/search/search.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [MatIconModule, ClickOutsideDirective, CommonModule, MyProfileComponent, FormsModule, ClickOutsideDirective, MatDividerModule],
+  imports: [MatIconModule, ClickOutsideDirective, CommonModule, MyProfileComponent, FormsModule, ClickOutsideDirective, MatDividerModule, SearchComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
@@ -40,9 +40,10 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  openResults() {
+  async openResults() {
     this.isResults = true;
-    this.searchService.getAllDM();
+    await this.searchService.getAllDM();
+    await this.searchService.getAllChannel();
   }
 
   closeResults() {
@@ -75,11 +76,6 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  openChannel(){
 
-  }
 
-  openDM() {
-
-  }
 }

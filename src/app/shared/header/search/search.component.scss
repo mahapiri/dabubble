@@ -1,0 +1,377 @@
+.result-container {
+    width: 100%;
+    max-height: 50vh;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--white);
+    border-radius: 0px 0px 30px 30px;
+    padding: 0px 30px 16px 30px;
+    gap: 15px;
+    transition: all 100ms ease-in-out;
+    box-shadow: 0px 6px 10px -4px rgba(0, 0, 0, 0.2);
+    border: 1px solid;
+    border-top-color: var(--white);
+    border-right-color: var(--purple-2);
+    border-bottom-color: var(--purple-2);
+    border-left-color: var(--purple-2);
+}
+
+.active {
+    border-radius: 42px 42px 0px 0px !important;
+    border-color: unset;
+    border-top-color: var(--purple-2);
+    border-right-color: var(--purple-2);
+    border-bottom-color: var(--white);
+    border-left-color: var(--purple-2);
+
+    &:focus-visible {
+        border-color: unset;
+        border-top-color: var(--purple-2);
+        border-right-color: var(--purple-2);
+        border-bottom-color: var(--white);
+        border-left-color: var(--purple-2);
+    }
+}
+
+.user-container {
+    // width: 342px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    cursor: pointer;
+
+    &:hover {
+
+        .user-name,
+        .arrow-icon {
+            color: var(--purple-3);
+        }
+
+        .arrow-icon {
+            transform: scale(1.2);
+        }
+    }
+}
+
+.user-name {
+    font-family: "Nunito";
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 43.65px;
+    color: var(--black);
+}
+
+.img-content {
+    position: relative;
+
+    img {
+        width: 70px;
+        height: 70px;
+        border-radius: 42px;
+    }
+}
+
+.status-icon {
+    width: 16.67px;
+    height: 16.67px;
+    border: 2px solid var(--white);
+    border-radius: 50%;
+    position: absolute;
+    bottom: 4px;
+    right: 7px;
+}
+
+.online {
+    background-color: var(--green);
+}
+
+.offline {
+    background-color: var(--rosa);
+}
+
+.info-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--white);
+    border-radius: 30px 0px 30px 30px;
+    padding: 30px;
+    gap: 15px;
+    position: absolute;
+    top: 100px;
+    right: 0px;
+    z-index: 1;
+    transition: all 100ms ease-out;
+    box-shadow: 0px 6px 10px 0px rgba(0, 0, 0, 0.2);
+}
+
+a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 222px;
+    text-decoration: none;
+    font-family: "Nunito";
+    color: var(--black);
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 32.74px;
+    cursor: pointer;
+}
+
+.d-none {
+    display: none;
+}
+
+
+
+.profile-content {
+    display: flex;
+    align-items: center;
+    border-radius: 35px;
+    padding: 4px 20px;
+    gap: 15px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--bg-color);
+        border-radius: 35px;
+        color: var(--black);
+    }
+}
+
+.profile {
+    display: flex;
+    position: relative;
+
+    img {
+        height: 50px;
+        width: 50px;
+    }
+}
+
+.profile-left {
+    min-width: 180px;
+    max-width: 200px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.profile-icon {
+    border-radius: 30px;
+}
+
+.result-status-icon {
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--white);
+    border-radius: 50%;
+    position: absolute;
+    top: 38px;
+    left: 34px;
+}
+
+.n-h4 {
+    padding-left: 16px;
+}
+
+
+.result-user-container,
+.result-dm-container,
+.result-channel-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+.channels-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 4px 20px;
+    background-color: var(--white);
+    box-shadow: unset !important;
+    color: var(--black) !important;
+}
+
+.channels-section {
+    display: flex;
+    justify-content: space-between;
+}
+
+.channels-header {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 5px 10px 5px 0px;
+    gap: 15px;
+}
+
+.channels-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    mat-icon {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+.dm-content {
+    padding: 20px 20px;
+    padding-top: 32px !important;
+}
+
+.profile-right {
+    width: 100%;
+}
+
+.profile-up {
+    position: relative;
+
+    mat-divider {
+        border-top-color: var(--lines);
+    }
+
+    .message-date {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: -18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 36px;
+        width: fit-content;
+        border: 1px solid var(--lines);
+        border-radius: 30px;
+        padding: 5px 15px 5px 15px;
+        background-color: var(--white);
+        font-size: 16px;
+        font-weight: 400;
+        color: var(--black);
+    }
+}
+
+
+.message-wrapper {
+    font-family: "Nunito";
+    display: flex;
+    color: var(--gray);
+    gap: 24px;
+    padding: 10px 0px 0px 0px;
+    overflow: visible;
+    cursor: pointer;
+
+    .profile-img {
+        position: relative;
+    }
+
+    .message-details {
+        display: flex;
+        flex-direction: column;
+        // gap: 8px;
+    }
+
+    .user-img {
+        height: 50px;
+        width: 50px;
+        border-radius: 40px;
+        object-fit: contain;
+    }
+
+    .user-wrapper {
+        display: flex;
+        gap: 16px;
+    }
+
+    .user-name {
+        color: var(--black);
+        font-size: 18px;
+        font-weight: 700;
+
+        &:hover {
+            color: var(--purple-1);
+        }
+    }
+
+    .time {
+        font-size: 14px;
+        font-weight: 400;
+    }
+
+    .text-bubble {
+        width: fit-content;
+        font-size: 18px;
+        padding: 12px;
+        // padding: 15px;
+        border-radius: 0 30px 30px 30px;
+        background-color: var(--bg-color);
+        color: var(--black);
+        word-break: break-word;
+    }
+}
+
+.my-message {
+    .message {
+        position: relative;
+        justify-content: flex-end;
+        padding: 10px 24px 10px 24px;
+
+        &:hover {
+            .reaction-bar {
+                opacity: 1;
+                left: 24px;
+                transition: left 0.15s ease-out, opacity 0.15s ease-out;
+            }
+        }
+    }
+
+    .message-wrapper {
+        flex-direction: row-reverse;
+        align-items: center; ///
+    }
+
+    .message-details {
+        align-items: flex-end;
+    }
+
+    .user-wrapper {
+        justify-content: flex-end;
+        align-items: baseline;
+    }
+
+    .text-bubble {
+        border-radius: 30px 0 30px 30px;
+        background-color: var(--purple-2);
+        color: var(--white);
+    }
+
+    .reaction-bar {
+        right: unset;
+        left: 90px;
+    }
+
+    .reactions-wrapper {
+        justify-content: flex-end;
+    }
+
+    &:hover {
+        .text-bubble {
+            background-color: var(--purple-2);
+        }
+    }
+}
+
+.message-image {
+    width: 50px;
+    height: 50px;
+}

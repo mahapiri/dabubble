@@ -2,17 +2,22 @@ import { inject, Injectable, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from './user.service';
 import { User } from '../../models/user.class';
 import { Subscription } from 'rxjs';
-import { Channel } from '../../models/channel.class';
+import { Channel, ChannelMessage } from '../../models/channel.class';
 import { DirectMessageService } from './direct-message.service';
-import { collection, Firestore, getDoc, getDocs, onSnapshot, query, where } from '@angular/fire/firestore';
+import { collection, Firestore, getDocs, query, where } from '@angular/fire/firestore';
 import { DmMessage } from '../../models/direct-message.class';
+import { ChannelService } from './channel.service';
+import { ChannelMessageService } from './channel-message.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SearchService implements OnInit, OnDestroy {
+  private firestore: Firestore = inject(Firestore);
   private userService: UserService = inject(UserService);
-  private dmService: DirectMessageService = inject(DirectMessageService);
+  private directMessageService: DirectMessageService = inject(DirectMessageService);
+  private channelService: ChannelService = inject(ChannelService);
+  private channelMessageService: ChannelMessageService = inject(ChannelMessageService);
   private userListSubscription: Subscription = new Subscription();
   private currentUserChannelsSubscription: Subscription = new Subscription();
   private dmSubscription: Subscription = new Subscription();
@@ -21,49 +26,54 @@ export class SearchService implements OnInit, OnDestroy {
   channelList: Channel[] = [];
   currentUserID: string = '';
   directMessage: DmMessage[] = [];
+  channelMessage: ChannelMessage[] = [];
 
-  constructor() { 
-    this.userListSubscription = this.userService.userList$.subscribe((user) =>  {
+
+  constructor() {
+    this.userListSubscription = this.userService.userList$.subscribe((user) => {
       this.userList = user;
     });
-    this.currentUserChannelsSubscription = this.userService.userChannels$.subscribe((channels) =>  {
+    this.currentUserChannelsSubscription = this.userService.userChannels$.subscribe((channels) => {
       this.channelList = channels;
     });
     // this.dmSubscription = this.dmService.messages$.subscribe((message) =>  {
     //   console.log(message);
     // });
     this.userService.currentUser$.subscribe((user) => {
-      if(user) {
-        this.currentUserID = user?.userId
+      if (user) {
+        this.currentUserID = user?.userId || '';
       }
-
     })
   }
+
 
   ngOnInit() {
   }
 
+
   ngOnDestroy(): void {
-      this.userListSubscription.unsubscribe();
-      this.currentUserChannelsSubscription.unsubscribe();
-      // this.dmSubscription.unsubscribe();
+    this.userListSubscription.unsubscribe();
+    this.currentUserChannelsSubscription.unsubscribe();
+    // this.dmSubscription.unsubscribe();
   }
+
 
   async getAllDM() {
     this.directMessage = [];
-    const collectionRef = this.dmService.getCollectionRef();
+    const collectionRef = this.directMessageService.getCollectionRef();
 
     const q = query(collectionRef, where("userIDs", "array-contains", this.currentUserID));
 
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       const dmID = doc.id;
-      this.getMessage(dmID);
+      this.getDmMessage(dmID);
     })
   }
 
-  async getMessage(dmID: string) {
-    const messageRef = this.dmService.getMessageRefForId(dmID);
+
+  async getDmMessage(dmID: string) {
+    const messageRef = this.directMessageService.getMessageRefForId(dmID);
     const message = await getDocs(messageRef);
 
     message.forEach((doc) => {
@@ -88,10 +98,41 @@ export class SearchService implements OnInit, OnDestroy {
       }
 
       this.directMessage.push(message);
-
-      console.log(this.directMessage)
     })
   }
 
 
+  async getAllChannel() {
+    this.channelMessage = [];
+    for (const channel of this.channelList) {
+      const id = channel.channelID;
+      if (id) {
+        await this.getChannelMessage(id);
+      }
+    }
+  }
+
+
+  async getChannelMessage(id: string) {
+    const messageRef = collection(this.firestore, `channels/${id}/messages`);
+    const messages = await getDocs(messageRef);
+
+    messages.forEach((doc) => {
+      const data = doc.data();
+
+      const message: any = {
+        authorId: data['authorId'],
+        authorName: data['authorName'],
+        date: data['date'],
+        id: data['id'],
+        isFirstMessageOfDay: data['isFirstMessageOfDay'],
+        profileImage: data['profileImage'],
+        text: data['text'],
+        time: data['time'],
+      }
+
+      this.channelMessage.push(message);
+      console.log(this.channelMessage)
+    })
+  }
 }
