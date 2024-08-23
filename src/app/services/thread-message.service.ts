@@ -34,7 +34,7 @@ export class ThreadMessageService {
   threads: Thread[] = [];
   threadMessages: ThreadMessage[] = [];
 
-  previousDate: string | null = null;
+  //previousDate: string | null = null;
 
   unsubUser!: Subscription;
   selectedThread: Subscription;
@@ -170,7 +170,7 @@ export class ThreadMessageService {
     return new Promise((resolve) => {
       const unsubscribe = onSnapshot(q, (list) => {
         this.threadMessages = [];
-        this.previousDate = null;
+        //this.previousDate = null;
 
         list.forEach((message) => {
           const currentMessage = this.setMessageObject(
@@ -181,7 +181,7 @@ export class ThreadMessageService {
           this.threadMessages.push(currentMessage);
         });
 
-        this.threadMessages.reverse();
+        //this.threadMessages.reverse();
         this.threadMessagesSubjects.next(this.threadMessages);
         console.log('Thread Message received:', this.threadMessages);
 
