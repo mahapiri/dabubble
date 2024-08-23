@@ -79,11 +79,18 @@ export class ChannelNewMessageInputComponent implements OnInit{
     }
   }
 
+  /**
+   * calls the onFileSelected method and sets the uploadPath to "channel"
+   * @param event 
+   */
   async chooseFile(event: Event) {
     this.uploadService.onFileSelected(event)
     this.uploadService.uploadPath = this.uploadPath;
   }
 
+  /**
+   * calls the upload method if a file was chosen and saves the dawnload URL of the file to the messageText
+   */
   async checkPictureUpload() {
     if (this.uploadService.fileChosen) {
       await this.uploadService.uploadPicture();

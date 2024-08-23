@@ -80,7 +80,5 @@ export class MainWindowComponent implements OnInit {
     if (this.channelMessagesService.messageListUnsubscribe) {
           this.channelMessagesService.messageListUnsubscribe()
     }
-
   }
-  
 }

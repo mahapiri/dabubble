@@ -26,8 +26,11 @@ export class UploadService {
   currentImg$ = this.currentImg.asObservable();
 
 
-  constructor() {   }
+  constructor() { }
 
+  /**
+   * opens the file input when called
+   */
   triggerFileInput(): void {
     const fileInput = document.getElementById('file-upload') as HTMLInputElement;
     if (fileInput) {
@@ -35,17 +38,19 @@ export class UploadService {
     }
   }
 
+  /**
+   * saves the selected file in the file variable and sets the observable for the current image
+   * @param event 
+   */
   onFileSelected(event: Event): void {
-      const input = event.target as HTMLInputElement;
+    const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.file = input.files[0];
       if (this.file.type.startsWith('image/') || this.file.type.startsWith('application/')) {
         const reader = new FileReader();
         reader.onload = () => {
           this.currentImg.next(reader.result);
-          this.fileChosen = true;
-          this.userSpecificPath = `${this.uploadPath}/${this.userService.userID}/${this.file.name}`
-          this.storageRef = ref(this.storage, this.userSpecificPath);
+          this.setPathForUpload();
         };
         reader.readAsDataURL(this.file);
       } else {
@@ -54,15 +59,30 @@ export class UploadService {
     }
   }
 
-  removeImg(){
-    this.fileChosen = false;
-    this.currentImg.next("");   
+  /**
+   * sets the upload path for the file
+   */
+  setPathForUpload(){
+    this.fileChosen = true;
+    this.userSpecificPath = `${this.uploadPath}/${this.userService.userID}/${this.file.name}`
+    this.storageRef = ref(this.storage, this.userSpecificPath);
   }
 
+  /**
+   * removes the file from the observable
+   */
+  removeImg() {
+    this.fileChosen = false;
+    this.currentImg.next("");
+  }
+
+  /**
+   * uploads the file and sets the download URL
+   */
   async uploadPicture() {
     await uploadBytes(this.storageRef, this.file).then(async (snapshot) => {
       this.downloadURL = await getDownloadURL(this.storageRef);
-      this.currentImg.next("");   
+      this.currentImg.next("");
       this.fileChosen = false;
     })
   }
