@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Thread, ThreadMessage } from '../../models/thread.class';
 import { ChatService } from './chat.service';
 import {
+  CollectionReference,
   Firestore,
   addDoc,
   collection,
@@ -16,7 +17,6 @@ import { UserService } from './user.service';
 import { ThreadService } from './thread.service';
 import { User } from '../../models/user.class';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { ChannelService } from './channel.service';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +27,9 @@ export class ThreadMessageService {
 
   private answerCountSubject = new BehaviorSubject<number>(0);
   public answerCount$ = this.answerCountSubject.asObservable();
+
+  private lastAnswerSubject = new BehaviorSubject<string>('');
+  public lastAnswer$ = this.lastAnswerSubject.asObservable();
 
   threads: Thread[] = [];
   threadMessages: ThreadMessage[] = [];
@@ -51,47 +54,75 @@ export class ThreadMessageService {
   }
 
   getAnswerCount() {
-    const q = query(this.getThreadMessagesRef());
+    const msgRef = this.getThreadMessagesRef();
+    this.subscribeToAnswerCount(msgRef, this.updateAnswerCount.bind(this));
+  }
 
-    onSnapshot(q, async () => {
-      const countSnapshot = await getCountFromServer(q);
-      const answerCount = countSnapshot.data().count;
-      this.updateAnswerCount(answerCount);
+  getAnswerCountForChannelMessage(chMsgId: string): Observable<number> {
+    return new Observable<number>((answerCountSubject) => {
+      this.threadService
+        .findThreadByMessageId(chMsgId)
+        .then((existingThread) => {
+          if (existingThread) {
+            const threadID =
+              this.threadService.getThreadIdFromSnapshot(existingThread);
+            const msgRef = collection(
+              this.firestore,
+              `threads/${threadID}/messages`
+            );
+            this.subscribeToAnswerCount(
+              msgRef,
+              answerCountSubject.next.bind(answerCountSubject)
+            );
+          }
+        });
     });
+  }
+
+  getLastAnswer(chMsgId: string): Observable<string> {
+    return new Observable<string>((lastAnswerSubject) => {
+      this.threadService
+        .findThreadByMessageId(chMsgId)
+        .then((existingThread) => {
+          if (existingThread) {
+            const threadID =
+              this.threadService.getThreadIdFromSnapshot(existingThread);
+            const msgRef = collection(
+              this.firestore,
+              `threads/${threadID}/messages`
+            );
+            this.subscribeToLastAnswer(msgRef, lastAnswerSubject);
+          }
+        });
+    });
+  }
+
+  subscribeToLastAnswer(msgRef: CollectionReference, lastAnswerSubject: any) {
+    const q = query(msgRef, orderBy('date', 'desc'), orderBy('time', 'desc'));
+    const unsubscribe = onSnapshot(q, async (snapshot) => {
+      if (!snapshot.empty) {
+        const lastMessage = snapshot.docs[0].data();
+        const lastAnswerTime = `${lastMessage['time']}`;
+        lastAnswerSubject.next(lastAnswerTime);
+      }
+    });
+    return unsubscribe;
+  }
+
+  subscribeToAnswerCount(
+    msgRef: CollectionReference,
+    callback: (count: number) => void
+  ) {
+    const unsubscribe = onSnapshot(msgRef, async () => {
+      const countSnapshot = await getCountFromServer(msgRef);
+      const answerCount = countSnapshot.data().count;
+      callback(answerCount);
+    });
+    return unsubscribe;
   }
 
   updateAnswerCount(count: number) {
     this.answerCountSubject.next(count);
-  }
-
-  getAnswerCountForChannelMessage(
-    channelMessageId: string
-  ): Observable<number> {
-    const answerCountSubject = new BehaviorSubject<number>(0);
-
-    this.threadService
-      .findThreadByMessageId(channelMessageId)
-      .then((existingThread) => {
-        if (existingThread) {
-          const threadID =
-            this.threadService.getThreadIdFromSnapshot(existingThread);
-
-          const threadMessagesRef = collection(
-            this.firestore,
-            `threads/${threadID}/messages`
-          );
-
-          onSnapshot(threadMessagesRef, async () => {
-            const countSnapshot = await getCountFromServer(threadMessagesRef);
-            const answerCount = countSnapshot.data().count;
-            answerCountSubject.next(answerCount);
-          });
-        } else {
-          answerCountSubject.next(0);
-        }
-      });
-
-    return answerCountSubject.asObservable();
   }
 
   /**
@@ -156,6 +187,7 @@ export class ThreadMessageService {
 
         resolve();
       });
+      return unsubscribe;
     });
   }
 
@@ -207,7 +239,7 @@ export class ThreadMessageService {
     });
   }
 
-  getThreadMessagesRef() {
+  getThreadMessagesRef(): CollectionReference {
     return collection(
       this.firestore,
       `threads/${this.threadService.threadID}/messages`

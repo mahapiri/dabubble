@@ -90,7 +90,9 @@
               {{ answerCount }} Antworten
             </div>
 
-            <div class="last-answer">Letzte Antwort 14:56</div>
+            <div class="last-answer">
+              Letzte Antwort {{ chatService.formatTime(lastAnswerTime) }} Uhr
+            </div>
           </div>
 
           <div *ngIf="isMyMessage && !edit" class="reaction-container">

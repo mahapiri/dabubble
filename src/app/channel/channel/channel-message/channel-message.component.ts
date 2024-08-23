@@ -11,7 +11,6 @@ import { FormsModule } from '@angular/forms';
 import { ChannelMessageService } from '../../../services/channel-message.service';
 import { ThreadService } from '../../../services/thread.service';
 import { ThreadMessageService } from '../../../services/thread-message.service';
-import { Thread, ThreadMessage } from '../../../../models/thread.class';
 import { Observable, Subscription } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
 
@@ -33,16 +32,14 @@ import { ChangeDetectorRef } from '@angular/core';
 export class ChannelMessageComponent {
   @Input() channel!: Channel;
   @Input() channelMessage!: ChannelMessage;
-  //@Input() channelMessages: ChannelMessage[] = [];
   @Output() clickedAnswer = new EventEmitter<boolean>();
 
   selectedChannelMessage$!: Observable<ChannelMessage>;
 
-  //selectedThread$: Observable<Thread | null>;
-  //threadMessages$: Observable<ThreadMessage[]>;
-
   public answerCount: number = 0;
+  public lastAnswerTime: string = '';
   private answerCountSubscription!: Subscription;
+  private lastAnswerSubscription!: Subscription;
 
   isMyMessage: boolean = false;
   edit: boolean = false;
@@ -53,10 +50,7 @@ export class ChannelMessageComponent {
     private threadService: ThreadService,
     public threadMessageService: ThreadMessageService,
     private cdRef: ChangeDetectorRef
-  ) {
-    //this.selectedThread$ = this.threadService.selectedThread$;
-    //this.threadMessages$ = this.threadMessageService.threadMessages$;
-  }
+  ) {}
 
   /**
    * The `isMyMessage` property is set by checking if the `channelMessage` belongs to the current user.
@@ -69,6 +63,14 @@ export class ChannelMessageComponent {
       .subscribe((count) => {
         this.answerCount = count;
         this.cdRef.detectChanges();
+      });
+
+    this.lastAnswerSubscription = this.threadMessageService
+      .getLastAnswer(this.channelMessage.id)
+      .subscribe((time) => {
+        this.lastAnswerTime = time;
+        this.cdRef.detectChanges();
+        console.log('last answer time:', time);
       });
   }
 
@@ -113,5 +115,6 @@ export class ChannelMessageComponent {
 
   ngOnDestroy() {
     this.answerCountSubscription.unsubscribe();
+    this.lastAnswerSubscription.unsubscribe();
   }
 }
