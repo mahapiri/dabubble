@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,6 +7,7 @@ import { SearchService } from '../../../services/search.service';
 import { UserService } from '../../../services/user.service';
 import { ChatService } from '../../../services/chat.service';
 import { DirectMessageService } from '../../../services/direct-message.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-search',
@@ -20,11 +21,12 @@ import { DirectMessageService } from '../../../services/direct-message.service';
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss'
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
   searchService: SearchService = inject(SearchService);
   userService: UserService = inject(UserService);
   chatService: ChatService = inject(ChatService);
   directMessageService: DirectMessageService = inject(DirectMessageService);
+  currentUserSubscription: Subscription = new Subscription();
   currentUser: any = '';
 
   constructor() {
@@ -33,16 +35,20 @@ export class SearchComponent implements OnInit {
 
   async ngOnInit() {
     //await this.userService.getUserID();
-    this.userService.currentUser$.subscribe((user) => {
+    this.currentUserSubscription = this.userService.currentUser$.subscribe((user) => {
       this.currentUser = user;
     });
   }
 
-  openChannel(){
+  ngOnDestroy(): void {
+    this.currentUserSubscription.unsubscribe();
+  }
+
+  openChannel() {
 
   }
 
-  
+
   openDM() {
 
   }

@@ -20,6 +20,7 @@ export class SearchService implements OnInit, OnDestroy {
   private channelMessageService: ChannelMessageService = inject(ChannelMessageService);
   private userListSubscription: Subscription = new Subscription();
   private currentUserChannelsSubscription: Subscription = new Subscription();
+  private currentUserSubscription: Subscription = new Subscription();
   private dmSubscription: Subscription = new Subscription();
 
 
@@ -28,10 +29,13 @@ export class SearchService implements OnInit, OnDestroy {
   userList: User[] = [];
   directMessage: DmMessage[] = [];
   channelMessage: ChannelMessage[] = [];
+  // channelMessage: any;
+  channelListMsg: any = [];
 
   resultDM: DmMessage[] = [];
   resultUser: User[] = [];
-  resultChannel: ChannelMessage[] = [];
+  // resultChannel: ChannelMessage[] = [];
+  resultChannel: any;
 
 
   constructor() {
@@ -44,7 +48,7 @@ export class SearchService implements OnInit, OnDestroy {
     // this.dmSubscription = this.dmService.messages$.subscribe((message) =>  {
     //   console.log(message);
     // });
-    this.userService.currentUser$.subscribe((user) => {
+    this.currentUserSubscription = this.userService.currentUser$.subscribe((user) => {
       if (user) {
         this.currentUserID = user?.userId || '';
       }
@@ -59,7 +63,9 @@ export class SearchService implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.userListSubscription.unsubscribe();
     this.currentUserChannelsSubscription.unsubscribe();
+    this.currentUserSubscription.unsubscribe();
     // this.dmSubscription.unsubscribe();
+    console.log('unsub');
   }
 
 
@@ -108,17 +114,27 @@ export class SearchService implements OnInit, OnDestroy {
 
 
   async getAllChannel() {
-    this.channelMessage = [];
+    this.channelListMsg = [];
     for (const channel of this.channelList) {
       const id = channel.channelID;
       if (id) {
-        await this.getChannelMessage(id);
+        const channelList: any = {
+          channelID: channel.channelID,
+          channelMember: channel.channelMember,
+          channelName: channel.channelName,
+          createdBy: channel.createdBy,
+          description: channel.description,
+          messages: []
+        }
+        this.channelListMsg.push(channelList);
+        const arrayIndex = this.channelListMsg.length - 1;
+        await this.getChannelMessage(arrayIndex, id);
       }
     }
   }
 
 
-  async getChannelMessage(id: string) {
+  async getChannelMessage(arrayIndex: number, id: string) {
     const messageRef = collection(this.firestore, `channels/${id}/messages`);
     const messages = await getDocs(messageRef);
 
@@ -136,12 +152,14 @@ export class SearchService implements OnInit, OnDestroy {
         time: data['time'],
       }
 
-      this.channelMessage.push(message);
-      // console.log(this.channelMessage)
-    })
+      if (this.channelListMsg[arrayIndex] && this.channelListMsg[arrayIndex].messages) {
+        this.channelListMsg[arrayIndex].messages.push(message);
+      }
+    });
   }
 
-  search(searchInputValue: string) {
+
+  async search(searchInputValue: string) {
     this.resultDM = [];
     this.resultUser = [];
     this.resultChannel = [];
@@ -159,13 +177,22 @@ export class SearchService implements OnInit, OnDestroy {
 
 
   async searchDM(searchWord: string) {
+    const tempResult: any = []
+    let ids: any = [];
+
     this.directMessage.forEach((message) => {
       const text = message.text || '';
+
       if (text.toLowerCase().includes(searchWord)) {
-        this.resultDM.push(message);
+        if (ids.indexOf(message.id) === -1) {
+          tempResult.push(message);
+          ids.push(message.id);
+        }
       }
     });
+    this.resultDM = tempResult;
   }
+
 
   async searchUser(searchWord: string) {
     this.userList.forEach((user) => {
@@ -176,12 +203,22 @@ export class SearchService implements OnInit, OnDestroy {
     });
   }
 
+
   async searchChannel(searchWord: string) {
-    this.channelMessage.forEach((channel) => {
-      const message = channel.text || '';
-      if (message.toLowerCase().includes(searchWord)) {
-        this.resultChannel.push(channel);
+
+    for (const channel of this.channelListMsg) {
+      const messages = channel['messages'];
+
+      for (const message of messages) {
+        const text = message.text || '';
+        if (text.toLowerCase().includes(searchWord)) {
+          this.resultChannel.push({
+            channelId: channel.channelID,
+            channelName: channel.channelName,
+            message: message
+          });
+        }
       }
-    });
+    }
   }
 }
