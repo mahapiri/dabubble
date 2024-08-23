@@ -21,7 +21,7 @@ import { SearchComponent } from '../header/search/search.component';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
-  clickedUser: boolean = false; 
+  clickedUser: boolean = false;
   clickedProfile: boolean = false;
   authService: AuthService = inject(AuthService);
   userService: UserService = inject(UserService);
@@ -32,17 +32,18 @@ export class HeaderComponent implements OnInit {
   isResults: boolean = false;
   searchInputValue: string = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   async ngOnInit() {
-   // await this.userService.getUserID();
+    // await this.userService.getUserID();
     this.userService.currentUser$.subscribe((user) => {
       this.currentUser = user;
     });
   }
 
   async openResults() {
-    this.isResults = true;
+    this.isResults = this.searchInputValue.trim().length > 0;
+
     await this.searchService.getAllDM();
     await this.searchService.getAllChannel();
     await this.searchService.search(this.searchInputValue);
@@ -50,8 +51,9 @@ export class HeaderComponent implements OnInit {
 
   closeResults() {
     this.isResults = false;
+    this.searchInputValue = '';
   }
-  
+
   openPopup(event: Event) {
     event.stopPropagation();
     this.clickedUser = !this.clickedUser;
@@ -72,12 +74,9 @@ export class HeaderComponent implements OnInit {
     this.clickedProfile = false;
   }
 
-  async logOut(event: Event){
+  async logOut(event: Event) {
     event.preventDefault();
     await this.authService.logOut();
     this.router.navigate(['/']);
   }
-
-
-
 }
