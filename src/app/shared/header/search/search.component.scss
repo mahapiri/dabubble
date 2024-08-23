@@ -234,6 +234,22 @@ a {
     width: 100%;
 }
 
+.thread-profile-down {
+    display: flex;
+}
+
+.channel-thread-message-channel {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.channel-thread-message-thread {
+    width: 50%;
+}
+
+
 .profile-up {
     position: relative;
 

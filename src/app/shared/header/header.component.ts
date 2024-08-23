@@ -46,6 +46,7 @@ export class HeaderComponent implements OnInit {
 
     await this.searchService.getAllDM();
     await this.searchService.getAllChannel();
+    await this.searchService.getAllThreads();
     await this.searchService.search(this.searchInputValue);
   }
 

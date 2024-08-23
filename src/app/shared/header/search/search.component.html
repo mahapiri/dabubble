@@ -60,6 +60,102 @@
     </div>
 
 
+
+
+    <div class="result-channel-container">
+        <h4 class="n-h4">Threads</h4>
+
+        <div *ngIf="this.searchService.resultThread.length === 0" class="no-message-container">
+            <p class="n-p">Keine Threads mit Nachrichten gefunden</p>
+        </div>
+
+        <ng-container *ngIf="this.searchService.resultThread.length > 0">
+            <div *ngFor="let thread of this.searchService.resultThread; let i = index" (click)="openChannel()">
+                <div class="profile-content dm-content">
+                    <div class="profile-left">
+                        <div class="channels-section">
+                            <div class="channels-header">
+                                <div class="channels-title">
+                                    <mat-icon class="channel-icon">tag</mat-icon>
+                                    <p class="n-p">{{ thread.channelName }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-right">
+                        <div class="profile-up">
+                            <mat-divider> </mat-divider>
+                            <div class="message-date">
+                                {{ chatService.formatDate(thread.message.date) }}
+                            </div>
+                        </div>
+                        <div class="profile-down thread-profile-down">
+                            <div class="channel-thread-message-channel">
+                                <div>Channel Nachricht:</div>
+                                <div>{{ thread.replyToMessage.text }}</div>
+                            </div>
+                            <div class="my-message channel-thread-message-thread">
+                                <div class="message-wrapper">
+                                    <div class="profile-img">
+                                        <img class="user-img" src="{{ thread.message.profileImage }}" />
+                                    </div>
+
+                                    <div class="message-details">
+                                        <div class="user-wrapper">
+                                            <div class="user-name">{{ thread.message.authorName }}</div>
+                                            <div class="time">
+                                                {{ chatService.formatTime(thread.message.time) }} Uhr
+                                            </div>
+                                        </div>
+                                        <div class="text-bubble">
+                                            <ng-container
+                                                *ngIf="directMessageService.isImage(thread.message.text); else textContent">
+                                                <img [src]="thread.message.text" alt="Image" class="message-image" />
+                                            </ng-container>
+                                            <ng-template #textContent>{{ thread.message.text }}</ng-template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <div class="result-dm-container">
         <h4 class="n-h4">Direktnachrichten</h4>
 
