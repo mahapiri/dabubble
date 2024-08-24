@@ -9,19 +9,14 @@
 
     <div class="message" [ngClass]="{ 'bg-color': edit }">
       <div *ngIf="!edit" id="reactionBar" class="reaction-bar">
-        <button class="mini-fab-btn" mat-mini-fab>
-          <img src="./../../../assets/emojis/check.png" alt="hands up" />
-        </button>
-        <button class="mini-fab-btn" mat-mini-fab>
-          <img
-            src="./../../../assets/emojis/raising-both-hands.svg"
-            alt="heart"
-          />
-        </button>
-        <button class="mini-fab-btn" mat-mini-fab>
-          <mat-icon>add_reaction</mat-icon>
-        </button>
-        <button (click)="openThread()" class="mini-fab-btn" mat-mini-fab>
+        <app-reaction-bar
+          [isMyMessage]="isMyMessage"
+          [message]="channelMessage"
+          (clickedAnswer)="openThread()"
+          (editSelected)="openEdit()"
+        ></app-reaction-bar>
+
+        <!-- <button (click)="openThread()" class="mini-fab-btn" mat-mini-fab>
           <mat-icon>comment</mat-icon>
         </button>
         <div *ngIf="isMyMessage">
@@ -32,7 +27,7 @@
           <div class="edit-msg-bubble">
             <button (click)="openEdit()">Nachricht bearbeiten</button>
           </div>
-        </div>
+        </div> -->
       </div>
 
       <div class="message-wrapper">
