@@ -74,22 +74,21 @@
 
   <mat-card-footer>
     <div class="new-message-container">
-      <input
-        [(ngModel)]="messageText"
-        matInput
-        type="text"
-        placeholder="Antworten..."
-      />
 
+      @if (this.uploadService.currentImg$ | async) {
+        <img [src]="this.uploadService.currentImg$ | async" alt="">
+        <mat-icon (click)="this.uploadService.removeImg()" class="close-icon pos-relative">close</mat-icon>
+        }@else {
+        <input [(ngModel)]="messageText" matInput type="text" placeholder="Antworten..." />
+        }
       <div class="message-controls">
         <div class="add-elements">
-          <button
-            class="mini-fab-button"
-            mat-mini-fab
-            class="add-doc mini-fab-btn"
-          >
-            <mat-icon>add</mat-icon>
-          </button>
+          <button (click)="this.uploadService.triggerFileInput()" class="mini-fab-button" mat-mini-fab
+          class="add-doc mini-fab-btn">
+          <input id="file-upload" type="file" (change)="chooseFile($event)"
+            [accept]="uploadService.acceptedFileTypes" hidden />
+          <mat-icon>add</mat-icon>
+        </button>
           <div class="vertical-divider"></div>
           <button mat-mini-fab class="emojis mini-fab-btn">
             <mat-icon>sentiment_satisfied</mat-icon>

@@ -46,6 +46,10 @@ export class ThreadMessageComponent {
     this.isMyMessage = this.chatService.setMyMessage(this.threadMessage);
   }
 
+  isImageUrl(url: string): boolean {
+    return url.startsWith('https://firebasestorage.googleapis.com/');
+  }
+
   openEdit() {}
 
   closeEdit() {}

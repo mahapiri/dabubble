@@ -50,8 +50,13 @@
               </div>
             </div>
           </div>
-          <div *ngIf="!edit" class="text-bubble">{{ threadMessage.text }}</div>
-
+          <div *ngIf="!edit" class="text-bubble">
+            @if (this.isImageUrl(threadMessage.text)) {
+            <img class="channel-upload" [src]="threadMessage.text" alt="" />
+            }@else {
+            {{ threadMessage.text }}
+            }
+          </div>
           <div *ngIf="isMyMessage && !edit" class="reaction-container">
             <div class="reactions-wrapper">
               <button class="reaction-btn">
