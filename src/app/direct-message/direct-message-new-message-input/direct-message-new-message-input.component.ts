@@ -42,7 +42,7 @@ export class DirectMessageNewMessageInputComponent implements OnInit, OnDestroy 
   private directMessageService: DirectMessageService = inject(DirectMessageService);
   public uploadService: UploadService = inject(UploadService);
   private userSubscription: Subscription = new Subscription();
-
+  uploadPath: string = 'direct-message'
 
   profile: Partial<User> = {};
   @Output() messageCreated: EventEmitter<void> = new EventEmitter<void>();
@@ -82,6 +82,7 @@ export class DirectMessageNewMessageInputComponent implements OnInit, OnDestroy 
    * checks the valid of a message to start the newDmMessage function
    */
   async createMessage() {
+    await this.checkPictureUpload();
     if (!this.messageText.trim()) {
       console.warn('The message field is empty. Please type a message!');
     } else {
@@ -136,8 +137,16 @@ export class DirectMessageNewMessageInputComponent implements OnInit, OnDestroy 
 
   async chooseFile(event: Event) {
     this.uploadService.onFileSelected(event)
-    this.uploadService.uploadPicture();
-    this.messageText = this.uploadService.downloadURL;
-    await this.createMessage();
+    this.uploadService.uploadPath = this.uploadPath;
   }
+
+    /**
+   * calls the upload method if a file was chosen and saves the dawnload URL of the file to the messageText
+   */
+    async checkPictureUpload() {
+      if (this.uploadService.fileChosen) {
+        await this.uploadService.uploadPicture();
+        this.messageText = this.uploadService.downloadURL;
+      }
+    }
 }
