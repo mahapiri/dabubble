@@ -15,17 +15,20 @@ header {
     cursor: pointer;
   }
 
+
 .wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+    gap: 50px;
     height: 100vh;
     background-color: var(--bg-color);
 
 
     .login-card {
         height: 769px;
-        width: 606px;
+        width: clamp(320px, 90vw, 606px);
         border-radius: 30px;
         padding: 50px;
         background-color: white;
@@ -129,4 +132,26 @@ input[type="checkbox"] {
             color: var(--purple-3);
         }
     }
+}
+
+@media (max-width: 720px) {
+    .hide-on-mobile {
+        display: none;
+    }
+
+    .wrapper{
+        .login-card{
+            padding-inline: 10px;
+        }
+    }
+    .mobile-link span{
+        font-size: 18px;
+    }
+
+}
+
+@media (min-width: 720px) {
+    .mobile-link, .mobile-logo{
+        display: none !important;
+    }  
 }

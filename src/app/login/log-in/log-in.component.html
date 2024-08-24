@@ -1,4 +1,4 @@
-<header>
+<header class="hide-on-mobile">
   <img src="../../../assets/img/logo-with-font.png" alt="Logo Dabubble" class="logo">
   <div class="header-link">
     <span>Neu bei DABubble?</span>
@@ -6,6 +6,7 @@
   </div>
 </header>
 <div class="wrapper">
+  <img class="mobile-logo" src="../../../assets/img/logo-with-font.png" alt="">
   <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
     <mat-card appearance="outlined" class="login-card">
       <h1>Anmeldung</h1>
@@ -35,7 +36,10 @@
       </div>
     </mat-card>
   </form>
-
+  <div class="header-link mobile-link">
+    <span>Neu bei DABubble?</span>
+    <button routerLink="/sign-up"  class="create-button">Konto erstellen</button>
+  </div>
 
 
 </div>
