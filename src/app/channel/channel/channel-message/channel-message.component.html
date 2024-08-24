@@ -36,7 +36,7 @@
       </div>
 
       <div class="message-wrapper">
-        <img class="user-img" src="{{ channelMessage.profileImage }}" />
+        <img class="user-img" src="{{ channelMessage.profileImg }}" />
 
         <div class="message-details">
           <div *ngIf="!edit" class="user-wrapper">
@@ -95,31 +95,10 @@
             </div>
           </div>
 
-          <div *ngIf="isMyMessage && !edit" class="reaction-container">
-            <div class="reactions-wrapper">
-              <button class="reaction-btn">
-                <div class="reaction-info-menu">
-                  <img src="./../../../assets/emojis/rocket.svg" alt="nerd" />
-                  <span class="user">Noah Braun</span>
-                  <span>hat reagiert</span>
-                </div>
-                <img src="./../../../assets/emojis/rocket.svg" alt="check" />
-                <span class="reaction-count">1</span>
-              </button>
-
-              <button class="reaction-btn">
-                <div class="reaction-info-menu">
-                  <img src="./../../../assets/emojis/check.png" alt="rocket" />
-                  <span class="user">Sofia Müller</span>
-                  <span>hat reagiert</span>
-                </div>
-                <img src="./../../../assets/emojis/check.png" alt="check" />
-                <span class="reaction-count">1</span>
-              </button>
-              <button class="mini-fab-btn" mat-mini-fab>
-                <mat-icon>add_reaction</mat-icon>
-              </button>
-            </div>
+          <div *ngIf="!edit" class="reaction-container">
+            <app-reaction-container
+              [message]="channelMessage"
+            ></app-reaction-container>
           </div>
         </div>
       </div>

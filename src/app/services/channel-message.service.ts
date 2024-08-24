@@ -150,6 +150,8 @@ export class ChannelMessageService {
       authorName: data['authorName'],
       authorId: data['authorId'],
       profileImage: data['profileImage'],
+      reaction: [],
+      file: '',
       isFirstMessageOfDay: false,
     });
   }
@@ -179,6 +181,8 @@ export class ChannelMessageService {
       authorName: user.username,
       authorId: user.userId,
       profileImage: user.profileImage,
+      reaction: [],
+      file: '',
       isFirstMessageOfDay: false,
     });
   }

@@ -216,7 +216,9 @@ export class ThreadMessageService {
       date: data['date'],
       authorName: data['authorName'],
       authorId: data['authorId'],
-      profileImage: data['profileImage'],
+      profileImg: data['profileImage'],
+      reaction: [],
+      file: '',
       isFirstMessageOfDay: false,
     });
   }
@@ -245,7 +247,9 @@ export class ThreadMessageService {
       date: now.toISOString().split('T')[0],
       authorName: user.username,
       authorId: user.userId,
-      profileImage: user.profileImage,
+      profileImg: user.profileImage,
+      reaction: [],
+      file: '',
       isFirstMessageOfDay: false,
     });
   }
