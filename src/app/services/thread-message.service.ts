@@ -3,9 +3,11 @@ import { Thread, ThreadMessage } from '../../models/thread.class';
 import { ChatService } from './chat.service';
 import {
   CollectionReference,
+  DocumentReference,
   Firestore,
   addDoc,
   collection,
+  doc,
   getCountFromServer,
   limit,
   onSnapshot,
@@ -191,6 +193,15 @@ export class ThreadMessageService {
     });
   }
 
+  async updateMessage(threadMessage: ThreadMessage) {
+    if (threadMessage.id) {
+      let docRef = this.getSingleThreadMessageRef(threadMessage.id);
+      await updateDoc(docRef, threadMessage.getMessageJson()).catch((err) => {
+        console.log(err);
+      });
+    }
+  }
+
   /**
    * Creates a new `ThreadMessage` object from the provided data.
    * @param {string} id - id of the message.
@@ -243,6 +254,16 @@ export class ThreadMessageService {
     return collection(
       this.firestore,
       `threads/${this.threadService.threadID}/messages`
+    );
+  }
+
+  getSingleThreadMessageRef(docId: string): DocumentReference {
+    return doc(
+      collection(
+        this.firestore,
+        `threads/${this.threadService.threadID}/messages`
+      ),
+      docId
     );
   }
 
