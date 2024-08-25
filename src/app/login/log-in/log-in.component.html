@@ -1,3 +1,10 @@
+<div *ngIf="firstOpen" class="intro-screen">
+  <div class="logo-container">
+    <img src="../../../assets/img/logo-no-font.png" alt="">
+    <h1>DABubble</h1>
+  </div>
+
+</div>
 <header class="hide-on-mobile">
   <img src="../../../assets/img/logo-with-font.png" alt="Logo Dabubble" class="logo">
   <div class="header-link">
@@ -11,9 +18,13 @@
     <mat-card appearance="outlined" class="login-card">
       <h1>Anmeldung</h1>
       <p>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest.</p>
-      <input type="text" formControlName="userEmail" placeholder="beispielname@email.com">
+      <div class="mail-input">
+        <img class="mail-icon" src="../../../assets/img/mail.png" alt="">
+        <input type="text" formControlName="userEmail" placeholder="beispielname@email.com">
+      </div>
       <span class="errormessage" *ngIf="invalidMail">{{mailerrorMessage}}</span>
       <div class="show-button-container">
+        <img class="password-icon" src="../../../assets/img/lock.png" alt="">
         <input [type]="passwordVisible ? 'text' : 'password'" formControlName="userPassword" placeholder="Passwort">
         <button type="button" (click)="showPassword()" mat-icon-button>
           <mat-icon>
@@ -29,7 +40,10 @@
         oder
         <div class="divider"></div>
       </div>
-      <button type="button" (click)="loginWithGoogle()" class="google-signin-button">Anmelden mit Google</button>
+      <div class="google-signin-container">
+        <button type="button" (click)="loginWithGoogle()" class="google-signin-button">Anmelden mit Google</button>
+        <img class="google-icon" src="../../../assets/img/Google.png" alt="">
+      </div>
       <div class="singup-button-container">
         <button type="submit" class="signin-button">Anmelden</button>
         <button type="button" (click)="logInAsGuest()" class="guest-login-button">Gäste-Login</button>
@@ -38,7 +52,7 @@
   </form>
   <div class="header-link mobile-link">
     <span>Neu bei DABubble?</span>
-    <button routerLink="/sign-up"  class="create-button">Konto erstellen</button>
+    <button routerLink="/sign-up" class="create-button">Konto erstellen</button>
   </div>
 
 

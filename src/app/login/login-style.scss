@@ -78,6 +78,25 @@ input[type="checkbox"] {
     /* Example color: blue */
 }
 
+.mail-input, .name-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    .mail-icon, .name-icon {
+        height: 20px;
+        width: 20px;
+        position: absolute;
+        left: 35px;
+    }
+
+    input{
+        flex: 1;
+    }
+
+}
+
 
 .next-button-container {
     display: flex;
@@ -100,6 +119,32 @@ input[type="checkbox"] {
         &:hover {
             background-color: var(--purple-2);
         }
+    }
+}
+
+.show-button-container {
+    display: flex;
+    position: relative;
+    align-items: center;
+
+    input {
+        flex: 1;
+    }
+
+    .password-icon {
+        height: 20px;
+        width: 20px;
+        position: absolute;
+        left: 35px;
+    }
+    button {
+        width: 0;
+        padding: 0;
+        margin: 0;
+        background: transparent;
+        border: none;
+        position: relative;
+        right: 40px;
     }
 }
 
@@ -142,11 +187,14 @@ input[type="checkbox"] {
     .wrapper{
         .login-card{
             padding-inline: 10px;
+            max-height: 550px;
         }
     }
     .mobile-link span{
         font-size: 18px;
     }
+
+
 
 }
 

@@ -28,6 +28,7 @@ export class LogInComponent {
   invalidPassword: boolean = false;
   password: string = "";
   passwordVisible: boolean = false;
+  firstOpen: boolean = true;
   constructor(private router: Router, private auth: Auth) { }
 
 
@@ -35,6 +36,11 @@ export class LogInComponent {
     userEmail: ["", Validators.required],
     userPassword: ["", Validators.required]
   })
+
+  ngOnInit(){
+    this.hideIntroScreen();
+  }
+
 
   async onSubmit() {
     this.email = this.userForm.value.userEmail || '';
@@ -76,11 +82,11 @@ export class LogInComponent {
       });
   }
 
-  /*    async logInAsGuest() {
-      await this.authService.logInUser("gast@googlemail.com", "123456")
-      this.userForm.reset();
-      this.router.navigate(['/main-window']);
-    }  */
+  hideIntroScreen() {
+    setTimeout(() => {
+      this.firstOpen = false;
+    }, 5000);
+  }
 
   async logInAsGuest() {
     await signInAnonymously(this.auth).then((login) => {

@@ -1,5 +1,92 @@
 @import "./../login-style.scss";
 
+.intro-screen {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(1.46deg, #313AE6 1.22%, #797EF3 98.76%);
+    z-index: 10;
+    overflow: hidden;
+    animation: fadeOut 1s linear 4s;
+
+
+    .logo-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation: moveAndFade 2s ease-in-out forwards 3s;
+        display: flex;
+        align-items: center;
+        width: 40vw;
+        gap: 20px;
+
+        img {
+            width: 180px;
+            height: 180px;
+            opacity: 1;
+            animation: fadeIn 2s ease-out forwards
+        }
+
+        h1 {
+            font-size: 100px;
+            color: white;
+            letter-spacing: -9px;
+            opacity: 0;
+            white-space: nowrap;
+            width: 0;
+            animation: revealText 1s linear forwards 1s
+        }
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes revealText {
+    from {
+        width: 0;
+        opacity: 0;
+    }
+
+    to {
+        width: auto;
+        opacity: 1;
+    }
+}
+
+@keyframes moveAndFade {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        top: -20px;
+        left: -140px;
+        opacity: 0;
+        transform: scale(0.4);
+    }
+}
+
 .header-link {
     display: flex;
     flex-direction: column;
@@ -27,14 +114,41 @@ input {
     }
 }
 
-.google-signin-button {
-    width: 100%;
-    padding: 11px 32px 11px 32px;
-    border-radius: 50px;
-    background-color: var(--bg-color);
-    border: none;
-    color: var(--purple-1);
+.google-signin-container {
+    display: flex;
+    position: relative;
+    align-items: center;
+
+    .google-icon {
+        width: 35px;
+        position: absolute;
+        left: 60px;
+    }
+
+    .google-signin-button {
+        width: 100%;
+        padding: 11px 32px 11px 32px;
+        border-radius: 50px;
+        background-color: var(--bg-color);
+        border: none;
+        color: var(--purple-1);
+        font-size: 18px;
+        height: 60px;
+        cursor: pointer;
+
+        &:hover {
+            border: 1px solid var(--purple-1);
+            font-weight: 700;
+        }
+
+        &:hover+img {
+            width: 40px;
+        }
+    }
+
+
 }
+
 
 .singup-button-container {
     display: flex;
@@ -92,22 +206,4 @@ input {
     color: var(--rosa);
     margin-block: -20px;
     padding-left: 30px;
-}
-
-.show-button-container {
-    display: flex;
-
-    input {
-        flex: 1;
-    }
-
-    button {
-        width: 0;
-        padding: 0;
-        margin: 0;
-        background: transparent;
-        border: none;
-        position: relative;
-        right: 40px;
-    }
 }

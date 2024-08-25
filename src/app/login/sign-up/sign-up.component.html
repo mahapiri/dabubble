@@ -8,13 +8,18 @@
       <button class="arrow-back-button" routerLink="/log-in"><mat-icon class="icon">arrow_back</mat-icon></button>
       <h1>Konto erstellen</h1>
       <p>Mit deinem Namen und deiner E-Mail-Adresse hast du dein neues DABubble-Konto</p>
-      <input type="text" placeholder="Name und Nachname" formControlName="userName">
+      <div class="name-input">
+        <img class="name-icon" src="../../../assets/img/person_filled.png" alt="">
+        <input type="text" placeholder="Name und Nachname" formControlName="userName">
+      </div>
       <span class="errormessage" *ngIf="invalidName">{{nameErrorMessage}}</span>
-
-      <input type="text" placeholder="beispielname@email.com" formControlName="userEmail">
+      <div class="mail-input">
+        <img class="mail-icon" src="../../../assets/img/mail.png" alt="">
+        <input type="text" placeholder="beispielname@email.com" formControlName="userEmail">
+      </div>
       <span class="errormessage" *ngIf="invalidMail">{{mailerrorMessage}}</span>
-
       <div class="show-button-container">
+        <img class="password-icon" src="../../../assets/img/lock.png" alt="">
         <input [type]="passwordVisible ? 'text' : 'password'" formControlName="userPassword" placeholder="Passwort">
         <button type="button" (click)="showPassword()" mat-icon-button>
           <mat-icon>
