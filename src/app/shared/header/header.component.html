@@ -1,41 +1,56 @@
 <header>
-    <img src="../../../assets/img/logo-with-font.png" alt="Logo Dabubble" class="logo">
-    <div class="searchfield-container">
-        <div class="searchfield-content">
-            <input #search [(ngModel)]="searchInputValue" type="text" placeholder="Code learning durchsuchen"
-                class="searchfield active" [ngClass]="{'active': isResults}" (click)="openResults()"
-                (ngModelChange)="openResults()" appClickOutside (clickOutside)="closeResults()">
-            <mat-icon class="search-icon" (click)="openResults()">search</mat-icon>
+  <img
+    src="../../../assets/img/logo-with-font.png"
+    alt="Logo Dabubble"
+    class="logo"
+  />
+  <div class="searchfield-container">
+    <div class="searchfield-content">
+      <input
+        #search
+        [(ngModel)]="searchInputValue"
+        type="text"
+        placeholder="Code learning durchsuchen"
+        class="searchfield active"
+        [ngClass]="{ active: isResults }"
+        (click)="openResults()"
+        (ngModelChange)="openResults()"
+        appClickOutside
+        (clickOutside)="closeResults()"
+      />
+      <mat-icon class="search-icon" (click)="openResults()">search</mat-icon>
 
-
-            <ng-container *ngIf="searchInputValue.length > 0">
-                <div *ngIf="isResults">
-                    <app-search></app-search>
-                </div>
-            </ng-container>
-
+      <ng-container *ngIf="searchInputValue.length > 0">
+        <div *ngIf="isResults">
+          <app-search></app-search>
         </div>
-
-
-
-
+      </ng-container>
     </div>
-    <div class="user-div">
-        <div class="user-container" (click)="openPopup($event)">
-            <div class="user-name">{{ currentUser?.username }}</div>
-            <div class="img-content">
-                <img src="{{ currentUser?.profileImage }}" alt="User">
-                <div class="status-icon" ngClass="{{ currentUser?.state }}"></div>
-            </div>
-            <div>
-                <mat-icon class="arrow-icon">keyboard_arrow_down</mat-icon>
-            </div>
-        </div>
-        <div class="info-container" *ngIf="clickedUser" appClickOutside (clickOutside)="closePopup()">
-            <a (click)="openProfile()">Profil</a>
-            <a (click)="logOut($event)">Log out</a>
-        </div>
+  </div>
+  <div class="user-div">
+    <div class="user-container" (click)="openPopup($event)">
+      <div class="user-name">{{ currentUser?.username }}</div>
+      <div class="img-content">
+        <img src="{{ currentUser?.profileImage }}" alt="User" />
+        <div class="status-icon" ngClass="{{ currentUser?.state }}"></div>
+      </div>
+      <div class="arrow-container">
+        <mat-icon class="arrow-icon">keyboard_arrow_down</mat-icon>
+      </div>
     </div>
+    <div
+      class="info-container"
+      *ngIf="clickedUser"
+      appClickOutside
+      (clickOutside)="closePopup()"
+    >
+      <a (click)="openProfile()">Profil</a>
+      <a (click)="logOut($event)">Log out</a>
+    </div>
+  </div>
 </header>
-<app-my-profile *ngIf="clickedProfile" [clickedProfile]="clickedProfile"
-    (clickedProfileChange)="profileClosed()"></app-my-profile>
+<app-my-profile
+  *ngIf="clickedProfile"
+  [clickedProfile]="clickedProfile"
+  (clickedProfileChange)="profileClosed()"
+></app-my-profile>

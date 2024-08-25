@@ -189,3 +189,18 @@ mat-list-item {
 ::ng-deep mat-list-item .mdc-list-item__content {
   overflow: visible;
 }
+
+/* Smartphones - - - - - - - - - */
+
+@media only screen and (max-width: 960px) {
+  mat-card {
+    display: none;
+    height: calc(100vh - 85.5px);
+    width: 100vw;
+    border-radius: 0px;
+  }
+
+  .members-container-content {
+    display: none;
+  }
+}

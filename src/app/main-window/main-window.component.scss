@@ -7,3 +7,11 @@
 .d-none {
   display: none;
 }
+
+/* Smartphones - - - - - - - - - */
+
+@media only screen and (max-width: 960px) {
+  .workspace {
+    padding: 0;
+  }
+}

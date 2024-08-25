@@ -8,8 +8,6 @@ import {
   ChangeDetectorRef,
   Output,
   EventEmitter,
-  ViewChild,
-  ElementRef,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactionService } from '../../services/reaction.service';

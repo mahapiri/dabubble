@@ -23,7 +23,6 @@ import { Channel, ChannelMessage } from '../../models/channel.class';
 export class ThreadService {
   threadID?: string = '';
   threads: Thread[] = [];
-  allThreadsList: any = [];
 
   private threadsSubject = new BehaviorSubject<Thread[]>([]);
   threads$ = this.threadsSubject.asObservable();
