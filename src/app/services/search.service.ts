@@ -307,5 +307,6 @@ export class SearchService implements OnInit, OnDestroy {
       }
       this.resultThread = tempResult;
     }
+    console.log(this.resultThread);
   }
 }

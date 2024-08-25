@@ -83,41 +83,54 @@
                         </div>
                     </div>
                     <div class="profile-right">
-                        <div class="profile-up">
-                            <mat-divider> </mat-divider>
-                            <div class="message-date">
-                                {{ chatService.formatDate(thread.message.date) }}
-                            </div>
-                        </div>
-                        <div class="profile-down thread-profile-down">
-                            <div class="channel-thread-message-channel">
-                                <div>Channel Nachricht:</div>
+                        <div class="channel-thread-message-channel">
+                            <div class="c-t-m-container">
+                                <div class="profile-section">
+                                    <img src="{{ thread.replyToMessage.profileImage }}" alt="{{ thread.replyToMessage.authorName }} Profile Image">
+                                    <div>&commat;{{ thread.replyToMessage.authorName }}</div>
+                                </div>
                                 <div>{{ thread.replyToMessage.text }}</div>
                             </div>
-                            <div class="my-message channel-thread-message-thread">
-                                <div class="message-wrapper">
-                                    <div class="profile-img">
-                                        <img class="user-img" src="{{ thread.message.profileImage }}" />
-                                    </div>
+                            <mat-icon>comment</mat-icon>
+                        </div>
 
-                                    <div class="message-details">
-                                        <div class="user-wrapper">
-                                            <div class="user-name">{{ thread.message.authorName }}</div>
-                                            <div class="time">
-                                                {{ chatService.formatTime(thread.message.time) }} Uhr
-                                            </div>
+
+                        <div>
+                            <div class="profile-up">
+                                <mat-divider> </mat-divider>
+                                <div class="message-date">
+                                    {{ chatService.formatDate(thread.message.date) }}
+                                </div>
+                            </div>
+                            <div class="profile-down thread-profile-down">
+
+                                <div class="my-message channel-thread-message-thread">
+                                    <div class="message-wrapper">
+                                        <div class="profile-img">
+                                            <img class="user-img" src="{{ thread.message.profileImage }}" />
                                         </div>
-                                        <div class="text-bubble">
-                                            <ng-container
-                                                *ngIf="directMessageService.isImage(thread.message.text); else textContent">
-                                                <img [src]="thread.message.text" alt="Image" class="message-image" />
-                                            </ng-container>
-                                            <ng-template #textContent>{{ thread.message.text }}</ng-template>
+
+                                        <div class="message-details">
+                                            <div class="user-wrapper">
+                                                <div class="user-name">{{ thread.message.authorName }}</div>
+                                                <div class="time">
+                                                    {{ chatService.formatTime(thread.message.time) }} Uhr
+                                                </div>
+                                            </div>
+                                            <div class="text-bubble">
+                                                <ng-container
+                                                    *ngIf="directMessageService.isImage(thread.message.text); else textContent">
+                                                    <img [src]="thread.message.text" alt="Image"
+                                                        class="message-image" />
+                                                </ng-container>
+                                                <ng-template #textContent>{{ thread.message.text }}</ng-template>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
