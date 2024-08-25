@@ -1,3 +1,10 @@
+<div *ngIf="firstOpen" class="intro-screen">
+  <div class="logo-container">
+    <img src="../../../assets/img/logo-no-font.png" alt="">
+    <h1>DABubble</h1>
+  </div>
+
+</div>
 <header class="hide-on-mobile">
   <img src="../../../assets/img/logo-with-font.png" alt="Logo Dabubble" class="logo">
   <div class="header-link">
@@ -35,7 +42,7 @@
       </div>
       <div class="google-signin-container">
         <button type="button" (click)="loginWithGoogle()" class="google-signin-button">Anmelden mit Google</button>
-                <img class="google-icon" src="../../../assets/img/Google.png" alt="">
+        <img class="google-icon" src="../../../assets/img/Google.png" alt="">
       </div>
       <div class="singup-button-container">
         <button type="submit" class="signin-button">Anmelden</button>
