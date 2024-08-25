@@ -142,6 +142,10 @@ a {
         background-color: var(--bg-color);
         border-radius: 35px;
         color: var(--black);
+
+        .channel-thread-message-channel {
+            background-color: var(--white);
+        }
     }
 }
 
@@ -239,14 +243,57 @@ a {
 }
 
 .channel-thread-message-channel {
-    width: 50%;
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 25px;
+    gap: 10px;
+    font-family: 'Nunito';
+    font-size: 16px !important;
+    color: var(--gray);
+    border-radius: 30px;
+    background-color: rgba(104, 104, 104, 0.1);
+    padding: 8px;
+
+    mat-icon {
+        display: flex;
+        align-items: center;
+        font-size: 16px !important;
+        padding-right: 8px;
+        .material-symbols-rounded {
+            font-size: unset !important;
+        }
+    
+    }
+
+    .c-t-m-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+
+    }
+
+    .profile-section {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        img {
+            width: 25px;
+            height: 25px;
+            border-radius: 100%;
+        }
+    }
+
+
 }
 
+
+
 .channel-thread-message-thread {
-    width: 50%;
+    width: 100%;
 }
 
 
