@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import {
@@ -23,7 +23,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [MatCardModule, MatIconModule, ReactiveFormsModule, RouterLink, CommonModule],
+  imports: [MatCardModule, MatIconModule, ReactiveFormsModule, RouterLink, CommonModule, MatIcon],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss',
 })
@@ -36,7 +36,7 @@ export class ResetPasswordComponent {
   userService: UserService = inject(UserService);
   actionCode: string | null = '';
   passwordsNotMatching: boolean = false;
-
+  passwordVisible: boolean = false;
   userForm = this.formbuilder.group({
     newPassword: ['', [Validators.required, Validators.minLength(6)]],
     newPasswordConfirm: ['', [Validators.required, Validators.minLength(6)]],
@@ -105,5 +105,9 @@ export class ResetPasswordComponent {
     else{
       this.passwordsNotMatching = true
     }
+  }
+
+  showPassword() {
+    this.passwordVisible = !this.passwordVisible;
   }
 }

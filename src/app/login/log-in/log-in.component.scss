@@ -27,14 +27,41 @@ input {
     }
 }
 
-.google-signin-button {
-    width: 100%;
-    padding: 11px 32px 11px 32px;
-    border-radius: 50px;
-    background-color: var(--bg-color);
-    border: none;
-    color: var(--purple-1);
+.google-signin-container {
+    display: flex;
+    position: relative;
+    align-items: center;
+
+    .google-icon {
+        width: 35px;
+        position: absolute;
+        left: 60px;
+    }
+
+    .google-signin-button {
+        width: 100%;
+        padding: 11px 32px 11px 32px;
+        border-radius: 50px;
+        background-color: var(--bg-color);
+        border: none;
+        color: var(--purple-1);
+        font-size: 18px;
+        height: 60px;
+        cursor: pointer;
+
+        &:hover {
+            border: 1px solid var(--purple-1);
+            font-weight: 700;
+        }
+
+        &:hover + img{
+            width: 40px;
+        }
+    }
+
+
 }
+
 
 .singup-button-container {
     display: flex;
@@ -92,22 +119,4 @@ input {
     color: var(--rosa);
     margin-block: -20px;
     padding-left: 30px;
-}
-
-.show-button-container {
-    display: flex;
-
-    input {
-        flex: 1;
-    }
-
-    button {
-        width: 0;
-        padding: 0;
-        margin: 0;
-        background: transparent;
-        border: none;
-        position: relative;
-        right: 40px;
-    }
 }
