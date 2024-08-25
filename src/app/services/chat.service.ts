@@ -10,6 +10,7 @@ export class ChatService {
   previousDate: string | null = null;
   message!: ChannelMessage | DmMessage;
   isChannel: boolean = false;
+  isChannelSelectedOnMobile: boolean = false;
 
   constructor(private userService: UserService) {}
 
@@ -93,7 +94,7 @@ export class ChatService {
   }
 
   /**
-   * Sets the isChannel variable to true when a channel is clicked and to false when a direct message profile is clicked. 
+   * Sets the isChannel variable to true when a channel is clicked and to false when a direct message profile is clicked.
    * This functionality allows the thread element to be shown or hidden accordingly.
    *
    * @param {boolean} status
@@ -101,5 +102,23 @@ export class ChatService {
    */
   setIsChannel(status: boolean) {
     this.isChannel = status;
+  }
+
+  /**
+   * Updates the header logo (DaBubble or DevSpace) on the window width and clicked channel.
+   * This handles the mobile view adjustment.
+   *
+   * @param {boolean} clickedChannel - Whether a channel was clicked.
+   */
+  updateHeaderOnMobile(clickedChannel: boolean) {
+    if (window.innerWidth > 960) {
+      this.isChannelSelectedOnMobile = false;
+    } else if (window.innerWidth <= 960 && clickedChannel) {
+      this.isChannelSelectedOnMobile = true;
+    }
+  }
+
+  getIsChannelSelectedOnMobile(): boolean {
+    return this.isChannelSelectedOnMobile;
   }
 }

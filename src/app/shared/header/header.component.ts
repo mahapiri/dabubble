@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, inject, Input, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
@@ -16,9 +16,18 @@ import { SearchComponent } from '../header/search/search.component';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [MatIconModule, ClickOutsideDirective, CommonModule, MyProfileComponent, FormsModule, ClickOutsideDirective, MatDividerModule, SearchComponent],
+  imports: [
+    MatIconModule,
+    ClickOutsideDirective,
+    CommonModule,
+    MyProfileComponent,
+    FormsModule,
+    ClickOutsideDirective,
+    MatDividerModule,
+    SearchComponent,
+  ],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+  styleUrl: './header.component.scss',
 })
 export class HeaderComponent implements OnInit {
   clickedUser: boolean = false;
@@ -32,13 +41,19 @@ export class HeaderComponent implements OnInit {
   isResults: boolean = false;
   searchInputValue: string = '';
 
-  constructor(private router: Router) { }
+  @Input() isChannelSelectedOnMobile: boolean = false;
+  @Input() clickedChannel: boolean = false;
+
+  constructor(private router: Router) {}
 
   async ngOnInit() {
     // await this.userService.getUserID();
     this.userService.currentUser$.subscribe((user) => {
       this.currentUser = user;
     });
+
+    this.isChannelSelectedOnMobile =
+      this.chatService.getIsChannelSelectedOnMobile();
   }
 
   async openResults() {
@@ -53,6 +68,13 @@ export class HeaderComponent implements OnInit {
   closeResults() {
     this.isResults = false;
     this.searchInputValue = '';
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.chatService.updateHeaderOnMobile(this.clickedChannel);
+    this.isChannelSelectedOnMobile =
+      this.chatService.getIsChannelSelectedOnMobile();
   }
 
   openPopup(event: Event) {

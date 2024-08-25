@@ -7,6 +7,7 @@ import {
   EventEmitter,
   Input,
   OnInit,
+  Renderer2,
 } from '@angular/core';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -43,6 +44,7 @@ export class WorkspaceMenuComponent implements OnInit {
   @ViewChild('drawer') drawer!: MatDrawer;
   @Output() clickedChannelChange = new EventEmitter<boolean>();
   @Output() selectProfileChange = new EventEmitter<boolean>();
+
   @Input() clickedChannel: boolean = false;
 
   userChannels$: Observable<Channel[]> = this.userService.userChannels$;
@@ -68,11 +70,12 @@ export class WorkspaceMenuComponent implements OnInit {
   userList$ = this.userService.userList$;
 
   constructor(
+    private renderer: Renderer2,
     private channelService: ChannelService,
     public userService: UserService,
     private directMessage: DirectMessageService,
     private chatService: ChatService
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.userService.getUserList();
@@ -80,6 +83,18 @@ export class WorkspaceMenuComponent implements OnInit {
       await this.channelService.loadChannels();
       this.showFirstChannel();
     }, 1000);
+
+    /*  window.addEventListener('resize', () => {
+      if (window.innerWidth > 960) {
+        const workspaceMenu = document.querySelector('section');
+        const channelCard = document.querySelector('mat-card');
+
+        if (workspaceMenu && channelCard) {
+          this.renderer.setStyle(workspaceMenu, 'display', 'flex');
+          this.renderer.setStyle(channelCard, 'display', 'none');
+        }
+      }
+    }); */
   }
 
   /**
@@ -95,7 +110,6 @@ export class WorkspaceMenuComponent implements OnInit {
       });
       this.subscription.unsubscribe();
     }, 500);
-
   }
 
   /**
@@ -108,6 +122,33 @@ export class WorkspaceMenuComponent implements OnInit {
     this.channelService.setSelectedChannel(channel);
     this.selectProfileChange.emit(false);
     this.chatService.setIsChannel(true);
+
+    this.openChannelOnMobile();
+    this.chatService.updateHeaderOnMobile(this.clickedChannel);
+  }
+
+  openChannelOnMobile() {
+    if (window.innerWidth <= 960) {
+      const workspaceMenu = document.querySelector('section');
+      const channelCard = document.querySelector('mat-card');
+
+      if (workspaceMenu && channelCard) {
+        this.renderer.setStyle(workspaceMenu, 'display', 'none');
+        this.renderer.setStyle(channelCard, 'display', 'flex');
+      }
+    }
+  }
+
+  openWorkspaceMenuOnMobile() {
+    if (window.innerWidth > 960) {
+      const workspaceMenu = document.querySelector('section');
+      const channelCard = document.querySelector('mat-card');
+
+      if (workspaceMenu && channelCard) {
+        this.renderer.setStyle(workspaceMenu, 'display', 'flex');
+        this.renderer.setStyle(channelCard, 'display', 'none');
+      }
+    }
   }
 
   toggle() {
@@ -148,5 +189,5 @@ export class WorkspaceMenuComponent implements OnInit {
     this.chatService.setIsChannel(false);
   }
 
-  editChannel(channel: string) { }
+  editChannel(channel: string) {}
 }

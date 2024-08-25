@@ -32,8 +32,8 @@ import { Subscription } from 'rxjs';
   styleUrl: './main-window.component.scss',
 })
 export class MainWindowComponent implements OnInit {
-  userService: UserService = inject(UserService)
-  channelMessagesService: ChannelMessageService = inject(ChannelMessageService)
+  userService: UserService = inject(UserService);
+  channelMessagesService: ChannelMessageService = inject(ChannelMessageService);
   channel: Channel = new Channel({
     channelID: '',
     channelName: '',
@@ -46,18 +46,19 @@ export class MainWindowComponent implements OnInit {
   selectProfile: boolean = false;
   selectedChannel: Subscription | undefined;
 
-
   constructor(private channelService: ChannelService) {}
 
   ngOnInit() {
     this.userService.getUserID();
-    this.selectedChannel = this.channelService.selectedChannel$.subscribe((channel) => {
-      if (channel) {
-        this.channel = channel;
-        this.channelService.setChannelId(channel);
-        this.channelMessagesService.subMessageList();
+    this.selectedChannel = this.channelService.selectedChannel$.subscribe(
+      (channel) => {
+        if (channel) {
+          this.channel = channel;
+          this.channelService.setChannelId(channel);
+          this.channelMessagesService.subMessageList();
+        }
       }
-    });
+    );
   }
 
   handleChannelClick(event: boolean) {
@@ -74,11 +75,11 @@ export class MainWindowComponent implements OnInit {
     this.clickedThread = false;
   }
 
-  ngOnDestroy(){
-    this.userService.authStateSubscription?.unsubscribe()
-    this.selectedChannel?.unsubscribe()
+  ngOnDestroy() {
+    this.userService.authStateSubscription?.unsubscribe();
+    this.selectedChannel?.unsubscribe();
     if (this.channelMessagesService.messageListUnsubscribe) {
-          this.channelMessagesService.messageListUnsubscribe()
+      this.channelMessagesService.messageListUnsubscribe();
     }
   }
 }
