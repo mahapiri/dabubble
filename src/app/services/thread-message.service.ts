@@ -3,9 +3,11 @@ import { Thread, ThreadMessage } from '../../models/thread.class';
 import { ChatService } from './chat.service';
 import {
   CollectionReference,
+  DocumentReference,
   Firestore,
   addDoc,
   collection,
+  doc,
   getCountFromServer,
   limit,
   onSnapshot,
@@ -191,6 +193,15 @@ export class ThreadMessageService {
     });
   }
 
+  async updateMessage(threadMessage: ThreadMessage) {
+    if (threadMessage.id) {
+      let docRef = this.getSingleThreadMessageRef(threadMessage.id);
+      await updateDoc(docRef, threadMessage.getMessageJson()).catch((err) => {
+        console.log(err);
+      });
+    }
+  }
+
   /**
    * Creates a new `ThreadMessage` object from the provided data.
    * @param {string} id - id of the message.
@@ -205,7 +216,9 @@ export class ThreadMessageService {
       date: data['date'],
       authorName: data['authorName'],
       authorId: data['authorId'],
-      profileImage: data['profileImage'],
+      profileImg: data['profileImage'],
+      reaction: [],
+      file: '',
       isFirstMessageOfDay: false,
     });
   }
@@ -234,7 +247,9 @@ export class ThreadMessageService {
       date: now.toISOString().split('T')[0],
       authorName: user.username,
       authorId: user.userId,
-      profileImage: user.profileImage,
+      profileImg: user.profileImage,
+      reaction: [],
+      file: '',
       isFirstMessageOfDay: false,
     });
   }
@@ -243,6 +258,16 @@ export class ThreadMessageService {
     return collection(
       this.firestore,
       `threads/${this.threadService.threadID}/messages`
+    );
+  }
+
+  getSingleThreadMessageRef(docId: string): DocumentReference {
+    return doc(
+      collection(
+        this.firestore,
+        `threads/${this.threadService.threadID}/messages`
+      ),
+      docId
     );
   }
 

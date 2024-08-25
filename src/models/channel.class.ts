@@ -40,8 +40,15 @@ export class ChannelMessage {
   date: string = '';
   authorName: string = '';
   authorId: string = '';
-  profileImage: string = '';
+  profileImg: string = '';
+  reaction: string[] = [];
+  file: string = '';
   isFirstMessageOfDay: boolean = false;
+  authorImg?: string = ''; // Optional, for consistency with DmMessage
+  authorstate?: string = ''; // Optional
+  profileId?: string = ''; // Optional
+  profileName?: string = ''; // Optional
+  profileState?: string = ''; // Optional
 
   constructor(obj?: any) {
     this.id = obj ? obj.id : '';
@@ -50,7 +57,9 @@ export class ChannelMessage {
     this.date = obj ? obj.date : '';
     this.authorName = obj ? obj.authorName : '';
     this.authorId = obj ? obj.authorId : '';
-    this.profileImage = obj ? obj.profileImage : '';
+    this.profileImg = obj ? obj.profileImage : '';
+    this.reaction = obj ? obj.reaction : [];
+    this.file = obj ? obj.file : '';
     this.isFirstMessageOfDay = obj ? obj.isFirstMessageOfDay || false : false;
   }
 
@@ -62,7 +71,14 @@ export class ChannelMessage {
       date: this.date,
       authorName: this.authorName,
       authorId: this.authorId,
-      profileImage: this.profileImage,
+      authorImg: this.authorImg, // Included even if optional
+      authorstate: this.authorstate,
+      profileId: this.profileId,
+      profileName: this.profileName,
+      profileImg: this.profileImg,
+      profileState: this.profileState,
+      reaction: this.reaction,
+      file: this.file,
       isFirstMessageOfDay: this.isFirstMessageOfDay,
     };
   }

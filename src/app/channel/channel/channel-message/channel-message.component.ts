@@ -13,6 +13,8 @@ import { ThreadService } from '../../../services/thread.service';
 import { ThreadMessageService } from '../../../services/thread-message.service';
 import { Observable, Subscription } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
+import { ReactionBarComponent } from '../../../chat/reaction-bar/reaction-bar.component';
+import { ReactionContainerComponent } from '../../../chat/reaction-container/reaction-container.component';
 
 @Component({
   selector: 'app-channel-message',
@@ -25,6 +27,8 @@ import { ChangeDetectorRef } from '@angular/core';
     MatDividerModule,
     MatInputModule,
     FormsModule,
+    ReactionBarComponent,
+    ReactionContainerComponent,
   ],
   templateUrl: './channel-message.component.html',
   styleUrl: './channel-message.component.scss',

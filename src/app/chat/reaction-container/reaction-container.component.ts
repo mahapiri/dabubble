@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  inject,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactionService } from '../../services/reaction.service';
 import { UserService } from '../../services/user.service';
@@ -6,17 +13,15 @@ import { CommonModule } from '@angular/common';
 import { DmMessage } from '../../../models/direct-message.class';
 import { ReactionBarComponent } from '../reaction-bar/reaction-bar.component';
 import { Subscription } from 'rxjs';
+import { ChannelMessage } from '../../../models/channel.class';
+import { ThreadMessage } from '../../../models/thread.class';
 
 @Component({
   selector: 'app-reaction-container',
   standalone: true,
-  imports: [
-    MatIconModule,
-    CommonModule,
-    ReactionBarComponent
-  ],
+  imports: [MatIconModule, CommonModule, ReactionBarComponent],
   templateUrl: './reaction-container.component.html',
-  styleUrls: ['./reaction-container.component.scss']
+  styleUrls: ['./reaction-container.component.scss'],
 })
 export class ReactionContainerComponent implements OnInit, OnDestroy {
   private reactionService: ReactionService = inject(ReactionService);
@@ -24,31 +29,30 @@ export class ReactionContainerComponent implements OnInit, OnDestroy {
   private reactionSubscription = new Subscription();
   private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
-  @Input() message!: DmMessage;
+  @Input() message!: DmMessage | ChannelMessage | ThreadMessage;
 
   reactions: any;
-  userNames: { [userId: string]: string } = {}; 
+  userNames: { [userId: string]: string } = {};
 
   constructor() {}
 
-  
   ngOnInit() {
     if (this.message && this.message.id) {
       this.reactionService.loadReactionsForMessage(this.message.id);
 
-      this.reactionSubscription = this.reactionService.reactions$.subscribe(async (reactions) => {
-        this.reactions = reactions[this.message.id];
-        await this.loadUserNames();
-        this.cdr.detectChanges();
-      });
+      this.reactionSubscription = this.reactionService.reactions$.subscribe(
+        async (reactions) => {
+          this.reactions = reactions[this.message.id];
+          await this.loadUserNames();
+          this.cdr.detectChanges();
+        }
+      );
     }
   }
-
 
   ngOnDestroy(): void {
     this.reactionSubscription.unsubscribe();
   }
-
 
   private async loadUserNames(): Promise<void> {
     if (this.reactions) {
@@ -67,24 +71,23 @@ export class ReactionContainerComponent implements OnInit, OnDestroy {
     }
   }
 
-
   getUserName(userId: string): string {
     const username = this.userNames[userId];
-    if(userId === this.userService.userID) {
+    if (userId === this.userService.userID) {
       return 'Du';
     } else {
       return username || 'Unbekannt';
     }
   }
 
-
   isCurrentUser(userId: string): boolean {
     return userId === this.userService.userID;
   }
-  
 
   getSortedAuthors(authorIDs: string[]): string[] {
-    const otherAuthors = authorIDs.filter(id => id !== this.userService.userID);
+    const otherAuthors = authorIDs.filter(
+      (id) => id !== this.userService.userID
+    );
     if (authorIDs.includes(this.userService.userID)) {
       otherAuthors.push(this.userService.userID);
     }

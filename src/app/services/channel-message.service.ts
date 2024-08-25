@@ -15,7 +15,7 @@ import { User } from '../../models/user.class';
 import { ChatService } from './chat.service';
 import { ChannelService } from './channel.service';
 import { ChannelMessage } from '../../models/channel.class';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { query } from '@angular/fire/firestore';
 
 @Injectable({
@@ -45,7 +45,7 @@ export class ChannelMessageService {
     private chatService: ChatService,
     private channelService: ChannelService
   ) {
- /*    this.selectedChannel = this.channelService.selectedChannel$.subscribe(
+    /*    this.selectedChannel = this.channelService.selectedChannel$.subscribe(
       (channel) => {
         if (channel) {
           
@@ -55,8 +55,6 @@ export class ChannelMessageService {
       }
     ); */
   }
-
-  
 
   /**
    * Sets the selected message, when clicked to answer.
@@ -152,6 +150,8 @@ export class ChannelMessageService {
       authorName: data['authorName'],
       authorId: data['authorId'],
       profileImage: data['profileImage'],
+      reaction: [],
+      file: '',
       isFirstMessageOfDay: false,
     });
   }
@@ -181,6 +181,8 @@ export class ChannelMessageService {
       authorName: user.username,
       authorId: user.userId,
       profileImage: user.profileImage,
+      reaction: [],
+      file: '',
       isFirstMessageOfDay: false,
     });
   }

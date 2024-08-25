@@ -9,7 +9,6 @@ import { MatListModule } from '@angular/material/list';
 import { Thread, ThreadMessage } from '../../../models/thread.class';
 import { ChatService } from '../../services/chat.service';
 import { ThreadMessageService } from '../../services/thread-message.service';
-import { ThreadService } from '../../services/thread.service';
 
 @Component({
   selector: 'app-thread-message',
@@ -35,8 +34,7 @@ export class ThreadMessageComponent {
 
   constructor(
     public chatService: ChatService,
-    private theadMessageService: ThreadMessageService,
-    private threadService: ThreadService
+    private threadMessageService: ThreadMessageService
   ) {}
 
   /**
@@ -50,9 +48,16 @@ export class ThreadMessageComponent {
     return url.startsWith('https://firebasestorage.googleapis.com/');
   }
 
-  openEdit() {}
+  openEdit() {
+    this.edit = true;
+  }
 
-  closeEdit() {}
+  closeEdit() {
+    this.edit = false;
+  }
 
-  saveMessage() {}
+  saveMessage() {
+    this.threadMessageService.updateMessage(this.threadMessage);
+    this.closeEdit();
+  }
 }
