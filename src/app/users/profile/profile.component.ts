@@ -47,6 +47,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 
   openDM() {
-
+    this.close();
+    this.sharedService.setSelectProfile(true);
+    this.directMessage.openDmFromUser(this.user);
+    this.chatService.setIsChannel(false);
   }
 }

@@ -39,6 +39,7 @@ export class MainWindowComponent implements OnInit {
   userService: UserService = inject(UserService)
   channelMessagesService: ChannelMessageService = inject(ChannelMessageService)
   sharedService: SharedService = inject(SharedService)
+  selectProfileSubscription: Subscription = new Subscription();
 
   channel: Channel = new Channel({
     channelID: '',
@@ -65,6 +66,10 @@ export class MainWindowComponent implements OnInit {
         }
       }
     );
+
+    this.selectProfileSubscription = this.sharedService.selectProfileChange$.subscribe(selectProfile => {
+      this.selectProfile = selectProfile;
+    });
   }
 
   handleChannelClick(event: boolean) {
@@ -75,8 +80,7 @@ export class MainWindowComponent implements OnInit {
     this.clickedThread = event;
   }
 
-  handleProfileClick(event: boolean) {
-    this.selectProfile = event;
+  handleProfileClick() {
     this.clickedChannel = false;
     this.clickedThread = false;
   }
@@ -87,5 +91,6 @@ export class MainWindowComponent implements OnInit {
     if (this.channelMessagesService.messageListUnsubscribe) {
       this.channelMessagesService.messageListUnsubscribe();
     }
+    this.selectProfileSubscription?.unsubscribe();
   }
 }

@@ -18,11 +18,12 @@ import { CreateChannelComponent } from '../../channel/create-channel/create-chan
 import { ChannelService } from '../../services/channel.service';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
-import { Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { Channel } from '../../../models/channel.class';
 import { User } from '../../../models/user.class';
 import { DirectMessageService } from '../../services/direct-message.service';
 import { ChatService } from '../../services/chat.service';
+import { SharedService } from '../../services/shared.service';
 
 @Component({
   selector: 'app-workspace-menu',
@@ -43,7 +44,7 @@ import { ChatService } from '../../services/chat.service';
 export class WorkspaceMenuComponent implements OnInit {
   @ViewChild('drawer') drawer!: MatDrawer;
   @Output() clickedChannelChange = new EventEmitter<boolean>();
-  @Output() selectProfileChange = new EventEmitter<boolean>();
+  // @Output() selectProfileChange = new EventEmitter<boolean>();
 
   @Input() clickedChannel: boolean = false;
 
@@ -73,8 +74,9 @@ export class WorkspaceMenuComponent implements OnInit {
     private renderer: Renderer2,
     private channelService: ChannelService,
     public userService: UserService,
-    private directMessage: DirectMessageService,
-    private chatService: ChatService
+    private directMessageService: DirectMessageService,
+    private chatService: ChatService,
+    private sharedService: SharedService,
   ) {}
 
   async ngOnInit() {
@@ -120,12 +122,13 @@ export class WorkspaceMenuComponent implements OnInit {
   selectChannel(channel: Channel) {
     this.channel = channel;
     this.channelService.setSelectedChannel(channel);
-    this.selectProfileChange.emit(false);
+    this.sharedService.setSelectProfile(false);
     this.chatService.setIsChannel(true);
 
     this.openChannelOnMobile();
     this.chatService.updateHeaderOnMobile(this.clickedChannel);
   }
+
 
   openChannelOnMobile() {
     if (window.innerWidth <= 960) {
@@ -184,8 +187,8 @@ export class WorkspaceMenuComponent implements OnInit {
 
   clickedProfile(i: number, profile: User) {
     this.selectedUserIndex = i;
-    this.selectProfileChange.emit(true);
-    this.directMessage.openDmFromUser(profile);
+    this.sharedService.setSelectProfile(true);
+    this.directMessageService.openDmFromUser(profile);
     this.chatService.setIsChannel(false);
   }
 

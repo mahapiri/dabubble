@@ -14,6 +14,9 @@ export class SharedService {
   private profileSubject = new BehaviorSubject<any>(null);
   profile$ = this.profileSubject.asObservable();
 
+  private selectProfileSubject = new BehaviorSubject<boolean>(false);
+  selectProfileChange$ = this.selectProfileSubject.asObservable();
+
 
   isProfileID: string = '';
   isResults: boolean = false;
@@ -38,5 +41,9 @@ export class SharedService {
       const data = userSnap.data();
       this.profileSubject.next(data);
     }
+  }
+
+  setSelectProfile(state: boolean) {
+    this.selectProfileSubject.next(state);
   }
 }

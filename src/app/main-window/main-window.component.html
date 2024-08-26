@@ -3,7 +3,7 @@
   <app-workspace-menu
     [clickedChannel]="clickedChannel"
     (clickedChannelChange)="handleChannelClick($event)"
-    (selectProfileChange)="handleProfileClick($event)"
+    (selectProfileChange)="handleProfileClick()"
   ></app-workspace-menu>
   <app-channel
     *ngIf="!selectProfile"
