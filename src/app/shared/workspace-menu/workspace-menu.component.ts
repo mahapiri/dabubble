@@ -171,7 +171,8 @@ export class WorkspaceMenuComponent implements OnInit {
     this.clickedMessage = !this.clickedMessage;
   }
 
-  createChannel() {
+  createChannel(event: Event) {
+    event.stopPropagation();
     this.clickedChannel = !this.clickedChannel;
     this.clickedChannelChange.emit(this.clickedChannel);
   }

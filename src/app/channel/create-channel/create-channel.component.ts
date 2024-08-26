@@ -6,11 +6,12 @@ import { ChannelService } from '../../services/channel.service';
 import { UserService } from '../../services/user.service';
 import { User } from '../../../models/user.class';
 import { MatRadioModule } from '@angular/material/radio';
+import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 
 @Component({
   selector: 'app-create-channel',
   standalone: true,
-  imports: [MatIconModule, CommonModule, FormsModule, MatRadioModule],
+  imports: [MatIconModule, CommonModule, FormsModule, MatRadioModule, ClickOutsideDirective],
   templateUrl: './create-channel.component.html',
   styleUrl: './create-channel.component.scss',
 })

@@ -26,7 +26,7 @@
                 <h4 class="n-h4 bold">Channels</h4>
               </div>
             </div>
-            <div class="add-div" (click)="createChannel()">
+            <div class="add-div" (click)="createChannel($event)">
               <mat-icon class="add-icon" [class.bold-add]="clickedChannel"
                 >add</mat-icon
               >
@@ -58,7 +58,7 @@
           <div class="channels-content">
             <div class="channels-section">
               <div class="channels-header subtitle-header">
-                <div class="channels-title subtitle-title add-channel">
+                <div class="channels-title subtitle-title add-channel" (click)="createChannel($event)">
                   <mat-icon>add_circle</mat-icon>
                   <p class="n-p">Channel hinzufügen</p>
                 </div>
