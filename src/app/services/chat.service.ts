@@ -107,13 +107,12 @@ export class ChatService {
   /**
    * Updates the header logo (DaBubble or DevSpace) on the window width and clicked channel.
    * This handles the mobile view adjustment.
-   *
-   * @param {boolean} clickedChannel - Whether a channel was clicked.
    */
-  updateHeaderOnMobile(clickedChannel: boolean) {
+  updateHeaderOnMobile() {
+    console.log('Update Header on Mobile, isChannel:', this.isChannel);
     if (window.innerWidth > 960) {
       this.isChannelSelectedOnMobile = false;
-    } else if (window.innerWidth <= 960 && clickedChannel) {
+    } else if (window.innerWidth <= 960 && this.isChannel) {
       this.isChannelSelectedOnMobile = true;
     }
   }

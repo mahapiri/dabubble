@@ -44,7 +44,6 @@ export class HeaderComponent implements OnInit {
   searchInputValue: string = '';
 
   @Input() isChannelSelectedOnMobile: boolean = false;
-  @Input() clickedChannel: boolean = false;
 
   constructor(private router: Router) {}
 
@@ -74,7 +73,7 @@ export class HeaderComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
-    this.chatService.updateHeaderOnMobile(this.clickedChannel);
+    this.chatService.updateHeaderOnMobile();
     this.isChannelSelectedOnMobile =
       this.chatService.getIsChannelSelectedOnMobile();
   }

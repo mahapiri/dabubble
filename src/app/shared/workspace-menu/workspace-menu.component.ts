@@ -76,7 +76,7 @@ export class WorkspaceMenuComponent implements OnInit {
     public userService: UserService,
     private directMessageService: DirectMessageService,
     private chatService: ChatService,
-    private sharedService: SharedService,
+    private sharedService: SharedService
   ) {}
 
   async ngOnInit() {
@@ -126,9 +126,8 @@ export class WorkspaceMenuComponent implements OnInit {
     this.chatService.setIsChannel(true);
 
     this.openChannelOnMobile();
-    this.chatService.updateHeaderOnMobile(this.clickedChannel);
+    this.chatService.updateHeaderOnMobile();
   }
-
 
   openChannelOnMobile() {
     if (window.innerWidth <= 960) {
