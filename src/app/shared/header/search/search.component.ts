@@ -10,6 +10,8 @@ import { DirectMessageService } from '../../../services/direct-message.service';
 import { Subscription } from 'rxjs';
 import { user } from '@angular/fire/auth';
 import { SharedService } from '../../../services/shared.service';
+import { ChannelService } from '../../../services/channel.service';
+import { Channel } from '../../../../models/channel.class';
 
 @Component({
   selector: 'app-search',
@@ -27,6 +29,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   searchService: SearchService = inject(SearchService);
   userService: UserService = inject(UserService);
   chatService: ChatService = inject(ChatService);
+  channelService: ChannelService = inject(ChannelService);
   directMessageService: DirectMessageService = inject(DirectMessageService);
   sharedService: SharedService = inject(SharedService);
   currentUserSubscription: Subscription = new Subscription();
@@ -47,9 +50,18 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.currentUserSubscription.unsubscribe();
   }
 
-  openChannel() {
 
+  openChannel(event: Event, channel: Channel) {
+    console.log(channel);
+    event?.stopPropagation();
+    this.sharedService.isResults = false;
+    this.channelService.setSelectedChannel(channel);
+    this.sharedService.setSelectProfile(false);
+    this.chatService.setIsChannel(true);
+
+    // this.channelService.selectedChannel.next(channel);
   }
+
 
   openThread() {
 

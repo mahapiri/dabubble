@@ -18,7 +18,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class ChannelService {
-  private selectedChannel = new BehaviorSubject<Channel | null>(null);
+  public selectedChannel = new BehaviorSubject<Channel | null>(null);
   selectedChannel$ = this.selectedChannel.asObservable();
 
   createdBy: string = '';
@@ -39,7 +39,9 @@ export class ChannelService {
       onSnapshot(doc(this.firestore, 'channels', channel.channelID), (doc) => {
         this.selectedChannel.next(new Channel(doc.data()));
       });
+
     }
+    console.log('channel service: Objekt', channel)
   }
 
   /**

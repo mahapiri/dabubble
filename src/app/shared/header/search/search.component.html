@@ -8,7 +8,8 @@
         </div>
 
         <ng-container *ngIf="this.searchService.resultChannel.length > 0">
-            <div *ngFor="let channel of this.searchService.resultChannel; let i = index" (click)="openChannel()">
+            <div *ngFor="let channel of this.searchService.resultChannel; let i = index"
+                (click)="openChannel($event, channel)">
                 <div class="profile-content dm-content">
                     <div class="profile-left">
                         <div class="channels-section">
@@ -60,8 +61,6 @@
     </div>
 
 
-
-
     <div class="result-channel-container">
         <h4 class="n-h4">Threads</h4>
 
@@ -86,7 +85,8 @@
                         <div class="channel-thread-message-channel">
                             <div class="c-t-m-container">
                                 <div class="profile-section">
-                                    <img src="{{ thread.replyToMessage.profileImage }}" alt="{{ thread.replyToMessage.authorName }} Profile Image">
+                                    <img src="{{ thread.replyToMessage.profileImage }}"
+                                        alt="{{ thread.replyToMessage.authorName }} Profile Image">
                                     <div>&commat;{{ thread.replyToMessage.authorName }}</div>
                                 </div>
                                 <div>{{ thread.replyToMessage.text }}</div>
@@ -136,37 +136,6 @@
             </div>
         </ng-container>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     <div class="result-dm-container">
@@ -233,7 +202,8 @@
             <p class="n-p">Keine User gefunden</p>
         </div>
 
-        <div *ngFor="let user of this.searchService.resultUser; let i = index" (click)="openProfile($event, user.userId)">
+        <div *ngFor="let user of this.searchService.resultUser; let i = index"
+            (click)="openProfile($event, user.userId)">
             <div class="profile-content">
                 <div class="profile">
                     <img [src]="user.profileImage" alt="Character" class="profile-icon">
