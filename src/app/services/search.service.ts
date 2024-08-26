@@ -45,31 +45,35 @@ export class SearchService implements OnInit, OnDestroy {
   resultThread: any = [];
 
 
-  constructor() {
-    this.userListSubscription = this.userService.userList$.subscribe((user) => {
-      this.userList = user;
-    });
-    this.currentUserChannelsSubscription = this.userService.userChannels$.subscribe((channels) => {
-      this.channelList = channels;
-    });
-    // this.dmSubscription = this.dmService.messages$.subscribe((message) =>  {
-    //   console.log(message);
-    // });
-    this.currentUserSubscription = this.userService.currentUser$.subscribe((user) => {
-      if (user) {
-        this.currentUserID = user?.userId || '';
-      }
-    })
-    this.threadSubscription = this.threadService.threads$.subscribe((thread) => {
-      if (thread) {
-        this.threads = thread;
-      }
-    })
+  isOn: boolean = false;
 
-  }
+
+  constructor() { }
 
 
   ngOnInit() {
+    if(this.isOn) {
+      this.userListSubscription = this.userService.userList$.subscribe((user) => {
+        this.userList = user;
+      });
+      this.currentUserChannelsSubscription = this.userService.userChannels$.subscribe((channels) => {
+        this.channelList = channels;
+      });
+      // this.dmSubscription = this.dmService.messages$.subscribe((message) =>  {
+      //   console.log(message);
+      // });
+      this.currentUserSubscription = this.userService.currentUser$.subscribe((user) => {
+        if (user) {
+          this.currentUserID = user?.userId || '';
+        }
+      })
+      this.threadSubscription = this.threadService.threads$.subscribe((thread) => {
+        if (thread) {
+          this.threads = thread;
+        }
+      })
+    }
+
   }
 
 
