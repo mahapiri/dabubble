@@ -6,9 +6,7 @@ import { Channel, ChannelMessage } from '../../models/channel.class';
 import { DirectMessageService } from './direct-message.service';
 import { collection, Firestore, getDoc, getDocs, query, where } from '@angular/fire/firestore';
 import { DmMessage } from '../../models/direct-message.class';
-import { ChannelService } from './channel.service';
-import { ChannelMessageService } from './channel-message.service';
-import { replyToMessage, Thread, ThreadMessage } from '../../models/thread.class';
+import { Thread } from '../../models/thread.class';
 import { ThreadService } from './thread.service';
 
 @Injectable({
@@ -18,13 +16,10 @@ export class SearchService implements OnInit, OnDestroy {
   private firestore: Firestore = inject(Firestore);
   private userService: UserService = inject(UserService);
   private directMessageService: DirectMessageService = inject(DirectMessageService);
-  private channelService: ChannelService = inject(ChannelService);
-  private channelMessageService: ChannelMessageService = inject(ChannelMessageService);
   private threadService: ThreadService = inject(ThreadService);
   private userListSubscription: Subscription = new Subscription();
   private currentUserChannelsSubscription: Subscription = new Subscription();
   private currentUserSubscription: Subscription = new Subscription();
-  private dmSubscription: Subscription = new Subscription();
   private threadSubscription: Subscription = new Subscription();
 
 
@@ -34,56 +29,55 @@ export class SearchService implements OnInit, OnDestroy {
   directMessage: DmMessage[] = [];
   channelMessage: ChannelMessage[] = [];
   threads: Thread[] = [];
-  // channelMessage: any;
   channelListMsg: any = [];
   threadListMsg: any = [];
 
   resultDM: DmMessage[] = [];
   resultUser: User[] = [];
-  // resultChannel: ChannelMessage[] = [];
   resultChannel: any;
   resultThread: any = [];
-
-
-  isOn: boolean = false;
 
 
   constructor() { }
 
 
-  ngOnInit() {
-    if(this.isOn) {
-      this.userListSubscription = this.userService.userList$.subscribe((user) => {
-        this.userList = user;
-      });
-      this.currentUserChannelsSubscription = this.userService.userChannels$.subscribe((channels) => {
-        this.channelList = channels;
-      });
-      // this.dmSubscription = this.dmService.messages$.subscribe((message) =>  {
-      //   console.log(message);
-      // });
-      this.currentUserSubscription = this.userService.currentUser$.subscribe((user) => {
-        if (user) {
-          this.currentUserID = user?.userId || '';
-        }
-      })
-      this.threadSubscription = this.threadService.threads$.subscribe((thread) => {
-        if (thread) {
-          this.threads = thread;
-        }
-      })
-    }
+  ngOnInit() { }
 
+  
+  ngOnDestroy(): void { }
+
+
+  async startSubscription() {
+    console.log('start search / sub')
+    this.userListSubscription = this.userService.userList$.subscribe((user) => {
+      this.userList = user;
+    });
+    this.currentUserChannelsSubscription = this.userService.userChannels$.subscribe((channels) => {
+      this.channelList = channels;
+    });
+    // this.dmSubscription = this.dmService.messages$.subscribe((message) =>  {
+    //   console.log(message);
+    // });
+    this.currentUserSubscription = this.userService.currentUser$.subscribe((user) => {
+      if (user) {
+        this.currentUserID = user?.userId || '';
+      }
+    })
+    this.threadSubscription = this.threadService.threads$.subscribe((thread) => {
+      if (thread) {
+        this.threads = thread;
+      }
+    })
   }
 
 
-  ngOnDestroy(): void {
+  stopSubscription() {
     this.userListSubscription.unsubscribe();
     this.currentUserChannelsSubscription.unsubscribe();
     this.currentUserSubscription.unsubscribe();
     // this.dmSubscription.unsubscribe();
     this.threadSubscription.unsubscribe();
-    console.log('unsub');
+    console.log('stop search / unsub');
   }
 
 
@@ -110,13 +104,13 @@ export class SearchService implements OnInit, OnDestroy {
 
       const message: any = {
         authorId: data['authorId'] || '',
-        authorName: data['authorName'] || '',  ///snap
-        authorImg: data['authorImg'] || '',     // snap
-        authorstate: data['authorstate'] || '',  // snap
+        authorName: data['authorName'] || '',
+        authorImg: data['authorImg'] || '', 
+        authorstate: data['authorstate'] || '',
         profileId: data['profileId'] || '',
-        profileName: data['profileName'] || '',  // snap
-        profileImg: data['profileImg'] || '', //snap
-        profileState: data['profileState'] || '', /// snap
+        profileName: data['profileName'] || '', 
+        profileImg: data['profileImg'] || '',
+        profileState: data['profileState'] || '',
         date: data['date'] || '',
         time: data['time'] || '',
         text: data['text'] || '',

@@ -58,6 +58,7 @@ export class HeaderComponent implements OnInit {
   }
 
   async openResults() {
+    this.searchService.startSubscription();
     this.sharedService.isResults = this.searchInputValue.trim().length > 0;
 
     await this.searchService.getAllDM();
@@ -67,6 +68,7 @@ export class HeaderComponent implements OnInit {
   }
 
   closeResults() {
+    this.searchService.stopSubscription();
     this.sharedService.isResults = false;
     this.searchInputValue = '';
   }
