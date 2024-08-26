@@ -70,7 +70,7 @@
         </div>
 
         <ng-container *ngIf="this.searchService.resultThread.length > 0">
-            <div *ngFor="let thread of this.searchService.resultThread; let i = index" (click)="openChannel()">
+            <div *ngFor="let thread of this.searchService.resultThread; let i = index" (click)="openThread()">
                 <div class="profile-content dm-content">
                     <div class="profile-left">
                         <div class="channels-section">
@@ -182,7 +182,6 @@
                 <div class="profile-left">
                     <div class="profile">
                         <img [src]="dm.profileImg" alt="Character" class="profile-icon">
-                        <div class="result-status-icon" [ngClass]="dm.profileState"></div>
                     </div>
                     <p class="n-p">
                         {{ dm.profileName }}
@@ -234,7 +233,7 @@
             <p class="n-p">Keine User gefunden</p>
         </div>
 
-        <div *ngFor="let user of this.searchService.resultUser; let i = index" (click)="openProfile()">
+        <div *ngFor="let user of this.searchService.resultUser; let i = index" (click)="openProfile(user.userId)">
             <div class="profile-content">
                 <div class="profile">
                     <img [src]="user.profileImage" alt="Character" class="profile-icon">

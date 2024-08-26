@@ -21,4 +21,4 @@
   *ngIf="clickedChannel"
   (clickedChannel)="handleChannelClick($event)"
 ></app-create-channel>
-<app-profile *ngIf=""></app-profile>
+<app-profile *ngIf="this.sharedService.isProfile"></app-profile>

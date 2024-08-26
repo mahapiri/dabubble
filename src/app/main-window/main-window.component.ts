@@ -13,6 +13,7 @@ import { ChannelService } from '../services/channel.service';
 import { UserService } from '../services/user.service';
 import { ChannelMessageService } from '../services/channel-message.service';
 import { Subscription } from 'rxjs';
+import { SharedService } from '../services/shared.service';
 
 @Component({
   selector: 'app-main-window',
@@ -34,6 +35,7 @@ import { Subscription } from 'rxjs';
 export class MainWindowComponent implements OnInit {
   userService: UserService = inject(UserService)
   channelMessagesService: ChannelMessageService = inject(ChannelMessageService)
+  sharedService: SharedService = inject(SharedService)
   channel: Channel = new Channel({
     channelID: '',
     channelName: '',

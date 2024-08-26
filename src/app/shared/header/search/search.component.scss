@@ -313,7 +313,8 @@ a {
         justify-content: center;
         align-items: center;
         height: 36px;
-        width: fit-content;
+        // width: fit-content;
+        width: max-content;
         border: 1px solid var(--lines);
         border-radius: 30px;
         padding: 5px 15px 5px 15px;

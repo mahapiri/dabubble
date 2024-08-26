@@ -6,11 +6,11 @@
                 <mat-icon class="close-icon" (click)="close()">close</mat-icon>
             </div>
         </div>
-        <img class="profile-img" src="../../../assets/img/character2.png" alt="Profile Image">
+        <img class="profile-img" src="{{  this.sharedService.profile.profileImage }}" alt="Profile Image">
         <div class="profile-info">
-            <h2 class="n-h2">Elise Roth</h2>
+            <h2 class="n-h2">{{ this.sharedService.profile.username }}</h2>
             <div class="status-container">
-                <div class="status-icon absent"></div>
+                <div class="status-icon" ngClass="{{  this.sharedService.profile.state }}"></div>
                 <p class="n-p absent-text">Abwesend</p>
             </div>
         </div>
@@ -19,7 +19,7 @@
                 <mat-icon>mail</mat-icon>
                 <h4 class="n-h4">E-Mail-Adresse</h4>
             </div>
-            <a href="">rothelise&#64;beispiel.com</a>
+            <a href="">{{  this.sharedService.profile.email }}</a>
         </div>
         <button class="primary-btn">
             <mat-icon>mode_comment</mat-icon>
