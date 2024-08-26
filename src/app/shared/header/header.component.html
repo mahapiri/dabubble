@@ -17,7 +17,7 @@
         type="text"
         placeholder="Code learning durchsuchen"
         class="searchfield active"
-        [ngClass]="{ active: isResults }"
+        [ngClass]="{ active: this.sharedService.isResults }"
         (click)="openResults()"
         (ngModelChange)="openResults()"
         appClickOutside
@@ -26,7 +26,7 @@
       <mat-icon class="search-icon" (click)="openResults()">search</mat-icon>
 
       <ng-container *ngIf="searchInputValue.length > 0">
-        <div *ngIf="isResults">
+        <div *ngIf="this.sharedService.isResults">
           <app-search></app-search>
         </div>
       </ng-container>

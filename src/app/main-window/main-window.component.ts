@@ -14,6 +14,7 @@ import { UserService } from '../services/user.service';
 import { ChannelMessageService } from '../services/channel-message.service';
 import { Subscription } from 'rxjs';
 import { SharedService } from '../services/shared.service';
+import { ClickOutsideDirective } from '../directive/click-outside.directive';
 
 @Component({
   selector: 'app-main-window',
@@ -28,6 +29,7 @@ import { SharedService } from '../services/shared.service';
     ProfileComponent,
     PrivacyPolicyComponent,
     DirectMessageComponent,
+    ClickOutsideDirective
   ],
   templateUrl: './main-window.component.html',
   styleUrl: './main-window.component.scss',

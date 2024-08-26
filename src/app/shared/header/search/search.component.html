@@ -233,7 +233,7 @@
             <p class="n-p">Keine User gefunden</p>
         </div>
 
-        <div *ngFor="let user of this.searchService.resultUser; let i = index" (click)="openProfile(user.userId)">
+        <div *ngFor="let user of this.searchService.resultUser; let i = index" (click)="openProfile($event, user.userId)">
             <div class="profile-content">
                 <div class="profile">
                     <img [src]="user.profileImage" alt="Character" class="profile-icon">

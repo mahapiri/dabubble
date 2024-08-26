@@ -1,50 +1,42 @@
 import { inject, Injectable } from '@angular/core';
 import { UserService } from './user.service';
-import { collection, Firestore, getDocs } from '@angular/fire/firestore';
+import { doc, Firestore, getDoc } from '@angular/fire/firestore';
 import { User } from '../../models/user.class';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SharedService {
-  private userService: UserService = inject(UserService);
   private firestore: Firestore = inject(Firestore);
   isProfile: boolean = false;
+
+  private profileSubject = new BehaviorSubject<any>(null);
+  profile$ = this.profileSubject.asObservable();
+
+
   isProfileID: string = '';
-  profile: any;
+  isResults: boolean = false;
+
 
   constructor() { }
 
-
-
+  
   openProfile(userID: string) {
     this.isProfile = true;
     this.isProfileID = userID;
     this.getProfile(userID);
   }
 
+
   async getProfile(userID: string) {
-    const docRef = collection(this.firestore, 'users');
-    const userRef = await getDocs(docRef);
-    
-    userRef.forEach((doc) => {
-      const data = doc.data();
-      const id = data['userId'];
+    const docRef = doc(this.firestore, `users/${userID}`);
+    const userSnap = await getDoc(docRef);
 
-      if(id === userID) {
-        // const user = {
-        //   username: data['username'],
-        //   userId: data['userId'],
-        //   email: data['email'],
-        //   state: data['state'],
-        //   userChannels: data['userChannels'],
-        //   profileImage: data['profileImage'],
-        // };
-        // this.profile = user;
-        this.profile = data;
-        console.log(this.profile)
-      }
-    })
 
+    if (userSnap.exists()) {
+      const data = userSnap.data();
+      this.profileSubject.next(data);
+    }
   }
 }

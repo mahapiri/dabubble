@@ -1,17 +1,19 @@
 <section>
-    <div class="profile-container">
+    <div class="profile-container" appClickOutside (clickOutside)="close()">
         <div class="profile-title">
             <h3 class="n-h3">Profil</h3>
             <div class="icon-container">
                 <mat-icon class="close-icon" (click)="close()">close</mat-icon>
             </div>
         </div>
-        <img class="profile-img" src="{{  this.sharedService.profile.profileImage }}" alt="Profile Image">
+        <img class="profile-img" src="{{  this.user?.profileImage }}" alt="Profile Image">
         <div class="profile-info">
-            <h2 class="n-h2">{{ this.sharedService.profile.username }}</h2>
+            <h2 class="n-h2">{{ this.user?.username }}</h2>
             <div class="status-container">
-                <div class="status-icon" ngClass="{{  this.sharedService.profile.state }}"></div>
-                <p class="n-p absent-text">Abwesend</p>
+                <div class="status-icon" ngClass="{{  this.user?.state }}"></div>
+                <p class="n-p online-text" *ngIf="user?.state === 'online'">Online</p>
+                <p class="n-p offline-text" *ngIf="user?.state === 'offline'">Offline</p>
+                <p class="n-p absent-text" *ngIf="user?.state === 'absent'">Abwesend</p>
             </div>
         </div>
         <div class="mail-container">
@@ -19,9 +21,9 @@
                 <mat-icon>mail</mat-icon>
                 <h4 class="n-h4">E-Mail-Adresse</h4>
             </div>
-            <a href="">{{  this.sharedService.profile.email }}</a>
+            <a [href]="'mailto:' + user?.email">{{ user?.email }}</a>
         </div>
-        <button class="primary-btn">
+        <button class="btn-default btn-primary" (click)="openDM()">
             <mat-icon>mode_comment</mat-icon>
             Nachricht
         </button>

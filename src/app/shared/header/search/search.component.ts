@@ -60,7 +60,9 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   }
 
-  openProfile(userID: string) {
+  openProfile(event: Event, userID: string) {
+    event?.stopPropagation();
+    this.sharedService.isResults = false;
     this.sharedService.openProfile(userID);
   }
 }
