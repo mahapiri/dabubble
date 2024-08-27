@@ -9,8 +9,7 @@
     background: linear-gradient(1.46deg, #313AE6 1.22%, #797EF3 98.76%);
     z-index: 10;
     overflow: hidden;
-    animation: fadeOut 1s linear 4s;
-
+    animation: fadeOut 1s linear forwards 4s;
 
     .logo-container {
         position: absolute;
@@ -24,8 +23,8 @@
         gap: 20px;
 
         img {
-            width: 180px;
-            height: 180px;
+            width: 150px;
+            height: 150px;
             opacity: 1;
             animation: fadeIn 2s ease-out forwards
         }
@@ -34,7 +33,7 @@
             font-size: 100px;
             color: white;
             letter-spacing: -9px;
-            opacity: 0;
+            opacity: 1;
             white-space: nowrap;
             width: 0;
             animation: revealText 1s linear forwards 1s
@@ -145,8 +144,6 @@ input {
             width: 40px;
         }
     }
-
-
 }
 
 
@@ -206,4 +203,72 @@ input {
     color: var(--rosa);
     margin-block: -20px;
     padding-left: 30px;
+}
+
+
+@media (max-width: 1100px) {
+    .intro-screen {   
+        .logo-container {
+            width: 50vw;
+            img {
+                width: 120px;
+                height: 120px;
+            }
+            h1 {
+                letter-spacing: 0px;
+                font-size: 70px;
+            }
+        }
+    }
+}
+
+@media (max-width: 720px) {
+    .google-signin-container {
+
+        .google-icon {
+            width: 30px;
+            position: absolute;
+            left: 30px;
+        }
+
+        .google-signin-button {
+            padding: 6px 16px 6px 16px;
+            font-size: 16px;
+            height: 50px;
+
+            &:hover {
+                font-weight: 600;
+            }
+
+            &:hover+img {
+                width: 35px;
+            }
+        }
+    }
+
+
+
+    .intro-screen {
+        .logo-container {
+            justify-content: center;
+            animation: moveAndFadeMobile 2s ease-in-out forwards 3s;
+
+            h1 {
+                display: none;
+            }
+        }
+    }
+
+    @keyframes moveAndFadeMobile {
+        from {
+            opacity: 1;
+        }
+
+        to {
+            top: 2vh;
+            left: 30vw;
+            opacity: 0;
+            transform: scale(0.4);
+        }
+    }
 }

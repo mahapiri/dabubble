@@ -28,7 +28,6 @@ export class LogInComponent {
   invalidPassword: boolean = false;
   password: string = "";
   passwordVisible: boolean = false;
-  firstOpen: boolean = true;
   constructor(private router: Router, private auth: Auth) { }
 
 
@@ -84,7 +83,7 @@ export class LogInComponent {
 
   hideIntroScreen() {
     setTimeout(() => {
-      this.firstOpen = false;
+      this.authService.firstOpen = false;
     }, 5000);
   }
 
