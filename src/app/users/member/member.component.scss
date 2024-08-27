@@ -21,7 +21,10 @@
     width: 306px;
     border-radius: 30px;
     gap: 15px;
+    max-height: 30vh;
+    overflow-y: scroll;
 }
+
 
 .profile-container {
     display: flex;
@@ -52,7 +55,8 @@
 .profile-content {
     display: flex;
     position: relative;
-    img{
+
+    img {
         height: 50px;
         width: 50px;
     }

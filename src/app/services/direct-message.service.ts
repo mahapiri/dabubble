@@ -69,7 +69,7 @@ export class DirectMessageService implements OnDestroy {
   /**
    * Opens the direct messages from the clicked profile.
    */
-  async openDmFromUser(profile: User) {
+  async openDmFromUser(profile: any) {
     this.getActualProfile(profile);
     await this.addDirectMessage();
     // this.getDmInfo();

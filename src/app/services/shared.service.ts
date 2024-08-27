@@ -17,6 +17,9 @@ export class SharedService {
   private selectProfileSubject = new BehaviorSubject<boolean>(false);
   selectProfileChange$ = this.selectProfileSubject.asObservable();
 
+  private clickedAnswerSubject = new BehaviorSubject<boolean>(false);
+  clickedAnswer$ = this.clickedAnswerSubject.asObservable();
+
 
   isProfileID: string = '';
   isResults: boolean = false;
@@ -45,5 +48,9 @@ export class SharedService {
 
   setSelectProfile(state: boolean) {
     this.selectProfileSubject.next(state);
+  }
+
+  setAnswerClicked(value: boolean) {
+    this.clickedAnswerSubject.next(value);
   }
 }

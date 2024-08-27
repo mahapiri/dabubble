@@ -51,9 +51,11 @@ export class SearchService implements OnInit, OnDestroy {
     console.log('start search / sub')
     this.userListSubscription = this.userService.userList$.subscribe((user) => {
       this.userList = user;
+      console.log('sub:', user)
     });
     this.currentUserChannelsSubscription = this.userService.userChannels$.subscribe((channels) => {
       this.channelList = channels;
+      console.log('sub:', channels)
     });
     // this.dmSubscription = this.dmService.messages$.subscribe((message) =>  {
     //   console.log(message);
@@ -61,11 +63,13 @@ export class SearchService implements OnInit, OnDestroy {
     this.currentUserSubscription = this.userService.currentUser$.subscribe((user) => {
       if (user) {
         this.currentUserID = user?.userId || '';
+        console.log('sub:', user)
       }
     })
     this.threadSubscription = this.threadService.threads$.subscribe((thread) => {
       if (thread) {
         this.threads = thread;
+        console.log('sub:', thread)
       }
     })
   }
@@ -271,7 +275,7 @@ export class SearchService implements OnInit, OnDestroy {
         const text = message.text || '';
         if (text.toLowerCase().includes(searchWord)) {
           this.resultChannel.push({
-            channelId: channel.channelID,
+            channelID: channel.channelID,
             channelName: channel.channelName,
             message: message
           });
