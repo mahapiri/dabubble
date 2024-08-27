@@ -18,7 +18,7 @@ import { CreateChannelComponent } from '../../channel/create-channel/create-chan
 import { ChannelService } from '../../services/channel.service';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Channel } from '../../../models/channel.class';
 import { User } from '../../../models/user.class';
 import { DirectMessageService } from '../../services/direct-message.service';
@@ -125,8 +125,7 @@ export class WorkspaceMenuComponent implements OnInit {
     this.sharedService.setSelectProfile(false);
     this.chatService.setIsChannel(true);
 
-    this.chatService.openChannelOnMobile();
-    this.chatService.updateHeaderOnMobile();
+    this.chatService.handleWindowChangeOnMobile();
   }
 
   toggle() {
