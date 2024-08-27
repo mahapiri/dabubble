@@ -296,6 +296,32 @@ a {
   scrollbar-width: none;
 }
 
+/* Custom Scrollbar - - - - - - - - - */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--purple-2) #dddddd00;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--purple-2);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  cursor: pointer;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #00000000;
+  border: 1px solid #00000000;
+}
+
 /* Smartphones - - - - - - - - - */
 
 @media only screen and (max-width: 960px) {
