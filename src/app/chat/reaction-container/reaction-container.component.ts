@@ -30,6 +30,7 @@ export class ReactionContainerComponent implements OnInit, OnDestroy {
   private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
   @Input() message!: DmMessage | ChannelMessage | ThreadMessage;
+  @Input() isMyMessage: boolean = false;
 
   reactions: any;
   userNames: { [userId: string]: string } = {};

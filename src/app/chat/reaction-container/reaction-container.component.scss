@@ -1,108 +1,120 @@
 .reactions-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+
+  .reaction-btn {
+    position: relative;
+    width: fit-content;
+    height: 34px;
+    background-color: var(--white);
+    border: 1px solid var(--lines);
+    border-radius: 20px;
+    padding: 5px 10px 5px 10px;
     display: flex;
     align-items: center;
     gap: 10px;
+    cursor: pointer;
+    transition: all 70ms ease-in-out;
 
-    .reaction-btn {
-        position: relative;
-        width: fit-content;
-        height: 34px;
-        background-color: var(--white);
-        border: 1px solid var(--lines);
-        border-radius: 20px;
-        padding: 5px 10px 5px 10px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        cursor: pointer;
-        transition: all 70ms ease-in-out;
+    &:hover {
+      border: 1px solid var(--purple-1);
 
-        &:hover {
-            border: 1px solid var(--purple-1);
-
-            .reaction-info-menu {
-                visibility: visible;
-            }
-        }
-
-        img {
-            display: flex;
-            width: 20px;
-            height: 20px;
-        }
+      .reaction-info-menu {
+        visibility: visible;
+      }
     }
 
-    .mini-fab-btn {
-        height: 34px;
-        width: 34px;
+    img {
+      display: flex;
+      width: 20px;
+      height: 20px;
     }
+  }
+
+  .mini-fab-btn {
+    height: 34px;
+    width: 34px;
+  }
 }
 
 .reaction-info-menu {
-    position: absolute;
-    min-width: 158px;
-    min-height: 112px;
-    left: 50%;
-    top: -112px;
-    border-radius: 30px 30px 30px 0;
-    padding: 15px 8px 15px 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    background-color: var(--purple-1);
-    color: white;
-    font-size: 16px;
-    z-index: 1;
-    visibility: hidden;
+  position: absolute;
+  min-width: 158px;
+  min-height: 112px;
+  left: 50%;
+  top: -112px;
+  border-radius: 30px 30px 30px 0;
+  padding: 15px 8px 15px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  background-color: var(--purple-1);
+  color: white;
+  font-size: 16px;
+  z-index: 1;
+  visibility: hidden;
 
-    img {
-        width: 30px;
-        height: 30px;
-    }
+  img {
+    width: 30px;
+    height: 30px;
+  }
 
-    .user {
-        font-size: 18px;
-        font-weight: 700;
-    }
+  .user {
+    font-size: 18px;
+    font-weight: 700;
+  }
 }
 
 .mini-fab-btn {
-    display: inline-flex;
-    position: relative;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--white);
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--white);
+  box-shadow: none;
+  color: var(--gray);
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  border-radius: 50%;
+
+  &:hover {
+    color: var(--purple-3);
+    background-color: var(--bg-color);
+    --mat-fab-small-state-layer-color: var(--white);
     box-shadow: none;
-    color: var(--gray);
-    cursor: pointer;
-    border: none;
-    padding: 0;
-    border-radius: 50%;
 
-
-    &:hover {
-        color: var(--purple-3);
-        background-color: var(--bg-color);
-        --mat-fab-small-state-layer-color: var(--white);
-        box-shadow: none;
-
-        .mat-icon {
-            font-weight: bold;
-        }
-
-        .reaction-info-menu {
-            visibility: visible;
-        }
+    .mat-icon {
+      font-weight: bold;
     }
+
+    .reaction-info-menu {
+      visibility: visible;
+    }
+  }
 }
 
 .reaction-menu {
-    width: unset !important;
-    height: unset !important;
-    min-width: unset !important;
-    min-height: unset !important;
-    top: unset;
-    left: 16px;
-    bottom: 100%;
+  width: unset !important;
+  height: unset !important;
+  min-width: unset !important;
+  min-height: unset !important;
+  top: unset;
+  left: 16px;
+  bottom: 100%;
+}
+
+.reactions-wrapper.my-message {
+  justify-content: flex-end;
+}
+
+/* Smartphones - - - - - - - - - */
+
+@media only screen and (max-width: 960px) {
+  .reactions-wrapper {
+    max-width: 290px;
+  }
 }

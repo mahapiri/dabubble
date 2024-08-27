@@ -86,13 +86,14 @@
             </div>
 
             <div class="last-answer">
-              Letzte Antwort {{ chatService.formatTime(lastAnswerTime) }} Uhr
+              Letzte Antwort {{ chatService.formatTime(lastAnswerTime) }}
             </div>
           </div>
 
           <div *ngIf="!edit" class="reaction-container">
             <app-reaction-container
               [message]="channelMessage"
+              [isMyMessage]="isMyMessage"
             ></app-reaction-container>
           </div>
         </div>

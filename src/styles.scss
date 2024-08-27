@@ -276,7 +276,7 @@ a {
   font-size: 16px !important;
   border-radius: 20px !important;
   cursor: pointer !important;
-  font-family: 'Nunito' !important;
+  font-family: "Nunito" !important;
   color: var(--gray) !important;
 
   &:focus-visible {
@@ -287,11 +287,19 @@ a {
 .emoji-mart-search input::placeholder {
   display: flex;
   align-items: center;
-  font-family: 'Nunito' !important;
+  font-family: "Nunito" !important;
   font-size: 16px !important;
   color: var(--gray) !important;
 }
 
 .emoji-mart-scroll {
   scrollbar-width: none;
+}
+
+/* Smartphones - - - - - - - - - */
+
+@media only screen and (max-width: 960px) {
+  .n-h3 {
+    font-size: 20px !important;
+  }
 }

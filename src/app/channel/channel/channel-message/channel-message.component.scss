@@ -30,11 +30,13 @@
   display: flex;
   color: var(--gray);
   gap: 24px;
-  padding: 10px 0 10px 24px;
+  padding: 10px 24px 10px 24px;
   overflow: visible;
   cursor: pointer;
 
   .message-details {
+    width: fit-content;
+    max-width: 70vw;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -81,6 +83,7 @@
 
   .text-bubble {
     width: fit-content;
+    max-width: 73vw;
     word-wrap: break-word;
     white-space: normal;
     font-size: 18px;
@@ -95,7 +98,7 @@
   .message {
     position: relative;
     justify-content: flex-end;
-    padding: 10px 24px 10px 24px;
+    //padding: 10px 24px 10px 24px;
 
     &:hover {
       .reaction-bar {
@@ -128,10 +131,6 @@
     right: unset;
     left: 90px;
     width: 255px;
-  }
-
-  .reactions-wrapper {
-    justify-content: flex-end;
   }
 
   &:hover {
@@ -243,6 +242,7 @@
 }
 
 .reactions-wrapper {
+  width: 100%;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -355,4 +355,25 @@
 .channel-upload {
   height: 70px;
   width: 70px;
+}
+
+/* Smartphones - - - - - - - - - */
+
+@media only screen and (max-width: 960px) {
+  .message-wrapper {
+    width: 100vw;
+    gap: 18px;
+    padding: 10px 16px 10px 16px;
+
+    .user-img {
+      height: 50px;
+      width: 50px;
+    }
+  }
+
+  /* .my-message {
+    .message {
+      padding: 10px 6px 10px 6px;
+    }
+  } */
 }
