@@ -125,32 +125,8 @@ export class WorkspaceMenuComponent implements OnInit {
     this.sharedService.setSelectProfile(false);
     this.chatService.setIsChannel(true);
 
-    this.openChannelOnMobile();
+    this.chatService.openChannelOnMobile();
     this.chatService.updateHeaderOnMobile();
-  }
-
-  openChannelOnMobile() {
-    if (window.innerWidth <= 960) {
-      const workspaceMenu = document.querySelector('section');
-      const channelCard = document.querySelector('mat-card');
-
-      if (workspaceMenu && channelCard) {
-        this.renderer.setStyle(workspaceMenu, 'display', 'none');
-        this.renderer.setStyle(channelCard, 'display', 'flex');
-      }
-    }
-  }
-
-  openWorkspaceMenuOnMobile() {
-    if (window.innerWidth > 960) {
-      const workspaceMenu = document.querySelector('section');
-      const channelCard = document.querySelector('mat-card');
-
-      if (workspaceMenu && channelCard) {
-        this.renderer.setStyle(workspaceMenu, 'display', 'flex');
-        this.renderer.setStyle(channelCard, 'display', 'none');
-      }
-    }
   }
 
   toggle() {

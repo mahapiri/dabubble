@@ -13,6 +13,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { DirectMessageService } from '../../services/direct-message.service';
 import { SearchComponent } from '../header/search/search.component';
 import { SharedService } from '../../services/shared.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -43,7 +44,8 @@ export class HeaderComponent implements OnInit {
   // isResults: boolean = false;
   searchInputValue: string = '';
 
-  @Input() isChannelSelectedOnMobile: boolean = false;
+  isChannelSelectedOnMobile: boolean = false;
+  private subscription: Subscription = new Subscription();
 
   constructor(private router: Router) {}
 
@@ -53,8 +55,11 @@ export class HeaderComponent implements OnInit {
       this.currentUser = user;
     });
 
-    this.isChannelSelectedOnMobile =
-      this.chatService.getIsChannelSelectedOnMobile();
+    this.subscription.add(
+      this.chatService.isChannelSelectedOnMobile$.subscribe((isSelected) => {
+        this.isChannelSelectedOnMobile = isSelected;
+      })
+    );
   }
 
   async openResults() {
@@ -73,11 +78,18 @@ export class HeaderComponent implements OnInit {
     this.searchInputValue = '';
   }
 
-  @HostListener('window:resize', ['$event'])
+  /*   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
     this.chatService.updateHeaderOnMobile();
     this.isChannelSelectedOnMobile =
-      this.chatService.getIsChannelSelectedOnMobile();
+      this.chatService.setIsChannelSelectedOnMobile();
+  } */
+
+  backToWorkspacemenu() {
+    this.chatService.setIsChannel(false);
+    this.chatService.setClickedBack(true);
+    this.chatService.openWorkspaceMenuOnMobile();
+    this.chatService.updateHeaderOnMobile();
   }
 
   openPopup(event: Event) {
@@ -104,5 +116,9 @@ export class HeaderComponent implements OnInit {
     event.preventDefault();
     await this.authService.logOut();
     this.router.navigate(['/']);
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

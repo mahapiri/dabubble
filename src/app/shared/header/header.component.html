@@ -5,9 +5,15 @@
     alt="Logo Dabubble"
     class="logo"
   />
-  <div *ngIf="isChannelSelectedOnMobile" class="workspace-title">
-    <img src="../assets/img/workspace-logo.png" alt="Workspace Logo" />
-    <h4 class="n-h4 bold">Devspace</h4>
+  <div *ngIf="isChannelSelectedOnMobile" class="workspace-content">
+    <div class="arrow-back" (click)="backToWorkspacemenu()">
+      <mat-icon>chevron_left</mat-icon>
+    </div>
+
+    <div class="workspace-title">
+      <img src="../assets/img/workspace-logo.png" alt="Workspace Logo" />
+      <h4 class="n-h4 bold">Devspace</h4>
+    </div>
   </div>
   <div class="searchfield-container">
     <div class="searchfield-content">

@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { UserService } from './user.service';
 import { DmMessage } from '../../models/direct-message.class';
 import { ChannelMessage } from '../../models/channel.class';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,8 +12,21 @@ export class ChatService {
   message!: ChannelMessage | DmMessage;
   isChannel: boolean = false;
   isChannelSelectedOnMobile: boolean = false;
+  clickedBack: boolean = false;
+  private renderer: Renderer2;
 
-  constructor(private userService: UserService) {}
+  private isChannelSelectedOnMobileSubject = new BehaviorSubject<boolean>(
+    false
+  );
+  isChannelSelectedOnMobile$ =
+    this.isChannelSelectedOnMobileSubject.asObservable();
+
+  constructor(
+    private userService: UserService,
+    private rendererFactory: RendererFactory2
+  ) {
+    this.renderer = rendererFactory.createRenderer(null, null);
+  }
 
   /**
    * Determines if a message is the first of the day for the dividing line between days in the Chat.
@@ -104,20 +118,47 @@ export class ChatService {
     this.isChannel = status;
   }
 
+  setClickedBack(status: boolean) {
+    this.clickedBack = status;
+  }
+
   /**
    * Updates the header logo (DaBubble or DevSpace) on the window width and clicked channel.
    * This handles the mobile view adjustment.
    */
   updateHeaderOnMobile() {
-    console.log('Update Header on Mobile, isChannel:', this.isChannel);
-    if (window.innerWidth > 960) {
-      this.isChannelSelectedOnMobile = false;
+    if (window.innerWidth > 960 || !this.isChannel) {
+      this.setIsChannelSelectedOnMobile(false);
     } else if (window.innerWidth <= 960 && this.isChannel) {
-      this.isChannelSelectedOnMobile = true;
+      this.setIsChannelSelectedOnMobile(true);
     }
   }
 
-  getIsChannelSelectedOnMobile(): boolean {
-    return this.isChannelSelectedOnMobile;
+  setIsChannelSelectedOnMobile(value: boolean) {
+    this.isChannelSelectedOnMobileSubject.next(value);
+  }
+
+  openChannelOnMobile() {
+    if (window.innerWidth <= 960) {
+      const workspaceMenu = document.querySelector('section');
+      const channelCard = document.querySelector('mat-card');
+
+      if (workspaceMenu && channelCard) {
+        this.renderer.setStyle(workspaceMenu, 'display', 'none');
+        this.renderer.setStyle(channelCard, 'display', 'flex');
+      }
+    }
+  }
+
+  openWorkspaceMenuOnMobile() {
+    if (window.innerWidth > 960 || this.clickedBack) {
+      const workspaceMenu = document.querySelector('section');
+      const channelCard = document.querySelector('mat-card');
+
+      if (workspaceMenu && channelCard) {
+        this.renderer.setStyle(workspaceMenu, 'display', 'flex');
+        this.renderer.setStyle(channelCard, 'display', 'none');
+      }
+    }
   }
 }

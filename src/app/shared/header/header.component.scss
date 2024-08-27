@@ -324,6 +324,39 @@ a {
   width: 100%;
 }
 
+.workspace-content {
+  width: fit-content;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--black);
+  flex-shrink: 1;
+
+  .workspace-title {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    gap: 10px;
+
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 30px;
+    }
+
+    h4 {
+      padding-left: 0;
+      font-weight: bold !important;
+    }
+  }
+
+  .arrow-back {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+  }
+}
+
 /* Smartphones - - - - - - - - - */
 
 @media only screen and (max-width: 960px) {
