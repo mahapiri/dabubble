@@ -62,6 +62,7 @@ export class ChannelMessageService {
    */
   setSelectedMessage(selectedMessage: ChannelMessage | null) {
     this.selectedChannelMessage.next(selectedMessage);
+    console.log(selectedMessage);
   }
 
   /**

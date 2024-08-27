@@ -12,6 +12,8 @@ import { user } from '@angular/fire/auth';
 import { SharedService } from '../../../services/shared.service';
 import { ChannelService } from '../../../services/channel.service';
 import { Channel } from '../../../../models/channel.class';
+import { ChannelMessageService } from '../../../services/channel-message.service';
+import { ThreadService } from '../../../services/thread.service';
 
 @Component({
   selector: 'app-search',
@@ -30,6 +32,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   userService: UserService = inject(UserService);
   chatService: ChatService = inject(ChatService);
   channelService: ChannelService = inject(ChannelService);
+  channelMessageService: ChannelMessageService = inject(ChannelMessageService);
+  threadService: ThreadService = inject(ThreadService);
   directMessageService: DirectMessageService = inject(DirectMessageService);
   sharedService: SharedService = inject(SharedService);
   currentUserSubscription: Subscription = new Subscription();
@@ -52,19 +56,21 @@ export class SearchComponent implements OnInit, OnDestroy {
 
 
   openChannel(event: Event, channel: Channel) {
-    console.log(channel);
     event?.stopPropagation();
     this.sharedService.isResults = false;
     this.channelService.setSelectedChannel(channel);
     this.sharedService.setSelectProfile(false);
     this.chatService.setIsChannel(true);
-
-    // this.channelService.selectedChannel.next(channel);
   }
 
 
-  openThread() {
+  openThread(thread: any) {
+    let channelMsg = thread['replyToMessage'];
+    // this.clickedAnswer.emit(true);
+    this.channelMessageService.setSelectedMessage(channelMsg);
+    this.threadService.handleThread();
 
+    console.log(channelMsg);
   }
 
 

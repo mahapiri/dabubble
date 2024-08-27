@@ -69,7 +69,7 @@
         </div>
 
         <ng-container *ngIf="this.searchService.resultThread.length > 0">
-            <div *ngFor="let thread of this.searchService.resultThread; let i = index" (click)="openThread()">
+            <div *ngFor="let thread of this.searchService.resultThread; let i = index" (click)="openThread(thread)">
                 <div class="profile-content dm-content">
                     <div class="profile-left">
                         <div class="channels-section">

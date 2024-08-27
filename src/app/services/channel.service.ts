@@ -39,9 +39,7 @@ export class ChannelService {
       onSnapshot(doc(this.firestore, 'channels', channel.channelID), (doc) => {
         this.selectedChannel.next(new Channel(doc.data()));
       });
-
     }
-    console.log('channel service: Objekt', channel)
   }
 
   /**
