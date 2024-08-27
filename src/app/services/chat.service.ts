@@ -11,15 +11,11 @@ export class ChatService {
   previousDate: string | null = null;
   message!: ChannelMessage | DmMessage;
   isChannel: boolean = false;
-  isChannelSelectedOnMobile: boolean = false;
   clickedBack: boolean = false;
   private renderer: Renderer2;
 
-  private isChannelSelectedOnMobileSubject = new BehaviorSubject<boolean>(
-    false
-  );
-  isChannelSelectedOnMobile$ =
-    this.isChannelSelectedOnMobileSubject.asObservable();
+  private headerLogoSubject = new BehaviorSubject<string>('daBubble');
+  headerLogo$ = this.headerLogoSubject.asObservable();
 
   constructor(
     private userService: UserService,
@@ -123,22 +119,34 @@ export class ChatService {
   }
 
   /**
-   * Updates the header logo (DaBubble or DevSpace) on the window width and clicked channel.
+   * Updates the header logo (DaBubble or DevSpace) depending on window width and if channel is selected.
    * This handles the mobile view adjustment.
    */
-  updateHeaderOnMobile() {
-    if (window.innerWidth > 960 || !this.isChannel) {
-      this.setIsChannelSelectedOnMobile(false);
-    } else if (window.innerWidth <= 960 && this.isChannel) {
-      this.setIsChannelSelectedOnMobile(true);
+  handleWindowChangeOnMobile() {
+    if (this.channelSelectedOnMobile()) {
+      this.showHeaderLogo('channelLogo');
+      this.showChannel();
+    } else if (this.workspaceMenuSelectedOnMobile()) {
+      this.showHeaderLogo('daBubble');
+      this.showWorkspaceMenu();
+    } else {
+      this.showHeaderLogo('daBubble');
     }
   }
 
-  setIsChannelSelectedOnMobile(value: boolean) {
-    this.isChannelSelectedOnMobileSubject.next(value);
+  channelSelectedOnMobile() {
+    return window.innerWidth <= 960 && this.isChannel;
   }
 
-  openChannelOnMobile() {
+  workspaceMenuSelectedOnMobile() {
+    return window.innerWidth <= 960 && !this.isChannel;
+  }
+
+  showHeaderLogo(value: string) {
+    this.headerLogoSubject.next(value);
+  }
+
+  showChannel() {
     if (window.innerWidth <= 960) {
       const workspaceMenu = document.querySelector('section');
       const channelCard = document.querySelector('mat-card');
@@ -150,7 +158,7 @@ export class ChatService {
     }
   }
 
-  openWorkspaceMenuOnMobile() {
+  showWorkspaceMenu() {
     if (window.innerWidth > 960 || this.clickedBack) {
       const workspaceMenu = document.querySelector('section');
       const channelCard = document.querySelector('mat-card');

@@ -1,11 +1,11 @@
 <header>
   <img
-    *ngIf="!isChannelSelectedOnMobile"
+    *ngIf="headerLogo === 'daBubble'"
     src="../../../assets/img/logo-with-font.png"
     alt="Logo Dabubble"
     class="logo"
   />
-  <div *ngIf="isChannelSelectedOnMobile" class="workspace-content">
+  <div *ngIf="headerLogo === 'channelLogo'" class="workspace-content">
     <div class="arrow-back" (click)="backToWorkspacemenu()">
       <mat-icon>chevron_left</mat-icon>
     </div>

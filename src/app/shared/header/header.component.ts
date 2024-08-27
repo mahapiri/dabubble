@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, Input, OnInit } from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
@@ -44,7 +44,7 @@ export class HeaderComponent implements OnInit {
   // isResults: boolean = false;
   searchInputValue: string = '';
 
-  isChannelSelectedOnMobile: boolean = false;
+  headerLogo: string = 'daBubble';
   private subscription: Subscription = new Subscription();
 
   constructor(private router: Router) {}
@@ -56,8 +56,8 @@ export class HeaderComponent implements OnInit {
     });
 
     this.subscription.add(
-      this.chatService.isChannelSelectedOnMobile$.subscribe((isSelected) => {
-        this.isChannelSelectedOnMobile = isSelected;
+      this.chatService.headerLogo$.subscribe((isChanged) => {
+        this.headerLogo = isChanged;
       })
     );
   }
@@ -88,8 +88,7 @@ export class HeaderComponent implements OnInit {
   backToWorkspacemenu() {
     this.chatService.setIsChannel(false);
     this.chatService.setClickedBack(true);
-    this.chatService.openWorkspaceMenuOnMobile();
-    this.chatService.updateHeaderOnMobile();
+    this.chatService.handleWindowChangeOnMobile();
   }
 
   openPopup(event: Event) {
