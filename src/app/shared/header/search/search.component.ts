@@ -14,6 +14,8 @@ import { ChannelService } from '../../../services/channel.service';
 import { Channel } from '../../../../models/channel.class';
 import { ChannelMessageService } from '../../../services/channel-message.service';
 import { ThreadService } from '../../../services/thread.service';
+import { MainWindowComponent } from '../../../main-window/main-window.component';
+import { User } from '../../../../models/user.class';
 
 @Component({
   selector: 'app-search',
@@ -31,6 +33,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   searchService: SearchService = inject(SearchService);
   userService: UserService = inject(UserService);
   chatService: ChatService = inject(ChatService);
+  mainWindow: MainWindowComponent = inject(MainWindowComponent);
   channelService: ChannelService = inject(ChannelService);
   channelMessageService: ChannelMessageService = inject(ChannelMessageService);
   threadService: ThreadService = inject(ThreadService);
@@ -44,7 +47,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    //await this.userService.getUserID();
     this.currentUserSubscription = this.userService.currentUser$.subscribe((user) => {
       this.currentUser = user;
     });
@@ -66,16 +68,32 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   openThread(thread: any) {
     let channelMsg = thread['replyToMessage'];
-    // this.clickedAnswer.emit(true);
+    this.mainWindow.selectProfile = false;
+    this.mainWindow.clickedThread = true;
     this.channelMessageService.setSelectedMessage(channelMsg);
     this.threadService.handleThread();
-
-    console.log(channelMsg);
   }
 
 
-  openDM() {
+  async openDM(event: Event, dm: any) {
+    event?.stopPropagation();
+    this.sharedService.isResults = false;
+    let profile = await this.setProfile(dm);
+    this.sharedService.setSelectProfile(true);
+    this.directMessageService.openDmFromUser(profile);
+    this.chatService.setIsChannel(false);
+  }
 
+
+  async setProfile(dm: any) {
+    return {
+      username: dm['authorName'],
+      userId: dm['authorId'],
+      email: '',
+      state: dm['authorstate'],
+      userChannels: [],
+      profileImage: dm['authorImg']
+    }
   }
 
   openProfile(event: Event, userID: string) {
