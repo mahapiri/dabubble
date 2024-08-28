@@ -308,6 +308,7 @@ export class DirectMessageService implements OnDestroy {
     return new DmMessage({
       authorId: data['authorId'],
       authorName: data['authorName'],
+      authorImg: data['authorImg'],
       date: data['date'],
       time: data['time'],
       text: data['text'],

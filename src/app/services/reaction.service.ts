@@ -53,10 +53,12 @@ export class ReactionService {
   async setReaction(reaction: string, message: DmMessage) {
     const messageID = message.id;
     const userID = this.userService.userID;
+    console.log(messageID);
 
     if (this.activeReactions[messageID] === reaction) {
       await this.removeReaction(reaction, messageID, userID);
       delete this.activeReactions[messageID];
+      console.log('removeReaction')
       return;
     }
 
@@ -67,11 +69,12 @@ export class ReactionService {
 
       this.activeReactions[messageID] = reaction;
       const docRef = this.getReactionRef();
+      console.log(message.authorId)
       const newReaction: Reaction = this.setReactionObject(userID, reaction, messageID, message.authorId);
       const reactionRef = await addDoc(docRef, newReaction.getJson());
 
       await this.updateReactionWithID(reactionRef.id);
-      await this.setReactionIdToDm(message.id, reactionRef.id);
+      // await this.setReactionIdToDm(message.id, reactionRef.id); // muss noch angepasst werden für channel / thread
     } catch (error) {
       console.warn("Error", error);
       delete this.activeReactions[messageID];  // Lokalen Zustand im Fehlerfall bereinigen
@@ -222,7 +225,7 @@ export class ReactionService {
         const userData = userDoc.data();
         return userData['username'] || 'Unknown';
       } else {
-        return 'Unknown';
+        return 'Gast (Profil gelöscht)';
       }
     } catch (error) {
       return 'Unknown';

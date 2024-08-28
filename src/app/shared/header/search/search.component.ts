@@ -16,6 +16,7 @@ import { ChannelMessageService } from '../../../services/channel-message.service
 import { ThreadService } from '../../../services/thread.service';
 import { MainWindowComponent } from '../../../main-window/main-window.component';
 import { User } from '../../../../models/user.class';
+import { DirectMessage, DmMessage } from '../../../../models/direct-message.class';
 
 @Component({
   selector: 'app-search',
@@ -43,8 +44,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   currentUser: any = '';
 
 
-  constructor() {
-  }
+  constructor() { }
 
   async ngOnInit() {
     this.currentUserSubscription = this.userService.currentUser$.subscribe((user) => {
@@ -79,20 +79,32 @@ export class SearchComponent implements OnInit, OnDestroy {
     event?.stopPropagation();
     this.sharedService.isResults = false;
     let profile = await this.setProfile(dm);
+    this.setProfilestate(dm);
     this.sharedService.setSelectProfile(true);
     this.directMessageService.openDmFromUser(profile);
     this.chatService.setIsChannel(false);
+  }
+  
+  
+  async setProfilestate(dm: DmMessage) {
+    let state = '';
+    this.searchService.userList.forEach(user => {
+      if(user.userId == dm.profileId) {
+        state = user.state;
+      }
+    });
+    return state;
   }
 
 
   async setProfile(dm: any) {
     return {
-      username: dm['authorName'],
-      userId: dm['authorId'],
+      username: dm['profileName'],
+      userId: dm['profileId'],
       email: '',
-      state: dm['authorstate'],
+      state: await this.setProfilestate(dm),
       userChannels: [],
-      profileImage: dm['authorImg']
+      profileImage: dm['profileImg']
     }
   }
 
