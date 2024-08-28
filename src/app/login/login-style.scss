@@ -172,7 +172,7 @@ input[type="checkbox"] {
     border: none;
     position: absolute;
     top: 7%;
-    left: 7%;
+    left: 6%;
     cursor: pointer;
     padding: 0;
     width: 40px;
@@ -194,7 +194,7 @@ input[type="checkbox"] {
 }
 
 
-@media (max-height: 850px) {
+@media (max-height: 900px) {
     input {
         padding: 10px 16px 10px 60px !important;
     }
