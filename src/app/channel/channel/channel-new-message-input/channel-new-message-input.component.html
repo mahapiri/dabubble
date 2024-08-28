@@ -3,7 +3,8 @@
   <img [src]="this.uploadService.currentImg$ | async" alt="">
   <mat-icon (click)="this.uploadService.removeImg()" class="close-icon pos-relative">close</mat-icon>
   }@else {
-  <input [(ngModel)]="messageText" matInput type="text" placeholder="Nachricht an #{{ channel.channelName }}" />
+  <textarea [(ngModel)]="messageText" matInput type="text" placeholder="Nachricht an {{ channel.channelName }}" rows="3"
+  (keydown)="onKeyDown($event)"></textarea>
   }
 
   <div class="message-controls">
@@ -26,7 +27,7 @@
         </app-tagging>
       </div>
     </div>
-    <button (click)="sendMessage()" mat-mini-fab class="send-btn">
+    <button class="send-btn" [ngClass]="{'send-btn-valid': messageText.trim().length > 0}" (click)="sendMessage()">
       <mat-icon>send</mat-icon>
     </button>
   </div>

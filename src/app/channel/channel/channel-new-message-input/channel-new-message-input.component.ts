@@ -113,4 +113,12 @@ export class ChannelNewMessageInputComponent implements OnInit{
   closePopup() {
     this.isTag = false;
   }
+
+
+  onKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.sendMessage();
+    }
+  }
 }
