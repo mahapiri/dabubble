@@ -18,6 +18,9 @@ import { ThreadMessageComponent } from './thread-message/thread-message.componen
 import { UploadService } from '../services/upload.service';
 import { TaggingComponent } from '../chat/tagging/tagging.component';
 import { TaggingService } from '../services/tagging.service';
+import { ClickOutsideDirective } from '../directive/click-outside.directive';
+import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import { EmojiPickerComponent } from '../chat/emoji-picker/emoji-picker.component';
 
 @Component({
   selector: 'app-thread',
@@ -34,7 +37,10 @@ import { TaggingService } from '../services/tagging.service';
     CommonModule,
     MemberComponent,
     FormsModule,
-    TaggingComponent
+    TaggingComponent,
+    ClickOutsideDirective,
+    EmojiComponent,
+    EmojiPickerComponent
   ],
   templateUrl: './thread.component.html',
   styleUrl: './thread.component.scss',
@@ -48,6 +54,8 @@ export class ThreadComponent implements OnInit, OnDestroy {
   uploadPath: string = 'threads';
 
   threadMessageText: string = '';
+  isEmoji: boolean = false;
+  notOpen: boolean = true;
   isTag: boolean = false;
 
   selectedThread$: Observable<Thread | null>;
@@ -156,5 +164,36 @@ export class ThreadComponent implements OnInit, OnDestroy {
   */
   closePopup() {
     this.isTag = false;
+  }
+
+
+  /**
+  * open the Emoji Container
+  */
+  openEmojiSet(event: Event) {
+    event.stopPropagation();
+    if (this.notOpen) {
+      this.isEmoji = !this.isEmoji;
+    }
+
+  }
+
+  
+  /**
+  * open the Emoji Container
+  */
+  closeEmojiSet() {
+    this.isEmoji = false;
+    this.notOpen = false;
+    setTimeout(() => this.notOpen = true, 1000);
+  }
+
+
+  /**
+  * handles emoji selection from the EmojiPickerComponent
+  */
+  onEmojiSelected(emoji: string) {
+    this.threadMessageText += emoji;
+    this.closeEmojiSet();
   }
 }
