@@ -201,6 +201,10 @@ mat-list-item {
     border-radius: 0px;
   }
 
+  mat-list {
+    overflow-x: hidden;
+  }
+
   .members-container-content {
     display: none;
   }
