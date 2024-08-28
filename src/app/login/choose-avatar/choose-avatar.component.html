@@ -32,8 +32,6 @@
                 Datei hochladen
             </button>
             <input id="file-upload" type="file" (change)="onFileSelected($event)" [accept]="acceptedFileTypes" hidden />
-            <button (click)="uploadPicture()">dsf</button>
-
         </div>
         <div class="next-button-container">
             <button type="button" (click)="createUser()" [disabled]="!pictureChosen" class="next-button">Weiter</button>
