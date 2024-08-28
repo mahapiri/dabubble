@@ -49,7 +49,7 @@
     <mat-icon>add_reaction</mat-icon>
   </button>
   <button
-    *ngIf="isChannelMessage"
+    *ngIf="isChannelMessage && !isFromReactionContainer"
     (click)="openThread()"
     class="mini-fab-btn"
     mat-mini-fab
