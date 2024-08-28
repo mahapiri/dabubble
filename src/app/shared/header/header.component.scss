@@ -18,13 +18,19 @@ header {
   position: relative;
   display: flex;
   width: 100%;
+  min-width: 450px;
   margin-left: calc(366px - 271px); // Logo space + page margin left
   margin-right: calc(366px - 271px); // Logo space + page margin left
   align-items: center;
 }
 
 .searchfield-content {
-  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  width: calc(
+    100% - 62px
+  ); // 100% - Thread Container Space without margin right
+  min-width: 450px;
 }
 
 .searchfield {
@@ -71,9 +77,9 @@ input[type="text"] {
   width: 35px;
   height: 35px;
   color: var(--gray);
-  position: absolute;
-  top: 23px;
-  right: 29px;
+  position: relative;
+  top: 22px;
+  right: 55px;
   cursor: pointer;
 }
 
