@@ -57,7 +57,7 @@ export class ChannelMessage {
     this.date = obj ? obj.date : '';
     this.authorName = obj ? obj.authorName : '';
     this.authorId = obj ? obj.authorId : '';
-    this.profileImg = obj ? obj.profileImage : '';
+    this.profileImg = obj ? obj.profileImg : '';
     this.reaction = obj ? obj.reaction : [];
     this.file = obj ? obj.file : '';
     this.isFirstMessageOfDay = obj ? obj.isFirstMessageOfDay || false : false;

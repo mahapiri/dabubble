@@ -29,7 +29,7 @@ export class replyToMessage {
   date: string = '';
   authorName: string = '';
   authorId: string = '';
-  profileImage: string = '';
+  profileImg: string = '';
   isFirstMessageOfDay: boolean = false;
 
   constructor(obj?: any) {
@@ -39,7 +39,7 @@ export class replyToMessage {
     this.date = obj ? obj.date : '';
     this.authorName = obj ? obj.authorName : '';
     this.authorId = obj ? obj.authorId : '';
-    this.profileImage = obj ? obj.profileImage : '';
+    this.profileImg = obj ? obj.profileImg : '';
     this.isFirstMessageOfDay = obj ? obj.isFirstMessageOfDay || false : false;
   }
 
@@ -51,7 +51,7 @@ export class replyToMessage {
       date: this.date,
       authorName: this.authorName,
       authorId: this.authorId,
-      profileImage: this.profileImage,
+      profileImg: this.profileImg,
       isFirstMessageOfDay: this.isFirstMessageOfDay,
     };
   }

@@ -130,7 +130,8 @@
   .reaction-bar {
     right: unset;
     left: 90px;
-    width: 255px;
+    width: fit-content;
+    max-width: 255px;
   }
 
   &:hover {

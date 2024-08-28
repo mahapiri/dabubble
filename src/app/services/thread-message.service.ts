@@ -216,7 +216,7 @@ export class ThreadMessageService {
       date: data['date'],
       authorName: data['authorName'],
       authorId: data['authorId'],
-      profileImg: data['profileImage'],
+      profileImg: data['profileImg'],
       reaction: [],
       file: '',
       isFirstMessageOfDay: false,
