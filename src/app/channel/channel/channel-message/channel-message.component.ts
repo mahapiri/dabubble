@@ -15,6 +15,7 @@ import { Observable, Subscription } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
 import { ReactionBarComponent } from '../../../chat/reaction-bar/reaction-bar.component';
 import { ReactionContainerComponent } from '../../../chat/reaction-container/reaction-container.component';
+import { ReactionService } from '../../../services/reaction.service';
 
 @Component({
   selector: 'app-channel-message',
@@ -53,7 +54,8 @@ export class ChannelMessageComponent {
     private channelMessageService: ChannelMessageService,
     private threadService: ThreadService,
     public threadMessageService: ThreadMessageService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private reactionService: ReactionService
   ) {}
 
   /**
@@ -121,4 +123,11 @@ export class ChannelMessageComponent {
     this.answerCountSubscription.unsubscribe();
     this.lastAnswerSubscription.unsubscribe();
   }
+
+    /**
+   * close the Smiley Emoticons for More Reactions
+   */
+    closeReactionMoreBtn() {
+      this.reactionService.moreBtn = false;
+    }
 }

@@ -7,7 +7,7 @@
       </div>
     </div>
 
-    <div class="message" [ngClass]="{ 'bg-color': edit }">
+    <div class="message" [ngClass]="{ 'bg-color': edit }" (mouseleave)="closeReactionMoreBtn()">
       <div *ngIf="!edit" id="reactionBar" class="reaction-bar">
         <app-reaction-bar
           [isMyMessage]="isMyMessage"
