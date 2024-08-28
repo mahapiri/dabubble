@@ -73,10 +73,6 @@ input {
         outline: 1px solid var(--gray);
     }
 }
-
-
-
-
 input[type="checkbox"] {
     border-color: #007bff;
     /* Example color: blue */
@@ -104,11 +100,7 @@ input[type="checkbox"] {
         flex: 1;
     }
 
-
 }
-
-
-
 
 .next-button-container {
     display: flex;
@@ -180,7 +172,7 @@ input[type="checkbox"] {
     border: none;
     position: absolute;
     top: 7%;
-    left: 7%;
+    left: 6%;
     cursor: pointer;
     padding: 0;
     width: 40px;
@@ -190,10 +182,6 @@ input[type="checkbox"] {
     &:hover {
         background-color: var(--bg-color) !important;
     }
-
-
-
-
     .icon {
         font-size: 30px;
         height: auto;
@@ -206,27 +194,39 @@ input[type="checkbox"] {
 }
 
 
-@media (max-height: 850px) {
+@media (max-height: 900px) {
     input {
         padding: 10px 16px 10px 60px !important;
     }
+
     .wrapper {
         .login-card {
             padding: 20px 10px 20px 10px !important;
         }
     }
 
-    h1{
+    h1 {
         font-size: 32px !important;
     }
 }
 
 @media (max-width: 720px) {
+    .arrow-back-button {
+        top: 4% !important;
+        left: 2% !important;
+    }
+
+    h1 {
+        padding-inline: 15px;
+    }
+
     .hide-on-mobile {
         display: none;
     }
 
-
+    .errormessage {
+        margin-block: -20px !important;
+    }
 
     .wrapper {
         padding-top: 20px;

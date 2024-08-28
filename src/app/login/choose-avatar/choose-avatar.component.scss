@@ -8,59 +8,6 @@
     background-color: var(--bg-color);
 }
 
-.login-card {
-    height: 769px;
-    width: 606px;
-    border-radius: 30px;
-    padding: 50px;
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-
-    h1 {
-        font-size: 46px;
-        font-weight: 700;
-        line-height: 55.2px;
-        text-align: center;
-        color: var(--purple-1);
-    }
-
-    p {
-        text-align: center;
-    }
-
-    a {
-        text-align: center;
-    }
-}
-
-.arrow-back-button {
-    background-color: white;
-    border: none;
-    position: absolute;
-    top: 7%;
-    left: 7%;
-    cursor: pointer;
-    padding: 0;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-
-    &:hover {
-        background-color: var(--bg-color) !important;
-    }
-
-    .icon {
-        font-size: 30px;
-        height: auto;
-        width: auto;
-
-        &:hover {
-            color: var(--purple-3);
-        }
-    }
-}
 
 .avatar-container {
     display: flex;
@@ -69,7 +16,7 @@
     flex-direction: column;
     gap: 30px;
 
-    img{
+    img {
         border-radius: 50%;
     }
 
@@ -92,8 +39,7 @@
 
         img {
             border-radius: 50%;
-            height: 70px;
-            width: 70px;
+            width: clamp(30px, 50%, 70px);
             cursor: pointer;
         }
     }
@@ -137,6 +83,18 @@ button {
     }
 }
 
+
+.own-picture-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    button {
+        flex: 1;
+        margin-inline: 10%;
+    }
+}
+
 .custom-file-upload {
     display: inline-block;
     padding: 6px 12px;
@@ -145,8 +103,24 @@ button {
     color: white;
     border-radius: 4px;
     border: 1px solid #007bff;
-  }
-  
-  #file-upload {
+}
+
+#file-upload {
     display: none;
-  }
+}
+
+@media (max-width: 720px) {
+    .avatar-container {
+        .profile-picture {
+            width: 120px;
+            height: 120px;
+        }
+    }
+
+    .own-picture-container {
+        button {
+            margin-inline: unset;
+            margin-left: 2%;
+        }
+    }
+}
