@@ -9,8 +9,15 @@
         <img class="profile-img" src="{{ currentUser?.profileImage }}" alt="Profile Image">
         <div class="profile-info">
             <div class="name-title">
-                <h2 class="n-h2">{{ currentUser?.username }}</h2>
-                <p class="n-p">Bearbeiten</p>
+                <div class="inputfield">
+
+                    @if(!editing){
+                        <h2 class="n-h2">{{ userName }}</h2>
+                    }@else{
+                    <input class="padding-left" [(ngModel)]="userName" type="text">
+                    }
+                </div>
+                <p (click)="edit()" class="n-p">{{ editing ? 'Speichern' : 'Bearbeiten' }}</p>
             </div>
 
             <div class="status-container">

@@ -8,7 +8,7 @@
     <div class="profile-section">
         <div class="profile-div">
             @for (member of channelMember; track $index) {
-            <div class="profile-container">
+            <div class="profile-container" (click)="openProfile($event, member)">
                 <div class="profile-content">
                     <img src="{{ member.profileImage }}" alt="Character" class="profile-icon" />
                     <div class="status-icon" ngClass="{{ member.state }}"></div>

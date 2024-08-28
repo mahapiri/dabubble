@@ -3,32 +3,86 @@ import { MatIconModule } from '@angular/material/icon';
 import { User } from '../../../models/user.class';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { doc, Firestore, updateDoc } from '@angular/fire/firestore';
+import { ChannelService } from '../../services/channel.service';
+import { Channel } from '../../../models/channel.class';
 
 @Component({
   selector: 'app-my-profile',
   standalone: true,
-  imports: [MatIconModule, CommonModule],
+  imports: [MatIconModule, CommonModule, FormsModule],
   templateUrl: './my-profile.component.html',
   styleUrl: './my-profile.component.scss'
 })
 export class MyProfileComponent implements OnInit {
   @Input() clickedProfile: boolean = false;
   @Output() clickedProfileChange = new EventEmitter<boolean>();
+  firestore: Firestore = inject(Firestore);
   userService: UserService = inject(UserService);
+  channelService: ChannelService = inject(ChannelService);
   currentUser: User | null = null;
+  editing: boolean = false;
+  userName: string = ''
 
-  constructor() {}
+  constructor() { }
 
   async ngOnInit() {
-   // await this.userService.getUserID();
     this.userService.currentUser$.subscribe((user) => {
       this.currentUser = user;
+      if (this.currentUser) {
+        this.userName = this.currentUser.username
+      }
     });
   }
 
   closeProfile() {
     this.clickedProfileChange.emit(false);
   }
+
+  edit() {
+    this.editing = !this.editing;
+    this.updataUserDatabase();
+  }
+
+
+  async updataUserDatabase() {
+    if (this.currentUser) {
+      await updateDoc(doc(this.firestore, 'users', this.currentUser.userId), {
+        username: this.userName,
+      });
+      const userChannels = this.currentUser?.userChannels
+      for (const channelID of userChannels) {
+        await this.channelService.getChannelById(channelID).then((channel) => {
+          if (channel) {
+            this.changeUsernameInChannel(channel)
+          }
+        })
+      }
+    }
+  }
+
+  async changeUsernameInChannel(channel: Channel) {
+    if (channel.channelID) {
+      let channelWithChangedName = this.changeNameInChannel(channel);
+      const channelRef = doc(this.firestore, "channels", channel.channelID);
+      await updateDoc(channelRef, {
+        channelMember: channelWithChangedName.channelMember
+      });
+    }
+  }
+
+  changeNameInChannel(channel: Channel): Channel {
+    channel.channelMember.forEach((channelmember) => {
+      if (channelmember.userId == this.currentUser?.userId) {
+        channelmember.username = this.userName;
+      }
+    })
+    return channel
+  }
+
+
+
 
   getStatusText(status: string | undefined): string {
     switch (status) {

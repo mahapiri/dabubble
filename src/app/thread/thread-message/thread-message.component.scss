@@ -62,7 +62,7 @@
   .reaction-bar {
     right: unset;
     left: 90px;
-    width: 100px;
+    width: fit-content;
   }
 
   .reactions-wrapper {
@@ -114,7 +114,7 @@
   justify-content: center;
   align-items: center;
   top: 20px;
-  left: 85px;
+  left: 32px;
   width: 280px;
   height: 64px;
   border-radius: 0 25px 25px 25px;
@@ -181,4 +181,8 @@
 
 .bg-color {
   background-color: var(--bg-color);
+}
+
+.edit-container {
+  position: relative;
 }

@@ -1,11 +1,13 @@
 <mat-list-item>
   <div [ngClass]="{ 'my-message': isMyMessage }">
-    <div class="message" [ngClass]="{ 'bg-color': edit }">
+    <div class="message" [ngClass]="{ 'bg-color': edit }" (mouseleave)="closeReactionMoreBtn()">
       <div *ngIf="!edit" id="reactionBar" class="reaction-bar">
-        <button class="mini-fab-btn" mat-mini-fab>
+        <button *ngIf="!isReactionBtn" class="mini-fab-btn" mat-mini-fab (click)="openReactionBtn()">
           <mat-icon>add_reaction</mat-icon>
         </button>
-        <div *ngIf="isMyMessage">
+        <app-reaction-bar *ngIf="isReactionBtn" [isMyMessage]="isMyMessage" [message]="threadMessage"
+          [isFromThread]="true" (editSelected)="openEdit()"></app-reaction-bar>
+        <div *ngIf="isMyMessage" class="edit-container">
           <button class="mini-fab-btn more-btn" mat-mini-fab>
             <mat-icon>more_vert</mat-icon>
           </button>
@@ -28,11 +30,7 @@
           </div>
 
           <div *ngIf="edit" class="edit-textbox">
-            <textarea
-              [(ngModel)]="threadMessage.text"
-              type="text"
-              rows="3"
-            ></textarea>
+            <textarea [(ngModel)]="threadMessage.text" type="text" rows="3"></textarea>
             <div *ngIf="edit" class="edit-options-wrapper">
               <button class="mini-fab-btn" mat-mini-fab>
                 <mat-icon>sentiment_satisfied</mat-icon>
@@ -54,7 +52,8 @@
             {{ threadMessage.text }}
             }
           </div>
-          <div *ngIf="isMyMessage && !edit" class="reaction-container">
+          <app-reaction-container *ngIf="!edit" [message]="threadMessage"></app-reaction-container>
+          <!-- <div *ngIf="isMyMessage && !edit" class="reaction-container">
             <div class="reactions-wrapper">
               <button class="reaction-btn">
                 <div class="reaction-info-menu">
@@ -79,7 +78,7 @@
                 <mat-icon>add_reaction</mat-icon>
               </button>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
