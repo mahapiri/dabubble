@@ -9,6 +9,8 @@ import { MatListModule } from '@angular/material/list';
 import { Thread, ThreadMessage } from '../../../models/thread.class';
 import { ChatService } from '../../services/chat.service';
 import { ThreadMessageService } from '../../services/thread-message.service';
+import { ReactionContainerComponent } from '../../chat/reaction-container/reaction-container.component';
+import { ReactionBarComponent } from '../../chat/reaction-bar/reaction-bar.component';
 
 @Component({
   selector: 'app-thread-message',
@@ -21,6 +23,8 @@ import { ThreadMessageService } from '../../services/thread-message.service';
     MatDividerModule,
     MatInputModule,
     FormsModule,
+    ReactionContainerComponent,
+    ReactionBarComponent
   ],
   templateUrl: './thread-message.component.html',
   styleUrl: './thread-message.component.scss',

@@ -54,6 +54,7 @@
             {{ threadMessage.text }}
             }
           </div>
+          <app-reaction-container [message]="threadMessage"></app-reaction-container>
           <div *ngIf="isMyMessage && !edit" class="reaction-container">
             <div class="reactions-wrapper">
               <button class="reaction-btn">
