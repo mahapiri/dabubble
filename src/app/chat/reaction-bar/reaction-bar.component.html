@@ -21,7 +21,7 @@
   >
     <img src="./../../../assets/reaction/clap.svg" alt="Clap" />
   </button>
-  <ng-container *ngIf="reactionService.moreBtn">
+  <ng-container *ngIf="reactionService.moreBtn || isFromThread">
     <button
       class="mini-fab-btn"
       mat-mini-fab
@@ -41,7 +41,7 @@
   </ng-container>
 
   <button
-    *ngIf="!reactionService.moreBtn"
+    *ngIf="!reactionService.moreBtn && !isFromThread"
     class="mini-fab-btn"
     mat-mini-fab
     (click)="showAllReactionBtn()"
@@ -49,14 +49,14 @@
     <mat-icon>add_reaction</mat-icon>
   </button>
   <button
-    *ngIf="isChannelMessage && (!isFromReactionContainer || !isFromReactionContainer)"
+    *ngIf="isChannelMessage && (!isFromReactionContainer || !isFromReactionContainer) && !isFromThread"
     (click)="openThread()"
     class="mini-fab-btn"
     mat-mini-fab
   >
     <mat-icon>comment</mat-icon>
   </button>
-  <div *ngIf="isMyMessage" class="more-btn-container">
+  <div *ngIf="isMyMessage && !isFromThread" class="more-btn-container">
     <button class="mini-fab-btn more-btn" mat-mini-fab>
       <mat-icon>more_vert</mat-icon>
     </button>

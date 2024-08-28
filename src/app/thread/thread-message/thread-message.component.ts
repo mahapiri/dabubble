@@ -11,6 +11,7 @@ import { ChatService } from '../../services/chat.service';
 import { ThreadMessageService } from '../../services/thread-message.service';
 import { ReactionContainerComponent } from '../../chat/reaction-container/reaction-container.component';
 import { ReactionBarComponent } from '../../chat/reaction-bar/reaction-bar.component';
+import { ReactionService } from '../../services/reaction.service';
 
 @Component({
   selector: 'app-thread-message',
@@ -34,11 +35,13 @@ export class ThreadMessageComponent {
   @Input() threadMessage!: ThreadMessage;
 
   isMyMessage: boolean = false;
+  isReactionBtn: boolean = false;
   edit: boolean = false;
 
   constructor(
     public chatService: ChatService,
-    private threadMessageService: ThreadMessageService
+    private threadMessageService: ThreadMessageService,
+    private reactionService: ReactionService
   ) {}
 
   /**
@@ -63,5 +66,14 @@ export class ThreadMessageComponent {
   saveMessage() {
     this.threadMessageService.updateMessage(this.threadMessage);
     this.closeEdit();
+  }
+
+  openReactionBtn() {
+    this.isReactionBtn = true;
+  }
+
+  closeReactionMoreBtn() {
+    this.reactionService.moreBtn = false;
+    this.isReactionBtn = false;
   }
 }

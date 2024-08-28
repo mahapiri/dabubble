@@ -36,6 +36,7 @@ export class ReactionBarComponent implements OnInit, OnDestroy {
   @Input() isMyMessage: boolean = false;
   @Input() message!: DmMessage | ChannelMessage | ThreadMessage;
   @Input() isFromReactionContainer: boolean = false;
+  @Input() isFromThread: boolean = false;
   @Output() editSelected: EventEmitter<void> = new EventEmitter<void>();
   @Output() clickedAnswer = new EventEmitter<boolean>();
   @Output() clickedThreadChange = new EventEmitter<boolean>();

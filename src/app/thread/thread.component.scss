@@ -131,6 +131,7 @@ mat-card-footer {
   padding: 32px 0 32px 0;
   display: flex;
   flex-direction: column;
+  gap: 20px;
   overflow: visible;
 
   mat-list-item {
@@ -222,7 +223,7 @@ mat-card-footer {
   position: absolute;
   top: -24px;
   right: 0px;
-  width: 66px;
+  width: fit-content;
   height: 46px;
   display: flex;
   justify-content: center;
@@ -243,7 +244,7 @@ mat-card-footer {
   }
 
   .mini-fab-btn {
-    color: var(--black);
+    color: var(--gray);
     &:hover {
       color: var(--purple-3);
     }
