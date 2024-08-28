@@ -138,14 +138,15 @@ mat-card-footer {
     height: fit-content;
     padding: 10px 24px 10px 24px;
     overflow: visible;
+    cursor: unset !important;
 
-    &:hover {
-      background-color: var(--bg-color);
+    // &:hover {
+    //   background-color: var(--bg-color);
 
-      .text-bubble {
-        background-color: var(--white);
-      }
-    }
+    //   .text-bubble {
+    //     background-color: var(--white);
+    //   }
+    // }
   }
 }
 
@@ -251,15 +252,15 @@ mat-card-footer {
   }
 }
 
-.initial-message-container {
-  &:hover {
-    .reaction-bar {
-      opacity: 1;
-      right: 24px;
-      transition: right 0.15s ease-out, opacity 0.15s ease-out;
-    }
-  }
-}
+// .initial-message-container {
+//   &:hover {
+//     .reaction-bar {
+//       opacity: 1;
+//       right: 24px;
+//       transition: right 0.15s ease-out, opacity 0.15s ease-out;
+//     }
+//   }
+// }
 
 .mini-fab-btn {
   background-color: var(--white);
@@ -372,4 +373,8 @@ mat-card-footer {
       padding: 0px 6px;
     }
   }
+}
+
+.no-hover {
+  cursor: unset;
 }
