@@ -118,6 +118,10 @@ export class ChatService {
     this.clickedBack = status;
   }
 
+  mobileScreen() {
+    return window.innerWidth <= 960;
+  }
+
   /**
    * Updates the header logo (DaBubble or DevSpace) depending on window width and if channel is selected.
    * This handles the mobile view adjustment.

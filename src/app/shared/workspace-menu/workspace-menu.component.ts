@@ -7,7 +7,6 @@ import {
   EventEmitter,
   Input,
   OnInit,
-  Renderer2,
 } from '@angular/core';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -24,6 +23,7 @@ import { User } from '../../../models/user.class';
 import { DirectMessageService } from '../../services/direct-message.service';
 import { ChatService } from '../../services/chat.service';
 import { SharedService } from '../../services/shared.service';
+import { SearchComponent } from '../header/search/search.component';
 
 @Component({
   selector: 'app-workspace-menu',
@@ -36,6 +36,7 @@ import { SharedService } from '../../services/shared.service';
     CommonModule,
     CreateChannelComponent,
     FormsModule,
+    SearchComponent,
   ],
   templateUrl: './workspace-menu.component.html',
   styleUrl: './workspace-menu.component.scss',
@@ -65,18 +66,18 @@ export class WorkspaceMenuComponent implements OnInit {
   openDm: boolean = false;
   selectedUserIndex: number | null = null;
   subscription: Subscription = new Subscription();
+  searchInputValue: string = '';
 
   readonly panelOpenState = signal(false);
 
   userList$ = this.userService.userList$;
 
   constructor(
-    private renderer: Renderer2,
     private channelService: ChannelService,
     public userService: UserService,
     private directMessageService: DirectMessageService,
-    private chatService: ChatService,
-    private sharedService: SharedService
+    public chatService: ChatService,
+    public sharedService: SharedService
   ) {}
 
   async ngOnInit() {
@@ -168,4 +169,8 @@ export class WorkspaceMenuComponent implements OnInit {
   }
 
   editChannel(channel: string) {}
+
+  openResults() {}
+
+  closeResults() {}
 }

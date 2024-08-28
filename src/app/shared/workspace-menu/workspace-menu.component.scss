@@ -338,6 +338,77 @@ mat-content-hide-toggle {
   font-weight: 700 !important;
 }
 
+.searchfield-container {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.searchfield-content {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.searchfield {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 24px;
+  border-radius: 42px;
+  border: 1px solid var(--lines);
+  outline: none;
+
+  &::placeholder {
+    font-family: Nunito;
+    font-weight: 400;
+    font-size: 17px;
+    color: var(--gray);
+  }
+
+  &:focus-visible {
+    border-color: var(--purple-2);
+  }
+
+  &:hover {
+    border-color: var(--purple-2);
+  }
+}
+
+input[type="text"] {
+  width: 100%;
+  font-weight: 400;
+  font-size: 24px;
+  color: var(--gray);
+  text-align: left;
+}
+
+.search-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--gray);
+  position: absolute;
+  top: 12px;
+  right: 10px;
+
+  cursor: pointer;
+}
+
+.searchfield-container:hover .active {
+  border-color: unset;
+  border-top-color: var(--purple-2);
+  border-right-color: var(--purple-2);
+  border-bottom-color: var(--white);
+  border-left-color: var(--purple-2);
+}
+
+.searchfield-container:hover .searchfield:not(.active) {
+  border-color: var(--purple-2);
+}
+
 /* Smartphones - - - - - - - - - */
 
 @media only screen and (max-width: 960px) {
@@ -354,9 +425,14 @@ mat-content-hide-toggle {
     border-radius: 0px;
     margin-right: 0px;
     width: 100vw;
+    padding: 32px 20px;
   }
 
   .workspace-content {
     display: none;
+  }
+
+  .mobile-padding {
+    padding: 0px 12px; // additional to sidenav padding, bec search is wider than elements underneath
   }
 }
