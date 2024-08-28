@@ -40,8 +40,7 @@ export class ThreadComponent {
   @Output() clickedCloseThread = new EventEmitter<boolean>();
   @Input() thread!: Thread;
   uploadService: UploadService = inject(UploadService);
-  uploadPath: string = 'threads'
-
+  uploadPath: string = 'threads';
 
   messageText: string = '';
 
@@ -65,16 +64,16 @@ export class ThreadComponent {
     });
   }
 
-    /**
+  /**
    * calls the onFileSelected method and sets the uploadPath to "channel"
-   * @param event 
+   * @param event
    */
-    async chooseFile(event: Event) {
-      this.uploadService.onFileSelected(event)
-      this.uploadService.uploadPath = this.uploadPath;
-    }
+  async chooseFile(event: Event) {
+    this.uploadService.onFileSelected(event);
+    this.uploadService.uploadPath = this.uploadPath;
+  }
 
-      /**
+  /**
    * calls the upload method if a file was chosen and saves the dawnload URL of the file to the messageText
    */
   async checkPictureUpload() {
@@ -86,6 +85,7 @@ export class ThreadComponent {
 
   closeThread() {
     this.clickedCloseThread.emit(false);
+    this.chatService.showChannelOnMobile();
   }
 
   /** Sends the text in the input field to the Thread Collection in the Backend. Trims the message from whitespace, ensures input is not empty, clears the input field after send */

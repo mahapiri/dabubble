@@ -347,3 +347,28 @@ mat-card-footer {
     width: 34px;
   }
 }
+
+/* Smartphones - - - - - - - - - */
+
+@media only screen and (max-width: 960px) {
+  mat-card {
+    display: flex;
+    height: calc(100vh - 80px);
+    width: 100vw;
+    border-radius: 0px;
+    margin-left: 0;
+  }
+
+  mat-list {
+    overflow-x: hidden;
+  }
+
+  mat-card-header {
+    height: 60px;
+
+    .thread-header {
+      height: 60px;
+      padding: 0px 6px;
+    }
+  }
+}

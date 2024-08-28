@@ -89,6 +89,8 @@ export class ChannelMessageComponent {
     this.clickedAnswer.emit(true);
     this.channelMessageService.setSelectedMessage(this.channelMessage);
     this.threadService.handleThread();
+    this.cdRef.detectChanges();
+    this.chatService.showThreadOnMobile();
   }
 
   /**
@@ -124,10 +126,10 @@ export class ChannelMessageComponent {
     this.lastAnswerSubscription.unsubscribe();
   }
 
-    /**
+  /**
    * close the Smiley Emoticons for More Reactions
    */
-    closeReactionMoreBtn() {
-      this.reactionService.moreBtn = false;
-    }
+  closeReactionMoreBtn() {
+    this.reactionService.moreBtn = false;
+  }
 }

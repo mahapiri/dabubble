@@ -153,11 +153,11 @@ export class ChatService {
   showChannel() {
     if (window.innerWidth <= 960) {
       const workspaceMenu = document.querySelector('section');
-      const channelCard = document.querySelector('mat-card');
+      const channel = document.querySelector('#channel');
 
-      if (workspaceMenu && channelCard) {
+      if (workspaceMenu && channel) {
         this.renderer.setStyle(workspaceMenu, 'display', 'none');
-        this.renderer.setStyle(channelCard, 'display', 'flex');
+        this.renderer.setStyle(channel, 'display', 'flex');
       }
     }
   }
@@ -165,12 +165,32 @@ export class ChatService {
   showWorkspaceMenu() {
     if (window.innerWidth > 960 || this.clickedBack) {
       const workspaceMenu = document.querySelector('section');
-      const channelCard = document.querySelector('mat-card');
+      const channelCard = document.querySelector('#channel');
 
       if (workspaceMenu && channelCard) {
         this.renderer.setStyle(workspaceMenu, 'display', 'flex');
         this.renderer.setStyle(channelCard, 'display', 'none');
       }
+    }
+  }
+
+  showThreadOnMobile() {
+    if (window.innerWidth <= 960) {
+      //const thread = document.querySelector('#thread');
+      const channel = document.querySelector('#channel');
+
+      //this.renderer.setStyle(thread, 'display', 'flex');
+      this.renderer.setStyle(channel, 'display', 'none');
+    }
+  }
+
+  showChannelOnMobile() {
+    if (window.innerWidth <= 960) {
+      //const thread = document.querySelector('#thread');
+      const channel = document.querySelector('#channel');
+
+      //this.renderer.setStyle(thread, 'display', 'none');
+      this.renderer.setStyle(channel, 'display', 'flex');
     }
   }
 }
