@@ -13,7 +13,7 @@
       <p class="n-p">Keine User gefunden</p>
     </div>
 
-    <div *ngFor="let member of filteredMembers; let i = index" (click)="selectMember(member)">
+    <div *ngFor="let member of filteredMembers; let i = index" (click)="selectMemberToChannel(member)">
       <div class="profile-content">
         <div class="profile">
           <img [src]="member.profileImage" alt="Character" class="profile-icon">

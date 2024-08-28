@@ -89,7 +89,7 @@
         type="text"
         placeholder="Antworten..."
       /> -->
-      <textarea [(ngModel)]="messageText" matInput type="text" placeholder="Antworten..." rows="3"
+      <textarea [(ngModel)]="threadMessageText" matInput type="text" placeholder="Antworten..." rows="3"
       (keydown)="onKeyDown($event)"></textarea>
       }
       <div class="message-controls">
@@ -113,11 +113,13 @@
           <button mat-mini-fab class="emojis mini-fab-btn">
             <mat-icon>sentiment_satisfied</mat-icon>
           </button>
-          <button mat-mini-fab class="tag-person mini-fab-btn">
+          <button mat-mini-fab class="tag-person mini-fab-btn" (click)="openPopup($event)">
             <mat-icon>alternate_email</mat-icon>
           </button>
+          <app-tagging *ngIf="isTag" (closePopup)="closePopup()" [isFromThread]="true">
+          </app-tagging>
         </div>
-        <button class="send-btn" [ngClass]="{'send-btn-valid': messageText.trim().length > 0}" (click)="sendMessage()">
+        <button class="send-btn" [ngClass]="{'send-btn-valid': threadMessageText.trim().length > 0}" (click)="sendMessage()">
           <mat-icon>send</mat-icon>
         </button>
       </div>

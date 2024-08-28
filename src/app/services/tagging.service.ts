@@ -10,8 +10,10 @@ import { User } from '../../models/user.class';
 export class TaggingService implements OnInit, OnDestroy {
   private channelService: ChannelService = inject(ChannelService);
   private channelSubscription: Subscription = new Subscription();
-  public memberSelected = new BehaviorSubject<any>(null);
-  memberSelected$ = this.memberSelected.asObservable();
+  public memberSelectedChannel = new BehaviorSubject<any>(null);
+  memberSelectedChannel$ = this.memberSelectedChannel.asObservable();
+  public memberSelectedThread = new BehaviorSubject<any>(null);
+  memberSelectedThread$ = this.memberSelectedThread.asObservable();
 
   currentChannelID: string = '';
   currentChannelMember: any;
@@ -43,7 +45,15 @@ export class TaggingService implements OnInit, OnDestroy {
   /**
   * get the selected member
   */
-  selectMember(member: User) {
-    this.memberSelected.next(member);
+  selectMemberChannel(member: User) {
+    this.memberSelectedChannel.next(member);
+  }
+
+
+  /**
+  * get the selected member
+  */
+  selectMemberThread(member: User) {
+    this.memberSelectedThread.next(member);
   }
 }

@@ -43,7 +43,7 @@ export class ChannelNewMessageInputComponent implements OnInit {
    * subscribes selected member
    */
   ngOnInit() {
-    this.taggingSubscription = this.taggingService.memberSelected$.subscribe((member) => {
+    this.taggingSubscription = this.taggingService.memberSelectedChannel$.subscribe((member) => {
       if (member && member.username) {
         this.addMemberToMessage(member.username);
       }
