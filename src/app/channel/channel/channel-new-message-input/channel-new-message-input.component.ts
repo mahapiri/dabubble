@@ -25,7 +25,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './channel-new-message-input.component.html',
   styleUrl: './channel-new-message-input.component.scss',
 })
-export class ChannelNewMessageInputComponent implements OnInit{
+export class ChannelNewMessageInputComponent implements OnInit {
   public taggingService: TaggingService = inject(TaggingService);
   private taggingSubscription: Subscription = new Subscription();
   @Input() channel!: Channel;
@@ -57,7 +57,7 @@ export class ChannelNewMessageInputComponent implements OnInit{
   addMemberToMessage(username: string) {
     const mention = `@${username} `;
     if (!this.messageText.includes(mention)) {
-      this.messageText += ` ${mention}`; 
+      this.messageText += ` ${mention}`;
     }
   }
 
@@ -115,6 +115,10 @@ export class ChannelNewMessageInputComponent implements OnInit{
   }
 
 
+  /**
+  * sends the message if the message is valid and the Enter key is pressed
+  * when Shift+Enter is pressed, a line break is inserted instead
+  */
   onKeyDown(event: KeyboardEvent) {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();

@@ -96,4 +96,16 @@ export class ThreadComponent {
       this.messageText = '';
     }
   }
+
+  
+  /**
+  * sends the message if the message is valid and the Enter key is pressed
+  * when Shift+Enter is pressed, a line break is inserted instead
+  */
+  onKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.sendMessage();
+    }
+  }
 }

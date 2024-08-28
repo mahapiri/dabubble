@@ -83,12 +83,14 @@
         >close</mat-icon
       >
       }@else {
-      <input
+      <!-- <input
         [(ngModel)]="messageText"
         matInput
         type="text"
         placeholder="Antworten..."
-      />
+      /> -->
+      <textarea [(ngModel)]="messageText" matInput type="text" placeholder="Antworten..." rows="3"
+      (keydown)="onKeyDown($event)"></textarea>
       }
       <div class="message-controls">
         <div class="add-elements">
@@ -115,7 +117,7 @@
             <mat-icon>alternate_email</mat-icon>
           </button>
         </div>
-        <button (click)="sendMessage()" mat-mini-fab class="send-btn">
+        <button class="send-btn" [ngClass]="{'send-btn-valid': messageText.trim().length > 0}" (click)="sendMessage()">
           <mat-icon>send</mat-icon>
         </button>
       </div>
