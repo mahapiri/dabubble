@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ChannelMember } from '../../../models/channel.class';
 import { ClickOutsideDirective } from '../../directive/click-outside.directive';
+import { SharedService } from '../../services/shared.service';
 
 @Component({
   selector: 'app-member',
@@ -15,6 +16,7 @@ import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 })
 export class MemberComponent {
   channelService: ChannelService = inject(ChannelService);
+  sharedService: SharedService = inject(SharedService);
   @Output() clickedMembers = new EventEmitter<boolean>();
   @Output() switchToAddMembers = new EventEmitter<boolean>();
   channelMember: ChannelMember[] = [];
@@ -41,5 +43,12 @@ export class MemberComponent {
 
   closeWindow() {
     this.clickedMembers.emit(false)   
+  }
+
+  openProfile(event: Event, member: ChannelMember) {
+    event.stopPropagation();
+    this.closeWindow();
+    this.sharedService.openProfile(member.userId);
+    console.log(member);
   }
 }

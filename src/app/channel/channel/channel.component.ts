@@ -111,7 +111,7 @@ export class ChannelComponent implements AfterViewChecked {
       this.clickedEditChannel = false;
     }
     event.stopPropagation();
-    this.clickedMembers = true;
+    this.clickedMembers = !this.clickedMembers;
   }
 
   openAddMembers(event: Event) {
