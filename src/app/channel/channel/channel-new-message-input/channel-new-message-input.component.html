@@ -16,8 +16,11 @@
         <mat-icon>add</mat-icon>
       </button>
       <div class="vertical-divider"></div>
-      <button mat-mini-fab class="emojis mini-fab-btn">
+      <button mat-mini-fab class="emojis mini-fab-btn" (click)="openEmojiSet($event)">
         <mat-icon>sentiment_satisfied</mat-icon>
+        <div *ngIf="isEmoji" class="emoji-container" appClickOutside (clickOutside)="closeEmojiSet()">
+          <app-emoji-picker (emojiSelected)="onEmojiSelected($event)"></app-emoji-picker>
+        </div>
       </button>
       <div>
         <button mat-mini-fab class="tag-person mini-fab-btn" (click)="openPopup($event)">

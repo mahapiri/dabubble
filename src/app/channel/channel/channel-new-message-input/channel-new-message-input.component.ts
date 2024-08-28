@@ -10,6 +10,9 @@ import { UploadService } from '../../../services/upload.service';
 import { TaggingComponent } from '../../../chat/tagging/tagging.component';
 import { TaggingService } from '../../../services/tagging.service';
 import { Subscription } from 'rxjs';
+import { ClickOutsideDirective } from '../../../directive/click-outside.directive';
+import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import { EmojiPickerComponent } from '../../../chat/emoji-picker/emoji-picker.component';
 
 @Component({
   selector: 'app-channel-new-message-input',
@@ -20,7 +23,10 @@ import { Subscription } from 'rxjs';
     MatButtonModule,
     MatInputModule,
     FormsModule,
-    TaggingComponent
+    TaggingComponent,
+    ClickOutsideDirective,
+    EmojiComponent,
+    EmojiPickerComponent
   ],
   templateUrl: './channel-new-message-input.component.html',
   styleUrl: './channel-new-message-input.component.scss',
@@ -34,6 +40,8 @@ export class ChannelNewMessageInputComponent implements OnInit {
 
 
   messageText: string = '';
+  isEmoji: boolean = false;
+  notOpen: boolean = true;
   imgName: string = ''
   isTag: boolean = false;
 
@@ -124,5 +132,35 @@ export class ChannelNewMessageInputComponent implements OnInit {
       event.preventDefault();
       this.sendMessage();
     }
+  }
+
+
+  /**
+  * open the Emoji Container
+  */
+  openEmojiSet(event: Event) {
+    event.stopPropagation();
+    if (this.notOpen) {
+      this.isEmoji = !this.isEmoji;
+    }
+  }
+
+
+  /**
+  * open the Emoji Container
+  */
+  closeEmojiSet() {
+    this.isEmoji = false;
+    this.notOpen = false;
+    setTimeout(() => this.notOpen = true, 1000);
+  }
+
+
+  /**
+  * handles emoji selection from the EmojiPickerComponent
+  */
+  onEmojiSelected(emoji: string) {
+    this.messageText += emoji;
+    this.closeEmojiSet();
   }
 }
