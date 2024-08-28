@@ -18,7 +18,7 @@
             (editSelected)="openEdit()"></app-reaction-bar>
         </div>
         <div class="message-wrapper">
-          <img class="user-img" src="{{ message.profileImg }}" />
+          <img class="user-img" src="{{ message.authorImg }}" />
 
           <div class="message-details">
             <div class="user-wrapper">
@@ -39,7 +39,7 @@
       </div>
 
       <div *ngIf="edit" class="message-wrapper">
-        <img class="user-img" src="./../../../{{ message.profileImg }}" />
+        <img class="user-img" src="./../../../{{ message.authorImg }}" />
         <div class="edit-textbox">
           <textarea 
             type="text" 
