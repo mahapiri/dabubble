@@ -155,7 +155,8 @@ mat-list {
   display: flex;
   flex-direction: column-reverse;
   justify-content: flex-end;
-  gap: 8px;
+  // gap: 8px;
+  gap: 20px;
   color: var(--black);
   height: 100%;
 }
