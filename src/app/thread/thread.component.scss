@@ -365,6 +365,10 @@ mat-card-footer {
   }
 }
 
+.no-hover {
+  cursor: unset;
+}
+
 /* Smartphones - - - - - - - - - */
 
 @media only screen and (max-width: 960px) {
@@ -404,13 +408,15 @@ mat-card-footer {
 
   .main-chat {
     gap: 15px;
+    padding: 0 0 16px 0;
 
     mat-list-item {
-      padding: 10px 16px 10px 16px;
+      padding: 10px 16px 0px 16px;
     }
   }
-}
 
-.no-hover {
-  cursor: unset;
+  .divider-container[_ngcontent-ng-c1836859026] {
+    gap: 10px;
+    padding: 16px 16px 16px 16px;
+  }
 }
