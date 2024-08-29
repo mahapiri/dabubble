@@ -79,18 +79,18 @@ export class ChannelComponent implements AfterViewChecked {
   }
 
   ngOnInit() {
-    this.scrollToBottom();
+    //this.scrollToBottom();
   }
 
   ngAfterViewChecked() {
-    this.scrollToBottom();
+    //this.scrollToBottom();
   }
 
   scrollToBottom(): void {
     try {
       this.mainChat.nativeElement.scrollTop =
         this.mainChat.nativeElement.scrollHeight;
-    } catch (err) { }
+    } catch (err) {}
   }
 
   editChannel(event: Event) {
@@ -142,7 +142,7 @@ export class ChannelComponent implements AfterViewChecked {
 
   ngOnDestroy() {
     if (this.channelMessageService.messageListUnsubscribe) {
-      this.channelMessageService.messageListUnsubscribe()
+      this.channelMessageService.messageListUnsubscribe();
     }
     this.subscription.unsubscribe();
   }

@@ -186,3 +186,11 @@
 .edit-container {
   position: relative;
 }
+
+/* Smartphones - - - - - - - - - */
+
+@media only screen and (max-width: 960px) {
+  .message {
+    padding: 0 16px 0 16px;
+  }
+}
