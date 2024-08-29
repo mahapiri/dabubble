@@ -7,11 +7,12 @@ import { FormsModule } from '@angular/forms';
 import { doc, Firestore, updateDoc } from '@angular/fire/firestore';
 import { ChannelService } from '../../services/channel.service';
 import { Channel } from '../../../models/channel.class';
+import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 
 @Component({
   selector: 'app-my-profile',
   standalone: true,
-  imports: [MatIconModule, CommonModule, FormsModule],
+  imports: [MatIconModule, CommonModule, FormsModule, ClickOutsideDirective],
   templateUrl: './my-profile.component.html',
   styleUrl: './my-profile.component.scss'
 })
@@ -23,24 +24,30 @@ export class MyProfileComponent implements OnInit {
   channelService: ChannelService = inject(ChannelService);
   currentUser: User | null = null;
   editing: boolean = false;
-  userName: string = ''
+  userName: string = '';
+  userMail: string = '';
 
   constructor() { }
 
+  
   async ngOnInit() {
     this.userService.currentUser$.subscribe((user) => {
       this.currentUser = user;
       if (this.currentUser) {
         this.userName = this.currentUser.username
+        this.userMail = this.currentUser.email
       }
     });
   }
+
 
   closeProfile() {
     this.clickedProfileChange.emit(false);
   }
 
-  edit() {
+
+  edit(event: Event) {
+    event.stopPropagation();
     this.editing = !this.editing;
     this.updataUserDatabase();
   }
@@ -50,6 +57,7 @@ export class MyProfileComponent implements OnInit {
     if (this.currentUser) {
       await updateDoc(doc(this.firestore, 'users', this.currentUser.userId), {
         username: this.userName,
+        email: this.userMail,
       });
       const userChannels = this.currentUser?.userChannels
       for (const channelID of userChannels) {
@@ -62,6 +70,7 @@ export class MyProfileComponent implements OnInit {
     }
   }
 
+
   async changeUsernameInChannel(channel: Channel) {
     if (channel.channelID) {
       let channelWithChangedName = this.changeNameInChannel(channel);
@@ -72,6 +81,7 @@ export class MyProfileComponent implements OnInit {
     }
   }
 
+
   changeNameInChannel(channel: Channel): Channel {
     channel.channelMember.forEach((channelmember) => {
       if (channelmember.userId == this.currentUser?.userId) {
@@ -80,8 +90,6 @@ export class MyProfileComponent implements OnInit {
     })
     return channel
   }
-
-
 
 
   getStatusText(status: string | undefined): string {
@@ -95,5 +103,11 @@ export class MyProfileComponent implements OnInit {
       default:
         return '';
     }
+  }
+
+
+  cancel(event: Event) {
+    event.stopPropagation();
+    this.editing = false;
   }
 }

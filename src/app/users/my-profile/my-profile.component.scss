@@ -89,3 +89,62 @@ a {
     padding: 0px 10px 0px 40px;
     color: var(--blue);
 }
+
+.editing-title-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    mat-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+    }
+}
+
+.editing-title {
+    font-size: 20px !important;
+    line-height: 27.28px !important;
+}
+
+.editing-inputfield {
+    width: 100%;
+    display: flex;
+    border-radius: 30px;
+    border: 1px solid var(--lines);
+    padding: 15px 20px 15px 20px;
+    gap: 10px;
+    font-family: "Nunito";
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21.6px;
+
+    &:focus-visible {
+        outline: none;
+    }
+
+    &::placeholder {
+        color: var(--gray);
+    }
+}
+
+.editing-mail {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    mat-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+    }
+}
+
+.editing-btns {
+    display: flex;
+    gap: 32px;
+}
