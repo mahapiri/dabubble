@@ -23,13 +23,13 @@
     <mat-list class="main-chat">
       <div class="initial-message-container">
         <mat-list-item>
-          <div id="reactionBar" class="reaction-bar">
+          <!-- <div id="reactionBar" class="reaction-bar">
             <button class="mini-fab-btn" mat-mini-fab>
               <mat-icon>add_reaction</mat-icon>
             </button>
-          </div>
+          </div> -->
 
-          <div class="message-wrapper">
+          <div class="message-wrapper no-hover">
             <img
               class="user-img"
               src="{{ selectedThread.replyToMessage!.profileImg }}"
@@ -83,12 +83,14 @@
         >close</mat-icon
       >
       }@else {
-      <input
+      <!-- <input
         [(ngModel)]="messageText"
         matInput
         type="text"
         placeholder="Antworten..."
-      />
+      /> -->
+      <textarea [(ngModel)]="threadMessageText" matInput type="text" placeholder="Antworten..." rows="3"
+      (keydown)="onKeyDown($event)"></textarea>
       }
       <div class="message-controls">
         <div class="add-elements">
@@ -108,14 +110,19 @@
             <mat-icon>add</mat-icon>
           </button>
           <div class="vertical-divider"></div>
-          <button mat-mini-fab class="emojis mini-fab-btn">
+          <button mat-mini-fab class="emojis mini-fab-btn" (click)="openEmojiSet($event)">
             <mat-icon>sentiment_satisfied</mat-icon>
+            <div *ngIf="isEmoji" class="emoji-container" appClickOutside (clickOutside)="closeEmojiSet()">
+              <app-emoji-picker (emojiSelected)="onEmojiSelected($event)"></app-emoji-picker>
+            </div>
           </button>
-          <button mat-mini-fab class="tag-person mini-fab-btn">
+          <button mat-mini-fab class="tag-person mini-fab-btn" (click)="openPopup($event)">
             <mat-icon>alternate_email</mat-icon>
           </button>
+          <app-tagging *ngIf="isTag" (closePopup)="closePopup()" [isFromThread]="true">
+          </app-tagging>
         </div>
-        <button (click)="sendMessage()" mat-mini-fab class="send-btn">
+        <button class="send-btn" [ngClass]="{'send-btn-valid': threadMessageText.trim().length > 0}" (click)="sendMessage()">
           <mat-icon>send</mat-icon>
         </button>
       </div>

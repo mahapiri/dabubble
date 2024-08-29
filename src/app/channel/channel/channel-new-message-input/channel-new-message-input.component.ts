@@ -10,6 +10,9 @@ import { UploadService } from '../../../services/upload.service';
 import { TaggingComponent } from '../../../chat/tagging/tagging.component';
 import { TaggingService } from '../../../services/tagging.service';
 import { Subscription } from 'rxjs';
+import { ClickOutsideDirective } from '../../../directive/click-outside.directive';
+import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import { EmojiPickerComponent } from '../../../chat/emoji-picker/emoji-picker.component';
 
 @Component({
   selector: 'app-channel-new-message-input',
@@ -20,12 +23,15 @@ import { Subscription } from 'rxjs';
     MatButtonModule,
     MatInputModule,
     FormsModule,
-    TaggingComponent
+    TaggingComponent,
+    ClickOutsideDirective,
+    EmojiComponent,
+    EmojiPickerComponent
   ],
   templateUrl: './channel-new-message-input.component.html',
   styleUrl: './channel-new-message-input.component.scss',
 })
-export class ChannelNewMessageInputComponent implements OnInit{
+export class ChannelNewMessageInputComponent implements OnInit {
   public taggingService: TaggingService = inject(TaggingService);
   private taggingSubscription: Subscription = new Subscription();
   @Input() channel!: Channel;
@@ -34,6 +40,8 @@ export class ChannelNewMessageInputComponent implements OnInit{
 
 
   messageText: string = '';
+  isEmoji: boolean = false;
+  notOpen: boolean = true;
   imgName: string = ''
   isTag: boolean = false;
 
@@ -43,7 +51,7 @@ export class ChannelNewMessageInputComponent implements OnInit{
    * subscribes selected member
    */
   ngOnInit() {
-    this.taggingSubscription = this.taggingService.memberSelected$.subscribe((member) => {
+    this.taggingSubscription = this.taggingService.memberSelectedChannel$.subscribe((member) => {
       if (member && member.username) {
         this.addMemberToMessage(member.username);
       }
@@ -57,7 +65,7 @@ export class ChannelNewMessageInputComponent implements OnInit{
   addMemberToMessage(username: string) {
     const mention = `@${username} `;
     if (!this.messageText.includes(mention)) {
-      this.messageText += ` ${mention}`; 
+      this.messageText += ` ${mention}`;
     }
   }
 
@@ -112,5 +120,47 @@ export class ChannelNewMessageInputComponent implements OnInit{
    */
   closePopup() {
     this.isTag = false;
+  }
+
+
+  /**
+  * sends the message if the message is valid and the Enter key is pressed
+  * when Shift+Enter is pressed, a line break is inserted instead
+  */
+  onKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.sendMessage();
+    }
+  }
+
+
+  /**
+  * open the Emoji Container
+  */
+  openEmojiSet(event: Event) {
+    event.stopPropagation();
+    if (this.notOpen) {
+      this.isEmoji = !this.isEmoji;
+    }
+  }
+
+
+  /**
+  * open the Emoji Container
+  */
+  closeEmojiSet() {
+    this.isEmoji = false;
+    this.notOpen = false;
+    setTimeout(() => this.notOpen = true, 1000);
+  }
+
+
+  /**
+  * handles emoji selection from the EmojiPickerComponent
+  */
+  onEmojiSelected(emoji: string) {
+    this.messageText += emoji;
+    this.closeEmojiSet();
   }
 }

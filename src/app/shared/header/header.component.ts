@@ -49,6 +49,7 @@ export class HeaderComponent implements OnInit {
 
   constructor(private router: Router) {}
 
+  
   async ngOnInit() {
     // await this.userService.getUserID();
     this.userService.currentUser$.subscribe((user) => {
@@ -62,6 +63,7 @@ export class HeaderComponent implements OnInit {
     );
   }
 
+
   async openResults() {
     this.searchService.startSubscription();
     this.sharedService.isResults = this.searchInputValue.trim().length > 0;
@@ -72,11 +74,13 @@ export class HeaderComponent implements OnInit {
     await this.searchService.search(this.searchInputValue);
   }
 
+
   closeResults() {
     this.searchService.stopSubscription();
     this.sharedService.isResults = false;
     this.searchInputValue = '';
   }
+
 
   /*   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
@@ -85,16 +89,19 @@ export class HeaderComponent implements OnInit {
       this.chatService.setIsChannelSelectedOnMobile();
   } */
 
+
   backToWorkspacemenu() {
     this.chatService.setIsChannel(false);
     this.chatService.setClickedBack(true);
     this.chatService.handleWindowChangeOnMobile();
   }
 
+
   openPopup(event: Event) {
     event.stopPropagation();
     this.clickedUser = !this.clickedUser;
   }
+
 
   closePopup() {
     if (this.clickedUser) {
@@ -102,20 +109,25 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  openProfile() {
+
+  openProfile(event: Event) {
+    event.stopPropagation();
     this.clickedProfile = true;
     this.clickedUser = false;
   }
 
+
   profileClosed() {
     this.clickedProfile = false;
   }
+
 
   async logOut(event: Event) {
     event.preventDefault();
     await this.authService.logOut();
     this.router.navigate(['/']);
   }
+
 
   ngOnDestroy() {
     this.subscription.unsubscribe();

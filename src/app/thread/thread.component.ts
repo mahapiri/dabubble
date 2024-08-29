@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
@@ -8,7 +8,7 @@ import { MatListModule } from '@angular/material/list';
 import { EditChannelComponent } from '../channel/edit-channel/edit-channel.component';
 import { CommonModule } from '@angular/common';
 import { MemberComponent } from '../users/member/member.component';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ThreadService } from '../services/thread.service';
 import { Thread, ThreadMessage } from '../../models/thread.class';
 import { ChatService } from '../services/chat.service';
@@ -16,6 +16,11 @@ import { ThreadMessageService } from '../services/thread-message.service';
 import { FormsModule } from '@angular/forms';
 import { ThreadMessageComponent } from './thread-message/thread-message.component';
 import { UploadService } from '../services/upload.service';
+import { TaggingComponent } from '../chat/tagging/tagging.component';
+import { TaggingService } from '../services/tagging.service';
+import { ClickOutsideDirective } from '../directive/click-outside.directive';
+import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import { EmojiPickerComponent } from '../chat/emoji-picker/emoji-picker.component';
 
 @Component({
   selector: 'app-thread',
@@ -32,17 +37,26 @@ import { UploadService } from '../services/upload.service';
     CommonModule,
     MemberComponent,
     FormsModule,
+    TaggingComponent,
+    ClickOutsideDirective,
+    EmojiComponent,
+    EmojiPickerComponent
   ],
   templateUrl: './thread.component.html',
   styleUrl: './thread.component.scss',
 })
-export class ThreadComponent {
+export class ThreadComponent implements OnInit, OnDestroy {
   @Output() clickedCloseThread = new EventEmitter<boolean>();
   @Input() thread!: Thread;
   uploadService: UploadService = inject(UploadService);
+  public taggingService: TaggingService = inject(TaggingService);
+  private taggingSubscription: Subscription = new Subscription();
   uploadPath: string = 'threads';
 
-  messageText: string = '';
+  threadMessageText: string = '';
+  isEmoji: boolean = false;
+  notOpen: boolean = true;
+  isTag: boolean = false;
 
   selectedThread$: Observable<Thread | null>;
   threadMessages$: Observable<ThreadMessage[]>;
@@ -62,7 +76,33 @@ export class ThreadComponent {
     this.threadMessageService.answerCount$.subscribe((count) => {
       this.answerCount = count;
     });
+
+    this.taggingSubscription = this.taggingService.memberSelectedThread$.subscribe((member) => {
+      if (member && member.username) {
+        this.addMemberToMessage(member.username);
+      }
+    });
   }
+
+
+  /**
+  * unsubscribes selected member
+  */
+  ngOnDestroy(): void {
+    this.taggingSubscription.unsubscribe();
+  }
+
+
+  /**
+  * add member to message field
+  */
+  addMemberToMessage(username: string) {
+    const mention = `@${username} `;
+    if (!this.threadMessageText.includes(mention)) {
+      this.threadMessageText += ` ${mention}`;
+    }
+  }
+
 
   /**
    * calls the onFileSelected method and sets the uploadPath to "channel"
@@ -74,12 +114,12 @@ export class ThreadComponent {
   }
 
   /**
-   * calls the upload method if a file was chosen and saves the dawnload URL of the file to the messageText
+   * calls the upload method if a file was chosen and saves the dawnload URL of the file to the threadMessageText
    */
   async checkPictureUpload() {
     if (this.uploadService.fileChosen) {
       await this.uploadService.uploadPicture();
-      this.messageText = this.uploadService.downloadURL;
+      this.threadMessageText = this.uploadService.downloadURL;
     }
   }
 
@@ -91,9 +131,69 @@ export class ThreadComponent {
   /** Sends the text in the input field to the Thread Collection in the Backend. Trims the message from whitespace, ensures input is not empty, clears the input field after send */
   async sendMessage() {
     await this.checkPictureUpload();
-    if (this.messageText.trim()) {
-      await this.threadMessageService.addThreadMessage(this.messageText);
-      this.messageText = '';
+    if (this.threadMessageText.trim()) {
+      await this.threadMessageService.addThreadMessage(this.threadMessageText);
+      this.threadMessageText = '';
     }
+  }
+
+
+  /**
+  * sends the message if the message is valid and the Enter key is pressed
+  * when Shift+Enter is pressed, a line break is inserted instead
+  */
+  onKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.sendMessage();
+    }
+  }
+
+
+  /**
+  * open tagging popup
+  */
+  openPopup(event: Event) {
+    event?.stopPropagation();
+    this.isTag = !this.isTag;
+  }
+
+
+  /**
+  * close tagging popup
+  */
+  closePopup() {
+    this.isTag = false;
+  }
+
+
+  /**
+  * open the Emoji Container
+  */
+  openEmojiSet(event: Event) {
+    event.stopPropagation();
+    if (this.notOpen) {
+      this.isEmoji = !this.isEmoji;
+    }
+
+  }
+
+  
+  /**
+  * open the Emoji Container
+  */
+  closeEmojiSet() {
+    this.isEmoji = false;
+    this.notOpen = false;
+    setTimeout(() => this.notOpen = true, 1000);
+  }
+
+
+  /**
+  * handles emoji selection from the EmojiPickerComponent
+  */
+  onEmojiSelected(emoji: string) {
+    this.threadMessageText += emoji;
+    this.closeEmojiSet();
   }
 }

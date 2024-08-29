@@ -31,6 +31,7 @@ export class TaggingComponent implements OnInit, OnDestroy {
   searchText: string = '';
   filteredMembers: User[] = [];
   currentUser: any;
+  @Input() isFromThread: boolean = false;
 
 
   /**
@@ -55,7 +56,7 @@ export class TaggingComponent implements OnInit, OnDestroy {
    * unsubscribes the current user
    */
   ngOnDestroy(): void {
-      this.userSubscription.unsubscribe();
+    this.userSubscription.unsubscribe();
   }
 
 
@@ -77,8 +78,12 @@ export class TaggingComponent implements OnInit, OnDestroy {
   /**
   * select a member and then close the popup window
   */
-  selectMember(member: User) {
-    this.taggingService.selectMember(member);
+  selectMemberToChannel(member: User) {
+    if (this.isFromThread) {
+      this.taggingService.selectMemberThread(member);
+    } else {
+      this.taggingService.selectMemberChannel(member);
+    }
     this.closeWindow();
   }
 
