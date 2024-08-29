@@ -36,6 +36,7 @@ export class SearchService implements OnInit, OnDestroy {
   resultUser: User[] = [];
   resultChannel: any;
   resultThread: any = [];
+  timer: boolean = false;
 
 
   constructor() { }
@@ -43,19 +44,19 @@ export class SearchService implements OnInit, OnDestroy {
 
   ngOnInit() { }
 
-  
+
   ngOnDestroy(): void { }
 
 
   async startSubscription() {
-    console.log('start search / sub')
+    // console.log('start search / sub')
     this.userListSubscription = this.userService.userList$.subscribe((user) => {
       this.userList = user;
-      console.log('sub:', user)
+      // console.log('sub:', user)
     });
     this.currentUserChannelsSubscription = this.userService.userChannels$.subscribe((channels) => {
       this.channelList = channels;
-      console.log('sub:', channels)
+      // console.log('sub:', channels)
     });
     // this.dmSubscription = this.dmService.messages$.subscribe((message) =>  {
     //   console.log(message);
@@ -63,13 +64,13 @@ export class SearchService implements OnInit, OnDestroy {
     this.currentUserSubscription = this.userService.currentUser$.subscribe((user) => {
       if (user) {
         this.currentUserID = user?.userId || '';
-        console.log('sub:', user)
+        // console.log('sub:', user)
       }
     })
     this.threadSubscription = this.threadService.threads$.subscribe((thread) => {
       if (thread) {
         this.threads = thread;
-        console.log('sub:', thread)
+        // console.log('sub:', thread)
       }
     })
   }
@@ -81,21 +82,31 @@ export class SearchService implements OnInit, OnDestroy {
     this.currentUserSubscription.unsubscribe();
     // this.dmSubscription.unsubscribe();
     this.threadSubscription.unsubscribe();
-    console.log('stop search / unsub');
+    // console.log('stop search / unsub');
+  }
+
+
+  setTimerToTrue() {
+    this.timer = true
+    setTimeout(() => {
+      this.timer = false;
+    }, 60000);  // 60 sek
   }
 
 
   async getAllDM() {
-    this.directMessage = [];
-    const collectionRef = this.directMessageService.getCollectionRef();
+    if (!this.timer) {
+      this.directMessage = [];
+      const collectionRef = this.directMessageService.getCollectionRef();
 
-    const q = query(collectionRef, where("userIDs", "array-contains", this.currentUserID));
+      const q = query(collectionRef, where("userIDs", "array-contains", this.currentUserID));
 
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      const dmID = doc.id;
-      this.getDmMessage(dmID);
-    })
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        const dmID = doc.id;
+        this.getDmMessage(dmID);
+      })
+    }
   }
 
 
@@ -109,10 +120,10 @@ export class SearchService implements OnInit, OnDestroy {
       const message: any = {
         authorId: data['authorId'] || '',
         authorName: data['authorName'] || '',
-        authorImg: data['authorImg'] || '', 
+        authorImg: data['authorImg'] || '',
         authorstate: data['authorstate'] || '',
         profileId: data['profileId'] || '',
-        profileName: data['profileName'] || '', 
+        profileName: data['profileName'] || '',
         profileImg: data['profileImg'] || '',
         profileState: data['profileState'] || '',
         date: data['date'] || '',
@@ -123,28 +134,29 @@ export class SearchService implements OnInit, OnDestroy {
         id: data['id'] || '',
         isFirstMessageOfDay: data['isFirstMessageOfDay'] || '',
       }
-
       this.directMessage.push(message);
     })
   }
 
 
   async getAllChannel() {
-    this.channelListMsg = [];
-    for (const channel of this.channelList) {
-      const id = channel.channelID;
-      if (id) {
-        const channelList: any = {
-          channelID: channel.channelID,
-          channelMember: channel.channelMember,
-          channelName: channel.channelName,
-          createdBy: channel.createdBy,
-          description: channel.description,
-          messages: []
+    if (!this.timer) {
+      this.channelListMsg = [];
+      for (const channel of this.channelList) {
+        const id = channel.channelID;
+        if (id) {
+          const channelList: any = {
+            channelID: channel.channelID,
+            channelMember: channel.channelMember,
+            channelName: channel.channelName,
+            createdBy: channel.createdBy,
+            description: channel.description,
+            messages: []
+          }
+          this.channelListMsg.push(channelList);
+          const arrayIndex = this.channelListMsg.length - 1;
+          await this.getChannelMessage(arrayIndex, id);
         }
-        this.channelListMsg.push(channelList);
-        const arrayIndex = this.channelListMsg.length - 1;
-        await this.getChannelMessage(arrayIndex, id);
       }
     }
   }
@@ -176,19 +188,21 @@ export class SearchService implements OnInit, OnDestroy {
 
 
   async getAllThreads() {
-    this.threadListMsg = [];
-    for (const thread of this.threads) {
-      const id = thread.threadID;
-      if(id) {
-        const threadList: any = {
-          channelName: thread.channelName,
-          replyToMessage: thread.replyToMessage,
-          threadID: thread.threadID,
-          messages: []
+    if (!this.timer) {
+      this.threadListMsg = [];
+      for (const thread of this.threads) {
+        const id = thread.threadID;
+        if (id) {
+          const threadList: any = {
+            channelName: thread.channelName,
+            replyToMessage: thread.replyToMessage,
+            threadID: thread.threadID,
+            messages: []
+          }
+          this.threadListMsg.push(threadList);
+          const arrayIndex = this.threadListMsg.length - 1;
+          await this.getThreadMessage(arrayIndex, id);
         }
-        this.threadListMsg.push(threadList);
-        const arrayIndex = this.threadListMsg.length - 1;
-        await this.getThreadMessage(arrayIndex, id);
       }
     }
   }
@@ -220,10 +234,13 @@ export class SearchService implements OnInit, OnDestroy {
 
 
   async search(searchInputValue: string) {
-    this.resultDM = [];
+
     this.resultUser = [];
     this.resultChannel = [];
     this.resultThread = [];
+    if (!this.timer) {
+      this.resultDM = [];
+    }
 
     if (!searchInputValue || searchInputValue.trim() === '') {
       return;

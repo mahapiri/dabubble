@@ -27,10 +27,11 @@ header {
 .searchfield-content {
   display: flex;
   justify-content: flex-start;
-  width: calc(
-    100% - 62px
-  ); // 100% - Thread Container Space without margin right
-  min-width: 450px;
+//  width: calc(
+//   100% - 62px
+//  ); // 100% - Thread Container Space without margin right
+  width: 100%;
+//  min-width: 450px;
 }
 
 .searchfield {
@@ -77,9 +78,9 @@ input[type="text"] {
   width: 35px;
   height: 35px;
   color: var(--gray);
-  position: relative;
-  top: 22px;
-  right: 55px;
+  position: absolute;
+  top: 25px;
+  right: 32px;
   cursor: pointer;
 }
 

@@ -65,14 +65,24 @@ export class HeaderComponent implements OnInit {
 
 
   async openResults() {
-    this.searchService.startSubscription();
-    this.sharedService.isResults = this.searchInputValue.trim().length > 0;
-
-    await this.searchService.getAllDM();
-    await this.searchService.getAllChannel();
-    await this.searchService.getAllThreads();
-    await this.searchService.search(this.searchInputValue);
+    try {
+      this.searchService.startSubscription();
+      this.sharedService.isResults = this.searchInputValue.trim().length > 0;
+  
+      await Promise.all([
+        this.searchService.getAllDM(),
+        this.searchService.getAllChannel(),
+        this.searchService.getAllThreads()
+      ]);
+  
+      await this.searchService.search(this.searchInputValue);
+  
+      this.searchService.setTimerToTrue();
+    } catch (error) {
+      console.error('Fehler beim Aufrufen von Openresults', error);
+    }
   }
+  
 
 
   closeResults() {
