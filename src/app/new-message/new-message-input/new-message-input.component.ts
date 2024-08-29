@@ -4,6 +4,9 @@ import { UploadService } from '../../services/upload.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EmojiPickerComponent } from '../../chat/emoji-picker/emoji-picker.component';
+import { MatButtonModule } from '@angular/material/button';
+import { TaggingComponent } from '../../chat/tagging/tagging.component';
+import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 
 @Component({
   selector: 'app-new-message-input',
@@ -12,7 +15,10 @@ import { EmojiPickerComponent } from '../../chat/emoji-picker/emoji-picker.compo
     CommonModule,
     FormsModule,
     MatIconModule,
-    EmojiPickerComponent
+    EmojiPickerComponent,
+    MatButtonModule,
+    TaggingComponent,
+    ClickOutsideDirective
   ],
   templateUrl: './new-message-input.component.html',
   styleUrl: './new-message-input.component.scss'
@@ -24,7 +30,7 @@ export class NewMessageInputComponent {
   uploadPath: string = 'new-message'
   isEmoji: boolean = false;
   notOpen: boolean = true;
-
+  isTag: boolean = false;
 
 
   /**
@@ -38,6 +44,7 @@ export class NewMessageInputComponent {
     }
   }
 
+
   async chooseFile(event: Event) {
     this.uploadService.onFileSelected(event)
     this.uploadService.uploadPath = this.uploadPath;
@@ -45,20 +52,19 @@ export class NewMessageInputComponent {
 
 
   /**
-   * open the Emoji Container
-   */
+  * open the Emoji Container
+  */
   openEmojiSet(event: Event) {
     event.stopPropagation();
     if (this.notOpen) {
       this.isEmoji = !this.isEmoji;
     }
-
   }
 
 
   /**
- * close the Emoji Container
- */
+  * close the Emoji Container
+  */
   closeEmojiSet() {
     this.isEmoji = false;
     this.notOpen = false;
@@ -67,8 +73,8 @@ export class NewMessageInputComponent {
 
 
   /**
-* handles emoji selection from the EmojiPickerComponent
-*/
+  * handles emoji selection from the EmojiPickerComponent
+  */
   onEmojiSelected(emoji: string) {
     this.messageText += emoji;
     this.closeEmojiSet();
@@ -76,8 +82,8 @@ export class NewMessageInputComponent {
 
 
   /**
- * checks the valid of a message to start the newDmMessage function
- */
+  * checks the valid of a message to start the newDmMessage function
+  */
   async createMessage() {
     await this.checkPictureUpload();
     if (!this.messageText.trim()) {
@@ -90,12 +96,31 @@ export class NewMessageInputComponent {
 
 
   /**
-* calls the upload method if a file was chosen and saves the dawnload URL of the file to the messageText
-*/
+  * calls the upload method if a file was chosen and saves the dawnload URL of the file to the messageText
+  */
   async checkPictureUpload() {
     if (this.uploadService.fileChosen) {
       await this.uploadService.uploadPicture();
       this.messageText = this.uploadService.downloadURL;
     }
   }
+
+
+  /**
+  * open tagging popup
+  */
+  openPopup(event: Event) {
+    event?.stopPropagation();
+    this.isTag = !this.isTag;
+  }
+
+  /**
+  * close tagging popup
+  */
+  closePopup() {
+    this.isTag = false;
+  }
+
 }
+
+

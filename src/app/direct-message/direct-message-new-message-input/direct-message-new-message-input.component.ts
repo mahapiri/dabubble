@@ -15,7 +15,6 @@ import { DmMessage } from '../../../models/direct-message.class';
 import { TaggingComponent } from '../../chat/tagging/tagging.component';
 import { DirectMessageHeaderComponent } from '../direct-message-header/direct-message-header.component';
 import { Subscription } from 'rxjs';
-import { TaggingService } from '../../services/tagging.service';
 
 @Component({
   selector: 'app-direct-message-new-message-input',
@@ -28,7 +27,6 @@ import { TaggingService } from '../../services/tagging.service';
     FormsModule,
     PickerComponent,
     EmojiComponent,
-    ClickOutsideDirective,
     EmojiPickerComponent,
     ClickOutsideDirective,
     TaggingComponent,
