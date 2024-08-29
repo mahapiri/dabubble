@@ -5,8 +5,9 @@
     (clickedChannelChange)="handleChannelClick($event)"
     (selectProfileChange)="handleProfileClick()"
   ></app-workspace-menu>
+  <app-new-message *ngIf="isNewMessage"></app-new-message>
   <app-channel
-    *ngIf="!selectProfile"
+    *ngIf="!selectProfile && !isNewMessage"
     (clickedThreadChange)="handleThreadClick($event)"
     [channel]="channel"
   ></app-channel>
@@ -14,7 +15,7 @@
     *ngIf="!selectProfile && clickedThread"
     (clickedCloseThread)="handleThreadClick($event)"
   ></app-thread>
-  <app-direct-message *ngIf="selectProfile"></app-direct-message>
+  <app-direct-message *ngIf="selectProfile && !isNewMessage"></app-direct-message>
 </div>
 <app-create-channel
   class="create-section"

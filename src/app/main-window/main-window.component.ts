@@ -15,6 +15,7 @@ import { ChannelMessageService } from '../services/channel-message.service';
 import { Subscription } from 'rxjs';
 import { SharedService } from '../services/shared.service';
 import { ClickOutsideDirective } from '../directive/click-outside.directive';
+import { NewMessageComponent } from '../new-message/new-message.component';
 
 @Component({
   selector: 'app-main-window',
@@ -29,7 +30,8 @@ import { ClickOutsideDirective } from '../directive/click-outside.directive';
     ProfileComponent,
     PrivacyPolicyComponent,
     DirectMessageComponent,
-    ClickOutsideDirective
+    ClickOutsideDirective,
+    NewMessageComponent
   ],
   templateUrl: './main-window.component.html',
   styleUrl: './main-window.component.scss',
@@ -40,6 +42,7 @@ export class MainWindowComponent implements OnInit {
   channelMessagesService: ChannelMessageService = inject(ChannelMessageService)
   sharedService: SharedService = inject(SharedService)
   selectProfileSubscription: Subscription = new Subscription();
+  isNewMessageSubscription: Subscription = new Subscription();
 
   channel: Channel = new Channel({
     channelID: '',
@@ -51,6 +54,7 @@ export class MainWindowComponent implements OnInit {
   clickedChannel: boolean = false;
   clickedThread: boolean = false;
   selectProfile: boolean = false;
+  isNewMessage: boolean = false;
   selectedChannel: Subscription | undefined;
 
   constructor(private channelService: ChannelService) {}
@@ -69,6 +73,10 @@ export class MainWindowComponent implements OnInit {
 
     this.selectProfileSubscription = this.sharedService.selectProfileChange$.subscribe(selectProfile => {
       this.selectProfile = selectProfile;
+    });
+
+    this.isNewMessageSubscription = this.sharedService.isNewMessage$.subscribe(isNewMessage => {
+      this.isNewMessage = isNewMessage;
     });
   }
 
@@ -92,5 +100,6 @@ export class MainWindowComponent implements OnInit {
       this.channelMessagesService.messageListUnsubscribe();
     }
     this.selectProfileSubscription?.unsubscribe();
+    this.isNewMessageSubscription?.unsubscribe();
   }
 }

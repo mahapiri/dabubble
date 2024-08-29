@@ -45,6 +45,7 @@ import { SearchComponent } from '../header/search/search.component';
 export class WorkspaceMenuComponent implements OnInit {
   @ViewChild('drawer') drawer!: MatDrawer;
   @Output() clickedChannelChange = new EventEmitter<boolean>();
+  @Output() clickedNewMessageChange = new EventEmitter<boolean>();
   // @Output() selectProfileChange = new EventEmitter<boolean>();
 
   @Input() clickedChannel: boolean = false;
@@ -129,6 +130,9 @@ export class WorkspaceMenuComponent implements OnInit {
     this.selectedUserIndex = null;
 
     this.chatService.handleWindowChangeOnMobile();
+
+    this.sharedService.setIsNewMessage(false);
+    this.clickedMessage = false;
   }
 
   toggle() {
@@ -147,7 +151,16 @@ export class WorkspaceMenuComponent implements OnInit {
 
   newMessage() {
     this.clickedMessage = !this.clickedMessage;
+    this.sharedService.setSelectProfile(false);
+  
+    const currentIsNewMessage = this.sharedService.getIsNewMessage();
+    this.sharedService.setIsNewMessage(!currentIsNewMessage);
+  
+    this.chatService.setIsChannel(false);
+    this.clickedNewMessageChange.emit(this.clickedMessage);
+    this.selectedUserIndex = null;
   }
+  
 
   createChannel(event: Event) {
     event.stopPropagation();
@@ -168,6 +181,8 @@ export class WorkspaceMenuComponent implements OnInit {
     this.sharedService.setSelectProfile(true);
     this.directMessageService.openDmFromUser(profile);
     this.chatService.setIsChannel(false);
+    this.sharedService.setIsNewMessage(false);
+    this.clickedMessage = false;
   }
 
   editChannel(channel: string) {}

@@ -20,6 +20,9 @@ export class SharedService {
   private clickedAnswerSubject = new BehaviorSubject<boolean>(false);
   clickedAnswer$ = this.clickedAnswerSubject.asObservable();
 
+  private isNewMessageSubject = new BehaviorSubject<boolean>(false);
+  isNewMessage$ = this.isNewMessageSubject.asObservable();
+
 
   isProfileID: string = '';
   isResults: boolean = false;
@@ -52,5 +55,13 @@ export class SharedService {
 
   setAnswerClicked(value: boolean) {
     this.clickedAnswerSubject.next(value);
+  }
+
+  getIsNewMessage(): boolean {
+    return this.isNewMessageSubject.getValue();
+  }
+  
+  setIsNewMessage(value: boolean) {
+    this.isNewMessageSubject.next(value);
   }
 }
