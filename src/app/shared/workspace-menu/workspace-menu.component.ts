@@ -152,15 +152,16 @@ export class WorkspaceMenuComponent implements OnInit {
   newMessage() {
     this.clickedMessage = !this.clickedMessage;
     this.sharedService.setSelectProfile(false);
-  
+
     const currentIsNewMessage = this.sharedService.getIsNewMessage();
     this.sharedService.setIsNewMessage(!currentIsNewMessage);
-  
+
     this.chatService.setIsChannel(false);
     this.clickedNewMessageChange.emit(this.clickedMessage);
     this.selectedUserIndex = null;
+    this.chatService.showCreateChannelOnMobile();
+    this.chatService.showHeaderLogo('channelLogo');
   }
-  
 
   createChannel(event: Event) {
     event.stopPropagation();

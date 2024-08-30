@@ -1,82 +1,121 @@
-<section *ngIf="!addUserChannelVisible">
-    <div class="popup-container channel-container" appClickOutside (clickOutside)="close()">
-        <div class="title-content">
-            <h3 class="n-h3">Channel erstellen</h3>
-            <div class="icon-container">
-                <mat-icon class="close-icon" (click)="close()">close</mat-icon>
-            </div>
-        </div>
-        <p>Channels dienen deinem Team zur Kommunikation. Am besten sollten sie themenbezogen sein #marketing zum
-            Beispiel.</p>
-        <div class="input-container">
-            <p class="n-p bold">Channel-Name</p>
-            <div class="inputfield">
-                <input type="text" placeholder="z.B. Kooperationsprojekte" [(ngModel)]="channelName">
-                <mat-icon class="hashtag-icon">tag</mat-icon>
-            </div>
-        </div>
-        <div class="input-container">
-            <div class="input-title">
-                <p class="n-p bold">Beschreibung</p>
-                <p class="n-p">(optional)</p>
-            </div>
-            <input type="text" placeholder="Dein Text hier" [(ngModel)]="channelDescription">
-        </div>
-        <div class="btn-container">
-            <button (click)="nextPage()" class="btn-default btn-primary">Erstellen</button>
-        </div>
+<section id="createChannel" *ngIf="!addUserChannelVisible">
+  <div
+    class="popup-container channel-container"
+    appClickOutside
+    (clickOutside)="close()"
+  >
+    <div class="title-content">
+      <h3 class="n-h3">Channel erstellen</h3>
+      <div class="icon-container">
+        <mat-icon class="close-icon" (click)="close()">close</mat-icon>
+      </div>
     </div>
+    <p>
+      Channels dienen deinem Team zur Kommunikation. Am besten sollten sie
+      themenbezogen sein #marketing zum Beispiel.
+    </p>
+    <div class="input-container">
+      <p class="n-p bold">Channel-Name</p>
+      <div class="inputfield">
+        <input
+          type="text"
+          placeholder="z.B. Kooperationsprojekte"
+          [(ngModel)]="channelName"
+        />
+        <mat-icon class="hashtag-icon">tag</mat-icon>
+      </div>
+    </div>
+    <div class="input-container">
+      <div class="input-title">
+        <p class="n-p bold">Beschreibung</p>
+        <p class="n-p">(optional)</p>
+      </div>
+      <input
+        type="text"
+        placeholder="Dein Text hier"
+        [(ngModel)]="channelDescription"
+      />
+    </div>
+    <div class="btn-container">
+      <button (click)="nextPage()" class="btn-default btn-primary">
+        Erstellen
+      </button>
+    </div>
+  </div>
 </section>
 
 <section *ngIf="addUserChannelVisible">
-    <div class="popup-container channel-container">
-        <div class="title-content">
-            <h3 class="n-h3">Leute hinzufügen</h3>
-            <div class="icon-container">
-                <mat-icon class="close-icon" (click)="close()">close</mat-icon>
-            </div>
-        </div>
-        <div class="input-container">
-            <div class="inputfield">
-                <input type="radio" id="add-all-users" name="radioButton" checked>
-                <label for="add-all-users">Alle Mitglieder von OfficeTeam hinzufügen</label><br>
-            </div>
-        </div>
-        <div class="input-container">
-            <div class="inputfield">
-                <input type="radio" id="add-some-users" name="radioButton" [(ngModel)]="someUsersChecked"
-                    (change)="onRadioChange($event)">
-                <label for="add-some-users">Bestimmte Leute hinzufügen</label><br>
-            </div>
-        </div>
-
-        <div *ngIf="someUsersChecked" class="input-container">
-            <div class="input-title">
-                <p class="n-p bold">Name eingeben</p>
-            </div>
-            <input type="text" placeholder="Dein Text hier" [(ngModel)]="searchMember" (click)="showMember()"
-                (ngModelChange)="showMember()">
-            <div *ngIf="userlistOpen" class="profile-section">
-                <div class="channels-content" *ngFor="let profile of showUser; let i = index">
-                    <div class="channels-section">
-                        <div class="channels-header subtitle-header"
-                            [ngClass]=" profile.chosenToChannel ? 'selected' : '' " (click)="selectMember(profile)">
-                            <div class="channels-title subtitle-title profile-border">
-                                <div class="profile-content">
-                                    <img src="{{ profile.profileImage }}" alt="Character" class="profile-icon" />
-                                    <div class="status-icon" ngClass="{{ profile.state }}"></div>
-                                </div>
-                                <p class="n-p">{{ profile.username }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="btn-container">
-            <button (click)="createChannel()" class="btn-default btn-primary">Erstellen</button>
-        </div>
+  <div class="popup-container channel-container">
+    <div class="title-content">
+      <h3 class="n-h3">Leute hinzufügen</h3>
+      <div class="icon-container">
+        <mat-icon class="close-icon" (click)="close()">close</mat-icon>
+      </div>
     </div>
+    <div class="input-container">
+      <div class="inputfield">
+        <input type="radio" id="add-all-users" name="radioButton" checked />
+        <label for="add-all-users"
+          >Alle Mitglieder von OfficeTeam hinzufügen</label
+        ><br />
+      </div>
+    </div>
+    <div class="input-container">
+      <div class="inputfield">
+        <input
+          type="radio"
+          id="add-some-users"
+          name="radioButton"
+          [(ngModel)]="someUsersChecked"
+          (change)="onRadioChange($event)"
+        />
+        <label for="add-some-users">Bestimmte Leute hinzufügen</label><br />
+      </div>
+    </div>
+
+    <div *ngIf="someUsersChecked" class="input-container">
+      <div class="input-title">
+        <p class="n-p bold">Name eingeben</p>
+      </div>
+      <input
+        type="text"
+        placeholder="Dein Text hier"
+        [(ngModel)]="searchMember"
+        (click)="showMember()"
+        (ngModelChange)="showMember()"
+      />
+      <div *ngIf="userlistOpen" class="profile-section">
+        <div
+          class="channels-content"
+          *ngFor="let profile of showUser; let i = index"
+        >
+          <div class="channels-section">
+            <div
+              class="channels-header subtitle-header"
+              [ngClass]="profile.chosenToChannel ? 'selected' : ''"
+              (click)="selectMember(profile)"
+            >
+              <div class="channels-title subtitle-title profile-border">
+                <div class="profile-content">
+                  <img
+                    src="{{ profile.profileImage }}"
+                    alt="Character"
+                    class="profile-icon"
+                  />
+                  <div class="status-icon" ngClass="{{ profile.state }}"></div>
+                </div>
+                <p class="n-p">{{ profile.username }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-container">
+      <button (click)="createChannel()" class="btn-default btn-primary">
+        Erstellen
+      </button>
+    </div>
+  </div>
 </section>

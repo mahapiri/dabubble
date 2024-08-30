@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { DmMessage } from '../../models/direct-message.class';
 import { ChannelMessage } from '../../models/channel.class';
 import { BehaviorSubject } from 'rxjs';
+import { SharedService } from './shared.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,8 @@ export class ChatService {
 
   constructor(
     private userService: UserService,
-    private rendererFactory: RendererFactory2
+    private rendererFactory: RendererFactory2,
+    private sharedService: SharedService
   ) {
     this.renderer = rendererFactory.createRenderer(null, null);
   }
@@ -152,7 +154,7 @@ export class ChatService {
 
   showChannel() {
     if (window.innerWidth <= 960) {
-      const workspaceMenu = document.querySelector('section');
+      const workspaceMenu = document.querySelector('#workspaceMenu');
       const channel = document.querySelector('#channel');
 
       if (workspaceMenu && channel) {
@@ -164,33 +166,43 @@ export class ChatService {
 
   showWorkspaceMenu() {
     if (window.innerWidth > 960 || this.clickedBack) {
-      const workspaceMenu = document.querySelector('section');
+      const workspaceMenu = document.querySelector('#workspaceMenu');
       const channelCard = document.querySelector('#channel');
+      const newMessage = document.querySelector('#newMessage');
 
       if (workspaceMenu && channelCard) {
         this.renderer.setStyle(workspaceMenu, 'display', 'flex');
         this.renderer.setStyle(channelCard, 'display', 'none');
+      }
+
+      if (workspaceMenu && newMessage) {
+        this.renderer.setStyle(workspaceMenu, 'display', 'flex');
+        this.sharedService.setIsNewMessage(false);
       }
     }
   }
 
   showThreadOnMobile() {
     if (window.innerWidth <= 960) {
-      //const thread = document.querySelector('#thread');
       const channel = document.querySelector('#channel');
 
-      //this.renderer.setStyle(thread, 'display', 'flex');
       this.renderer.setStyle(channel, 'display', 'none');
     }
   }
 
   showChannelOnMobile() {
     if (window.innerWidth <= 960) {
-      //const thread = document.querySelector('#thread');
       const channel = document.querySelector('#channel');
 
-      //this.renderer.setStyle(thread, 'display', 'none');
       this.renderer.setStyle(channel, 'display', 'flex');
+    }
+  }
+
+  showCreateChannelOnMobile() {
+    if (window.innerWidth <= 960) {
+      const workspaceMenu = document.querySelector('#workspaceMenu');
+
+      this.renderer.setStyle(workspaceMenu, 'display', 'none');
     }
   }
 }
