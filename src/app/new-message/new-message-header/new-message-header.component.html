@@ -19,11 +19,11 @@
                             <!-- <div>
                                 <p class="n-p">Keine Channels gefunden</p>
                             </div> -->
-                            <div class="result-section">
+                            <div class="result-section" *ngFor="let channel of channels">
                                 <div class="result-header">
                                     <div class="result-title">
                                         <mat-icon class="result-icon">tag</mat-icon>
-                                        <p class="n-p">Office-Team</p>
+                                        <p class="n-p">{{ channel }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -39,20 +39,20 @@
                             <!-- <div>
                                 <p class="n-p">Keine User gefunden</p>
                             </div> -->
-                            <div class="result-section">
+                            <div class="result-section" *ngFor="let user of users">
                                 <div class="result-header">
                                     <div class="result-title">
                                         <div>
-                                            <img src="../../../assets/img/character4.png" alt="Character"
+                                            <img [src]="user.profileImage" alt="Profile Picture of {{ user.username }}"
                                                 class="profile-icon">
-                                            <div class="result-status-icon" [ngClass]=""></div>
+                                            <div class="result-status-icon" [ngClass]="user?.state"></div>
                                         </div>
                                         <div>
                                             <p class="n-p">
-                                                Gast
-                                                <span>(Du)</span>
+                                                {{ user?.username }}
+                                                <span *ngIf="user.userId === currentUserId">(Du)</span>
                                             </p>
-                                            <a href="#" class="n-a">gast&#64;gmail.com</a>
+                                            <a href="#" class="n-a">{{ user?.email }}</a>
                                         </div>
                                     </div>
                                 </div>
