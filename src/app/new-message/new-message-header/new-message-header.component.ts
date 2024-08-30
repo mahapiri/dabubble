@@ -35,5 +35,6 @@ export class NewMessageHeaderComponent {
 
   closeResults() {
     this.inputActive = false;
+    this.searchword = '';
   }
 }

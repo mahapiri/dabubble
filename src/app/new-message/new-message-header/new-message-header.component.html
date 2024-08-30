@@ -11,7 +11,7 @@
 
 
 
-                <div *ngIf="searchword.length > 0" class="result-container">
+                <div *ngIf="searchword.length > 0 && inputActive" class="result-container">
 
                     <ng-container *ngIf="channelsearch || (inputActive && !usersearch)">
                         <div class="result-content">
