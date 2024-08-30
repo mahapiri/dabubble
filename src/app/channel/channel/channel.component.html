@@ -70,6 +70,7 @@
   <mat-card-footer>
     <app-channel-new-message-input
       [channel]="channel"
+      (messageCreated)="onMessageCreated()"
     ></app-channel-new-message-input>
   </mat-card-footer>
 </mat-card>

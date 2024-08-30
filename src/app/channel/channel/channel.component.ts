@@ -5,9 +5,10 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnInit,
   Output,
   ViewChild,
-  inject
+  inject,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,7 +28,6 @@ import { ChannelService } from '../../services/channel.service';
 import { Observable, Subscription } from 'rxjs';
 import { ChannelMessageService } from '../../services/channel-message.service';
 import { UploadService } from '../../services/upload.service';
-
 
 @Component({
   selector: 'app-channel',
@@ -51,12 +51,12 @@ import { UploadService } from '../../services/upload.service';
   styleUrl: './channel.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChannelComponent implements AfterViewChecked {
+export class ChannelComponent implements OnInit {
   @Input() channel!: Channel;
   @Input() channelMessage!: ChannelMessage;
   @Output() clickedThreadChange = new EventEmitter<boolean>();
   @ViewChild('mainChat') mainChat!: ElementRef;
-    uploadService: UploadService = inject(UploadService);
+  uploadService: UploadService = inject(UploadService);
 
   clickedEditChannel: boolean = false;
   clickedAddMembers: boolean = false;
@@ -82,19 +82,25 @@ export class ChannelComponent implements AfterViewChecked {
     });
   }
 
-  ngOnInit() {
-    //this.scrollToBottom();
+  ngOnInit(): void {
+    this.scrollToBottom();
   }
 
-  ngAfterViewChecked() {
-    //this.scrollToBottom();
-  }
-
+  /**
+   * scroll to latest message
+   */
   scrollToBottom(): void {
-    try {
-      this.mainChat.nativeElement.scrollTop =
-        this.mainChat.nativeElement.scrollHeight;
-    } catch (err) {}
+    setTimeout(() => {
+      const container = this.mainChat.nativeElement;
+      container.scrollTop = container.scrollHeight;
+    }, 500);
+  }
+
+  /**
+   * Triggered when a new message is created to the bottom
+   */
+  onMessageCreated() {
+    this.scrollToBottom();
   }
 
   editChannel(event: Event) {

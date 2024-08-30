@@ -148,7 +148,8 @@ mat-card-footer {
 }
 
 .main-chat {
-  height: 100%;
+  overflow: scroll;
+  height: 100vh; //100%
 }
 
 mat-list {

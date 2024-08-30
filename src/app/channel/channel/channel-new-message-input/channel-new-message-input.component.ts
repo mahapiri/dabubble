@@ -1,4 +1,11 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
@@ -26,7 +33,7 @@ import { EmojiPickerComponent } from '../../../chat/emoji-picker/emoji-picker.co
     TaggingComponent,
     ClickOutsideDirective,
     EmojiComponent,
-    EmojiPickerComponent
+    EmojiPickerComponent,
   ],
   templateUrl: './channel-new-message-input.component.html',
   styleUrl: './channel-new-message-input.component.scss',
@@ -34,30 +41,32 @@ import { EmojiPickerComponent } from '../../../chat/emoji-picker/emoji-picker.co
 export class ChannelNewMessageInputComponent implements OnInit {
   public taggingService: TaggingService = inject(TaggingService);
   private taggingSubscription: Subscription = new Subscription();
-  @Input() channel!: Channel;
-  uploadService: UploadService = inject(UploadService);
-  uploadPath: string = 'channel'
 
+  @Input() channel!: Channel;
+  @Output() messageCreated: EventEmitter<void> = new EventEmitter<void>();
+
+  uploadService: UploadService = inject(UploadService);
+  uploadPath: string = 'channel';
 
   messageText: string = '';
   isEmoji: boolean = false;
   notOpen: boolean = true;
-  imgName: string = ''
+  imgName: string = '';
   isTag: boolean = false;
 
-  constructor(private channelMessageService: ChannelMessageService) { }
+  constructor(private channelMessageService: ChannelMessageService) {}
 
   /**
    * subscribes selected member
    */
   ngOnInit() {
-    this.taggingSubscription = this.taggingService.memberSelectedChannel$.subscribe((member) => {
-      if (member && member.username) {
-        this.addMemberToMessage(member.username);
-      }
-    });
+    this.taggingSubscription =
+      this.taggingService.memberSelectedChannel$.subscribe((member) => {
+        if (member && member.username) {
+          this.addMemberToMessage(member.username);
+        }
+      });
   }
-
 
   /**
    * add member to message field
@@ -69,14 +78,12 @@ export class ChannelNewMessageInputComponent implements OnInit {
     }
   }
 
-
   /**
    * unsubscribes selected member
    */
   ngOnDestroy(): void {
     this.taggingSubscription.unsubscribe();
   }
-
 
   /** Sends the text in the input field to the Channel Collection in the Backend. Trims the message from whitespace, ensures input is not empty, clears the input field after send */
   async sendMessage() {
@@ -85,14 +92,15 @@ export class ChannelNewMessageInputComponent implements OnInit {
       await this.channelMessageService.addMessage(this.messageText);
       this.messageText = '';
     }
+    this.messageCreated.emit();
   }
 
   /**
    * calls the onFileSelected method and sets the uploadPath to "channel"
-   * @param event 
+   * @param event
    */
   async chooseFile(event: Event) {
-    this.uploadService.onFileSelected(event)
+    this.uploadService.onFileSelected(event);
     this.uploadService.uploadPath = this.uploadPath;
   }
 
@@ -114,7 +122,6 @@ export class ChannelNewMessageInputComponent implements OnInit {
     this.isTag = !this.isTag;
   }
 
-
   /**
    * close tagging popup
    */
@@ -122,11 +129,10 @@ export class ChannelNewMessageInputComponent implements OnInit {
     this.isTag = false;
   }
 
-
   /**
-  * sends the message if the message is valid and the Enter key is pressed
-  * when Shift+Enter is pressed, a line break is inserted instead
-  */
+   * sends the message if the message is valid and the Enter key is pressed
+   * when Shift+Enter is pressed, a line break is inserted instead
+   */
   onKeyDown(event: KeyboardEvent) {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
@@ -134,10 +140,9 @@ export class ChannelNewMessageInputComponent implements OnInit {
     }
   }
 
-
   /**
-  * open the Emoji Container
-  */
+   * open the Emoji Container
+   */
   openEmojiSet(event: Event) {
     event.stopPropagation();
     if (this.notOpen) {
@@ -145,20 +150,18 @@ export class ChannelNewMessageInputComponent implements OnInit {
     }
   }
 
-
   /**
-  * open the Emoji Container
-  */
+   * open the Emoji Container
+   */
   closeEmojiSet() {
     this.isEmoji = false;
     this.notOpen = false;
-    setTimeout(() => this.notOpen = true, 1000);
+    setTimeout(() => (this.notOpen = true), 1000);
   }
 
-
   /**
-  * handles emoji selection from the EmojiPickerComponent
-  */
+   * handles emoji selection from the EmojiPickerComponent
+   */
   onEmojiSelected(emoji: string) {
     this.messageText += emoji;
     this.closeEmojiSet();
