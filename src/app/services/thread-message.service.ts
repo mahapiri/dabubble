@@ -166,7 +166,7 @@ export class ThreadMessageService {
       this.getThreadMessagesRef(),
       orderBy('date', 'asc'),
       orderBy('time', 'asc'),
-      limit(20)
+      limit(1000)
     );
 
     return new Promise((resolve) => {

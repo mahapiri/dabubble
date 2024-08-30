@@ -1,4 +1,14 @@
-import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
@@ -40,7 +50,7 @@ import { EmojiPickerComponent } from '../chat/emoji-picker/emoji-picker.componen
     TaggingComponent,
     ClickOutsideDirective,
     EmojiComponent,
-    EmojiPickerComponent
+    EmojiPickerComponent,
   ],
   templateUrl: './thread.component.html',
   styleUrl: './thread.component.scss',
@@ -48,6 +58,9 @@ import { EmojiPickerComponent } from '../chat/emoji-picker/emoji-picker.componen
 export class ThreadComponent implements OnInit, OnDestroy {
   @Output() clickedCloseThread = new EventEmitter<boolean>();
   @Input() thread!: Thread;
+  @ViewChild('messageContainer') private messageContainer!: ElementRef;
+  @Output() messageCreated: EventEmitter<void> = new EventEmitter<void>();
+
   uploadService: UploadService = inject(UploadService);
   public taggingService: TaggingService = inject(TaggingService);
   private taggingSubscription: Subscription = new Subscription();
@@ -77,32 +90,49 @@ export class ThreadComponent implements OnInit, OnDestroy {
       this.answerCount = count;
     });
 
-    this.taggingSubscription = this.taggingService.memberSelectedThread$.subscribe((member) => {
-      if (member && member.username) {
-        this.addMemberToMessage(member.username);
-      }
-    });
+    this.taggingSubscription =
+      this.taggingService.memberSelectedThread$.subscribe((member) => {
+        if (member && member.username) {
+          this.addMemberToMessage(member.username);
+        }
+      });
+
+    this.scrollToBottom();
   }
 
+  /**
+   * scroll to latest message
+   */
+  scrollToBottom(): void {
+    setTimeout(() => {
+      const container = this.messageContainer.nativeElement;
+      container.scrollTop = container.scrollHeight;
+    }, 1000);
+  }
 
   /**
-  * unsubscribes selected member
-  */
+   * Triggered when a new message is created to the bottom
+   */
+  onMessageCreated() {
+    this.scrollToBottom();
+  }
+
+  /**
+   * unsubscribes selected member
+   */
   ngOnDestroy(): void {
     this.taggingSubscription.unsubscribe();
   }
 
-
   /**
-  * add member to message field
-  */
+   * add member to message field
+   */
   addMemberToMessage(username: string) {
     const mention = `@${username} `;
     if (!this.threadMessageText.includes(mention)) {
       this.threadMessageText += ` ${mention}`;
     }
   }
-
 
   /**
    * calls the onFileSelected method and sets the uploadPath to "channel"
@@ -135,13 +165,13 @@ export class ThreadComponent implements OnInit, OnDestroy {
       await this.threadMessageService.addThreadMessage(this.threadMessageText);
       this.threadMessageText = '';
     }
+    this.messageCreated.emit();
   }
 
-
   /**
-  * sends the message if the message is valid and the Enter key is pressed
-  * when Shift+Enter is pressed, a line break is inserted instead
-  */
+   * sends the message if the message is valid and the Enter key is pressed
+   * when Shift+Enter is pressed, a line break is inserted instead
+   */
   onKeyDown(event: KeyboardEvent) {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
@@ -149,49 +179,43 @@ export class ThreadComponent implements OnInit, OnDestroy {
     }
   }
 
-
   /**
-  * open tagging popup
-  */
+   * open tagging popup
+   */
   openPopup(event: Event) {
     event?.stopPropagation();
     this.isTag = !this.isTag;
   }
 
-
   /**
-  * close tagging popup
-  */
+   * close tagging popup
+   */
   closePopup() {
     this.isTag = false;
   }
 
-
   /**
-  * open the Emoji Container
-  */
+   * open the Emoji Container
+   */
   openEmojiSet(event: Event) {
     event.stopPropagation();
     if (this.notOpen) {
       this.isEmoji = !this.isEmoji;
     }
-
   }
 
-  
   /**
-  * open the Emoji Container
-  */
+   * open the Emoji Container
+   */
   closeEmojiSet() {
     this.isEmoji = false;
     this.notOpen = false;
-    setTimeout(() => this.notOpen = true, 1000);
+    setTimeout(() => (this.notOpen = true), 1000);
   }
 
-
   /**
-  * handles emoji selection from the EmojiPickerComponent
-  */
+   * handles emoji selection from the EmojiPickerComponent
+   */
   onEmojiSelected(emoji: string) {
     this.threadMessageText += emoji;
     this.closeEmojiSet();

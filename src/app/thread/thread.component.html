@@ -19,7 +19,7 @@
     </div>
   </mat-card-header>
 
-  <mat-card-content>
+  <mat-card-content #messageContainer>
     <mat-list class="main-chat">
       <div class="initial-message-container">
         <mat-list-item>
@@ -74,7 +74,7 @@
   </mat-card-content>
 
   <mat-card-footer>
-    <div class="new-message-container">
+    <div class="new-message-container" (messageCreated)="onMessageCreated()">
       @if (this.uploadService.currentImg$ | async) {
       <img [src]="this.uploadService.currentImg$ | async" alt="" />
       <mat-icon
@@ -83,14 +83,14 @@
         >close</mat-icon
       >
       }@else {
-      <!-- <input
-        [(ngModel)]="messageText"
+      <textarea
+        [(ngModel)]="threadMessageText"
         matInput
         type="text"
         placeholder="Antworten..."
-      /> -->
-      <textarea [(ngModel)]="threadMessageText" matInput type="text" placeholder="Antworten..." rows="3"
-      (keydown)="onKeyDown($event)"></textarea>
+        rows="3"
+        (keydown)="onKeyDown($event)"
+      ></textarea>
       }
       <div class="message-controls">
         <div class="add-elements">
@@ -110,19 +110,42 @@
             <mat-icon>add</mat-icon>
           </button>
           <div class="vertical-divider"></div>
-          <button mat-mini-fab class="emojis mini-fab-btn" (click)="openEmojiSet($event)">
+          <button
+            mat-mini-fab
+            class="emojis mini-fab-btn"
+            (click)="openEmojiSet($event)"
+          >
             <mat-icon>sentiment_satisfied</mat-icon>
-            <div *ngIf="isEmoji" class="emoji-container" appClickOutside (clickOutside)="closeEmojiSet()">
-              <app-emoji-picker (emojiSelected)="onEmojiSelected($event)"></app-emoji-picker>
+            <div
+              *ngIf="isEmoji"
+              class="emoji-container"
+              appClickOutside
+              (clickOutside)="closeEmojiSet()"
+            >
+              <app-emoji-picker
+                (emojiSelected)="onEmojiSelected($event)"
+              ></app-emoji-picker>
             </div>
           </button>
-          <button mat-mini-fab class="tag-person mini-fab-btn" (click)="openPopup($event)">
+          <button
+            mat-mini-fab
+            class="tag-person mini-fab-btn"
+            (click)="openPopup($event)"
+          >
             <mat-icon>alternate_email</mat-icon>
           </button>
-          <app-tagging *ngIf="isTag" (closePopup)="closePopup()" [isFromThread]="true">
+          <app-tagging
+            *ngIf="isTag"
+            (closePopup)="closePopup()"
+            [isFromThread]="true"
+          >
           </app-tagging>
         </div>
-        <button class="send-btn" [ngClass]="{'send-btn-valid': threadMessageText.trim().length > 0}" (click)="sendMessage()">
+        <button
+          class="send-btn"
+          [ngClass]="{ 'send-btn-valid': threadMessageText.trim().length > 0 }"
+          (click)="sendMessage()"
+        >
           <mat-icon>send</mat-icon>
         </button>
       </div>

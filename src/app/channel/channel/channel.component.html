@@ -55,17 +55,16 @@
   </mat-card-header>
 
   <mat-card-content
+    #messageContainer
     [ngClass]="uploadService.fileChosen ? 'img-input-margin' : ''"
   >
-    <div #mainChat style="overflow: scroll; height: 100vh" class="main-chat">
-      <mat-list>
-        <app-channel-message
-          (clickedAnswer)="handleThreadClick($event)"
-          *ngFor="let channelMessage of channelMessages$ | async"
-          [channelMessage]="channelMessage"
-        ></app-channel-message>
-      </mat-list>
-    </div>
+    <mat-list>
+      <app-channel-message
+        (clickedAnswer)="handleThreadClick($event)"
+        *ngFor="let channelMessage of channelMessages$ | async"
+        [channelMessage]="channelMessage"
+      ></app-channel-message>
+    </mat-list>
   </mat-card-content>
   <mat-card-footer>
     <app-channel-new-message-input

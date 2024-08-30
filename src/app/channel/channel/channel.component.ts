@@ -55,7 +55,7 @@ export class ChannelComponent implements OnInit {
   @Input() channel!: Channel;
   @Input() channelMessage!: ChannelMessage;
   @Output() clickedThreadChange = new EventEmitter<boolean>();
-  @ViewChild('mainChat') mainChat!: ElementRef;
+  @ViewChild('messageContainer') private messageContainer!: ElementRef;
   uploadService: UploadService = inject(UploadService);
 
   clickedEditChannel: boolean = false;
@@ -91,7 +91,7 @@ export class ChannelComponent implements OnInit {
    */
   scrollToBottom(): void {
     setTimeout(() => {
-      const container = this.mainChat.nativeElement;
+      const container = this.messageContainer.nativeElement;
       container.scrollTop = container.scrollHeight;
     }, 500);
   }
