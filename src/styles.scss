@@ -17,6 +17,7 @@
   --green: rgba(146, 200, 62, 1);
   --rosa: rgba(237, 30, 121, 1);
   --blue: rgba(19, 129, 255, 1);
+  --img-size: 75px;
 }
 
 * {
@@ -209,6 +210,14 @@ a {
     background-color: var(--bg-color);
     gap: 10px;
   }
+}
+
+.img-input-height{
+  height: calc(145px + var(--img-size)) !important;
+}
+
+.img-input-margin{
+  margin-bottom: calc(180px + var(--img-size)) !important;
 }
 
 .emoji-container {
