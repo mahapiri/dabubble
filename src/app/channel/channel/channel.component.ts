@@ -7,6 +7,7 @@ import {
   Input,
   Output,
   ViewChild,
+  inject
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -25,6 +26,8 @@ import { Channel, ChannelMessage } from '../../../models/channel.class';
 import { ChannelService } from '../../services/channel.service';
 import { Observable, Subscription } from 'rxjs';
 import { ChannelMessageService } from '../../services/channel-message.service';
+import { UploadService } from '../../services/upload.service';
+
 
 @Component({
   selector: 'app-channel',
@@ -53,6 +56,7 @@ export class ChannelComponent implements AfterViewChecked {
   @Input() channelMessage!: ChannelMessage;
   @Output() clickedThreadChange = new EventEmitter<boolean>();
   @ViewChild('mainChat') mainChat!: ElementRef;
+    uploadService: UploadService = inject(UploadService);
 
   clickedEditChannel: boolean = false;
   clickedAddMembers: boolean = false;
