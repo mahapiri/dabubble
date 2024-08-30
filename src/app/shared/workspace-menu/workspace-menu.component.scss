@@ -21,7 +21,7 @@ section {
   justify-content: space-between;
   align-items: center;
   border-radius: 30px;
-  margin-bottom: 25px;
+  margin-bottom: 24px;
   color: var(--black);
   flex-shrink: 1;
 }
@@ -90,18 +90,27 @@ mat-content-hide-toggle {
   justify-content: space-between !important;
 }
 
-.gap-25 {
-  flex: 1;
-  overflow-y: auto;
+.d-flex-col {
   display: flex;
   flex-direction: column;
-  gap: 25px;
+}
+
+.mb-12 {
+  margin-bottom: 12px;
+}
+
+.mb-24 {
+  margin-bottom: 24px;
+}
+
+.mt-12 {
+  margin-top: 12px;
 }
 
 .channels-content {
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 24px;
   background-color: var(--white);
   box-shadow: unset !important;
   color: var(--black) !important;
@@ -164,8 +173,19 @@ mat-content-hide-toggle {
 }
 
 .channel-undersection {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   overflow-y: auto;
+}
+
+.channel-container {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.max-height {
+  max-height: 128px;
 }
 
 .subtitle-header {
@@ -174,7 +194,7 @@ mat-content-hide-toggle {
 }
 
 .subtitle-title {
-  padding: 4px 20px 4px 25px;
+  padding: 4px 20px 4px 24px;
 
   &:not(.profile-border):hover {
     border-radius: 20px;
@@ -212,18 +232,20 @@ mat-content-hide-toggle {
 }
 
 .profile-section {
-  max-height: calc(100vh - 618px);
-  overflow-y: auto;
+  max-height: calc(
+    100vh - 540px
+  ); //100vh minus header, paddings, workspace contents
+
   display: flex;
   flex-direction: column;
-  gap: 13px;
-  flex: 1;
+  gap: 12px;
+  flex: 1 1 auto;
   overflow-y: auto;
 }
 
 .profile-border {
   width: 100%;
-  padding: 4px 20px 4px 25px;
+  padding: 4px 20px 4px 24px;
 
   &:hover {
     background-color: var(--bg-color);
@@ -338,6 +360,10 @@ mat-content-hide-toggle {
   font-weight: 700 !important;
 }
 
+.height-100 {
+  height: 100%;
+}
+
 .searchfield-container {
   position: relative;
   display: flex;
@@ -434,5 +460,20 @@ input[type="text"] {
 
   .mobile-padding {
     padding: 0px 12px; // additional to sidenav padding, bec search is wider than elements underneath
+  }
+
+  .mobile-fab-new-message {
+    position: absolute;
+    bottom: 50px;
+    right: 16px;
+    height: 60px;
+    width: 60px;
+    background-color: var(--purple-1);
+    color: var(--white);
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
   }
 }
