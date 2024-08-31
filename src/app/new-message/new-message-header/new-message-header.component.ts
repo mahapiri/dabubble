@@ -7,6 +7,7 @@ import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 import { NewMessageService } from '../../services/new-message.service';
 import { Channel } from '../../../models/channel.class';
 import { User } from '../../../models/user.class';
+import { BehaviorSubject } from 'rxjs';
 
 
 @Component({
@@ -28,6 +29,7 @@ export class NewMessageHeaderComponent implements OnInit {
   inputActive: boolean = false;
   usersearch: boolean = false;
   channelsearch: boolean = false;
+
   searchword: string = '';
 
   channels: any = [];
@@ -46,6 +48,8 @@ export class NewMessageHeaderComponent implements OnInit {
     this.inputActive = this.searchword.trim().length > 0;
     this.usersearch = this.searchword.startsWith('@');
     this.channelsearch = this.searchword.startsWith('#');
+
+    this.newMessageService.setSearchword(this.searchword);
   }
 
   closeResults() {

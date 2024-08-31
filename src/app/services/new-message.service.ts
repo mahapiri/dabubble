@@ -1,6 +1,6 @@
 import { inject, Injectable, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from './user.service';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { User } from '../../models/user.class';
 
 @Injectable({
@@ -9,6 +9,9 @@ import { User } from '../../models/user.class';
 export class NewMessageService implements OnInit, OnDestroy {
   private userService: UserService = inject(UserService);
   private userServiceSubscription: Subscription = new Subscription();
+
+  private searchwordSubject = new BehaviorSubject<string>('');
+  searchword$ = this.searchwordSubject.asObservable();
 
   userList: User[] = [];
   channelList: any = [];
@@ -38,5 +41,10 @@ export class NewMessageService implements OnInit, OnDestroy {
   ngOnDestroy(): void {
       this.userServiceSubscription.unsubscribe();
       console.log('unsub new msg service')
+  }
+
+
+  setSearchword(searchword: string) {
+    this.searchwordSubject.next(searchword);
   }
 }
