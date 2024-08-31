@@ -144,7 +144,7 @@
 .edit-textbox {
   display: flex;
   flex-direction: column;
-  max-width: 300px;
+  width: 100%;
   height: fit-content;
   border-radius: 20px;
   border: 1px solid var(--lines);

@@ -3,6 +3,7 @@
 :host {
   display: flex;
   width: 100%;
+  min-width: 30px;
 }
 
 mat-card {
@@ -194,6 +195,12 @@ mat-list-item {
 }
 
 /* Smartphones - - - - - - - - - */
+
+/* @media only screen and (max-width: 1440px) {
+  mat-card {
+    overflow-y: auto;
+  }
+} */
 
 @media only screen and (max-width: 960px) {
   mat-card {

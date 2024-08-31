@@ -56,6 +56,7 @@ export class ChannelComponent implements OnInit {
   @Input() channelMessage!: ChannelMessage;
   @Output() clickedThreadChange = new EventEmitter<boolean>();
   @ViewChild('messageContainer') private messageContainer!: ElementRef;
+
   uploadService: UploadService = inject(UploadService);
 
   clickedEditChannel: boolean = false;

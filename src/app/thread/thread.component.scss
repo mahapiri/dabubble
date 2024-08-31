@@ -2,7 +2,7 @@
 
 mat-card {
   height: calc(100vh - 125.5px);
-  width: clamp(366px, 30vw, 485px);
+  width: clamp(450px, 30vw, 485px);
   display: flex;
   @include cardstyling();
   margin-left: 16px;
@@ -193,6 +193,7 @@ mat-card-footer {
   overflow: visible;
 
   .message-details {
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -371,6 +372,13 @@ mat-card-footer {
 }
 
 /* Smartphones - - - - - - - - - */
+
+@media only screen and (max-width: 1440px) {
+  mat-card {
+    border: 3px solid var(--bg-color);
+    margin-left: 0;
+  }
+}
 
 @media only screen and (max-width: 960px) {
   mat-card {
