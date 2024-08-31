@@ -20,18 +20,18 @@ header {
   width: 100%;
   min-width: 450px;
   margin-left: calc(366px - 271px); // Logo space + page margin left
-  margin-right: calc(366px - 271px); // Logo space + page margin left
+  margin-right: calc(366px - 340px); // Logo space + page margin left
   align-items: center;
 }
 
 .searchfield-content {
   display: flex;
   justify-content: flex-start;
-//  width: calc(
-//   100% - 62px
-//  ); // 100% - Thread Container Space without margin right
+  //  width: calc(
+  //   100% - 62px
+  //  ); // 100% - Thread Container Space without margin right
   width: 100%;
-//  min-width: 450px;
+  //  min-width: 450px;
 }
 
 .searchfield {
@@ -62,13 +62,13 @@ header {
   }
 }
 
-input.placeholder {
-  text-align: center;
+input::placeholder {
+  font-size: 22px !important;
 }
 
 input[type="text"] {
   font-weight: 400;
-  font-size: 24px;
+  font-size: 22px;
   line-height: 32.74px;
   color: var(--gray);
   text-align: left;
@@ -79,8 +79,8 @@ input[type="text"] {
   height: 35px;
   color: var(--gray);
   position: absolute;
-  top: 25px;
-  right: 32px;
+  top: 22px;
+  right: 24px;
   cursor: pointer;
 }
 

@@ -53,7 +53,8 @@ mat-card-content {
   padding: 16px 0 16px 0;
   flex: 1;
   margin-bottom: 180px;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 mat-card-footer {
@@ -294,7 +295,7 @@ mat-card-footer {
     }
   }
 }
-
+/* 
 .reaction-info-menu {
   position: absolute;
   width: 158px;
@@ -363,7 +364,7 @@ mat-card-footer {
     height: 34px;
     width: 34px;
   }
-}
+} */
 
 .no-hover {
   cursor: unset;

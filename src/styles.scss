@@ -106,6 +106,10 @@ a {
   gap: 32px;
 }
 
+.gap-16 {
+  gap: 16px;
+}
+
 .d-none {
   display: none !important;
 }
@@ -212,11 +216,11 @@ a {
   }
 }
 
-.img-input-height{
+.img-input-height {
   height: calc(145px + var(--img-size)) !important;
 }
 
-.img-input-margin{
+.img-input-margin {
   margin-bottom: calc(180px + var(--img-size)) !important;
 }
 
