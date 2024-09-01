@@ -16,10 +16,10 @@
                     <ng-container *ngIf="channelsearch || (inputActive && !usersearch)">
                         <div class="result-content">
                             <h4 class="n-h4">Channels</h4>
-                            <!-- <div>
+                            <div *ngIf="this.newMessageService.resultChannel.length == 0">
                                 <p class="n-p">Keine Channels gefunden</p>
-                            </div> -->
-                            <div class="result-section" *ngFor="let channel of channels">
+                            </div>
+                            <div class="result-section" *ngFor="let channel of this.newMessageService.resultChannel">
                                 <div class="result-header">
                                     <div class="result-title">
                                         <mat-icon class="result-icon">tag</mat-icon>
@@ -36,10 +36,10 @@
                     <ng-container *ngIf="usersearch || (inputActive && !channelsearch)">
                         <div class="result-content">
                             <h4 class="n-h4">User</h4>
-                            <!-- <div>
+                            <div *ngIf="this.newMessageService.resultUser.length == 0">
                                 <p class="n-p">Keine User gefunden</p>
-                            </div> -->
-                            <div class="result-section" *ngFor="let user of users">
+                            </div>
+                            <div class="result-section" *ngFor="let user of this.newMessageService.resultUser">
                                 <div class="result-header">
                                     <div class="result-title">
                                         <div>

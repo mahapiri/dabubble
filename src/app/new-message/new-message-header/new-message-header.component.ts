@@ -49,7 +49,15 @@ export class NewMessageHeaderComponent implements OnInit {
     this.usersearch = this.searchword.startsWith('@');
     this.channelsearch = this.searchword.startsWith('#');
 
-    this.newMessageService.setSearchword(this.searchword);
+    let searchwordToSet = this.searchword;
+
+    if(this.usersearch || this.channelsearch) {
+      if (this.searchword.trim().length > 1) {
+        searchwordToSet = this.searchword.substring(1);
+    }
+    }
+
+    this.newMessageService.setSearchword(searchwordToSet);
   }
 
   closeResults() {
