@@ -18,11 +18,24 @@
         <div class="members-container-content">
           <button class="channel-btn" (click)="openMembers($event)">
             <div class="img-container">
-              <img
-                *ngFor="let member of activeChannel.channelMember"
-                src="{{ member.profileImage }}"
-                alt="member"
-              />
+              <ng-container
+                *ngFor="
+                  let member of activeChannel.channelMember;
+                  let i = index
+                "
+              >
+                <img
+                  *ngIf="i < 3"
+                  src="{{ member.profileImage }}"
+                  alt="member"
+                />
+              </ng-container>
+              <div
+                *ngIf="activeChannel.channelMember.length > 3"
+                class="more-icon"
+              >
+                <mat-icon>more_horiz</mat-icon>
+              </div>
             </div>
             <span class="number-members">{{
               activeChannel.channelMember.length

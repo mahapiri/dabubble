@@ -94,6 +94,22 @@ mat-card-header {
     }
   }
 
+  .more-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 100px;
+    border: 2px solid var(--white);
+    margin-left: -10px;
+    background-color: var(--purple-2);
+    //background-image: url(./../../../assets/img/character-empty.png);
+    background-position: center;
+    background-size: contain;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .add-member-container {
     cursor: pointer;
     position: relative;
