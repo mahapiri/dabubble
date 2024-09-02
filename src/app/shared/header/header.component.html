@@ -76,8 +76,15 @@
         </div>
       </div>
     </div>
+    <div
+      class="overlay"
+      [ngClass]="{ visible: clickedUser }"
+      *ngIf="clickedUser || animationState === 'closing'"
+      (click)="closePopup()"
+    ></div>
   </div>
 </header>
+
 <app-my-profile
   *ngIf="clickedProfile"
   [clickedProfile]="clickedProfile"

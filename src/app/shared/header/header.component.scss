@@ -369,6 +369,20 @@ a {
   }
 }
 
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.08);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease-in-out;
+  z-index: 1;
+  border-radius: 0;
+}
+
 /* Smartphones - - - - - - - - - */
 
 @media only screen and (max-width: 960px) {
@@ -469,5 +483,10 @@ a {
 
   .info-container.closing {
     animation: slideOut 0.15s ease-in-out forwards; /* Closing Animation */
+  }
+
+  .overlay.visible {
+    opacity: 1;
+    visibility: visible;
   }
 }
