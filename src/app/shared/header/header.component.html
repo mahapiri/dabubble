@@ -51,14 +51,29 @@
         <mat-icon class="arrow-icon">keyboard_arrow_down</mat-icon>
       </div>
     </div>
+
     <div
       class="info-container"
       *ngIf="clickedUser"
       appClickOutside
       (clickOutside)="closePopup()"
     >
-      <a (click)="openProfile($event)">Profil</a>
-      <a (click)="logOut($event)">Log out</a>
+      <div
+        *ngIf="chatService.mobileScreen()"
+        class="handle"
+        (click)="closePopup()"
+      ></div>
+      <div class="positioning-menu-items">
+        <div class="mobile-icon">
+          <mat-icon *ngIf="chatService.mobileScreen()">account_circle</mat-icon>
+          <a (click)="openProfile($event)">Profil</a>
+        </div>
+
+        <div class="mobile-icon">
+          <mat-icon *ngIf="chatService.mobileScreen()">logout</mat-icon>
+          <a (click)="logOut($event)">Log out</a>
+        </div>
+      </div>
     </div>
   </div>
 </header>

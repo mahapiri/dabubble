@@ -14,6 +14,12 @@ import { DirectMessageService } from '../../services/direct-message.service';
 import { SearchComponent } from '../header/search/search.component';
 import { SharedService } from '../../services/shared.service';
 import { Subscription } from 'rxjs';
+import { MatListModule } from '@angular/material/list';
+import { MatButtonModule } from '@angular/material/button';
+import {
+  MatBottomSheet,
+  MatBottomSheetModule,
+} from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'app-header',
