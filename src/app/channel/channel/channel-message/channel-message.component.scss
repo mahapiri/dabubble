@@ -188,6 +188,7 @@
   background-color: var(--white);
   opacity: 0;
   cursor: pointer;
+  z-index: 1;
 
   img {
     display: flex;

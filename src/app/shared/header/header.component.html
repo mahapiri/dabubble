@@ -54,7 +54,8 @@
 
     <div
       class="info-container"
-      *ngIf="clickedUser"
+      [ngClass]="animationState"
+      *ngIf="clickedUser || animationState === 'closing'"
       appClickOutside
       (clickOutside)="closePopup()"
     >

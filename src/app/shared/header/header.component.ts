@@ -14,12 +14,6 @@ import { DirectMessageService } from '../../services/direct-message.service';
 import { SearchComponent } from '../header/search/search.component';
 import { SharedService } from '../../services/shared.service';
 import { Subscription } from 'rxjs';
-import { MatListModule } from '@angular/material/list';
-import { MatButtonModule } from '@angular/material/button';
-import {
-  MatBottomSheet,
-  MatBottomSheetModule,
-} from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'app-header',
@@ -50,6 +44,8 @@ export class HeaderComponent implements OnInit {
   // isResults: boolean = false;
   searchInputValue: string = '';
   isSmallScreen!: boolean;
+  animationState: 'opening' | 'closing' | 'none' = 'none';
+
   headerLogo: string = 'daBubble';
   private subscription: Subscription = new Subscription();
 
@@ -119,12 +115,27 @@ export class HeaderComponent implements OnInit {
 
   openPopup(event: Event) {
     event.stopPropagation();
-    this.clickedUser = !this.clickedUser;
+
+    if (!this.clickedUser) {
+      this.clickedUser = true;
+      this.animationState = 'opening';
+    } else {
+      this.animationState = 'closing';
+      setTimeout(() => {
+        this.clickedUser = false;
+        this.animationState = 'none';
+      }, 150); // Time of the slide-in Animation
+    }
   }
 
   closePopup() {
     if (this.clickedUser) {
-      this.clickedUser = false;
+      this.animationState = 'closing';
+
+      setTimeout(() => {
+        this.clickedUser = false;
+        this.animationState = 'none';
+      }, 150); // Time of the slide-out Animation
     }
   }
 

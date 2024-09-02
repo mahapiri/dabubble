@@ -444,4 +444,30 @@ a {
       width: 30px;
     }
   }
+
+  @keyframes slideIn {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideOut {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(100%);
+    }
+  }
+
+  .info-container.opening {
+    animation: slideIn 0.15s ease-in-out forwards; /* Opening Animation */
+  }
+
+  .info-container.closing {
+    animation: slideOut 0.15s ease-in-out forwards; /* Closing Animation */
+  }
 }
