@@ -15,6 +15,9 @@ export class NewMessageService implements OnInit, OnDestroy {
   private searchwordSubject = new BehaviorSubject<string>('');
   searchword$ = this.searchwordSubject.asObservable();
 
+  private messageIdSubject = new BehaviorSubject<string>('');
+  messageId$ = this.messageIdSubject.asObservable();
+
   userList: User[] = [];
   channelList: any = [];
   currentUserId: string = '';
@@ -35,7 +38,12 @@ export class NewMessageService implements OnInit, OnDestroy {
       if (currentUser) {
         currentUser.userChannels.forEach(async (id: any) => {
           const channelName = await this.proofChannelName(id);
-          this.channelList.push(channelName);
+          this.channelList.push(
+            {
+              name: channelName,
+              id: id
+            }
+          );
         });
       }
     });
@@ -92,10 +100,10 @@ export class NewMessageService implements OnInit, OnDestroy {
 
   searchChannel(searchword: string) {
     this.channelList.forEach((channel: any) => {
-      const channelName = channel || ''
+      const channelName = channel.name || ''
       if (channelName.toLowerCase().includes(searchword)) {
         this.resultChannel.push(channel);
-        this.proofChannelName(channel)
+        this.proofChannelName(channel.id);
       }
     })
   }
@@ -109,7 +117,17 @@ export class NewMessageService implements OnInit, OnDestroy {
       const doc = channelDoc.data();
       return doc['channelName'];
     } else {
-      return;
+      return false;
     }
+  }
+
+
+  selectChannel(channel: any) {
+    this.messageIdSubject.next(channel.id);
+  }
+
+
+  selectUser(user: User) {
+    this.messageIdSubject.next(user.userId);
   }
 }

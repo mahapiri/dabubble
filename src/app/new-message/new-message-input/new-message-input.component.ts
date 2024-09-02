@@ -7,6 +7,7 @@ import { EmojiPickerComponent } from '../../chat/emoji-picker/emoji-picker.compo
 import { MatButtonModule } from '@angular/material/button';
 import { TaggingComponent } from '../../chat/tagging/tagging.component';
 import { ClickOutsideDirective } from '../../directive/click-outside.directive';
+import { NewMessageService } from '../../services/new-message.service';
 
 @Component({
   selector: 'app-new-message-input',
@@ -24,7 +25,8 @@ import { ClickOutsideDirective } from '../../directive/click-outside.directive';
   styleUrl: './new-message-input.component.scss'
 })
 export class NewMessageInputComponent {
-  public uploadService: UploadService = inject(UploadService)
+  public uploadService: UploadService = inject(UploadService);
+  private newMessageService: NewMessageService = inject(NewMessageService);
 
   messageText: string = '';
   uploadPath: string = 'new-message'
@@ -89,6 +91,9 @@ export class NewMessageInputComponent {
     if (!this.messageText.trim()) {
       console.warn('The message field is empty. Please type a message!');
     } else {
+      this.newMessageService.messageId$.subscribe((id) => {
+        console.log(id);
+      })
       // this.messageCreated.emit();
     }
     this.messageText = '';

@@ -62,6 +62,17 @@ export class NewMessageHeaderComponent implements OnInit {
 
   closeResults() {
     this.inputActive = false;
-    this.searchword = '';
   }
+
+
+
+  selectChannel(channel: any) {
+    this.newMessageService.searchChannel(channel);
+    this.searchword = channel.name;
+  }
+
+  selectUser(user: User) {
+    this.newMessageService.selectUser(user)
+    this.searchword = user.username;
+  } 
 }

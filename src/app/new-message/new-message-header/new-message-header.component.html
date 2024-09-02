@@ -19,14 +19,17 @@
                             <div *ngIf="this.newMessageService.resultChannel.length == 0">
                                 <p class="n-p">Keine Channels gefunden</p>
                             </div>
-                            <div class="result-section" *ngFor="let channel of this.newMessageService.resultChannel">
-                                <div class="result-header">
-                                    <div class="result-title">
-                                        <mat-icon class="result-icon">tag</mat-icon>
-                                        <p class="n-p">{{ channel }}</p>
+                            <ng-container *ngFor="let channel of this.newMessageService.resultChannel">
+                                <div class="result-section" *ngIf="channel.name" (click)="selectChannel(channel)">
+                                    <div class="result-header">
+                                        <div class="result-title">
+                                            <mat-icon class="result-icon">tag</mat-icon>
+                                            <p class="n-p">{{ channel.name }}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </ng-container>
+
                         </div>
                     </ng-container>
 
@@ -39,7 +42,7 @@
                             <div *ngIf="this.newMessageService.resultUser.length == 0">
                                 <p class="n-p">Keine User gefunden</p>
                             </div>
-                            <div class="result-section" *ngFor="let user of this.newMessageService.resultUser">
+                            <div class="result-section" *ngFor="let user of this.newMessageService.resultUser" (click)="selectUser(user)">
                                 <div class="result-header">
                                     <div class="result-title">
                                         <div>
