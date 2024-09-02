@@ -1,51 +1,55 @@
 <section appClickOutside (clickOutside)="closeChannel()">
-    <div class="popup-container channel-container">
-        <div class="title-content">
-            <div class="title-icon-div">
-                <mat-icon>tag</mat-icon>
-                <h3 class="n-h3">{{activeChannel.channelName}}</h3>
-            </div>
-            <div class="icon-container">
-                <mat-icon class="close-icon" (click)="closeChannel()">close</mat-icon>
-            </div>
-        </div>
-        <div class="input-container" [class.border]="!editing">
-            <div class="title-save-div">
-                <p class="n-p bold">Channel-Name</p>
-                <a (click)="edit()">
-                    {{ editing ? 'Speichern' : 'Bearbeiten' }}
-                </a>
-            </div>
-            <div class="inputfield">
-
-                @if(!editing){
-                <mat-icon>tag</mat-icon>
-                <p class="n-p">{{channelName}}</p>
-                }@else{
-                <input class="padding-left" [(ngModel)]="channelName" type="text">
-                }
-            </div>
-        </div>
-        <div class="input-container" [class.border]="!editing">
-            <div class="title-save-div">
-                <p class="n-p bold">Beschreibung</p>
-                <a (click)="edit()">
-                    {{ editing ? 'Speichern' : 'Bearbeiten' }}
-                </a>
-            </div>
-            @if(!editing){
-            <p class="n-p">{{channelDescription}}</p>
-            }@else{
-            <input [(ngModel)]="channelDescription" type="text">
-            }
-            <div class="line"></div>
-            <div class="creator-container">
-                <p class="n-p bold">Erstellt von</p>
-                <h3 class="n-h3 color-p-3">{{activeChannel.createdBy}}</h3>
-            </div>
-        </div>
-        <div class="btn-container">
-            <button (click)="deleteUserFromChannel()"  class="btn-default btn-primary">Channel verlassen</button>
-        </div>
+  <div class="mobile-shadow">
+    <div class="title-content">
+      <div class="title-icon-div">
+        <mat-icon>tag</mat-icon>
+        <h3 class="n-h3">{{ activeChannel.channelName }}</h3>
+      </div>
+      <div class="icon-container">
+        <mat-icon class="close-icon" (click)="closeChannel()">close</mat-icon>
+      </div>
     </div>
+  </div>
+
+  <div class="popup-container channel-container">
+    <div class="input-container" [class.border]="!editing">
+      <div class="title-save-div">
+        <p class="n-p bold">Channel-Name</p>
+        <a (click)="edit()">
+          {{ editing ? "Speichern" : "Bearbeiten" }}
+        </a>
+      </div>
+      <div class="inputfield">
+        @if(!editing){
+        <mat-icon>tag</mat-icon>
+        <p class="n-p">{{ channelName }}</p>
+        }@else{
+        <input class="padding-left" [(ngModel)]="channelName" type="text" />
+        }
+      </div>
+    </div>
+    <div class="input-container" [class.border]="!editing">
+      <div class="title-save-div">
+        <p class="n-p bold">Beschreibung</p>
+        <a (click)="edit()">
+          {{ editing ? "Speichern" : "Bearbeiten" }}
+        </a>
+      </div>
+      @if(!editing){
+      <p class="n-p">{{ channelDescription }}</p>
+      }@else{
+      <input [(ngModel)]="channelDescription" type="text" />
+      }
+      <div class="line"></div>
+      <div class="creator-container">
+        <p class="n-p bold">Erstellt von</p>
+        <h3 class="n-h3 color-p-3">{{ activeChannel.createdBy }}</h3>
+      </div>
+    </div>
+    <div class="btn-container">
+      <button (click)="deleteUserFromChannel()" class="btn-default btn-primary">
+        Channel verlassen
+      </button>
+    </div>
+  </div>
 </section>
