@@ -5,6 +5,7 @@ import { SignUpComponent } from './login/sign-up/sign-up.component';
 import { ChooseAvatarComponent } from './login/choose-avatar/choose-avatar.component';
 import { ResetPasswordComponent } from './login/reset-password/reset-password.component';
 import { SendMailComponent } from './login/send-mail/send-mail.component';
+import { ImprintComponent } from './imprint/imprint.component';
 
 export const routes: Routes = [
     { path: '', component: LogInComponent},
@@ -14,5 +15,5 @@ export const routes: Routes = [
     { path: 'choose-avatar', component: ChooseAvatarComponent },
     { path: 'reset-password', component: ResetPasswordComponent },
     { path: 'send-mail', component: SendMailComponent },
-    
+    { path: 'imprint', component: ImprintComponent },    
 ];

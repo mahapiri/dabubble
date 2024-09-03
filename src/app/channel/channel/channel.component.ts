@@ -59,9 +59,6 @@ export class ChannelComponent implements OnInit {
 
   uploadService: UploadService = inject(UploadService);
 
-  clickedEditChannel: boolean = false;
-  clickedAddMembers: boolean = false;
-  clickedMembers: boolean = false;
   clickedThread: boolean = false;
   activeChannel: Channel = new Channel({});
 
@@ -73,7 +70,7 @@ export class ChannelComponent implements OnInit {
   private subscription: Subscription = new Subscription();
 
   constructor(
-    private channelService: ChannelService,
+    public channelService: ChannelService,
     private channelMessageService: ChannelMessageService
   ) {
     this.subscription = this.selectedChannel$.subscribe((value) => {
@@ -105,45 +102,21 @@ export class ChannelComponent implements OnInit {
   }
 
   editChannel(event: Event) {
-    if (this.clickedMembers || this.clickedAddMembers) {
-      this.clickedMembers = false;
-      this.clickedAddMembers = false;
-    }
+    this.channelService.closePopup()
     event.stopPropagation();
-    this.clickedEditChannel = true;
-  }
-  closeEditChannel(event: boolean) {
-    this.clickedEditChannel = event;
+    this.channelService.clickedEditChannel = true;
   }
 
   openMembers(event: Event) {
-    if (this.clickedAddMembers || this.clickedEditChannel) {
-      this.clickedAddMembers = false;
-      this.clickedEditChannel = false;
-    }
+    this.channelService.closePopup()
     event.stopPropagation();
-    this.clickedMembers = !this.clickedMembers;
+    this.channelService.clickedMembers = !this.channelService.clickedMembers;
   }
 
   openAddMembers(event: Event) {
-    if (this.clickedMembers || this.clickedEditChannel) {
-      this.clickedMembers = false;
-      this.clickedEditChannel = false;
-    }
+    this.channelService.closePopup()
     event.stopPropagation();
-    this.clickedAddMembers = true;
-  }
-
-  closeMembers(event: boolean) {
-    this.clickedMembers = event;
-  }
-
-  closeAddMembers(event: boolean) {
-    this.clickedAddMembers = event;
-  }
-
-  switchToAddMembers(event: boolean) {
-    this.clickedAddMembers = event;
+    this.channelService.clickedAddMembers = true;
   }
 
   handleThreadClick(event: boolean) {

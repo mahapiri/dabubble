@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-imprint',
@@ -9,7 +10,10 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './imprint.component.scss'
 })
 export class ImprintComponent {
+  constructor(private router: Router) { }
 
 
-  back() { }
+  back() { 
+    this.router.navigate(['/sign-up']);
+  }
 }

@@ -14,6 +14,7 @@ import { DirectMessageService } from '../../services/direct-message.service';
 import { SearchComponent } from '../header/search/search.component';
 import { SharedService } from '../../services/shared.service';
 import { Subscription } from 'rxjs';
+import { ChannelService } from '../../services/channel.service';
 
 @Component({
   selector: 'app-header',
@@ -38,6 +39,7 @@ export class HeaderComponent implements OnInit {
   userService: UserService = inject(UserService);
   chatService: ChatService = inject(ChatService);
   sharedService: SharedService = inject(SharedService);
+  channelService: ChannelService = inject(ChannelService);
   directMessageService: DirectMessageService = inject(DirectMessageService);
   searchService: SearchService = inject(SearchService);
   currentUser: any = '';
@@ -49,7 +51,7 @@ export class HeaderComponent implements OnInit {
   headerLogo: string = 'daBubble';
   private subscription: Subscription = new Subscription();
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   async ngOnInit() {
     // await this.userService.getUserID();
@@ -115,9 +117,9 @@ export class HeaderComponent implements OnInit {
 
   openPopup(event: Event) {
     event.stopPropagation();
-
     if (!this.clickedUser) {
       this.clickedUser = true;
+      this.channelService.closePopup();
       this.animationState = 'opening';
     } else {
       this.animationState = 'closing';

@@ -145,6 +145,6 @@ export class AddMemberComponent {
    */
   closeWindow() {
     this.selectedUsersForChannel = [];
-    this.clickedAddMembers.emit(false);
+    this.channelService.closePopup();
   }
 }

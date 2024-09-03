@@ -21,6 +21,9 @@ export class ChannelService {
   public selectedChannel = new BehaviorSubject<Channel | null>(null);
   selectedChannel$ = this.selectedChannel.asObservable();
 
+  clickedEditChannel: boolean = false;
+  clickedAddMembers: boolean = false;
+  clickedMembers: boolean = false;
   createdBy: string = '';
   channelID?: string = '';
 
@@ -144,5 +147,11 @@ export class ChannelService {
 
   getChannelRef() {
     return collection(this.firestore, 'channels');
+  }
+
+  closePopup(){
+    this.clickedEditChannel = false;
+    this.clickedAddMembers = false;
+    this.clickedMembers = false;
   }
 }

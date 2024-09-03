@@ -30,7 +30,10 @@
       </div>
       <span class="errormessage" *ngIf="invalidPassword">{{passwordErrorMessage}}</span>
 
-      <div><input type="checkbox" name="" id="">Ich stimme der <a href="">Datenschutzerklärung</a> zu</div>
+      <div><input formControlName="termsAccepted" type="checkbox">Ich stimme der <a routerLink="/imprint">Datenschutzerklärung</a> zu
+      </div>
+      <span class="errormessage" *ngIf="invalidTerms">{{termsErrorMessage}}</span>
+
       <div class="next-button-container">
         <button type="submit" class="next-button">Weiter</button>
       </div>
