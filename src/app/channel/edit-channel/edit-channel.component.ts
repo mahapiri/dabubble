@@ -96,7 +96,7 @@ export class EditChannelComponent {
   }
 
   closeChannel() {
-    this.channelClosed.emit(false);
+    this.channelService.closePopup();
   }
 
   ngOnDestroy() {

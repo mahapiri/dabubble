@@ -37,12 +37,12 @@ export class MemberComponent {
 
   switchToAdd(event: Event){
     event.stopPropagation();
-    this.switchToAddMembers.emit(true);
     this.closeWindow()
+    this.channelService.clickedAddMembers = true;
   }
 
   closeWindow() {
-    this.clickedMembers.emit(false)   
+    this.channelService.closePopup();   
   }
 
   openProfile(event: Event, member: ChannelMember) {

@@ -9,9 +9,8 @@
         </button>
         <app-edit-channel
           [channel]="activeChannel"
-          (channelClosed)="closeEditChannel($event)"
           class="edit-channel-container"
-          *ngIf="clickedEditChannel"
+          *ngIf="channelService.clickedEditChannel"
         ></app-edit-channel>
       </div>
       <div class="members-container">
@@ -42,10 +41,8 @@
             }}</span>
           </button>
           <app-member
-            (clickedMembers)="closeMembers($event)"
-            (switchToAddMembers)="switchToAddMembers($event)"
             class="app-member"
-            *ngIf="clickedMembers"
+            *ngIf="channelService.clickedMembers"
           ></app-member>
         </div>
         <div class="add-member-container">
@@ -59,8 +56,7 @@
           <app-add-member
             class="add-member-content"
             [channel]="activeChannel"
-            (clickedAddMembers)="closeAddMembers($event)"
-            *ngIf="clickedAddMembers"
+            *ngIf="channelService.clickedAddMembers"
           ></app-add-member>
         </div>
       </div>
