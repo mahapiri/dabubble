@@ -1,3 +1,5 @@
+@import "./../../../styles.scss";
+
 section {
   display: flex;
   justify-content: center;
@@ -5,20 +7,27 @@ section {
   flex-direction: column;
   position: absolute;
   top: 0;
-  z-index: 1;
+  z-index: 2;
   border-radius: 0px 30px 30px 30px;
   box-shadow: 0px 6px 10px 0px rgba(0, 0, 0, 0.2);
-  background-color: var(--white);
 }
 
 .popup-container {
-  padding: 20px 40px 40px 40px;
+  padding: 40px 40px 40px 40px;
   box-shadow: none;
+  background-color: var(--white);
+}
+
+.popup-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .channel-container {
   width: 872px;
-  height: 616px;
+  min-height: 500px;
+  max-height: 616px;
   position: relative;
   z-index: 1;
 }
@@ -28,9 +37,12 @@ section {
   border-radius: 0px 30px 0px 0px;
 }
 
+.header {
+  width: 100%;
+}
+
 .title-content {
   width: 100%;
-  padding: 40px 40px 0 40px;
   display: flex;
   justify-content: space-between;
   position: relative;
@@ -99,6 +111,7 @@ section {
 
   input[type="text"] {
     padding: 18px 20px 18px 60px;
+    border: 1px solid var(--lines);
   }
 }
 
@@ -111,13 +124,17 @@ section {
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  .n-h3 {
+    font-weight: 400 !important;
+  }
 }
 
 input[type="text"] {
   width: 100%;
   display: flex;
   border-radius: 40px;
-  border: 1px solid var(--gray);
+  border: 1px solid var(--lines);
   padding: 18px 20px 18px 20px;
   gap: 20px;
   font-family: "Nunito";
@@ -166,23 +183,81 @@ input[type="text"] {
     border-radius: 0 0 0 0;
   }
 
-  .channel-container {
+  /* .channel-container {
     width: 100%;
     height: calc(100vh - 90px); // 100vh - title height
     z-index: 1;
+  } */
+
+  .channel-container {
+    max-height: unset;
   }
 
   .popup-container {
+    width: 100%;
+    height: 100%;
     border-radius: 0px 0px 0px 0px;
-    padding: 20px 16px 20px 16px;
+    padding: 40px 0px 20px 0px;
+    gap: 0;
+  }
+
+  .header {
+    display: flex;
+    flex-direction: column;
   }
 
   .title-content {
-    padding: 40px 16px 10px 16px;
+    align-items: space-between;
+    padding: 0px 16px 10px 16px;
+  }
+
+  .title-save-div {
+    padding-right: 0px;
+
+    a {
+      color: var(--black) !important;
+    }
   }
 
   .mobile-shadow {
     box-shadow: 0px 8px 10px -6px rgba(0, 0, 0, 0.08);
     z-index: 2;
+    height: 20px;
+    margin-top: -20px;
+  }
+
+  .popup-body {
+    padding: 20px 16px 0px 16px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .edit-icon {
+    height: 30px;
+    width: 30px;
+    background-color: var(--bg-color);
+    padding: 3px;
+    border-radius: 30px;
+  }
+
+  .input-container.editing-active {
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    gap: 12px;
+
+    .title-save-div {
+      padding: 0 15px 0 15px;
+    }
+
+    .line {
+      margin: 20px 0 20px 0;
+    }
+  }
+
+  .popup-body.editing-active {
+    .creator-container {
+      padding: 0 15px 15px 15px;
+    }
   }
 }

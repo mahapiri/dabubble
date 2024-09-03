@@ -14,6 +14,7 @@ section {
 }
 
 .channel-container {
+  position: absolute;
   width: 872px;
   height: 539px;
   border-radius: 30px;
@@ -116,14 +117,11 @@ input[type="text"] {
   color: var(--black);
 }
 
-.channel-container {
-  height: auto;
-}
-
 /* Smartphones - - - - - - - - - */
 
 @media only screen and (max-width: 960px) {
   .channel-container {
+    position: relative;
     height: 100vh;
     max-height: none;
     border-radius: 0;

@@ -1,31 +1,52 @@
-<div appClickOutside (clickOutside)="closeWindow()" class="popup-container add-member-container">
-    <div class="member-content">
-        <div class="title-name-container">
-            <div class="title-content">
-                <h3 class="n-h3">Leute hinzufügen</h3>
-                <div class="icon-container">
-                    <mat-icon class="close-icon" (click)="closeWindow()">close</mat-icon>
-                </div>
-            </div>
-            <div class="channel-name">
-                <mat-icon class="tag-icon">tag</mat-icon>
-                <p class="n-p">{{channel.channelName}}</p>
-            </div>
+<div
+  appClickOutside
+  (clickOutside)="closeWindow()"
+  class="popup-container add-member-container"
+>
+  <div class="member-content">
+    <div class="title-name-container">
+      <div class="title-content">
+        <h3 class="n-h3">Leute hinzufügen</h3>
+        <div class="icon-container">
+          <mat-icon class="close-icon" (click)="closeWindow()">close</mat-icon>
         </div>
-        <input [(ngModel)]="searchMember" (ngModelChange)="showMember()" (click)="showMember()" type="text"
-            placeholder="Name eingeben">
-        @for (member of showUser; track $index) {
-        <div class="profile-container" [ngClass]=" member.chosenToChannel ? 'selected' : '' "
-            (click)="selectMember(member)">
-            <div class="profile-content">
-                <img src="{{ member.profileImage }}" alt="Character" class="profile-icon" />
-                <div class="status-icon" ngClass="{{ member.state }}"></div>
-            </div>
-            <p class="n-p">{{member.username}}</p>
-        </div>
-        }
-        <div class="btn-container">
-            <button (click)="addUserToActiveChannel()" class="btn-default btn-secondary">Hinzufügen</button>
-        </div>
+      </div>
+      <div class="channel-name">
+        <mat-icon class="tag-icon">tag</mat-icon>
+        <p class="n-p">{{ channel.channelName }}</p>
+      </div>
     </div>
+    <input
+      [(ngModel)]="searchMember"
+      (ngModelChange)="showMember()"
+      (click)="showMember()"
+      type="text"
+      placeholder="Name eingeben"
+    />
+    @for (member of showUser; track $index) {
+    <div
+      class="profile-container"
+      [ngClass]="member.chosenToChannel ? 'selected' : ''"
+      (click)="selectMember(member)"
+    >
+      <div class="profile-content">
+        <img
+          src="{{ member.profileImage }}"
+          alt="Character"
+          class="profile-icon"
+        />
+        <div class="status-icon" ngClass="{{ member.state }}"></div>
+      </div>
+      <p class="n-p">{{ member.username }}</p>
+    </div>
+    }
+    <div class="btn-container">
+      <button
+        (click)="addUserToActiveChannel()"
+        class="btn-default btn-primary"
+      >
+        Hinzufügen
+      </button>
+    </div>
+  </div>
 </div>

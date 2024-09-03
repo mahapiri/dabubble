@@ -1,29 +1,39 @@
-<div appClickOutside (clickOutside)="closeWindow()" class="popup-container member-container">
-    <div class="title-content">
-        <h3 class="n-h3">Mitglieder</h3>
-        <div class="icon-container">
-            <mat-icon class="close-icon" (click)="closeWindow()">close</mat-icon>
-        </div>
+<div
+  appClickOutside
+  (clickOutside)="closeWindow()"
+  class="popup-container member-container edit-channel-member"
+>
+  <div class="title-content">
+    <h3 class="n-h3">Mitglieder</h3>
+    <div class="icon-container">
+      <mat-icon class="close-icon" (click)="closeWindow()">close</mat-icon>
     </div>
-    <div class="profile-section">
-        <div class="profile-div">
-            @for (member of channelMember; track $index) {
-            <div class="profile-container" (click)="openProfile($event, member)">
-                <div class="profile-content">
-                    <img src="{{ member.profileImage }}" alt="Character" class="profile-icon" />
-                    <div class="status-icon" ngClass="{{ member.state }}"></div>
-                </div>
-                <p class="n-p">{{member.username}}</p>
-            </div>
-            }
+  </div>
+  <div class="profile-section">
+    <div class="profile-div">
+      @for (member of channelMember; track $index) {
+      <div class="profile-container" (click)="openProfile($event, member)">
+        <div class="profile-content">
+          <img
+            src="{{ member.profileImage }}"
+            alt="Character"
+            class="profile-icon"
+          />
+          <div class="status-icon" ngClass="{{ member.state }}"></div>
         </div>
-        <div class="add-member-container profile-div">
-            <div class="add-member-btn profile-container">
-                <div class="icon">
-                    <mat-icon class="add-icon">person_add</mat-icon>
-                </div>
-                <p (click)="switchToAdd($event)" class="n-p add-member-title">Mitglieder hinzufügen</p>
-            </div>
-        </div>
+        <p class="n-p">{{ member.username }}</p>
+      </div>
+      }
     </div>
+    <div class="add-member-container profile-div">
+      <div class="add-member-btn profile-container">
+        <div class="icon">
+          <mat-icon class="add-icon">person_add</mat-icon>
+        </div>
+        <p (click)="switchToAdd($event)" class="n-p add-member-title">
+          Mitglieder hinzufügen
+        </p>
+      </div>
+    </div>
+  </div>
 </div>

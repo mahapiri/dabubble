@@ -1,109 +1,139 @@
 .member-container {
-    border-radius: 30px 0px 30px 30px;
+  border-radius: 30px 0px 30px 30px;
 }
 
 .title-content {
-    display: flex;
-    justify-content: space-between;
-    position: relative;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
 }
 
 .profile-section {
-    display: flex;
-    flex-direction: column;
-    width: 335px;
-    gap: 15px;
+  display: flex;
+  flex-direction: column;
+  width: 335px;
+  gap: 15px;
 }
 
 .profile-div {
-    display: flex;
-    flex-direction: column;
-    width: 306px;
-    border-radius: 30px;
-    gap: 15px;
-    max-height: 30vh;
-    overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  width: 306px;
+  border-radius: 30px;
+  gap: 15px;
+  max-height: 30vh;
+  overflow-y: scroll;
 }
 
-
 .profile-container {
-    display: flex;
-    align-items: center;
-    border-radius: 35px;
-    padding: 4px 20px;
-    gap: 15px;
-    cursor: pointer;
+  display: flex;
+  align-items: center;
+  border-radius: 35px;
+  padding: 4px 20px;
+  gap: 15px;
+  cursor: pointer;
 
-    &:hover {
-        background-color: var(--bg-color);
-        border-radius: 35px;
-        color: var(--black);
-    }
+  &:hover {
+    background-color: var(--bg-color);
+    border-radius: 35px;
+    color: var(--black);
+  }
 }
 
 .add-member-btn {
-    cursor: pointer;
-    border-radius: 100px;
+  cursor: pointer;
+  border-radius: 100px;
 
-    &:hover {
-        background-color: var(--bg-color);
+  &:hover {
+    background-color: var(--bg-color);
 
-        .add-member-title {
-            color: var(--purple-3);
-        }
-
-        .add-icon {
-            color: var(--purple-3);
-            transform: scale(1.2);
-        }
+    .add-member-title {
+      color: var(--purple-3);
     }
+
+    .add-icon {
+      color: var(--purple-3);
+      transform: scale(1.2);
+    }
+  }
 }
 
 .profile-content {
-    display: flex;
-    position: relative;
+  display: flex;
+  position: relative;
 
-    img {
-        height: 50px;
-        width: 50px;
-    }
+  img {
+    height: 50px;
+    width: 50px;
+  }
 }
 
 .icon {
-    width: 50px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .profile-icon {
-    border-radius: 30px;
+  border-radius: 30px;
 }
 
 .add-icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 24px;
-    height: 24px;
-    border-radius: 20px;
-    gap: 10px;
-    padding: 18px;
-    background-color: var(--bg-color);
-    transition: all 75ms ease-in;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 20px;
+  gap: 10px;
+  padding: 18px;
+  background-color: var(--bg-color);
+  transition: all 75ms ease-in;
 }
 
 .status-icon {
-    width: 14px;
-    height: 14px;
-    border: 2px solid var(--white);
-    border-radius: 50%;
-    position: absolute;
-    top: 38px;
-    left: 34px;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--white);
+  border-radius: 50%;
+  position: absolute;
+  top: 38px;
+  left: 34px;
 }
 
 .add-member-container {
-    overflow: auto;
+  overflow: auto;
+}
+
+.edit-channel-member.member-container {
+  border-radius: 20px;
+  border: 1px solid var(--lines);
+}
+
+.edit-channel-member.popup-container {
+  padding: 20px;
+  box-shadow: none;
+  gap: 15px;
+}
+
+.edit-channel-member h3 {
+  font-size: 18px !important;
+}
+
+.edit-channel-member .close-icon {
+  display: none !important;
+}
+
+.edit-channel-member .profile-section {
+  width: 100%;
+}
+
+.edit-channel-member .profile-container {
+  padding: 4px 15px;
+}
+
+.edit-channel-member .add-member-container {
+  margin-left: -8px;
 }

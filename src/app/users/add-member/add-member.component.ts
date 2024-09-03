@@ -14,7 +14,7 @@ import { ClickOutsideDirective } from '../../directive/click-outside.directive';
   standalone: true,
   imports: [MatIconModule, FormsModule, CommonModule, ClickOutsideDirective],
   templateUrl: './add-member.component.html',
-  styleUrl: './add-member.component.scss'
+  styleUrl: './add-member.component.scss',
 })
 export class AddMemberComponent {
   @Output() clickedAddMembers = new EventEmitter<boolean>();
@@ -22,7 +22,7 @@ export class AddMemberComponent {
   firestore: Firestore = inject(Firestore);
   userService: UserService = inject(UserService);
   channelService: ChannelService = inject(ChannelService);
-  searchMember: string = "";
+  searchMember: string = '';
   userlistOpen: boolean = false;
   selectedUsersForChannel: User[] = [];
   showUser: User[] = [];
@@ -31,7 +31,9 @@ export class AddMemberComponent {
 
   ngOnInit() {
     this.getChannelMember();
-    this.userService.userArray.forEach(user => user.chosenToChannel = false)
+    this.userService.userArray.forEach(
+      (user) => (user.chosenToChannel = false)
+    );
   }
 
   /**
@@ -39,31 +41,31 @@ export class AddMemberComponent {
    */
   getChannelMember() {
     this.channel.channelMember.forEach((member) => {
-      this.channelMember.push(member)
-    })
-
+      this.channelMember.push(member);
+    });
   }
 
   /**
    * highlights the selected user
-   * @param user the user which is clicked on in the list 
+   * @param user the user which is clicked on in the list
    */
   selectMember(user: User) {
     user.chosenToChannel = !user.chosenToChannel;
     this.addSelectedUserToChannel(user);
   }
 
-
   /**
    * adds the marked users into the selectedUsersForChannel-array if they´re not already in it
-   * @param user the user which schould be added to the channel 
+   * @param user the user which schould be added to the channel
    */
   addSelectedUserToChannel(user: User) {
     if (this.selectedUsersForChannel.includes(user)) {
-      this.selectedUsersForChannel.splice(this.selectedUsersForChannel.indexOf(user), 1)
-    }
-    else {
-      this.selectedUsersForChannel.push(user)
+      this.selectedUsersForChannel.splice(
+        this.selectedUsersForChannel.indexOf(user),
+        1
+      );
+    } else {
+      this.selectedUsersForChannel.push(user);
     }
   }
 
@@ -72,13 +74,18 @@ export class AddMemberComponent {
    */
   showMember() {
     this.userlistOpen = true;
-    this.usersNotInChannel = this.getNotIncludedMembers(this.userService.userArray)
+    this.usersNotInChannel = this.getNotIncludedMembers(
+      this.userService.userArray
+    );
     this.showUser = this.usersNotInChannel;
-    if (this.searchMember == "") {
+    if (this.searchMember == '') {
       this.showUser = this.usersNotInChannel;
-    }
-    else {
-      this.showUser = this.usersNotInChannel.filter(user => { return user.username.toLowerCase().includes(this.searchMember.toLowerCase()) })
+    } else {
+      this.showUser = this.usersNotInChannel.filter((user) => {
+        return user.username
+          .toLowerCase()
+          .includes(this.searchMember.toLowerCase());
+      });
     }
   }
 
@@ -89,15 +96,17 @@ export class AddMemberComponent {
    */
   getNotIncludedMembers(allUsers: User[]) {
     let selectedUsers: any = [];
-    let allMemberIds = allUsers.map((user) => user.userId)
-    let chanelMemberIds = this.channelMember.map((user) => user.userId)
-    let difference = allMemberIds.filter(id => !chanelMemberIds.includes(id));
-    difference.forEach((user) => allUsers.forEach((allUser) => {
-      if (allUser.userId == user) {
-        selectedUsers.push(allUser)
-      }
-    }))
-    return selectedUsers
+    let allMemberIds = allUsers.map((user) => user.userId);
+    let chanelMemberIds = this.channelMember.map((user) => user.userId);
+    let difference = allMemberIds.filter((id) => !chanelMemberIds.includes(id));
+    difference.forEach((user) =>
+      allUsers.forEach((allUser) => {
+        if (allUser.userId == user) {
+          selectedUsers.push(allUser);
+        }
+      })
+    );
+    return selectedUsers;
   }
 
   /**
@@ -106,13 +115,16 @@ export class AddMemberComponent {
   addUserToActiveChannel() {
     this.selectedUsersForChannel.forEach(async (user) => {
       if (this.channelService.channelID) {
-        await updateDoc(doc(this.firestore, 'channels', this.channelService.channelID), {
-          channelMember: arrayUnion(this.addUserCredentialsToChannel(user))
-        });
-      }     
+        await updateDoc(
+          doc(this.firestore, 'channels', this.channelService.channelID),
+          {
+            channelMember: arrayUnion(this.addUserCredentialsToChannel(user)),
+          }
+        );
+      }
       await updateDoc(doc(this.firestore, 'users', user.userId), {
-        userChannels: arrayUnion(this.channelService.channelID)
-      })
+        userChannels: arrayUnion(this.channelService.channelID),
+      });
     });
     this.closeWindow();
   }
@@ -124,8 +136,8 @@ export class AddMemberComponent {
       email: user.email,
       state: user.state,
       userChannels: user.userChannels,
-      profileImage: user.profileImage
-    }
+      profileImage: user.profileImage,
+    };
   }
 
   /**
@@ -133,6 +145,6 @@ export class AddMemberComponent {
    */
   closeWindow() {
     this.selectedUsersForChannel = [];
-    this.clickedAddMembers.emit(false)
+    this.clickedAddMembers.emit(false);
   }
 }

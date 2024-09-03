@@ -118,6 +118,10 @@ a {
   display: flex;
 }
 
+.col {
+  flex-direction: column;
+}
+
 .online {
   background-color: var(--green);
 }
@@ -222,6 +226,15 @@ a {
 
 .img-input-margin {
   margin-bottom: calc(180px + var(--img-size)) !important;
+}
+
+.shaded-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .emoji-container {

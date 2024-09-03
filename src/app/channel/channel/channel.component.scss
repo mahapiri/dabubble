@@ -258,4 +258,15 @@ mat-list-item {
       width: 36px;
     }
   }
+
+  .members-container {
+    .add-member-content {
+      position: fixed;
+      right: 0;
+      top: 142px;
+      width: 94%;
+      padding-right: 2%;
+      z-index: 1;
+    }
+  }
 }
