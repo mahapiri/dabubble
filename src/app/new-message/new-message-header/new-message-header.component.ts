@@ -5,9 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 import { NewMessageService } from '../../services/new-message.service';
-import { Channel } from '../../../models/channel.class';
 import { User } from '../../../models/user.class';
-import { BehaviorSubject } from 'rxjs';
 
 
 @Component({
@@ -25,6 +23,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class NewMessageHeaderComponent implements OnInit {
   public newMessageService: NewMessageService = inject(NewMessageService);
+
 
   inputActive: boolean = false;
   usersearch: boolean = false;
@@ -67,8 +66,10 @@ export class NewMessageHeaderComponent implements OnInit {
 
 
   selectChannel(channel: any) {
-    this.newMessageService.searchChannel(channel);
+    this.newMessageService.selectChannel(channel);
     this.searchword = channel.name;
+
+
   }
 
   selectUser(user: User) {

@@ -18,6 +18,8 @@ export class NewMessageService implements OnInit, OnDestroy {
   private messageIdSubject = new BehaviorSubject<string>('');
   messageId$ = this.messageIdSubject.asObservable();
 
+  isChannel: boolean = false;
+
   userList: User[] = [];
   channelList: any = [];
   currentUserId: string = '';
@@ -124,10 +126,12 @@ export class NewMessageService implements OnInit, OnDestroy {
 
   selectChannel(channel: any) {
     this.messageIdSubject.next(channel.id);
+    this.isChannel = true;
   }
 
 
   selectUser(user: User) {
     this.messageIdSubject.next(user.userId);
+    this.isChannel = false;
   }
 }

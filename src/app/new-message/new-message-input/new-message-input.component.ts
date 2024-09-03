@@ -8,6 +8,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { TaggingComponent } from '../../chat/tagging/tagging.component';
 import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 import { NewMessageService } from '../../services/new-message.service';
+import { ChatService } from '../../services/chat.service';
+import { ChannelService } from '../../services/channel.service';
+import { SharedService } from '../../services/shared.service';
+import { Channel } from '../../../models/channel.class';
 
 @Component({
   selector: 'app-new-message-input',
@@ -27,6 +31,9 @@ import { NewMessageService } from '../../services/new-message.service';
 export class NewMessageInputComponent {
   public uploadService: UploadService = inject(UploadService);
   private newMessageService: NewMessageService = inject(NewMessageService);
+  public chatService: ChatService = inject(ChatService);
+  public channelService: ChannelService = inject(ChannelService);
+  public sharedService: SharedService = inject(SharedService);
 
   messageText: string = '';
   uploadPath: string = 'new-message'
@@ -92,11 +99,29 @@ export class NewMessageInputComponent {
       console.warn('The message field is empty. Please type a message!');
     } else {
       this.newMessageService.messageId$.subscribe((id) => {
+        if(this.newMessageService.isChannel) {
+          const channel = this.channelService.getChannelById(id);
+          this.createChannelMsg(channel);
+          //create channel message
+        } else {
+          //create user message
+          console.log('ischannel false')
+        }
         console.log(id);
       })
       // this.messageCreated.emit();
     }
     this.messageText = '';
+  }
+
+
+  createChannelMsg(channel: any) {
+    this.channelService.setSelectedChannel(channel);
+    this.sharedService.setSelectProfile(false);
+    this.chatService.setIsChannel(true);
+
+    const currentIsNewMessage = this.sharedService.getIsNewMessage();
+    this.sharedService.setIsNewMessage(!currentIsNewMessage);
   }
 
 
