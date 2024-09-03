@@ -21,38 +21,49 @@ export class SignUpComponent {
   passwordErrorMessage: string = "";
   mailerrorMessage: string = "";
   nameErrorMessage: string = "";
+  termsErrorMessage: string = "";
   invalidName: boolean = false;
   invalidMail: boolean = false;
   invalidPassword: boolean = false;
+  invalidTerms: boolean = false;
   constructor(private router: Router) { }
 
   userForm = this.formbuilder.group({
     userName: ["", Validators.required],
     userEmail: ["", [Validators.required, Validators.email]],
-    userPassword: ["", [Validators.required, Validators.minLength(6)]]
+    userPassword: ["", [Validators.required, Validators.minLength(6)]],
+    termsAccepted: [false, Validators.requiredTrue]
   })
+
+
 
   async onSubmit() {
     this.invalidName = false;
     this.invalidMail = false;
     this.invalidPassword = false;
+    this.invalidTerms = false;
     if (this.userForm.valid) {
       this.authService.usermail = this.userForm.value.userEmail || "";
       this.authService.username = this.userForm.value.userName || "";
       this.authService.userpassword = this.userForm.value.userPassword || "";
       this.router.navigate(['/choose-avatar']);
-    }
-    else if (this.userForm.get('userName')?.invalid) {
-      this.invalidName = true;
-      this.nameErrorMessage = "Bitte geben Sie einen Namen ein";
-    }
-    else if (this.userForm.get('userEmail')?.invalid) {
-      this.invalidMail = true;
-      this.mailerrorMessage = "Bitte geben Sie eine gültige Mailadresse ein";
-    }
-    else if (this.userForm.get('userPassword')?.invalid) {
-      this.invalidPassword = true;
-      this.passwordErrorMessage = "Ihr Passwort sollte mindestens 6 Zeichen lang sein";
+    } else {
+      if (this.userForm.get('userName')?.invalid) {
+        this.invalidName = true;
+        this.nameErrorMessage = "Bitte geben Sie einen Namen ein";
+      }
+      if (this.userForm.get('userEmail')?.invalid) {
+        this.invalidMail = true;
+        this.mailerrorMessage = "Bitte geben Sie eine gültige Mailadresse ein";
+      }
+      if (this.userForm.get('userPassword')?.invalid) {
+        this.invalidPassword = true;
+        this.passwordErrorMessage = "Ihr Passwort sollte mindestens 6 Zeichen lang sein";
+      }
+      if (this.userForm.get('termsAccepted')?.invalid) {
+        this.invalidTerms = true;
+        this.termsErrorMessage = "Bitte stimmen Sie den Datenschutzbestimmungen zu";
+      }
     }
   }
 
