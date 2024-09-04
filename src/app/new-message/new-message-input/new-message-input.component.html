@@ -30,7 +30,7 @@
               </div>
         </div>
         <button class="send-btn" [ngClass]="{'send-btn-valid': messageText.trim().length > 0}"
-            (click)="createMessage()">
+            (click)="createMessage($event)">
             <mat-icon>send</mat-icon>
         </button>
     </div>

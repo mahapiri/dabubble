@@ -67,14 +67,13 @@ export class EditChannelComponent {
     });
   }
 
+  /**
+   * deletes the current user from the channel
+   */
   async deleteUserFromChannel() {
     if (this.channel.channelID) {
       let reducedArray = this.createArrayWithoutUser();
-      const channelRef = doc(
-        this.firestore,
-        'channels',
-        this.channel.channelID
-      );
+      const channelRef = doc(this.firestore, 'channels', this.channel.channelID);
       const userRef = doc(this.firestore, 'users', this.currentUser.userId);
 
       await runTransaction(this.firestore, async (transaction) => {
@@ -88,17 +87,26 @@ export class EditChannelComponent {
     }
   }
 
+  /**
+   * subtracts the current user from all the users in the channel
+   * @returns an array of the users in the channel without the current user
+   */
   createArrayWithoutUser() {
     return this.channel.channelMember.filter(
       (member) => member.userId !== this.currentUser.userId
     );
   }
 
+/**
+ * opens and closes the edit window
+ */
   edit() {
     this.editing = !this.editing;
     this.saveChanges();
   }
-
+  /**
+   * updates the channe name or description if its changed by the user
+   */
   async saveChanges() {
     if (this.channel.channelID) {
       await updateDoc(doc(this.firestore, 'channels', this.channel.channelID), {
@@ -109,6 +117,9 @@ export class EditChannelComponent {
     this.channelService.loadChannels();
   }
 
+  /**
+   * closes the channel-window
+   */
   closeChannel() {
     this.channelService.closePopup();
   }

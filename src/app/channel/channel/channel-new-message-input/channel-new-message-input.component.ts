@@ -105,7 +105,7 @@ export class ChannelNewMessageInputComponent implements OnInit {
   }
 
   /**
-   * calls the upload method if a file was chosen and saves the dawnload URL of the file to the messageText
+   * calls the upload method if a file was chosen and saves the download URL of the file to the messageText
    */
   async checkPictureUpload() {
     if (this.uploadService.fileChosen) {

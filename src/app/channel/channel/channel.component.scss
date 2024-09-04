@@ -115,6 +115,7 @@ mat-card-header {
   }
 
   .add-member-content {
+    width: clamp(300px, 80vw, 514px);
     position: absolute;
     right: 0;
     top: 58px;

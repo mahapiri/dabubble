@@ -20,7 +20,7 @@
                                 <p class="n-p">Keine Channels gefunden</p>
                             </div>
                             <ng-container *ngFor="let channel of this.newMessageService.resultChannel">
-                                <div class="result-section" *ngIf="channel.name" (click)="selectChannel(channel)">
+                                <div class="result-section" *ngIf="channel.name" (click)="selectChannel($event, channel)">
                                     <div class="result-header">
                                         <div class="result-title">
                                             <mat-icon class="result-icon">tag</mat-icon>
@@ -42,7 +42,7 @@
                             <div *ngIf="this.newMessageService.resultUser.length == 0">
                                 <p class="n-p">Keine User gefunden</p>
                             </div>
-                            <div class="result-section" *ngFor="let user of this.newMessageService.resultUser" (click)="selectUser(user)">
+                            <div class="result-section" *ngFor="let user of this.newMessageService.resultUser" (click)="selectUser($event, user)">
                                 <div class="result-header">
                                     <div class="result-title">
                                         <div>

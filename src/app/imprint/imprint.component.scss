@@ -27,9 +27,6 @@ section {
     gap: 16px;
 }
 
-.address-content {
-    width: 564.27px;
-}
 
 .contact-content {
     display: flex;
@@ -43,4 +40,25 @@ section {
 
 .thin {
     font-weight: 400;
+}
+
+@media (max-width: 720px) {
+    section {
+        padding: 5px;
+    }
+
+    .imprint-container {
+        padding: 24px 28px;
+        gap: 16px;
+    }
+
+    h1{
+        font-size: 36px !important;
+    }
+    h2{
+        font-size: 24px !important;
+    }
+    h4{
+        margin-bottom: 6px !important;
+    }
 }

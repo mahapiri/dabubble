@@ -36,7 +36,7 @@ export class LogInComponent {
     userPassword: ["", Validators.required]
   })
 
-  ngOnInit(){
+  ngOnInit() {
     this.hideIntroScreen();
   }
 
@@ -54,32 +54,37 @@ export class LogInComponent {
         this.router.navigate(['/main-window']);
       })
       .catch((error) => {
-        if (error.code) {
-          switch (error.code) {
-            case 'auth/invalid-email':
-              this.invalidMail = true;
-              this.mailerrorMessage = "*Diese E-Mail-Adresse ist leider ungültig"
-              break;
-            case 'auth/user-not-found':
-              this.invalidMail = true;
-              this.mailerrorMessage = "Benutzer nicht gefunden"
-              break;
-            case 'auth/invalid-credential':
-              this.invalidPassword = true;
-              this.passworderrorMessage = "Falsches Passwort ... Bitte noch einmal versuchen. "
-              break;
-            case 'auth/missing-password':
-              this.invalidPassword = true;
-              this.passworderrorMessage = "Bitte geben Sie ein Passwort ein"
-              break;
-            default:
-              console.error('An unknown error occurred:', error.message);
-          }
-        } else {
-          console.error('An unexpected error occurred:', error);
-        }
+        this.handleError(error.code)
       });
   }
+
+  handleError(error: string) {
+    if (error) {
+      switch (error) {
+        case 'auth/invalid-email':
+          this.invalidMail = true;
+          this.mailerrorMessage = "*Diese E-Mail-Adresse ist leider ungültig"
+          break;
+        case 'auth/user-not-found':
+          this.invalidMail = true;
+          this.mailerrorMessage = "Benutzer nicht gefunden"
+          break;
+        case 'auth/invalid-credential':
+          this.invalidPassword = true;
+          this.passworderrorMessage = "Falsches Passwort ... Bitte noch einmal versuchen. "
+          break;
+        case 'auth/missing-password':
+          this.invalidPassword = true;
+          this.passworderrorMessage = "Bitte geben Sie ein Passwort ein"
+          break;
+        default:
+          console.error('An unknown error occurred:', error);
+      }
+    } else {
+      console.error('An unexpected error occurred:', error);
+    }
+  }
+
 
   hideIntroScreen() {
     setTimeout(() => {
