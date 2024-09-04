@@ -54,7 +54,7 @@ export class ChannelNewMessageInputComponent implements OnInit {
   imgName: string = '';
   isTag: boolean = false;
 
-  constructor(private channelMessageService: ChannelMessageService) {}
+  constructor(private channelMessageService: ChannelMessageService) { }
 
   /**
    * subscribes selected member
@@ -66,6 +66,7 @@ export class ChannelNewMessageInputComponent implements OnInit {
           this.addMemberToMessage(member.username);
         }
       });
+    this.messageText = ''; // testing
   }
 
   /**

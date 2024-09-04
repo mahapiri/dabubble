@@ -6,6 +6,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 import { NewMessageService } from '../../services/new-message.service';
 import { User } from '../../../models/user.class';
+import { ChannelService } from '../../services/channel.service';
+import { TaggingService } from '../../services/tagging.service';
 
 
 @Component({
@@ -23,6 +25,8 @@ import { User } from '../../../models/user.class';
 })
 export class NewMessageHeaderComponent implements OnInit {
   public newMessageService: NewMessageService = inject(NewMessageService);
+  public taggingService: TaggingService = inject(TaggingService);
+  private channelService: ChannelService = inject(ChannelService);
 
 
   inputActive: boolean = false;
@@ -69,6 +73,7 @@ export class NewMessageHeaderComponent implements OnInit {
     event.stopPropagation();
     event.preventDefault();
     this.newMessageService.selectChannel(channel);
+    this.taggingService.setSelectedChannel(channel);
     this.searchword = channel.name;
     this.closeResults();
   }

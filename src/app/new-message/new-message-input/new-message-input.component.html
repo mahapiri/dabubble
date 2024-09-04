@@ -21,13 +21,13 @@
                     <app-emoji-picker (emojiSelected)="onEmojiSelected($event)"></app-emoji-picker>
                 </div>
             </button>
-            <div>
+            <div *ngIf="this.newMessageService.isChannel && searchword.length !== 0">
                 <button mat-mini-fab class="tag-person mini-fab-btn" (click)="openPopup($event)">
-                  <mat-icon>alternate_email</mat-icon>
+                    <mat-icon>alternate_email</mat-icon>
                 </button>
-                <app-tagging *ngIf="isTag" (closePopup)="closePopup()">
+                <app-tagging *ngIf="isTag" (closePopup)="closePopup()" [isNewMessage]="true">
                 </app-tagging>
-              </div>
+            </div>
         </div>
         <button class="send-btn" [ngClass]="{'send-btn-valid': messageText.trim().length > 0}"
             (click)="createMessage($event)">

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { UploadService } from '../../services/upload.service';
 import { CommonModule } from '@angular/common';
@@ -17,6 +17,7 @@ import { Subscription, take } from 'rxjs';
 import { DirectMessageService } from '../../services/direct-message.service';
 import { UserService } from '../../services/user.service';
 import { User } from '../../../models/user.class';
+import { TaggingService } from '../../services/tagging.service';
 
 
 
@@ -35,16 +36,19 @@ import { User } from '../../../models/user.class';
   templateUrl: './new-message-input.component.html',
   styleUrl: './new-message-input.component.scss'
 })
-export class NewMessageInputComponent {
+export class NewMessageInputComponent implements OnInit, OnDestroy{
   public uploadService: UploadService = inject(UploadService);
-  private newMessageService: NewMessageService = inject(NewMessageService);
+  public newMessageService: NewMessageService = inject(NewMessageService);
   public chatService: ChatService = inject(ChatService);
+  public taggingService: TaggingService = inject(TaggingService);
   public channelMessageService: ChannelMessageService = inject(ChannelMessageService);
   public directMessageService: DirectMessageService = inject(DirectMessageService);
   public channelService: ChannelService = inject(ChannelService);
   public userService: UserService = inject(UserService);
   public sharedService: SharedService = inject(SharedService);
   private messageIdSubscription: Subscription = new Subscription();
+  private searchWordSubscription: Subscription = new Subscription();
+  private taggingSubscription: Subscription = new Subscription();
   private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
   messageText: string = '';
@@ -52,6 +56,47 @@ export class NewMessageInputComponent {
   isEmoji: boolean = false;
   notOpen: boolean = true;
   isTag: boolean = false;
+  searchword: string = '';
+
+  constructor() {
+    this.newMessageService.isChannel = false;
+  }
+
+  ngOnInit(): void {
+      this.searchWordSubscription = this.newMessageService.searchword$.subscribe((word) => {
+        this.searchword = word;
+        if(this.newMessageService.isChannel && this.searchword.length == 0) {
+          this.newMessageService.isChannel = false;
+        }
+      });
+
+      this.taggingSubscription =
+      this.taggingService.memberSelectedChannel$.subscribe((member) => {
+        if (member && member.username) {
+          this.addMemberToMessage(member.username);
+        }
+      });
+
+      this.messageText = ''; // testing
+  }
+
+    /**
+   * add member to message field
+   */
+    addMemberToMessage(username: string) {
+      const mention = `@${username} `;
+      if (!this.messageText.includes(mention)) {
+        this.messageText += ` ${mention}`;
+      }
+    }
+
+
+  ngOnDestroy(): void {
+      this.searchWordSubscription.unsubscribe();
+      this.messageIdSubscription.unsubscribe();
+      this.taggingSubscription.unsubscribe();
+      this.messageText = '';
+  }
 
 
   /**
@@ -159,7 +204,6 @@ export class NewMessageInputComponent {
 
 
   async sendMessage() {
-    console.log(this.messageText, this.chatService.isChannel);
     await this.checkPictureUpload();
     if (this.messageText.trim()) {
       if(this.chatService.isChannel) {

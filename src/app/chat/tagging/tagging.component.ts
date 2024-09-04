@@ -32,6 +32,8 @@ export class TaggingComponent implements OnInit, OnDestroy {
   filteredMembers: User[] = [];
   currentUser: any;
   @Input() isFromThread: boolean = false;
+  @Input() isNewMessage: boolean = false;
+
 
 
   /**
@@ -81,8 +83,11 @@ export class TaggingComponent implements OnInit, OnDestroy {
   selectMemberToChannel(member: User) {
     if (this.isFromThread) {
       this.taggingService.selectMemberThread(member);
-    } else {
+    } else if(!this.isFromThread){
       this.taggingService.selectMemberChannel(member);
+    } else if(this.isNewMessage) {
+      console.log('this')
+      this.taggingService.selectMemberNewMessage(member);
     }
     this.closeWindow();
   }
