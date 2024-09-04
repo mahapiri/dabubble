@@ -6,6 +6,8 @@ import { CommonModule } from '@angular/common';
 import { ChannelMember } from '../../../models/channel.class';
 import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 import { SharedService } from '../../services/shared.service';
+import { ChatService } from '../../services/chat.service';
+
 
 @Component({
   selector: 'app-member',
@@ -17,6 +19,7 @@ import { SharedService } from '../../services/shared.service';
 export class MemberComponent {
   channelService: ChannelService = inject(ChannelService);
   sharedService: SharedService = inject(SharedService);
+  chatService: ChatService = inject(ChatService);
   @Output() clickedMembers = new EventEmitter<boolean>();
   @Output() switchToAddMembers = new EventEmitter<boolean>();
   channelMember: ChannelMember[] = [];
@@ -42,7 +45,9 @@ export class MemberComponent {
   }
 
   closeWindow() {
-    this.channelService.closePopup();   
+    if (!this.chatService.mobileScreen()) {
+      this.channelService.closePopup();
+    }
   }
 
   openProfile(event: Event, member: ChannelMember) {
