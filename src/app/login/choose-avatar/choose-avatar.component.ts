@@ -30,6 +30,11 @@ export class ChooseAvatarComponent {
 
   constructor(private router: Router) { }
 
+
+  /**
+   * sets the avatar picture of the user to the selected template
+   * @param src of the template picture
+   */
   setPicture(src: string) {
     this.uploadOwnPicture = false;
     this.pictureChosen = true;
@@ -37,6 +42,10 @@ export class ChooseAvatarComponent {
     this.authService.profileImage = src;
   }
 
+
+  /**
+   * creates a new user based on the previous inputs
+   */
   async createUser() {
     await this.authService.createUser();
     await this.checkOwnPicture()
@@ -46,6 +55,9 @@ export class ChooseAvatarComponent {
     this.router.navigate(['/main-window']);
   }
 
+   /**
+   * opens the file input when called
+   */
   triggerFileInput(): void {
     const fileInput = document.getElementById('file-upload') as HTMLInputElement;
     if (fileInput) {
@@ -53,6 +65,10 @@ export class ChooseAvatarComponent {
     }
   }
 
+    /**
+   * saves the selected file in the file variable
+   * @param event 
+   */
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -71,6 +87,9 @@ export class ChooseAvatarComponent {
     }
   }
 
+  /**
+   * checks if the user has set an own picture he wants to upload
+   */
   async checkOwnPicture() {
     if (this.uploadOwnPicture) {
       this.userSpecificPath = `uploads/${this.authService.userId}/${this.file.name}`
@@ -78,7 +97,10 @@ export class ChooseAvatarComponent {
       await this.uploadPicture();
     }
   }
-
+  
+  /**
+   * uploads the file and sets the download URL
+   */
   async uploadPicture() {
     await uploadBytes(this.storageRef, this.file).then(async (snapshot) => {
       const downloadURL = await getDownloadURL(this.storageRef);

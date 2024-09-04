@@ -101,18 +101,26 @@ export class ChannelComponent implements OnInit {
     this.scrollToBottom();
   }
 
+  /**
+   * opens the edit-channel popup
+   */
   editChannel(event: Event) {
     this.channelService.closePopup()
     event.stopPropagation();
     this.channelService.clickedEditChannel = true;
   }
 
+    /**
+   * opens the members popup
+   */
   openMembers(event: Event) {
     this.channelService.closePopup()
     event.stopPropagation();
     this.channelService.clickedMembers = !this.channelService.clickedMembers;
   }
-
+  /**
+   * opens the add-members popup
+   */
   openAddMembers(event: Event) {
     this.channelService.closePopup()
     event.stopPropagation();
