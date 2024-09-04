@@ -40,7 +40,7 @@
         <h4 class="n-h4 bold">Devspace</h4>
       </div>
       <div class="workspace-img" (click)="newMessage()">
-        <mat-icon class="message-icon" [class.bold-message]="clickedMessage"
+        <mat-icon class="message-icon" [class.bold-message]="this.sharedService.clickedNewMessage$ | async"
           >edit_square</mat-icon
         >
       </div>

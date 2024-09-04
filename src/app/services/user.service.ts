@@ -1,10 +1,11 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth, deleteUser, onAuthStateChanged } from '@angular/fire/auth';
+import { Auth, deleteUser, onAuthStateChanged, user } from '@angular/fire/auth';
 import {
   arrayUnion,
   collection,
   doc,
   Firestore,
+  getDoc,
   onSnapshot,
   updateDoc,
 } from '@angular/fire/firestore';
@@ -102,6 +103,16 @@ export class UserService {
   unsubscribe() {
     if (this.unsubscribeSnapshot) {
       this.unsubscribeSnapshot();
+    }
+  }
+
+  async getUserById(userID: string) {
+    const userRef = doc(this.firestore, 'users', userID);
+    const userDoc = await getDoc(userRef);
+    if (userDoc.exists()) {
+      return new User(userDoc.data());
+    } else {
+      return undefined;
     }
   }
 }

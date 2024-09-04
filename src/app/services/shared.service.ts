@@ -23,6 +23,12 @@ export class SharedService {
   private isNewMessageSubject = new BehaviorSubject<boolean>(false);
   isNewMessage$ = this.isNewMessageSubject.asObservable();
 
+  private clickedNewMessageSubject = new BehaviorSubject<boolean>(false);
+  clickedNewMessage$ = this.clickedNewMessageSubject.asObservable();
+
+  private selectedUserIndexSubject = new BehaviorSubject<number | null>(null);
+  selectedUserIndex$ = this.selectedUserIndexSubject.asObservable();
+
 
   isProfileID: string = '';
   isResults: boolean = false;
@@ -63,5 +69,28 @@ export class SharedService {
   
   setIsNewMessage(value: boolean) {
     this.isNewMessageSubject.next(value);
+  }
+
+
+  getClickedNewMessage(): boolean {
+    return this.clickedNewMessageSubject.getValue();
+  }
+
+  setClickedNewMessage(value: boolean) {
+    this.clickedNewMessageSubject.next(value);
+  }
+
+
+  toggleClickedNewMessage() {
+    const currentValue = this.getClickedNewMessage();
+    this.setClickedNewMessage(!currentValue);
+  }
+
+  setSelectedUserIndex(i: number) {
+    this.selectedUserIndexSubject.next(i);
+  }
+
+  resetSelectedUserIndex() {
+    this.selectedUserIndexSubject.next(null);
   }
 }

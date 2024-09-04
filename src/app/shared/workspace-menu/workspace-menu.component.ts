@@ -7,6 +7,8 @@ import {
   EventEmitter,
   Input,
   OnInit,
+  ChangeDetectorRef,
+  inject,
 } from '@angular/core';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -47,6 +49,8 @@ export class WorkspaceMenuComponent implements OnInit {
   @Output() clickedChannelChange = new EventEmitter<boolean>();
   @Output() clickedNewMessageChange = new EventEmitter<boolean>();
   // @Output() selectProfileChange = new EventEmitter<boolean>();
+  private clickedNewMessageSubscription: Subscription = new Subscription();
+  private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
   @Input() clickedChannel: boolean = false;
 
@@ -62,12 +66,13 @@ export class WorkspaceMenuComponent implements OnInit {
   [x: string]: any;
   hover: boolean = false;
   open: boolean = false;
-  clickedMessage: boolean = false;
   openChannel: boolean = false;
   openDm: boolean = false;
   selectedUserIndex: number | null = null;
   subscription: Subscription = new Subscription();
   searchInputValue: string = '';
+
+  clickedNewMessage: boolean = false;
 
   readonly panelOpenState = signal(false);
 
@@ -88,6 +93,10 @@ export class WorkspaceMenuComponent implements OnInit {
       this.showFirstChannel();
     }, 1000);
 
+    this.sharedService.selectedUserIndex$.subscribe((i) => {
+      this.selectedUserIndex = i;
+    })
+
     /*  window.addEventListener('resize', () => {
       if (window.innerWidth > 960) {
         const workspaceMenu = document.querySelector('section');
@@ -100,6 +109,7 @@ export class WorkspaceMenuComponent implements OnInit {
       }
     }); */
   }
+
 
   /**
    * Upon page load, selects the first channel from the user's channel list and sets it as the currently active channel, shown in the main-window.
@@ -127,12 +137,13 @@ export class WorkspaceMenuComponent implements OnInit {
     this.sharedService.setSelectProfile(false);
     this.chatService.setIsChannel(true);
 
-    this.selectedUserIndex = null;
+    // this.selectedUserIndex = null;
+    this.sharedService.resetSelectedUserIndex();
 
     this.chatService.handleWindowChangeOnMobile();
 
     this.sharedService.setIsNewMessage(false);
-    this.clickedMessage = false;
+    this.sharedService.setClickedNewMessage(false);
   }
 
   toggle() {
@@ -150,17 +161,19 @@ export class WorkspaceMenuComponent implements OnInit {
   }
 
   newMessage() {
-    this.clickedMessage = !this.clickedMessage;
+    this.sharedService.toggleClickedNewMessage();
     this.sharedService.setSelectProfile(false);
 
     const currentIsNewMessage = this.sharedService.getIsNewMessage();
     this.sharedService.setIsNewMessage(!currentIsNewMessage);
 
     this.chatService.setIsChannel(false);
-    this.clickedNewMessageChange.emit(this.clickedMessage);
-    this.selectedUserIndex = null;
+    this.clickedNewMessageChange.emit(this.sharedService.getClickedNewMessage());
+    this.sharedService.resetSelectedUserIndex();
     this.chatService.showCreateChannelOnMobile();
     this.chatService.showHeaderLogo('channelLogo');
+
+    this.cdr.detectChanges();
   }
 
   createChannel(event: Event) {
@@ -178,12 +191,13 @@ export class WorkspaceMenuComponent implements OnInit {
   }
 
   clickedProfile(i: number, profile: User) {
-    this.selectedUserIndex = i;
+    this.sharedService.setSelectedUserIndex(i);
     this.sharedService.setSelectProfile(true);
     this.directMessageService.openDmFromUser(profile);
     this.chatService.setIsChannel(false);
     this.sharedService.setIsNewMessage(false);
-    this.clickedMessage = false;
+    this.sharedService.setClickedNewMessage(false);
+    this.sharedService
   }
 
   editChannel(channel: string) {}

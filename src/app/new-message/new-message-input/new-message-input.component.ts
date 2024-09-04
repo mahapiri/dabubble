@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { UploadService } from '../../services/upload.service';
 import { CommonModule } from '@angular/common';
@@ -12,6 +12,13 @@ import { ChatService } from '../../services/chat.service';
 import { ChannelService } from '../../services/channel.service';
 import { SharedService } from '../../services/shared.service';
 import { Channel } from '../../../models/channel.class';
+import { ChannelMessageService } from '../../services/channel-message.service';
+import { Subscription, take } from 'rxjs';
+import { DirectMessageService } from '../../services/direct-message.service';
+import { UserService } from '../../services/user.service';
+import { User } from '../../../models/user.class';
+
+
 
 @Component({
   selector: 'app-new-message-input',
@@ -32,8 +39,13 @@ export class NewMessageInputComponent {
   public uploadService: UploadService = inject(UploadService);
   private newMessageService: NewMessageService = inject(NewMessageService);
   public chatService: ChatService = inject(ChatService);
+  public channelMessageService: ChannelMessageService = inject(ChannelMessageService);
+  public directMessageService: DirectMessageService = inject(DirectMessageService);
   public channelService: ChannelService = inject(ChannelService);
+  public userService: UserService = inject(UserService);
   public sharedService: SharedService = inject(SharedService);
+  private messageIdSubscription: Subscription = new Subscription();
+  private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
   messageText: string = '';
   uploadPath: string = 'new-message'
@@ -93,36 +105,73 @@ export class NewMessageInputComponent {
   /**
   * checks the valid of a message to start the newDmMessage function
   */
-  async createMessage() {
+  async createMessage(event: Event) {
+    event.stopPropagation();
     await this.checkPictureUpload();
+
     if (!this.messageText.trim()) {
       console.warn('The message field is empty. Please type a message!');
     } else {
-      this.newMessageService.messageId$.subscribe((id) => {
-        if(this.newMessageService.isChannel) {
-          const channel = this.channelService.getChannelById(id);
-          this.createChannelMsg(channel);
-          //create channel message
-        } else {
-          //create user message
-          console.log('ischannel false')
+      this.messageIdSubscription = this.newMessageService.messageId$.pipe(take(1)).subscribe(
+        async (id) => {
+        if (this.newMessageService.isChannel && id) {
+          const channel = await this.channelService.getChannelById(id);
+
+          if (channel) {
+            this.createChannelMsg(channel);
+          }
+        } else if (!this.newMessageService.isChannel && id) {
+          const profile = await this.userService.getUserById(id);
+
+          if(profile) {
+            this.createUserMsg(profile);
+          }
+
         }
-        console.log(id);
-      })
-      // this.messageCreated.emit();
+      });
     }
-    this.messageText = '';
+    setTimeout(() => this.messageIdSubscription.unsubscribe(), 100);
   }
 
 
-  createChannelMsg(channel: any) {
-    this.channelService.setSelectedChannel(channel);
+  async createUserMsg(profile: User) {
+    // this.selectedUserIndex = i;
+    this.sharedService.setSelectProfile(true);
+    await this.directMessageService.openDmFromUser(profile);
+    this.chatService.setIsChannel(false);
+    this.sharedService.setIsNewMessage(false);
+    this.sharedService.setClickedNewMessage(false);
+    this.cdr.detectChanges();
+    this.sendMessage();
+  }
+
+
+  createChannelMsg(channel: Channel) {
+    this.sharedService.setClickedNewMessage(false);
+    this.channelService.selectedChannel.next(channel);
     this.sharedService.setSelectProfile(false);
     this.chatService.setIsChannel(true);
-
-    const currentIsNewMessage = this.sharedService.getIsNewMessage();
-    this.sharedService.setIsNewMessage(!currentIsNewMessage);
+    this.sharedService.setIsNewMessage(false);
+    this.sendMessage();
+    this.channelService.loadChannels();
+    this.cdr.detectChanges();
   }
+
+
+  async sendMessage() {
+    console.log(this.messageText, this.chatService.isChannel);
+    await this.checkPictureUpload();
+    if (this.messageText.trim()) {
+      if(this.chatService.isChannel) {
+        await this.channelMessageService.addMessage(this.messageText);
+      } else {
+        await this.directMessageService.newDmMessage(this.messageText);
+      }
+      this.messageText = '';
+    }
+    this.cdr.detectChanges();
+  }
+
 
 
   /**

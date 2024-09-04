@@ -65,15 +65,20 @@ export class NewMessageHeaderComponent implements OnInit {
 
 
 
-  selectChannel(channel: any) {
+  selectChannel(event: Event, channel: any) {
+    event.stopPropagation();
+    event.preventDefault();
     this.newMessageService.selectChannel(channel);
     this.searchword = channel.name;
-
-
+    this.closeResults();
   }
 
-  selectUser(user: User) {
+
+  selectUser(event: Event, user: User) {
+    event.stopPropagation();
+    event.preventDefault();
     this.newMessageService.selectUser(user)
     this.searchword = user.username;
+    this.closeResults();
   } 
 }
