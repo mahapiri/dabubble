@@ -137,3 +137,9 @@
 .edit-channel-member .add-member-container {
   margin-left: -8px;
 }
+
+@media only screen and (max-width: 960px) {
+  .popup-container {
+    padding: 20px;
+  }
+}

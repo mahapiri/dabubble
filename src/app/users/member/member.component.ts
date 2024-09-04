@@ -8,13 +8,12 @@ import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 import { SharedService } from '../../services/shared.service';
 import { ChatService } from '../../services/chat.service';
 
-
 @Component({
   selector: 'app-member',
   standalone: true,
   imports: [MatIconModule, FormsModule, CommonModule, ClickOutsideDirective],
   templateUrl: './member.component.html',
-  styleUrl: './member.component.scss'
+  styleUrl: './member.component.scss',
 })
 export class MemberComponent {
   channelService: ChannelService = inject(ChannelService);
@@ -22,30 +21,31 @@ export class MemberComponent {
   chatService: ChatService = inject(ChatService);
   @Output() clickedMembers = new EventEmitter<boolean>();
   @Output() switchToAddMembers = new EventEmitter<boolean>();
+  @Input() isEditChannelPopup: boolean = false;
+
   channelMember: ChannelMember[] = [];
 
-
   ngOnInit() {
-    this.getChannelMember()   
+    this.getChannelMember();
   }
 
   getChannelMember() {
-    this.channelMember = []
+    this.channelMember = [];
     this.channelService.selectedChannel$.forEach((channel) => {
-      (channel?.channelMember)?.forEach((member) => {
-        this.channelMember.push(member)
-      })
-    })
+      channel?.channelMember?.forEach((member) => {
+        this.channelMember.push(member);
+      });
+    });
   }
 
-  switchToAdd(event: Event){
+  switchToAdd(event: Event) {
     event.stopPropagation();
-    this.closeWindow()
+    this.closeWindow();
     this.channelService.clickedAddMembers = true;
   }
 
   closeWindow() {
-    if (!this.chatService.mobileScreen()) {
+    if (!this.isEditChannelPopup) {
       this.channelService.closePopup();
     }
   }

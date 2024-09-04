@@ -49,7 +49,11 @@
           <button
             class="add-member-btn"
             mat-mini-fab
-            (click)="openAddMembers($event)"
+            (click)="
+              chatService.mobileScreen()
+                ? openMembers($event)
+                : openAddMembers($event)
+            "
           >
             <mat-icon>person_add</mat-icon>
           </button>

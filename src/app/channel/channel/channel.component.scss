@@ -225,7 +225,7 @@ mat-list-item {
     border-radius: 0px;
   }
 
-  .members-container-content {
+  .members-container-content .channel-btn {
     display: none;
   }
 
@@ -261,12 +261,21 @@ mat-list-item {
 
   .members-container {
     .add-member-content {
+      max-width: 550px;
       position: fixed;
-      right: 0;
-      top: 142px;
-      width: 94%;
-      padding-right: 2%;
+      right: 4%;
+      left: 4%;
+      top: 140px;
       z-index: 1;
     }
+  }
+
+  .app-member {
+    max-width: 550px;
+    position: fixed;
+    z-index: 1;
+    right: 4%;
+    left: 4%;
+    top: 140px;
   }
 }

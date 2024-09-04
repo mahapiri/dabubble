@@ -39,7 +39,7 @@
 }
 
 input[type="text"] {
-  width: 100%; // 434px
+  width: 434px;
   display: flex;
   padding: 15px 20px;
   border: 1px solid var(--lines);
@@ -99,10 +99,16 @@ input[type="text"] {
   color: var(--black);
 }
 
-/* Smartphones - - - - - - - - - */
-
 @media only screen and (max-width: 960px) {
   .popup-container {
-    padding: 30px 16px;
+    padding: 20px;
+  }
+
+  .channel-name {
+    display: none;
+  }
+
+  input[type="text"] {
+    width: 100%;
   }
 }

@@ -28,6 +28,7 @@ import { ChannelService } from '../../services/channel.service';
 import { Observable, Subscription } from 'rxjs';
 import { ChannelMessageService } from '../../services/channel-message.service';
 import { UploadService } from '../../services/upload.service';
+import { ChatService } from '../../services/chat.service';
 
 @Component({
   selector: 'app-channel',
@@ -71,7 +72,8 @@ export class ChannelComponent implements OnInit {
 
   constructor(
     public channelService: ChannelService,
-    private channelMessageService: ChannelMessageService
+    private channelMessageService: ChannelMessageService,
+    public chatService: ChatService
   ) {
     this.subscription = this.selectedChannel$.subscribe((value) => {
       if (value) {
@@ -102,19 +104,19 @@ export class ChannelComponent implements OnInit {
   }
 
   editChannel(event: Event) {
-    this.channelService.closePopup()
+    this.channelService.closePopup();
     event.stopPropagation();
     this.channelService.clickedEditChannel = true;
   }
 
   openMembers(event: Event) {
-    this.channelService.closePopup()
+    this.channelService.closePopup();
     event.stopPropagation();
     this.channelService.clickedMembers = !this.channelService.clickedMembers;
   }
 
   openAddMembers(event: Event) {
-    this.channelService.closePopup()
+    this.channelService.closePopup();
     event.stopPropagation();
     this.channelService.clickedAddMembers = true;
   }

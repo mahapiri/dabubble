@@ -1,5 +1,4 @@
 <section appClickOutside (clickOutside)="closeChannel()">
-  <div *ngIf="!this.chatService.mobileScreen()" class="shaded-background"></div>
   <div class="popup-container channel-container">
     <div class="header">
       <div class="title-content">
@@ -76,6 +75,7 @@
       <app-member
         class="app-member"
         *ngIf="this.chatService.mobileScreen()"
+        [isEditChannelPopup]="true"
       ></app-member>
 
       <div class="btn-container">
@@ -89,3 +89,4 @@
     </div>
   </div>
 </section>
+<div *ngIf="!this.chatService.mobileScreen()" class="shaded-background"></div>
