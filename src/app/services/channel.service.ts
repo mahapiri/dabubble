@@ -150,6 +150,8 @@ export class ChannelService {
   }
 
   closePopup(){
+    console.log("popup closed");
+    
     this.clickedEditChannel = false;
     this.clickedAddMembers = false;
     this.clickedMembers = false;
