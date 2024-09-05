@@ -2,7 +2,7 @@ import { inject, Injectable, HostListener } from '@angular/core';
 import { User } from '../../models/user.class';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, deleteUser } from '@angular/fire/auth';
 import { UserService } from './user.service';
-import { arrayRemove, arrayUnion, collection, deleteDoc, doc, Firestore, getDoc, getDocs, runTransaction, setDoc, updateDoc } from '@angular/fire/firestore';
+import { arrayRemove, arrayUnion, collection, deleteDoc, doc, Firestore, getDoc, getDocs, runTransaction, setDoc, updateDoc, where, query } from '@angular/fire/firestore';
 import { Channel } from '../../models/channel.class';
 import { ChannelService } from './channel.service';
 import { ChannelMessageService } from './channel-message.service';
@@ -123,7 +123,8 @@ export class AuthService {
   async deleteGuestUser() {
     const user = this.auth.currentUser;
     if (user) {
-      await this.deleteGuestFromAllChannels(this.userId)
+      await this.deleteGuestFromAllChannels(this.userId);
+      await this.deleteDirectMessages(this.userId);
       await deleteUser(user).then().catch();
       await deleteDoc(doc(this.firestore, "users", this.userId));
     }
@@ -157,4 +158,27 @@ export class AuthService {
     return channel.channelMember.filter(member => member.userId !== idToDelete);
   }
 
+
+  async deleteDirectMessages(userId: string) {
+    const directMessagesRef = collection(this.firestore, 'direct-messages');
+    const q = query(directMessagesRef, where('userIDs', 'array-contains', userId));
+    const querySnapshot = await getDocs(q);
+  
+    for (const doc of querySnapshot.docs) {
+      const directMessageId = doc.id;
+      await this.deleteDirectMessage(directMessageId);
+    }
+  }
+  
+
+  async deleteDirectMessage(directMessageId: string) {
+    const messagesRef = collection(this.firestore, `direct-messages/${directMessageId}/messages`);
+    const messagesSnapshot = await getDocs(messagesRef);
+    for (const messageDoc of messagesSnapshot.docs) {
+      await deleteDoc(messageDoc.ref);
+    }
+  
+    const directMessageDocRef = doc(this.firestore, 'direct-messages', directMessageId);
+    await deleteDoc(directMessageDocRef);
+  }
 }
