@@ -43,6 +43,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   currentUserSubscription: Subscription = new Subscription();
   currentUser: any = '';
 
+  @Output() searchInputValueAction: EventEmitter<void> = new EventEmitter<void>();
+
 
   constructor() { }
 
@@ -63,6 +65,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.channelService.setSelectedChannel(channel);
     this.sharedService.setSelectProfile(false);
     this.chatService.setIsChannel(true);
+    this.resetSearchInputValue();
   }
 
 
@@ -72,6 +75,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.mainWindow.clickedThread = true;
     this.channelMessageService.setSelectedMessage(channelMsg);
     this.threadService.handleThread();
+    this.resetSearchInputValue();
   }
 
 
@@ -83,6 +87,11 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.sharedService.setSelectProfile(true);
     this.directMessageService.openDmFromUser(profile);
     this.chatService.setIsChannel(false);
+    this.resetSearchInputValue();
+  }
+
+  resetSearchInputValue() {
+    this.searchInputValueAction.emit();
   }
   
   
@@ -115,5 +124,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     event?.stopPropagation();
     this.sharedService.isResults = false;
     this.sharedService.openProfile(userID);
+    this.resetSearchInputValue();
   }
 }

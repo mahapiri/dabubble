@@ -43,7 +43,6 @@ export class HeaderComponent implements OnInit {
   directMessageService: DirectMessageService = inject(DirectMessageService);
   searchService: SearchService = inject(SearchService);
   currentUser: any = '';
-  // isResults: boolean = false;
   searchInputValue: string = '';
   isSmallScreen!: boolean;
   animationState: 'opening' | 'closing' | 'none' = 'none';
@@ -54,7 +53,6 @@ export class HeaderComponent implements OnInit {
   constructor(private router: Router) { }
 
   async ngOnInit() {
-    // await this.userService.getUserID();
     this.userService.currentUser$.subscribe((user) => {
       this.currentUser = user;
     });

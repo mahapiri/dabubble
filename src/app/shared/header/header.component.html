@@ -35,7 +35,7 @@
 
       <ng-container *ngIf="searchInputValue.length > 0">
         <div *ngIf="this.sharedService.isResults">
-          <app-search></app-search>
+          <app-search (searchInputValueAction)="closeResults()"></app-search>
         </div>
       </ng-container>
     </div>
