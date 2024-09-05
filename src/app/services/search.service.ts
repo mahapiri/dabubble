@@ -175,7 +175,7 @@ export class SearchService implements OnInit, OnDestroy {
         date: data['date'],
         id: data['id'],
         isFirstMessageOfDay: data['isFirstMessageOfDay'],
-        profileImage: data['profileImage'],
+        profileImage: data['profileImg'],
         text: data['text'],
         time: data['time'],
       }
@@ -221,7 +221,7 @@ export class SearchService implements OnInit, OnDestroy {
         date: data['date'],
         id: data['id'],
         isFirstMessageOfDay: data['isFirstMessageOfDay'],
-        profileImage: data['profileImage'],
+        profileImage: data['profileImg'],
         text: data['text'],
         time: data['time'],
       }
