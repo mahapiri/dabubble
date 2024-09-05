@@ -123,29 +123,29 @@ export class AuthService {
   async deleteGuestUser() {
     const user = this.auth.currentUser;
     if (user) {
-      await this.deleteGuestFromAllChannels()
+      await this.deleteGuestFromAllChannels(this.userId)
       await deleteUser(user).then().catch();
       await deleteDoc(doc(this.firestore, "users", this.userId));
     }
   }
 
-  async deleteGuestFromAllChannels() {
-    const userDocSnap = await getDoc(doc(this.firestore, "users", this.userId));
+  async deleteGuestFromAllChannels(idToDelete: string) {
+    const userDocSnap = await getDoc(doc(this.firestore, "users", idToDelete));
     if (userDocSnap.exists()) {
       const userChannels = userDocSnap.data()['userChannels'];
       for (const channelID of userChannels) {
         await this.channelService.getChannelById(channelID).then((channel) => {
           if (channel) {
-            this.deleteUserFromChannel(channel)
+            this.deleteUserFromChannel(channel, idToDelete)
           }
         })
       }
     }
   }
 
-  async deleteUserFromChannel(channel: Channel) {
+  async deleteUserFromChannel(channel: Channel, idToDelete: string) {
     if (channel.channelID) {
-      let reducedArray = this.createArrayWithoutUser(channel);
+      let reducedArray = this.createArrayWithoutUser(channel, idToDelete);
       const channelRef = doc(this.firestore, "channels", channel.channelID);
       await updateDoc(channelRef, {
         channelMember: reducedArray
@@ -153,13 +153,8 @@ export class AuthService {
     }
   }
 
-  createArrayWithoutUser(channel: Channel) {
-    return channel.channelMember.filter(member => member.userId !== this.userId);
-  }
-
-  @HostListener('window:beforeunload', ['$event'])
-  async unloadNotification($event: any): Promise<void> {
-    this.logOut()
+  createArrayWithoutUser(channel: Channel, idToDelete: string) {
+    return channel.channelMember.filter(member => member.userId !== idToDelete);
   }
 
 }

@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { AuthService } from './../../services/auth.service';
-import { Firestore } from '@angular/fire/firestore';
+import { collection, deleteDoc, doc, Firestore, getDocs, query, Timestamp, updateDoc, where } from '@angular/fire/firestore';
 import { MatIcon } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
@@ -38,6 +38,7 @@ export class LogInComponent {
 
   ngOnInit() {
     this.hideIntroScreen();
+    this.checkForOldGuestUsers();
   }
 
 
@@ -101,6 +102,7 @@ export class LogInComponent {
     )
     await this.authService.setStartingChannels();
     await this.authService.saveUserInDocument();
+    await this.setCreationTime(this.authService.userId);
     this.router.navigate(['/main-window']);
   }
 
@@ -120,6 +122,29 @@ export class LogInComponent {
     this.authService.logOut();
   }
 
+  async setCreationTime(userId: string) {
+    const guestRef = doc(this.firestore, "users", userId);
+    await updateDoc(guestRef, {
+      createdAt: Timestamp.now()
+    });
+  }
 
+  async checkForOldGuestUsers() {
+    const q = query(collection(this.firestore, "users"), where("username", "==", "Gast"));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach(async (user) => {
+      const guestTimestamp = user.data()['createdAt'] 
+      const userDocId = user.data()['userId']
+      if (this.isOlderThanOneDay(guestTimestamp)) {
+        await this.authService.deleteGuestFromAllChannels(userDocId);
+        await deleteDoc(doc(this.firestore, "users", userDocId));
+      }
+    });
+  }
 
+  isOlderThanOneDay(storedTimestamp: Timestamp): boolean {
+    const currentTimestamp = Timestamp.now();
+    const oneDayAgoTimestamp = Timestamp.fromMillis(currentTimestamp.toMillis() - (24 * 60 * 60 * 1000));
+    return storedTimestamp.toMillis() < oneDayAgoTimestamp.toMillis();
+  }
 }
