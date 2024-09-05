@@ -136,6 +136,7 @@
 
 .edit-channel-member .add-member-container {
   margin-left: -8px;
+  width: calc(100% + 16px); // Compensate Margin to stretch over width
 }
 
 @media only screen and (max-width: 960px) {

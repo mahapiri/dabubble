@@ -2,7 +2,7 @@
   appClickOutside
   (clickOutside)="closeWindow()"
   class="popup-container member-container"
-  [class.edit-channel-member]="isEditChannelPopup"
+  [class.edit-channel-member]="this.isEditChannelPopup"
 >
   <div class="title-content">
     <h3 class="n-h3">Mitglieder</h3>
@@ -38,4 +38,4 @@
     </div>
   </div>
 </section>
-<div *ngIf="!isEditChannelPopup" class="shaded-background"></div>
+<div *ngIf="!this.isEditChannelPopup" class="shaded-background"></div>

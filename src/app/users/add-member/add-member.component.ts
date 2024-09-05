@@ -8,6 +8,8 @@ import { Channel, ChannelMember } from '../../../models/channel.class';
 import { ChannelService } from '../../services/channel.service';
 import { arrayUnion, doc, Firestore, updateDoc } from '@angular/fire/firestore';
 import { ClickOutsideDirective } from '../../directive/click-outside.directive';
+import { Subscription } from 'rxjs';
+import { ChatService } from '../../services/chat.service';
 
 @Component({
   selector: 'app-add-member',
@@ -19,20 +21,29 @@ import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 export class AddMemberComponent {
   @Output() clickedAddMembers = new EventEmitter<boolean>();
   @Input() channel!: Channel;
+
   firestore: Firestore = inject(Firestore);
   userService: UserService = inject(UserService);
   channelService: ChannelService = inject(ChannelService);
+  chatService: ChatService = inject(ChatService);
   searchMember: string = '';
   userlistOpen: boolean = false;
   selectedUsersForChannel: User[] = [];
   showUser: User[] = [];
   channelMember: ChannelMember[] = [];
   usersNotInChannel: User[] = [];
+  isEditChannelPopup: boolean = false;
+  subscription: Subscription = new Subscription();
 
   ngOnInit() {
     this.getChannelMember();
     this.userService.userArray.forEach(
       (user) => (user.chosenToChannel = false)
+    );
+    this.subscription = this.channelService.isEditChannelPopup$.subscribe(
+      (value) => {
+        this.isEditChannelPopup = value;
+      }
     );
   }
 
@@ -146,5 +157,9 @@ export class AddMemberComponent {
   closeWindow() {
     this.selectedUsersForChannel = [];
     this.channelService.closePopup();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

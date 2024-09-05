@@ -2,7 +2,15 @@
   appClickOutside
   (clickOutside)="closeWindow()"
   class="popup-container add-member-container"
+  [class.edit-channel-active]="this.isEditChannelPopup"
 >
+  <div class="center-handle">
+    <div
+      *ngIf="chatService.mobileScreen()"
+      class="handle"
+      (click)="closeWindow()"
+    ></div>
+  </div>
   <div class="member-content">
     <div class="title-name-container">
       <div class="title-content">

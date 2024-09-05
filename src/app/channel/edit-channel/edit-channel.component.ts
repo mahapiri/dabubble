@@ -60,6 +60,8 @@ export class EditChannelComponent {
   }
 
   ngOnInit() {
+    this.channelService.setIsEditChannelPopup(true);
+
     this.subscription = this.userService.currentUser$.subscribe((value) => {
       if (value) {
         this.currentUser = value;
@@ -73,7 +75,11 @@ export class EditChannelComponent {
   async deleteUserFromChannel() {
     if (this.channel.channelID) {
       let reducedArray = this.createArrayWithoutUser();
-      const channelRef = doc(this.firestore, 'channels', this.channel.channelID);
+      const channelRef = doc(
+        this.firestore,
+        'channels',
+        this.channel.channelID
+      );
       const userRef = doc(this.firestore, 'users', this.currentUser.userId);
 
       await runTransaction(this.firestore, async (transaction) => {
@@ -97,9 +103,9 @@ export class EditChannelComponent {
     );
   }
 
-/**
- * opens and closes the edit window
- */
+  /**
+   * opens and closes the edit window
+   */
   edit() {
     this.editing = !this.editing;
     this.saveChanges();

@@ -21,6 +21,9 @@ export class ChannelService {
   public selectedChannel = new BehaviorSubject<Channel | null>(null);
   selectedChannel$ = this.selectedChannel.asObservable();
 
+  private _isEditChannelPopup = new BehaviorSubject<boolean>(false);
+  isEditChannelPopup$ = this._isEditChannelPopup.asObservable();
+
   clickedEditChannel: boolean = false;
   clickedAddMembers: boolean = false;
   clickedMembers: boolean = false;
@@ -43,6 +46,10 @@ export class ChannelService {
         this.selectedChannel.next(new Channel(doc.data()));
       });
     }
+  }
+
+  setIsEditChannelPopup(value: boolean) {
+    this._isEditChannelPopup.next(value); // Setze den Wert über BehaviorSubject
   }
 
   /**
@@ -138,9 +145,9 @@ export class ChannelService {
           this.getChannelById(channelId)
         );
         const channels = await Promise.all(channelPromises);
-         this.userService._userChannels.next(
+        this.userService._userChannels.next(
           channels.filter((channel) => channel !== undefined) as Channel[]
-        );        
+        );
       }
     });
   }
@@ -149,9 +156,9 @@ export class ChannelService {
     return collection(this.firestore, 'channels');
   }
 
-  closePopup(){
-    console.log("popup closed");
-    
+  closePopup() {
+    console.log('popup closed');
+
     this.clickedEditChannel = false;
     this.clickedAddMembers = false;
     this.clickedMembers = false;

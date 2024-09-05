@@ -210,6 +210,16 @@ mat-list-item {
   overflow: visible;
 }
 
+.edit-channel-active.add-member-content {
+  //evtl. in media max-width 960 verschieben
+  width: 100% !important;
+  z-index: 10 !important;
+  top: unset !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+}
+
 /* Smartphones - - - - - - - - - */
 
 /* @media only screen and (max-width: 1440px) {
