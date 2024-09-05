@@ -98,15 +98,18 @@ export class SearchComponent implements OnInit, OnDestroy {
 
 
   async setProfile(dm: any) {
+    const isCurrentUser = this.currentUser?.userId === dm['profileId'];
+  
     return {
-      username: dm['profileName'],
-      userId: dm['profileId'],
+      username: isCurrentUser ? dm['authorName'] : dm['profileName'],
+      userId: isCurrentUser ? dm['authorId'] : dm['profileId'],
       email: '',
       state: await this.setProfilestate(dm),
       userChannels: [],
-      profileImage: dm['profileImg']
-    }
+      profileImage: isCurrentUser ? dm['authorImg'] : dm['profileImg']
+    };
   }
+  
 
   openProfile(event: Event, userID: string) {
     event?.stopPropagation();

@@ -260,6 +260,7 @@ export class SearchService implements OnInit, OnDestroy {
     let ids: any = [];
 
     this.directMessage.forEach((message) => {
+
       const text = message.text || '';
 
       if (text.toLowerCase().includes(searchWord)) {
@@ -270,7 +271,19 @@ export class SearchService implements OnInit, OnDestroy {
       }
     });
     this.resultDM = tempResult;
+    this.updateDMsWithCurrentUserInfo();
   }
+
+
+  updateDMsWithCurrentUserInfo() {
+    this.resultDM.forEach(dm => {
+      if (this.currentUserID === dm.profileId) {
+        dm.profileImg = dm.authorImg || '';
+        dm.profileName = dm.authorName || '';
+      }
+    });
+  }
+
 
 
   async searchUser(searchWord: string) {
