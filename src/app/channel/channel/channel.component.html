@@ -59,6 +59,7 @@
           </button>
           <app-add-member
             class="add-member-content"
+            [class.edit-channel-active]="this.isEditChannelPopup"
             [channel]="activeChannel"
             *ngIf="channelService.clickedAddMembers"
           ></app-add-member>

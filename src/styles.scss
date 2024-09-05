@@ -158,6 +158,20 @@ a {
   box-shadow: 0px 6px 10px 0px rgba(0, 0, 0, 0.2);
 }
 
+.handle {
+  width: 62px;
+  height: 6px;
+  border-radius: 23px;
+  background-color: var(--purple-2);
+  cursor: pointer;
+}
+
+.center-handle {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .btn-default {
   display: flex;
   justify-content: center;

@@ -62,13 +62,14 @@ export class ChannelComponent implements OnInit {
 
   clickedThread: boolean = false;
   activeChannel: Channel = new Channel({});
+  isEditChannelPopup: boolean = false;
 
   selectedChannel$: Observable<Channel | null> =
     this.channelService.selectedChannel$;
   channelMessages$: Observable<ChannelMessage[]> =
     this.channelMessageService.channelMessages$;
 
-  private subscription: Subscription = new Subscription();
+  subscription: Subscription = new Subscription();
 
   constructor(
     public channelService: ChannelService,
@@ -80,6 +81,11 @@ export class ChannelComponent implements OnInit {
         this.activeChannel = new Channel(value);
       }
     });
+    this.subscription = this.channelService.isEditChannelPopup$.subscribe(
+      (value) => {
+        this.isEditChannelPopup = value;
+      }
+    );
   }
 
   ngOnInit(): void {
@@ -112,7 +118,7 @@ export class ChannelComponent implements OnInit {
     this.channelService.clickedEditChannel = true;
   }
 
-    /**
+  /**
    * opens the members popup
    */
   openMembers(event: Event) {
