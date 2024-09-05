@@ -95,6 +95,7 @@ export class WorkspaceMenuComponent implements OnInit {
 
     this.sharedService.selectedUserIndex$.subscribe((i) => {
       this.selectedUserIndex = i;
+      this.cdr.detectChanges();
     })
 
     /*  window.addEventListener('resize', () => {
@@ -197,7 +198,7 @@ export class WorkspaceMenuComponent implements OnInit {
     this.chatService.setIsChannel(false);
     this.sharedService.setIsNewMessage(false);
     this.sharedService.setClickedNewMessage(false);
-    this.sharedService
+    this.sharedService.setSelectedUserIndex(profile.userId);
   }
 
   editChannel(channel: string) {}
