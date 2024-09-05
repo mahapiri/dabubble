@@ -34,7 +34,7 @@ export class SearchService implements OnInit, OnDestroy {
 
   resultDM: DmMessage[] = [];
   resultUser: User[] = [];
-  resultChannel: any;
+  resultChannel: any = [];
   resultThread: any = [];
   timer: boolean = false;
 
@@ -284,6 +284,8 @@ export class SearchService implements OnInit, OnDestroy {
 
 
   async searchChannel(searchWord: string) {
+    const tempResult: any = [];
+    let ids: any = [];
 
     for (const channel of this.channelListMsg) {
       const messages = channel['messages'];
@@ -291,15 +293,20 @@ export class SearchService implements OnInit, OnDestroy {
       for (const message of messages) {
         const text = message.text || '';
         if (text.toLowerCase().includes(searchWord)) {
-          this.resultChannel.push({
-            channelID: channel.channelID,
-            channelName: channel.channelName,
-            message: message
-          });
+          if (ids.indexOf(message.id) === -1) {
+            tempResult.push({
+              channelID: channel.channelID,
+              channelName: channel.channelName,
+              message: message
+            });
+            ids.push(message.id);
+          }
         }
       }
     }
+    this.resultChannel = tempResult;
   }
+
 
 
   async searchThread(searchWord: string) {
