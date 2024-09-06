@@ -3,7 +3,6 @@ import {
   Component,
   EventEmitter,
   inject,
-  Input,
   Output,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
@@ -16,7 +15,6 @@ import { SharedService } from '../../services/shared.service';
 import { ChatService } from '../../services/chat.service';
 import { Subscription } from 'rxjs';
 import { UserService } from '../../services/user.service';
-import { user } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-member',
@@ -40,7 +38,6 @@ export class MemberComponent {
   isEditChannelPopup: boolean = false;
   userList$ = this.userService.userList$;
 
-
   ngOnInit() {
     this.getChannelMember();
 
@@ -52,7 +49,6 @@ export class MemberComponent {
     );
   }
 
-
   getChannelMember() {
     this.channelMember = [];
     this.channelService.selectedChannel$.forEach((channel) => {
@@ -63,35 +59,28 @@ export class MemberComponent {
     });
   }
 
-
   setActualProfileState(member: ChannelMember) {
     this.userList$.subscribe((user) => {
       user.forEach((profile) => {
-        if(member.userId == profile.userId) {
+        if (member.userId == profile.userId) {
           member.state = profile.state;
         }
-      })
-    })
+      });
+    });
   }
-
 
   switchToAdd(event: Event) {
     event.stopPropagation();
     this.closeWindow();
     this.channelService.clickedAddMembers = true;
-    console.log('editChannel Status =', this.isEditChannelPopup); //Test, danach prüfen, ob es die andere Einbindung beeinflusst!
-
     this.channelService.animationState = 'opening';
-    console.log('Current animation state:', this.channelService.animationState);
   }
-
 
   closeWindow() {
     if (!this.isEditChannelPopup) {
       this.channelService.closePopup();
     }
   }
-
 
   openProfile(event: Event, member: ChannelMember) {
     event.stopPropagation();
@@ -100,7 +89,6 @@ export class MemberComponent {
     console.log(member);
   }
 
-  
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

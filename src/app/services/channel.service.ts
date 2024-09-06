@@ -157,11 +157,18 @@ export class ChannelService {
     return collection(this.firestore, 'channels');
   }
 
-  closePopup() {
-    console.log('popup closed');
+  mobileScreen() {
+    return window.innerWidth <= 960;
+  }
 
-    this.clickedEditChannel = false;
-    this.clickedAddMembers = false;
-    this.clickedMembers = false;
+  closePopup() {
+    /* if () { //addMemberSlider
+      this.clickedEditChannel = true;
+      this.clickedAddMembers = false;
+    } else  */ {
+      this.clickedAddMembers = false;
+      this.clickedEditChannel = false;
+      this.clickedMembers = false;
+    }
   }
 }
