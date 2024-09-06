@@ -1,9 +1,10 @@
 import { inject, Injectable, OnDestroy, OnInit } from '@angular/core';
 import { ChannelService } from './channel.service';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription, take } from 'rxjs';
 import { Channel, ChannelMember } from '../../models/channel.class';
 import { User } from '../../models/user.class';
 import { doc, Firestore, onSnapshot } from '@angular/fire/firestore';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ import { doc, Firestore, onSnapshot } from '@angular/fire/firestore';
 export class TaggingService implements OnInit, OnDestroy {
   private firestore: Firestore = inject(Firestore);
   private channelService: ChannelService = inject(ChannelService);
+  private userService: UserService = inject(UserService);
   private channelSubscription: Subscription = new Subscription();
   public memberSelectedChannel = new BehaviorSubject<any>(null);
   memberSelectedChannel$ = this.memberSelectedChannel.asObservable();
@@ -20,7 +22,8 @@ export class TaggingService implements OnInit, OnDestroy {
   memberSelectedNewMessage$ = this.memberSelectedNewMessage.asObservable();
 
   currentChannelID: string = '';
-  currentChannelMember: any;
+  currentChannelMember: ChannelMember[] = [];
+  userList$ = this.userService.userList$;
 
 
   /**
@@ -28,13 +31,28 @@ export class TaggingService implements OnInit, OnDestroy {
   */
   constructor() {
     this.channelSubscription = this.channelService.selectedChannel$.subscribe((channel) => {
+      this.currentChannelMember = [];
       this.currentChannelID = channel?.channelID || '';
-      this.currentChannelMember = channel?.channelMember;
+      let member = channel?.channelMember;
+      member?.forEach((member) => {
+        this.setActualProfileState(member);
+        this.currentChannelMember.push(member);
+      })
     })
   }
 
+  ngOnInit() { }
 
-  ngOnInit(): void { }
+
+  setActualProfileState(member: ChannelMember) {
+    this.userList$.subscribe((user) => {
+      user.forEach((profile) => {
+        if (member.userId == profile.userId) {
+          member.state = profile.state;
+        }
+      })
+    })
+  }
 
 
   /**
@@ -57,7 +75,7 @@ export class TaggingService implements OnInit, OnDestroy {
   /**
   * get the selected member
   */
-  selectMemberChannel(member: User) {
+  selectMemberChannel(member: ChannelMember) {
     this.memberSelectedChannel.next(member);
   }
 
@@ -65,7 +83,7 @@ export class TaggingService implements OnInit, OnDestroy {
   /**
   * get the selected member
   */
-  selectMemberThread(member: User) {
+  selectMemberThread(member: ChannelMember) {
     this.memberSelectedThread.next(member);
   }
 
@@ -73,7 +91,7 @@ export class TaggingService implements OnInit, OnDestroy {
   /**
   * get the selected member
   */
-  selectMemberNewMessage(member: User) {
+  selectMemberNewMessage(member: ChannelMember) {
     this.memberSelectedNewMessage.next(member);
   }
 }

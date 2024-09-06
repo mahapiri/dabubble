@@ -34,7 +34,7 @@ export class SearchService implements OnInit, OnDestroy {
 
   resultDM: DmMessage[] = [];
   resultUser: User[] = [];
-  resultChannel: any;
+  resultChannel: any = [];
   resultThread: any = [];
   timer: boolean = false;
 
@@ -175,7 +175,7 @@ export class SearchService implements OnInit, OnDestroy {
         date: data['date'],
         id: data['id'],
         isFirstMessageOfDay: data['isFirstMessageOfDay'],
-        profileImage: data['profileImage'],
+        profileImage: data['profileImg'],
         text: data['text'],
         time: data['time'],
       }
@@ -221,7 +221,7 @@ export class SearchService implements OnInit, OnDestroy {
         date: data['date'],
         id: data['id'],
         isFirstMessageOfDay: data['isFirstMessageOfDay'],
-        profileImage: data['profileImage'],
+        profileImage: data['profileImg'],
         text: data['text'],
         time: data['time'],
       }
@@ -260,6 +260,7 @@ export class SearchService implements OnInit, OnDestroy {
     let ids: any = [];
 
     this.directMessage.forEach((message) => {
+
       const text = message.text || '';
 
       if (text.toLowerCase().includes(searchWord)) {
@@ -270,7 +271,19 @@ export class SearchService implements OnInit, OnDestroy {
       }
     });
     this.resultDM = tempResult;
+    this.updateDMsWithCurrentUserInfo();
   }
+
+
+  updateDMsWithCurrentUserInfo() {
+    this.resultDM.forEach(dm => {
+      if (this.currentUserID === dm.profileId) {
+        dm.profileImg = dm.authorImg || '';
+        dm.profileName = dm.authorName || '';
+      }
+    });
+  }
+
 
 
   async searchUser(searchWord: string) {
@@ -284,6 +297,8 @@ export class SearchService implements OnInit, OnDestroy {
 
 
   async searchChannel(searchWord: string) {
+    const tempResult: any = [];
+    let ids: any = [];
 
     for (const channel of this.channelListMsg) {
       const messages = channel['messages'];
@@ -291,15 +306,20 @@ export class SearchService implements OnInit, OnDestroy {
       for (const message of messages) {
         const text = message.text || '';
         if (text.toLowerCase().includes(searchWord)) {
-          this.resultChannel.push({
-            channelID: channel.channelID,
-            channelName: channel.channelName,
-            message: message
-          });
+          if (ids.indexOf(message.id) === -1) {
+            tempResult.push({
+              channelID: channel.channelID,
+              channelName: channel.channelName,
+              message: message
+            });
+            ids.push(message.id);
+          }
         }
       }
     }
+    this.resultChannel = tempResult;
   }
+
 
 
   async searchThread(searchWord: string) {

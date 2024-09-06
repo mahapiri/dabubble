@@ -43,7 +43,6 @@ export class HeaderComponent implements OnInit {
   directMessageService: DirectMessageService = inject(DirectMessageService);
   searchService: SearchService = inject(SearchService);
   currentUser: any = '';
-  // isResults: boolean = false;
   searchInputValue: string = '';
   isSmallScreen!: boolean;
 
@@ -53,7 +52,6 @@ export class HeaderComponent implements OnInit {
   constructor(private router: Router) {}
 
   async ngOnInit() {
-    // await this.userService.getUserID();
     this.userService.currentUser$.subscribe((user) => {
       this.currentUser = user;
     });
@@ -75,6 +73,7 @@ export class HeaderComponent implements OnInit {
   private checkScreenSize() {
     this.isSmallScreen = window.innerWidth <= 1190;
   }
+
 
   async openResults() {
     try {

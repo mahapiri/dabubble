@@ -86,7 +86,7 @@ export class SharedService {
     this.setClickedNewMessage(!currentValue);
   }
 
-  setSelectedUserIndex(i: number) {
+  setSelectedUserIndex(i: any) {
     this.selectedUserIndexSubject.next(i);
   }
 

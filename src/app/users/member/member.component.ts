@@ -15,6 +15,8 @@ import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 import { SharedService } from '../../services/shared.service';
 import { ChatService } from '../../services/chat.service';
 import { Subscription } from 'rxjs';
+import { UserService } from '../../services/user.service';
+import { user } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-member',
@@ -26,6 +28,7 @@ import { Subscription } from 'rxjs';
 export class MemberComponent {
   channelService: ChannelService = inject(ChannelService);
   sharedService: SharedService = inject(SharedService);
+  userService: UserService = inject(UserService);
   chatService: ChatService = inject(ChatService);
   changeDetectorRef: ChangeDetectorRef = inject(ChangeDetectorRef);
 
@@ -35,6 +38,8 @@ export class MemberComponent {
   subscription: Subscription = new Subscription();
   channelMember: ChannelMember[] = [];
   isEditChannelPopup: boolean = false;
+  userList$ = this.userService.userList$;
+
 
   ngOnInit() {
     this.getChannelMember();
@@ -47,14 +52,28 @@ export class MemberComponent {
     );
   }
 
+
   getChannelMember() {
     this.channelMember = [];
     this.channelService.selectedChannel$.forEach((channel) => {
       channel?.channelMember?.forEach((member) => {
+        this.setActualProfileState(member);
         this.channelMember.push(member);
       });
     });
   }
+
+
+  setActualProfileState(member: ChannelMember) {
+    this.userList$.subscribe((user) => {
+      user.forEach((profile) => {
+        if(member.userId == profile.userId) {
+          member.state = profile.state;
+        }
+      })
+    })
+  }
+
 
   switchToAdd(event: Event) {
     event.stopPropagation();
@@ -66,11 +85,13 @@ export class MemberComponent {
     console.log('Current animation state:', this.channelService.animationState);
   }
 
+
   closeWindow() {
     if (!this.isEditChannelPopup) {
       this.channelService.closePopup();
     }
   }
+
 
   openProfile(event: Event, member: ChannelMember) {
     event.stopPropagation();
@@ -79,6 +100,7 @@ export class MemberComponent {
     console.log(member);
   }
 
+  
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

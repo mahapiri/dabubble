@@ -43,6 +43,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   currentUserSubscription: Subscription = new Subscription();
   currentUser: any = '';
 
+  @Output() searchInputValueAction: EventEmitter<void> = new EventEmitter<void>();
+
 
   constructor() { }
 
@@ -63,6 +65,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.channelService.setSelectedChannel(channel);
     this.sharedService.setSelectProfile(false);
     this.chatService.setIsChannel(true);
+    this.resetSearchInputValue();
   }
 
 
@@ -72,6 +75,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.mainWindow.clickedThread = true;
     this.channelMessageService.setSelectedMessage(channelMsg);
     this.threadService.handleThread();
+    this.resetSearchInputValue();
   }
 
 
@@ -83,6 +87,12 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.sharedService.setSelectProfile(true);
     this.directMessageService.openDmFromUser(profile);
     this.chatService.setIsChannel(false);
+    this.sharedService.setSelectedUserIndex(profile.userId);
+    this.resetSearchInputValue();
+  }
+
+  resetSearchInputValue() {
+    this.searchInputValueAction.emit();
   }
   
   
@@ -98,19 +108,23 @@ export class SearchComponent implements OnInit, OnDestroy {
 
 
   async setProfile(dm: any) {
+    const isCurrentUser = this.currentUser?.userId === dm['profileId'];
+  
     return {
-      username: dm['profileName'],
-      userId: dm['profileId'],
+      username: isCurrentUser ? dm['authorName'] : dm['profileName'],
+      userId: isCurrentUser ? dm['authorId'] : dm['profileId'],
       email: '',
       state: await this.setProfilestate(dm),
       userChannels: [],
-      profileImage: dm['profileImg']
-    }
+      profileImage: isCurrentUser ? dm['authorImg'] : dm['profileImg']
+    };
   }
+  
 
   openProfile(event: Event, userID: string) {
     event?.stopPropagation();
     this.sharedService.isResults = false;
     this.sharedService.openProfile(userID);
+    this.resetSearchInputValue();
   }
 }

@@ -7,6 +7,7 @@ import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 import { TaggingService } from '../../services/tagging.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { UserService } from '../../services/user.service';
+import { ChannelMember } from '../../../models/channel.class';
 
 @Component({
   selector: 'app-tagging',
@@ -29,7 +30,7 @@ export class TaggingComponent implements OnInit, OnDestroy {
 
 
   searchText: string = '';
-  filteredMembers: User[] = [];
+  filteredMembers: ChannelMember[] = [];
   currentUser: any;
   @Input() isFromThread: boolean = false;
   @Input() isNewMessage: boolean = false;
@@ -70,7 +71,7 @@ export class TaggingComponent implements OnInit, OnDestroy {
       this.filteredMembers = this.taggingService.currentChannelMember;
     } else {
       const lowerSearchText = this.searchText.toLowerCase();
-      this.filteredMembers = this.taggingService.currentChannelMember.filter((member: User) =>
+      this.filteredMembers = this.taggingService.currentChannelMember.filter((member: ChannelMember) =>
         member.username.toLowerCase().includes(lowerSearchText)
       );
     }
@@ -80,13 +81,12 @@ export class TaggingComponent implements OnInit, OnDestroy {
   /**
   * select a member and then close the popup window
   */
-  selectMemberToChannel(member: User) {
+  selectMemberToChannel(member: ChannelMember) {
     if (this.isFromThread) {
       this.taggingService.selectMemberThread(member);
-    } else if(!this.isFromThread){
+    } else if (!this.isFromThread) {
       this.taggingService.selectMemberChannel(member);
-    } else if(this.isNewMessage) {
-      console.log('this')
+    } else if (this.isNewMessage) {
       this.taggingService.selectMemberNewMessage(member);
     }
     this.closeWindow();
