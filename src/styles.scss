@@ -249,8 +249,33 @@ a {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.25);
+  transition: opacity 0.15s ease-in-out;
 }
+
+.edit-channel-active.shaded-background {
+  z-index: 2 !important;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+/* Emojis - - - - - - - - - */
 
 .emoji-container {
   position: absolute;

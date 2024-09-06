@@ -46,12 +46,11 @@ export class HeaderComponent implements OnInit {
   // isResults: boolean = false;
   searchInputValue: string = '';
   isSmallScreen!: boolean;
-  animationState: 'opening' | 'closing' | 'none' = 'none';
 
   headerLogo: string = 'daBubble';
   private subscription: Subscription = new Subscription();
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   async ngOnInit() {
     // await this.userService.getUserID();
@@ -120,23 +119,23 @@ export class HeaderComponent implements OnInit {
     if (!this.clickedUser) {
       this.clickedUser = true;
       this.channelService.closePopup();
-      this.animationState = 'opening';
+      this.channelService.animationState = 'opening';
     } else {
-      this.animationState = 'closing';
+      this.channelService.animationState = 'closing';
       setTimeout(() => {
         this.clickedUser = false;
-        this.animationState = 'none';
+        this.channelService.animationState = 'none';
       }, 150); // Time of the slide-in Animation
     }
   }
 
   closePopup() {
     if (this.clickedUser) {
-      this.animationState = 'closing';
+      this.channelService.animationState = 'closing';
 
       setTimeout(() => {
         this.clickedUser = false;
-        this.animationState = 'none';
+        this.channelService.animationState = 'none';
       }, 150); // Time of the slide-out Animation
     }
   }

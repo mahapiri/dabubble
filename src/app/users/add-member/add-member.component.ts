@@ -156,6 +156,20 @@ export class AddMemberComponent {
    */
   closeWindow() {
     this.selectedUsersForChannel = [];
+
+    if (this.channelService.clickedAddMembers) {
+      this.channelService.animationState = 'closing';
+      console.log(
+        'Current animation state:',
+        this.channelService.animationState
+      );
+
+      setTimeout(() => {
+        this.channelService.clickedAddMembers = false;
+        this.channelService.animationState = 'none';
+      }, 150); // Time of the slide-out Animation
+    }
+
     this.channelService.closePopup();
   }
 

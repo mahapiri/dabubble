@@ -29,6 +29,7 @@ export class ChannelService {
   clickedMembers: boolean = false;
   createdBy: string = '';
   channelID?: string = '';
+  animationState: 'opening' | 'closing' | 'none' = 'none';
 
   /**
    * Subscribes to the `selectedChannel$` observable to react to changes in the selected channel.

@@ -61,6 +61,9 @@ export class MemberComponent {
     this.closeWindow();
     this.channelService.clickedAddMembers = true;
     console.log('editChannel Status =', this.isEditChannelPopup); //Test, danach prüfen, ob es die andere Einbindung beeinflusst!
+
+    this.channelService.animationState = 'opening';
+    console.log('Current animation state:', this.channelService.animationState);
   }
 
   closeWindow() {

@@ -54,8 +54,8 @@
 
     <div
       class="info-container"
-      [ngClass]="animationState"
-      *ngIf="clickedUser || animationState === 'closing'"
+      [ngClass]="channelService.animationState"
+      *ngIf="clickedUser || channelService.animationState === 'closing'"
       appClickOutside
       (clickOutside)="closePopup()"
     >
@@ -78,9 +78,9 @@
       </div>
     </div>
     <div
-      class="overlay"
+      class="shaded-background"
       [ngClass]="{ visible: clickedUser }"
-      *ngIf="clickedUser || animationState === 'closing'"
+      *ngIf="clickedUser || channelService.animationState === 'closing'"
       (click)="closePopup()"
     ></div>
   </div>

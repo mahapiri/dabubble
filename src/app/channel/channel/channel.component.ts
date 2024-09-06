@@ -1,6 +1,7 @@
 import {
   AfterViewChecked,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -126,13 +127,18 @@ export class ChannelComponent implements OnInit {
     event.stopPropagation();
     this.channelService.clickedMembers = !this.channelService.clickedMembers;
   }
+
   /**
    * opens the add-members popup
    */
   openAddMembers(event: Event) {
-    this.channelService.closePopup();
     event.stopPropagation();
-    this.channelService.clickedAddMembers = true;
+
+    if (!this.isEditChannelPopup) {
+      //checken ob wir das brauchen
+      this.channelService.closePopup();
+      this.channelService.clickedAddMembers = true;
+    }
   }
 
   handleThreadClick(event: boolean) {

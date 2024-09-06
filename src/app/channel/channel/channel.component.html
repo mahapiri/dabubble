@@ -58,11 +58,23 @@
             <mat-icon>person_add</mat-icon>
           </button>
           <app-add-member
+            [ngClass]="{
+              opening: channelService.animationState === 'opening',
+              closing: channelService.animationState === 'closing'
+            }"
             class="add-member-content"
             [class.edit-channel-active]="this.isEditChannelPopup"
             [channel]="activeChannel"
-            *ngIf="channelService.clickedAddMembers"
+            *ngIf="
+              channelService.clickedAddMembers ||
+              channelService.animationState === 'closing'
+            "
           ></app-add-member>
+          <div
+            *ngIf="channelService.clickedAddMembers"
+            [class.edit-channel-active]="this.isEditChannelPopup"
+            class="shaded-background"
+          ></div>
         </div>
       </div>
     </div>

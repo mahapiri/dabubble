@@ -218,6 +218,14 @@ mat-list-item {
   left: 0 !important;
   right: 0 !important;
   bottom: 0 !important;
+
+  &.opening {
+    animation: slideIn 0.15s ease-in-out forwards !important; /* Opening Animation */
+  }
+
+  &.closing {
+    animation: slideOut 0.15s ease-in-out forwards !important; /* Closing Animation */
+  }
 }
 
 /* Smartphones - - - - - - - - - */
