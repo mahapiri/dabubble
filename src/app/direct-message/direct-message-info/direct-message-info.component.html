@@ -19,7 +19,7 @@
 
             @else {
             <span class="info">Diese Unterhaltung findet nur zwischen
-                <span class="tag">&#64;{{ profile.username }}</span> und dir statt.</span>
+                <span class="tag" (click)="openProfile($event)">&#64;{{ profile.username }}</span> und dir statt.</span>
             }
         </mat-list-item>
     </mat-list>

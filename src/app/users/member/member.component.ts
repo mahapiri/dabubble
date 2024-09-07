@@ -86,7 +86,6 @@ export class MemberComponent {
     event.stopPropagation();
     this.closeWindow();
     this.sharedService.openProfile(member.userId);
-    console.log(member);
   }
 
   ngOnDestroy() {

@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { User } from '../../../models/user.class';
 import { DirectMessageService } from '../../services/direct-message.service';
 import { UserService } from '../../services/user.service';
+import { SharedService } from '../../services/shared.service';
 
 @Component({
   selector: 'app-direct-message-info',
@@ -20,6 +21,7 @@ import { UserService } from '../../services/user.service';
 export class DirectMessageInfoComponent implements OnInit, OnDestroy {
   public userService: UserService = inject(UserService);
   public directMessageService: DirectMessageService = inject(DirectMessageService);
+  public sharedService: SharedService = inject(SharedService);
   private infoSubscription: Subscription = new Subscription();
   profile: Partial<User> = {};
 
@@ -46,5 +48,17 @@ export class DirectMessageInfoComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     this.infoSubscription.unsubscribe();
+  }
+
+
+/**
+ * opens the profile popup
+ * @param event 
+ */
+  openProfile(event: Event) {
+    event.stopPropagation();
+    let userId = `${this.profile.userId}`;
+    this.sharedService.openProfile(userId);
+
   }
 }

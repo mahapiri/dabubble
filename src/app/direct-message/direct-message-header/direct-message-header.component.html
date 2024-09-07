@@ -1,6 +1,6 @@
 <mat-card-header>
     <div class="direct-message-info">
-        <button class="channel-btn">
+        <button class="channel-btn" (click)="openProfile($event)">
             <div class="profile-content">
                 <img src="{{ profile.profileImage }}" alt="Character" class="profile-icon" />
                 <div class="status-icon" ngClass="{{ profile.state }}"></div>
