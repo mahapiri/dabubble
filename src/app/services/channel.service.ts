@@ -161,11 +161,15 @@ export class ChannelService {
     return window.innerWidth <= 960;
   }
 
+  isAddMemberSlider() {
+    return this.isEditChannelPopup$ && this.clickedAddMembers;
+  }
+
   closePopup() {
-    /* if () { //addMemberSlider
+    if (this.isAddMemberSlider()) {
       this.clickedEditChannel = true;
       this.clickedAddMembers = false;
-    } else  */ {
+    } else {
       this.clickedAddMembers = false;
       this.clickedEditChannel = false;
       this.clickedMembers = false;

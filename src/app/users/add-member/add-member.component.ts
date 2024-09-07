@@ -19,7 +19,7 @@ import { ChatService } from '../../services/chat.service';
   styleUrl: './add-member.component.scss',
 })
 export class AddMemberComponent {
-  @Output() clickedAddMembers = new EventEmitter<boolean>();
+  //@Output() clickedAddMembers = new EventEmitter<boolean>();
   @Input() channel!: Channel;
 
   firestore: Firestore = inject(Firestore);
@@ -159,6 +159,7 @@ export class AddMemberComponent {
 
     if (!this.isEditChannelPopup) {
       this.channelService.clickedAddMembers = false;
+      this.channelService.closePopup();
     } else {
       this.channelService.animationState = 'closing';
       setTimeout(() => {
@@ -166,7 +167,6 @@ export class AddMemberComponent {
         this.channelService.animationState = 'none';
       }, 150); // Time of the slide-out Animation
     }
-    this.channelService.closePopup();
   }
 
   ngOnDestroy() {
