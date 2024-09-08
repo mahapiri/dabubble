@@ -41,7 +41,9 @@ export class LogInComponent {
     this.checkForOldGuestUsers();
   }
 
-
+  /**
+   * gets the login credentials from the user-input and logs in the user, if the credentials are correct
+   */
   async onSubmit() {
     this.email = this.userForm.value.userEmail || '';
     this.password = this.userForm.value.userPassword || '';
@@ -59,6 +61,10 @@ export class LogInComponent {
       });
   }
 
+  /**
+   *  handles the error messages, if the user-credentials are incorrect
+   * @param error
+   */
   handleError(error: string) {
     if (error) {
       switch (error) {
@@ -86,13 +92,19 @@ export class LogInComponent {
     }
   }
 
-
+  /**
+   * hides the intro screen once its showed. The intro screen is only showed again when the page is reloaded
+   */
   hideIntroScreen() {
     setTimeout(() => {
       this.authService.firstOpen = false;
     }, 5000);
   }
 
+  /**
+   * signs in with a guest account and saves the guest ID in the authService. It also sets the starting channel, creates a new User in the database
+   *  and saves the time, the guest user was created
+   */
   async logInAsGuest() {
     await signInAnonymously(this.auth).then((login) => {
       this.authService.userId = login.user.uid
@@ -106,7 +118,9 @@ export class LogInComponent {
     this.router.navigate(['/main-window']);
   }
 
-
+  /**
+   * logs in the user with his google user credentials
+   */
   async loginWithGoogle() {
     await this.authService.googleLogin().then(() => {
       this.userForm.reset();
@@ -114,14 +128,24 @@ export class LogInComponent {
     })
   }
 
+  /**
+   * toggles the visibility of the password
+   */
   showPassword() {
     this.passwordVisible = !this.passwordVisible;
   }
 
+  /**
+   * logs out the current user
+   */
   logOutUser() {
     this.authService.logOut();
   }
 
+  /**
+ * updates the user in the database to store the time, the user was created
+ * @param userId the id of the user
+ */
   async setCreationTime(userId: string) {
     const guestRef = doc(this.firestore, "users", userId);
     await updateDoc(guestRef, {
@@ -129,11 +153,15 @@ export class LogInComponent {
     });
   }
 
+  /**
+ * When guest users aren´t deleted correctly from the userlist and the userchannels, this function
+ * deletes old guest users, when they are older than 24 hours
+ */
   async checkForOldGuestUsers() {
     const q = query(collection(this.firestore, "users"), where("username", "==", "Gast"));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach(async (user) => {
-      const guestTimestamp = user.data()['createdAt'] 
+      const guestTimestamp = user.data()['createdAt']
       const userDocId = user.data()['userId']
       if (this.isOlderThanOneDay(guestTimestamp)) {
         await this.authService.deleteGuestFromAllChannels(userDocId);
@@ -142,6 +170,11 @@ export class LogInComponent {
     });
   }
 
+  /**
+ * checks if the user creation is older than 24 hours
+ * @param storedTimestamp creation time of the user
+ * @returns true if the user is older than 24 hours
+ */
   isOlderThanOneDay(storedTimestamp: Timestamp): boolean {
     const currentTimestamp = Timestamp.now();
     const oneDayAgoTimestamp = Timestamp.fromMillis(currentTimestamp.toMillis() - (24 * 60 * 60 * 1000));

@@ -30,16 +30,25 @@ export class AuthService {
 
   constructor(private auth: Auth) { }
 
+  /**
+  * creates the user with the given userCredentials and saves the corresponding userId
+  */
   async createUser() {
     await createUserWithEmailAndPassword(this.auth, this.usermail, this.userpassword).then(async (userCredential) => {
       this.userId = userCredential.user.uid;
     })
   }
 
+  /**
+ * saves the cresated user in the user-document of the firestore database
+ */
   async saveUserInDocument() {
     await setDoc(doc(this.firestore, "users", this.userId), this.setUser());
   }
 
+  /**
+ * adds the new user to the channelmember-list of the two starting channels
+ */
   async setStartingChannels() {
     const user = this.setUser();
     const updates = [
@@ -54,10 +63,19 @@ export class AuthService {
   }
 
 
+  /**
+ * logs in the user with the given user credentials from the log-in screen
+ * @param mail usermail
+ * @param password userpassword
+ */
   async logInUser(mail: string, password: string) {
     await signInWithEmailAndPassword(this.auth, mail, password)
   }
 
+  /**
+ * unsubscribes from the channel messages and from the current user Subscriptions and logs out the current user.
+ * If the current user is from a guest account, it also deletes the guest user
+ */
   async logOut() {
     this.unsubFromMessageList();
     this.userService.unsubscribe()
@@ -68,6 +86,9 @@ export class AuthService {
     await signOut(this.auth);
   }
 
+  /**
+ * unsubscribes from the channel-messagees
+ */
   unsubFromMessageList() {
     if (this.channelMessageService.messageListUnsubscribe) {
       this.channelMessageService.messageListUnsubscribe()
@@ -75,6 +96,9 @@ export class AuthService {
     }
   }
 
+  /**
+ * signs the user in with the google authentification, saves the userId and creates a new user from the google data
+ */
   async googleLogin() {
     await signInWithPopup(this.auth, this.provider).then((result) => {
       const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -87,6 +111,10 @@ export class AuthService {
     });
   }
 
+  /**
+ * saves the userdata provided from the google account
+ * @param user
+ */
   setGoogleUser(user: any) {
     this.username = user.displayName;
     this.usermail = user.email;
@@ -95,6 +123,11 @@ export class AuthService {
   }
 
 
+  /**
+ * checks if the user with the current google data and ID already exists in the user database of firestore.
+ * If not, the user is created and saved in the database
+ * @param userid the ID of the current user
+ */
   async lookForGoogleUserInDatabase(userid: string) {
     const userdoc = await getDoc(doc(this.firestore, "users", userid))
     if (!userdoc.exists()) {
@@ -103,6 +136,10 @@ export class AuthService {
     }
   }
 
+  /**
+ * creates a user Object from the provided userdata
+ * @returns the userObject of the new User
+ */
   setUser() {
     const user = {
       username: this.username,
@@ -120,6 +157,9 @@ export class AuthService {
     return user;
   }
 
+  /**
+ * deletes the guest user from all channels and directmessages
+ */
   async deleteGuestUser() {
     const user = this.auth.currentUser;
     if (user) {
@@ -130,6 +170,10 @@ export class AuthService {
     }
   }
 
+  /**
+ * looks up in witch channels the guestuser was a member and removes the user from all of these channels
+ * @param idToDelete ID of the user
+ */
   async deleteGuestFromAllChannels(idToDelete: string) {
     const userDocSnap = await getDoc(doc(this.firestore, "users", idToDelete));
     if (userDocSnap.exists()) {
@@ -144,6 +188,11 @@ export class AuthService {
     }
   }
 
+  /**
+ * removes the user from the channel by updating the channelMember-array with an array, where the user is´t part of
+ * @param channel channel where the user is part of
+ * @param idToDelete userId
+ */
   async deleteUserFromChannel(channel: Channel, idToDelete: string) {
     if (channel.channelID) {
       let reducedArray = this.createArrayWithoutUser(channel, idToDelete);
@@ -154,6 +203,12 @@ export class AuthService {
     }
   }
 
+  /**
+ * filters out the user from the channelMember array
+ * @param channel channel where the user is part of
+ * @param idToDelete userId
+ * @returns a channelMember-array without the user
+ */
   createArrayWithoutUser(channel: Channel, idToDelete: string) {
     return channel.channelMember.filter(member => member.userId !== idToDelete);
   }
@@ -163,13 +218,13 @@ export class AuthService {
     const directMessagesRef = collection(this.firestore, 'direct-messages');
     const q = query(directMessagesRef, where('userIDs', 'array-contains', userId));
     const querySnapshot = await getDocs(q);
-  
+
     for (const doc of querySnapshot.docs) {
       const directMessageId = doc.id;
       await this.deleteDirectMessage(directMessageId);
     }
   }
-  
+
 
   async deleteDirectMessage(directMessageId: string) {
     const messagesRef = collection(this.firestore, `direct-messages/${directMessageId}/messages`);
@@ -177,7 +232,7 @@ export class AuthService {
     for (const messageDoc of messagesSnapshot.docs) {
       await deleteDoc(messageDoc.ref);
     }
-  
+
     const directMessageDocRef = doc(this.firestore, 'direct-messages', directMessageId);
     await deleteDoc(directMessageDocRef);
   }

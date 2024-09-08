@@ -33,8 +33,12 @@ export class UserService {
   public authStateSubscription: Subscription | undefined;
   private unsubscribeSnapshot: (() => void) | undefined;
 
-  constructor(private auth: Auth) {}
+  constructor(private auth: Auth) { }
 
+  /**
+ * gets the userId from the current, logged-in, user and sets the state ro onlinee, or offline.
+ * sets the current-user-Observable to the current user
+ */
   async getUserID() {
     this.authStateSubscription = new Subscription();
     const authStateChangeHandler = onAuthStateChanged(this.auth, (user) => {
@@ -53,6 +57,9 @@ export class UserService {
     this.authStateSubscription.add(authStateChangeHandler);
   }
 
+  /**
+ * get an observable of all the user-Objects, that are saved in the database
+ */
   getUserList() {
     onSnapshot(collection(this.firestore, 'users'), (querySnapshot) => {
       this.userArray = [];
@@ -64,12 +71,15 @@ export class UserService {
     });
   }
 
+  /**
+ * gives the current User Object to the current-user-observable
+ */
   getCurrentUser() {
     this.unsubscribeSnapshot = onSnapshot(
       this.getUserRef(),
       (user) => {
         if (user.exists()) {
-          this.currentUser.next(new User(user.data()));         
+          this.currentUser.next(new User(user.data()));
         }
       },
       (error) => {
@@ -79,12 +89,20 @@ export class UserService {
     );
   }
 
+  /**
+ * sets the state of the user in the document to online or offline
+ * @param state the state to set ("Online", or "Offline")
+ */
   async setUserState(state: string) {
     if (this.userID) {
       await updateDoc(this.getUserRef(), { state: state });
     }
   }
 
+  /**
+ * gets the firestore reference of the current user
+ * @returns firestore reference
+ */
   getUserRef() {
     return doc(this.firestore, 'users', this.userID);
   }
@@ -100,6 +118,9 @@ export class UserService {
     });
   }
 
+  /**
+ * unsubscribes from the current-user-snapshot
+ */
   unsubscribe() {
     if (this.unsubscribeSnapshot) {
       this.unsubscribeSnapshot();

@@ -37,6 +37,9 @@ export class SignUpComponent {
 
 
 
+  /**
+ * saves the user credentials in the authService if they are correct or throws an errormessage if they are incorrect
+ */
   async onSubmit() {
     this.invalidName = false;
     this.invalidMail = false;
@@ -67,6 +70,9 @@ export class SignUpComponent {
     }
   }
 
+  /**
+ * toggles the password visibility
+ */
   showPassword() {
     this.passwordVisible = !this.passwordVisible;
   }
