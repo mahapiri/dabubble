@@ -6,6 +6,7 @@ import { ChooseAvatarComponent } from './login/choose-avatar/choose-avatar.compo
 import { ResetPasswordComponent } from './login/reset-password/reset-password.component';
 import { SendMailComponent } from './login/send-mail/send-mail.component';
 import { ImprintComponent } from './imprint/imprint.component';
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 
 export const routes: Routes = [
     { path: '', component: LogInComponent},
@@ -16,4 +17,6 @@ export const routes: Routes = [
     { path: 'reset-password', component: ResetPasswordComponent },
     { path: 'send-mail', component: SendMailComponent },
     { path: 'imprint', component: ImprintComponent },    
+    { path: 'privacy', component: PrivacyPolicyComponent },    
+
 ];

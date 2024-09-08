@@ -12,6 +12,7 @@ import { ResetPasswordComponent } from './login/reset-password/reset-password.co
 import { SendMailComponent } from './login/send-mail/send-mail.component';
 import localeDe from '@angular/common/locales/de';
 import { ImprintComponent } from './imprint/imprint.component';
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -29,7 +30,8 @@ registerLocaleData(localeDe, 'de');
     ChooseAvatarComponent,
     ResetPasswordComponent,
     SendMailComponent,
-    ImprintComponent
+    ImprintComponent,
+    PrivacyPolicyComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
