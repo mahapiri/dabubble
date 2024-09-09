@@ -56,6 +56,5 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.sharedService.setClickedNewMessage(false);
     this.sharedService.setSelectedUserIndex(this.user.userId);
     this.chatService.handleWindowChangeOnMobile();
-    this.chatService.showWorkspaceMenu();
   }
 }
