@@ -149,6 +149,26 @@ export class ChatService {
   }
 
   /**
+   * Trigger layout update based on the current screen size.
+   * If it's mobile, update mobile view, else show desktop view.
+   */
+  updateLayoutOnResize() {
+    if (this.mobileScreen()) {
+      this.handleWindowChangeOnMobile();
+    } else {
+      this.showDesktopLayout();
+    }
+  }
+
+  /**
+   * Handles the desktop layout view.
+   */
+  showDesktopLayout() {
+    this.showWorkspaceMenu();
+    this.showHeaderLogo('daBubble');
+  }
+
+  /**
    * Checks if a channel is selected on a mobile device (window width 960px or less).
    * @returns {boolean} `true` if the screen width is 960 pixels or less and a channel is selected; otherwise, `false`.
    */
@@ -191,17 +211,12 @@ export class ChatService {
     }
   }
 
-  /*   showWorkspaceMenu() {
-    if (
-      window.innerWidth > 960 ||
-      (this.workspaceMenuSelectedOnMobile() && this.clickedBack)
-    ) {
-      this.showHeaderLogo('daBubble');
-
+  showWorkspaceMenu() {
+    if (window.innerWidth > 960) {
       const workspaceMenu = document.querySelector('#workspaceMenu');
       this.renderer.setStyle(workspaceMenu, 'display', 'flex');
     }
-  } */
+  }
 
   setIsDirectMessage() {
     this.sharedService.selectProfileChange$.subscribe((status) => {

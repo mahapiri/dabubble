@@ -9,6 +9,7 @@ import {
   OnInit,
   ChangeDetectorRef,
   inject,
+  HostListener,
 } from '@angular/core';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -113,6 +114,14 @@ export class WorkspaceMenuComponent implements OnInit {
         }
       }
     }); */
+  }
+
+  /**
+   * Listens for window resize events and triggers the checkScreenSize method.
+   */
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.chatService.updateLayoutOnResize();
   }
 
   /**

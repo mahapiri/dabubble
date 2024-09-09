@@ -81,6 +81,7 @@ export class HeaderComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.checkScreenSize();
+    this.chatService.updateLayoutOnResize();
   }
 
   /**
