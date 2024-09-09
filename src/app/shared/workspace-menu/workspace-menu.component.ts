@@ -145,7 +145,6 @@ export class WorkspaceMenuComponent implements OnInit {
     this.sharedService.resetSelectedUserIndex();
 
     this.chatService.handleWindowChangeOnMobile();
-    this.chatService.showWorkspaceMenu();
     this.sharedService.setIsNewMessage(false);
     this.sharedService.setClickedNewMessage(false);
   }
@@ -176,7 +175,7 @@ export class WorkspaceMenuComponent implements OnInit {
       this.sharedService.getClickedNewMessage()
     );
     this.sharedService.resetSelectedUserIndex();
-    this.chatService.hideComponentOnMobile('#workspaceMenu');
+    this.chatService.hideComponentOnMobile('workspaceMenu');
     this.chatService.showHeaderLogo('channelLogo');
 
     this.cdr.detectChanges();
@@ -206,7 +205,6 @@ export class WorkspaceMenuComponent implements OnInit {
     this.sharedService.setSelectedUserIndex(profile.userId);
 
     this.chatService.handleWindowChangeOnMobile();
-    this.chatService.showWorkspaceMenu();
   }
 
   editChannel(channel: string) {}

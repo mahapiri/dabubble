@@ -125,13 +125,6 @@ export class HeaderComponent implements OnInit {
     this.searchInputValue = '';
   }
 
-  /*   @HostListener('window:resize', ['$event'])
-  onResize(event: Event) {
-    this.chatService.updateHeaderOnMobile();
-    this.isChannelSelectedOnMobile =
-      this.chatService.setIsChannelSelectedOnMobile();
-  } */
-
   /**
    * Handles navigation back to the workspace menu, resetting the profile and channel states.
    */
@@ -139,10 +132,9 @@ export class HeaderComponent implements OnInit {
     this.chatService.setIsChannel(false);
     this.sharedService.setSelectProfile(false);
     this.mainWindow.clickedThread = false;
-    this.chatService.setClickedBack(true);
     this.chatService.handleWindowChangeOnMobile();
-    this.chatService.showWorkspaceMenu();
-    this.chatService.setClickedBack(false);
+    this.chatService.showComponentOnMobile('workspaceMenu');
+    this.sharedService.setIsNewMessage(false);
     this.sharedService.resetSelectedUserIndex();
   }
 

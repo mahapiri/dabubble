@@ -100,7 +100,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.resetSearchInputValue();
     this.sharedService.setClickedNewMessage(false);
     this.chatService.handleWindowChangeOnMobile();
-    this.chatService.showWorkspaceMenu();
     this.sharedService.setIsNewMessage(false);
   }
 

@@ -13,7 +13,6 @@ export class ChatService {
   message!: ChannelMessage | DmMessage;
   isChannel: boolean = false;
   isDirectMessage: boolean = false;
-  clickedBack: boolean = false;
   private renderer: Renderer2;
 
   private headerLogoSubject = new BehaviorSubject<string>('daBubble');
@@ -119,14 +118,6 @@ export class ChatService {
   }
 
   /**
-   * Sets the value of the `clickedBack` property.
-   * @param {boolean} status - The new value to set for the `clickedBack` property.
-   */
-  setClickedBack(status: boolean) {
-    this.clickedBack = status;
-  }
-
-  /**
    * Determines if the current screen width is considered mobile.
    * @returns `true` if the screen width is 960 pixels or less, otherwise `false`.
    */
@@ -153,8 +144,8 @@ export class ChatService {
    */
   updateView(componentId1: string, componentId2: string, logo: string) {
     this.showHeaderLogo(logo);
-    this.hideComponentOnMobile(`#${componentId1}`);
-    this.showComponentOnMobile(`#${componentId2}`);
+    this.hideComponentOnMobile(componentId1);
+    this.showComponentOnMobile(componentId2);
   }
 
   /**
@@ -188,46 +179,29 @@ export class ChatService {
 
   hideComponentOnMobile(componentId: string) {
     if (window.innerWidth <= 960) {
-      const component = document.querySelector(componentId);
+      const component = document.querySelector(`#${componentId}`);
       this.renderer.setStyle(component, 'display', 'none');
     }
   }
 
   showComponentOnMobile(componentId: string) {
     if (window.innerWidth <= 960) {
-      const component = document.querySelector(componentId);
+      const component = document.querySelector(`#${componentId}`);
       this.renderer.setStyle(component, 'display', 'flex');
     }
   }
 
-  showWorkspaceMenu() {
+  /*   showWorkspaceMenu() {
     if (
-      (this.workspaceMenuSelectedOnMobile() && window.innerWidth > 960) ||
+      window.innerWidth > 960 ||
       (this.workspaceMenuSelectedOnMobile() && this.clickedBack)
     ) {
       this.showHeaderLogo('daBubble');
 
       const workspaceMenu = document.querySelector('#workspaceMenu');
-      const channelCard = document.querySelector('#channel');
-      const newMessage = document.querySelector('#newMessage');
-      const directMessage = document.querySelector('#directMessage');
-
-      if (workspaceMenu && channelCard) {
-        this.renderer.setStyle(workspaceMenu, 'display', 'flex');
-        this.renderer.setStyle(channelCard, 'display', 'none');
-      }
-
-      if (workspaceMenu && directMessage) {
-        this.renderer.setStyle(workspaceMenu, 'display', 'flex');
-        this.renderer.setStyle(directMessage, 'display', 'none');
-      }
-
-      if (workspaceMenu && newMessage) {
-        this.renderer.setStyle(workspaceMenu, 'display', 'flex');
-        this.sharedService.setIsNewMessage(false);
-      }
+      this.renderer.setStyle(workspaceMenu, 'display', 'flex');
     }
-  }
+  } */
 
   setIsDirectMessage() {
     this.sharedService.selectProfileChange$.subscribe((status) => {

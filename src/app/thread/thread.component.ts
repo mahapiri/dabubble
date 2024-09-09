@@ -158,7 +158,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
    */
   closeThread() {
     this.clickedCloseThread.emit(false);
-    this.chatService.showComponentOnMobile('#channel');
+    this.chatService.showComponentOnMobile('channel');
   }
 
   /** Sends the text in the input field to the Thread Collection in the Backend. Trims the message from whitespace, ensures input is not empty, clears the input field after send */

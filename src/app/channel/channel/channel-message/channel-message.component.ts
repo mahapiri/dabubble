@@ -89,7 +89,7 @@ export class ChannelMessageComponent {
     this.channelMessageService.setSelectedMessage(this.channelMessage);
     this.threadService.handleThread();
     this.cdRef.detectChanges();
-    this.chatService.hideComponentOnMobile('#channel');
+    this.chatService.hideComponentOnMobile('channel');
   }
 
   /**
