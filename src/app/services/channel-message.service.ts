@@ -132,7 +132,6 @@ export class ChannelMessageService {
 
       this.channelMessages.reverse();
       this.channelMessagesSubjects.next(this.channelMessages);
-      console.log('Message received:', this.channelMessages);
     });
   }
 

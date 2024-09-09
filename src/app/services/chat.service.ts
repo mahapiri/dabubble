@@ -154,7 +154,7 @@ export class ChatService {
   }
 
   /**
-   * Checks if a channel isselected on a mobile device (window width 960px or less).
+   * Checks if a channel is selected on a mobile device (window width 960px or less).
    * @returns {boolean} `true` if the screen width is 960 pixels or less and a channel is selected; otherwise, `false`.
    */
   channelSelectedOnMobile() {

@@ -156,7 +156,6 @@ export class AddMemberComponent {
    */
   closeWindow() {
     this.selectedUsersForChannel = [];
-
     if (!this.isEditChannelPopup) {
       this.channelService.clickedAddMembers = false;
       this.channelService.closePopup();

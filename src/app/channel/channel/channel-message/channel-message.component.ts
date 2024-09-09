@@ -76,7 +76,6 @@ export class ChannelMessageComponent {
       .subscribe((time) => {
         this.lastAnswerTime = time;
         this.cdRef.detectChanges();
-        console.log('last answer time:', time);
       });
   }
 

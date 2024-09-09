@@ -181,7 +181,6 @@ export class ThreadService {
         this.threads.push(currentThread);
       });
       this.threadsSubject.next(this.threads);
-      console.log('Thread received:', this.threads);
     });
   }
 

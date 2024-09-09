@@ -210,6 +210,7 @@ export class ChannelService {
       this.clickedAddMembers = false;
       this.clickedEditChannel = false;
       this.clickedMembers = false;
+      this.setIsEditChannelPopup(false);
     }
   }
 }

@@ -60,7 +60,7 @@ export class EditChannelComponent {
   }
 
   ngOnInit() {
-    this.channelService.setIsEditChannelPopup(true);
+    //this.channelService.setIsEditChannelPopup(true);
 
     this.subscription = this.userService.currentUser$.subscribe((value) => {
       if (value) {
@@ -129,6 +129,9 @@ export class EditChannelComponent {
    */
   closeChannel() {
     this.channelService.closePopup();
+    if (!this.chatService.mobileScreen()) {
+      this.channelService.setIsEditChannelPopup(false);
+    }
   }
 
   /**
