@@ -35,8 +35,7 @@
   cursor: pointer;
 
   .message-details {
-    width: fit-content;
-    max-width: 70vw;
+    width: clamp(47vw, 90%, 85vw);
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -371,23 +370,17 @@
       width: 50px;
     }
   }
-
-  /* .my-message {
-    .message {
-      padding: 10px 6px 10px 6px;
-    }
-  } */
 }
 
 @media only screen and (max-width: 500px) {
   .edit-options-wrapper {
-      flex-direction: column;
-      align-items: flex-start !important;
-      height: unset !important;
+    flex-direction: column;
+    align-items: flex-start !important;
+    height: unset !important;
   }
 
   .btn-container {
-      width: 100%;
-      justify-content: space-between;
+    width: 100%;
+    justify-content: space-between;
   }
 }
