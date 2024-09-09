@@ -134,7 +134,7 @@ export class HeaderComponent implements OnInit {
     this.sharedService.setSelectProfile(false);
     this.mainWindow.clickedThread = false;
     this.chatService.handleWindowChangeOnMobile();
-    this.chatService.showComponentOnMobile('workspaceMenu');
+    this.chatService.showWorkspaceMenu();
     this.sharedService.setIsNewMessage(false);
     this.sharedService.resetSelectedUserIndex();
   }

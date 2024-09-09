@@ -226,9 +226,24 @@ export class ChatService {
    * Displays the workspace menu if the screen width is greater than 960 pixels (desktop view).
    */
   showWorkspaceMenu() {
-    if (window.innerWidth > 960) {
+    if (window.innerWidth > 960 || this.workspaceMenuSelectedOnMobile()) {
       const workspaceMenu = document.querySelector('#workspaceMenu');
       this.renderer.setStyle(workspaceMenu, 'display', 'flex');
+    }
+    this.hideOtherComponents();
+  }
+
+  /** Hides the other components on mobile screen when clicking back to workspace menu */
+  hideOtherComponents() {
+    if (this.mobileScreen()) {
+      const channelCard = document.querySelector('#channel');
+      const directMessage = document.querySelector('#directMessage');
+      if (channelCard) {
+        this.renderer.setStyle(channelCard, 'display', 'none');
+      }
+      if (directMessage) {
+        this.renderer.setStyle(directMessage, 'display', 'none');
+      }
     }
   }
 
