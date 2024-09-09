@@ -69,7 +69,6 @@ export class DirectMessageHeaderComponent implements OnInit, OnDestroy {
     event.stopPropagation();
     let userId = `${this.profile.userId}`;
     if (userId == this.currentuser[0].userId) {
-      console.log('open my-profile'); // logik muss noch hinzugefügt werden
       this.sharedService.openProfile(userId); // vorrübergehend drin
     } else {
       this.sharedService.openProfile(userId);

@@ -226,3 +226,17 @@
 .message-image {
     width: 188px;
 }
+
+
+@media only screen and (max-width: 960px) {
+    .message-wrapper {
+        width: 100vw;
+        gap: 18px;
+        padding: 10px 16px 10px 16px;
+
+        .user-img {
+            height: 50px;
+            width: 50px;
+        }
+    }
+}
