@@ -118,7 +118,6 @@ export class ChannelComponent implements OnInit {
     event.stopPropagation();
     this.channelService.clickedEditChannel = true;
     this.channelService.setIsEditChannelPopup(true);
-    console.log('editChannelPopup State', this.isEditChannelPopup);
   }
 
   /**

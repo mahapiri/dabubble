@@ -218,7 +218,6 @@ export class ThreadMessageService {
 
         //this.threadMessages.reverse();
         this.threadMessagesSubjects.next(this.threadMessages);
-        console.log('Thread Message received:', this.threadMessages);
 
         resolve();
       });
