@@ -1,4 +1,12 @@
-import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { User } from '../../../models/user.class';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
@@ -12,14 +20,9 @@ import { ChannelMember } from '../../../models/channel.class';
 @Component({
   selector: 'app-tagging',
   standalone: true,
-  imports: [
-    MatIconModule,
-    CommonModule,
-    FormsModule,
-    ClickOutsideDirective
-  ],
+  imports: [MatIconModule, CommonModule, FormsModule, ClickOutsideDirective],
   templateUrl: './tagging.component.html',
-  styleUrl: './tagging.component.scss'
+  styleUrl: './tagging.component.scss',
 })
 export class TaggingComponent implements OnInit, OnDestroy {
   @Input() showUser: User[] = [];
@@ -28,14 +31,11 @@ export class TaggingComponent implements OnInit, OnDestroy {
   private userService: UserService = inject(UserService);
   private userSubscription: Subscription = new Subscription();
 
-
   searchText: string = '';
   filteredMembers: ChannelMember[] = [];
   currentUser: any;
   @Input() isFromThread: boolean = false;
   @Input() isNewMessage: boolean = false;
-
-
 
   /**
    * subscribes the current user
@@ -46,14 +46,12 @@ export class TaggingComponent implements OnInit, OnDestroy {
     });
   }
 
-
   /**
-  * get all user from current channel
-  */
+   * get all user from current channel
+   */
   ngOnInit() {
     this.filteredMembers = this.taggingService.currentChannelMember;
   }
-
 
   /**
    * unsubscribes the current user
@@ -62,25 +60,24 @@ export class TaggingComponent implements OnInit, OnDestroy {
     this.userSubscription.unsubscribe();
   }
 
-
   /**
-  * search member to tag
-  */
+   * search member to tag
+   */
   searchMember() {
     if (this.searchText.trim() === '') {
       this.filteredMembers = this.taggingService.currentChannelMember;
     } else {
       const lowerSearchText = this.searchText.toLowerCase();
-      this.filteredMembers = this.taggingService.currentChannelMember.filter((member: ChannelMember) =>
-        member.username.toLowerCase().includes(lowerSearchText)
+      this.filteredMembers = this.taggingService.currentChannelMember.filter(
+        (member: ChannelMember) =>
+          member.username.toLowerCase().includes(lowerSearchText)
       );
     }
   }
 
-
   /**
-  * select a member and then close the popup window
-  */
+   * select a member and then close the popup window
+   */
   selectMemberToChannel(member: ChannelMember) {
     if (this.isFromThread) {
       this.taggingService.selectMemberThread(member);
@@ -92,10 +89,9 @@ export class TaggingComponent implements OnInit, OnDestroy {
     this.closeWindow();
   }
 
-
   /**
-  * close the popup window
-  */
+   * close the popup window
+   */
   closeWindow() {
     this.closePopup.emit();
   }

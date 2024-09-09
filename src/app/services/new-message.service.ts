@@ -5,9 +5,9 @@ import { User } from '../../models/user.class';
 import { doc, Firestore, getDoc } from '@angular/fire/firestore';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class NewMessageService implements OnInit, OnDestroy {
+export class NewMessageService implements OnDestroy {
   private firestore: Firestore = inject(Firestore);
   private userService: UserService = inject(UserService);
   private userServiceSubscription: Subscription = new Subscription();
@@ -26,45 +26,41 @@ export class NewMessageService implements OnInit, OnDestroy {
   resultUser: User[] = [];
   resultChannel: any = [];
 
-
   constructor() {
-    const currentUserSubscription = this.userService.currentUser$.subscribe(user => {
-      this.currentUserId = user?.userId || '';
-    });
-
-    const userListSubscription = this.userService._userList.subscribe(userList => {
-      this.userList = userList;
-
-      const currentUser = this.userList.find(profile => this.currentUserId === profile.userId);
-
-      if (currentUser) {
-        currentUser.userChannels.forEach(async (id: any) => {
-          const channelName = await this.proofChannelName(id);
-          this.channelList.push(
-            {
-              name: channelName,
-              id: id
-            }
-          );
-        });
+    const currentUserSubscription = this.userService.currentUser$.subscribe(
+      (user) => {
+        this.currentUserId = user?.userId || '';
       }
-    });
+    );
+
+    const userListSubscription = this.userService._userList.subscribe(
+      (userList) => {
+        this.userList = userList;
+
+        const currentUser = this.userList.find(
+          (profile) => this.currentUserId === profile.userId
+        );
+
+        if (currentUser) {
+          currentUser.userChannels.forEach(async (id: any) => {
+            const channelName = await this.proofChannelName(id);
+            this.channelList.push({
+              name: channelName,
+              id: id,
+            });
+          });
+        }
+      }
+    );
 
     this.userServiceSubscription.add(currentUserSubscription);
     this.userServiceSubscription.add(userListSubscription);
   }
 
-
-  ngOnInit(): void {
-
-  }
-
-
   ngOnDestroy(): void {
     this.userServiceSubscription.unsubscribe();
-    console.log('unsub new msg service')
+    console.log('unsub new msg service');
   }
-
 
   setSearchword(searchword: string) {
     this.searchwordSubject.next(searchword);
@@ -88,28 +84,28 @@ export class NewMessageService implements OnInit, OnDestroy {
     this.searchChannel(searchValue);
   }
 
-
   searchUser(searchword: string) {
     this.userList.forEach((user) => {
       const profile = user.username || '';
       const mail = user.email || '';
-      if (profile.toLowerCase().includes(searchword) || mail.toLowerCase().includes(searchword)) {
+      if (
+        profile.toLowerCase().includes(searchword) ||
+        mail.toLowerCase().includes(searchword)
+      ) {
         this.resultUser.push(user);
       }
-    })
+    });
   }
-
 
   searchChannel(searchword: string) {
     this.channelList.forEach((channel: any) => {
-      const channelName = channel.name || ''
+      const channelName = channel.name || '';
       if (channelName.toLowerCase().includes(searchword)) {
         this.resultChannel.push(channel);
         this.proofChannelName(channel.id);
       }
-    })
+    });
   }
-
 
   async proofChannelName(id: string) {
     const channelRef = doc(this.firestore, 'channels', id);
@@ -123,12 +119,10 @@ export class NewMessageService implements OnInit, OnDestroy {
     }
   }
 
-
   selectChannel(channel: any) {
     this.messageIdSubject.next(channel.id);
     this.isChannel = true;
   }
-
 
   selectUser(user: User) {
     this.messageIdSubject.next(user.userId);

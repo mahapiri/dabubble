@@ -110,6 +110,7 @@ export class EditChannelComponent {
     this.editing = !this.editing;
     this.saveChanges();
   }
+
   /**
    * updates the channe name or description if its changed by the user
    */
@@ -130,6 +131,9 @@ export class EditChannelComponent {
     this.channelService.closePopup();
   }
 
+  /**
+   * Clean up subscriptions when the component is destroyed.
+   */
   ngOnDestroy() {
     this.subscription.unsubscribe();
     this.subscribeChannel.unsubscribe();

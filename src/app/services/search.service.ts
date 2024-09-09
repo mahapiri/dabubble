@@ -4,24 +4,31 @@ import { User } from '../../models/user.class';
 import { Subscription } from 'rxjs';
 import { Channel, ChannelMessage } from '../../models/channel.class';
 import { DirectMessageService } from './direct-message.service';
-import { collection, Firestore, getDoc, getDocs, query, where } from '@angular/fire/firestore';
+import {
+  collection,
+  Firestore,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from '@angular/fire/firestore';
 import { DmMessage } from '../../models/direct-message.class';
 import { Thread } from '../../models/thread.class';
 import { ThreadService } from './thread.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SearchService implements OnInit, OnDestroy {
   private firestore: Firestore = inject(Firestore);
   private userService: UserService = inject(UserService);
-  private directMessageService: DirectMessageService = inject(DirectMessageService);
+  private directMessageService: DirectMessageService =
+    inject(DirectMessageService);
   private threadService: ThreadService = inject(ThreadService);
   private userListSubscription: Subscription = new Subscription();
   private currentUserChannelsSubscription: Subscription = new Subscription();
   private currentUserSubscription: Subscription = new Subscription();
   private threadSubscription: Subscription = new Subscription();
-
 
   currentUserID: string = '';
   channelList: Channel[] = [];
@@ -38,15 +45,11 @@ export class SearchService implements OnInit, OnDestroy {
   resultThread: any = [];
   timer: boolean = false;
 
+  constructor() {}
 
-  constructor() { }
+  ngOnInit() {}
 
-
-  ngOnInit() { }
-
-
-  ngOnDestroy(): void { }
-
+  ngOnDestroy(): void {}
 
   async startSubscription() {
     // console.log('start search / sub')
@@ -54,27 +57,31 @@ export class SearchService implements OnInit, OnDestroy {
       this.userList = user;
       // console.log('sub:', user)
     });
-    this.currentUserChannelsSubscription = this.userService.userChannels$.subscribe((channels) => {
-      this.channelList = channels;
-      // console.log('sub:', channels)
-    });
+    this.currentUserChannelsSubscription =
+      this.userService.userChannels$.subscribe((channels) => {
+        this.channelList = channels;
+        // console.log('sub:', channels)
+      });
     // this.dmSubscription = this.dmService.messages$.subscribe((message) =>  {
     //   console.log(message);
     // });
-    this.currentUserSubscription = this.userService.currentUser$.subscribe((user) => {
-      if (user) {
-        this.currentUserID = user?.userId || '';
-        // console.log('sub:', user)
+    this.currentUserSubscription = this.userService.currentUser$.subscribe(
+      (user) => {
+        if (user) {
+          this.currentUserID = user?.userId || '';
+          // console.log('sub:', user)
+        }
       }
-    })
-    this.threadSubscription = this.threadService.threads$.subscribe((thread) => {
-      if (thread) {
-        this.threads = thread;
-        // console.log('sub:', thread)
+    );
+    this.threadSubscription = this.threadService.threads$.subscribe(
+      (thread) => {
+        if (thread) {
+          this.threads = thread;
+          // console.log('sub:', thread)
+        }
       }
-    })
+    );
   }
-
 
   stopSubscription() {
     this.userListSubscription.unsubscribe();
@@ -85,30 +92,30 @@ export class SearchService implements OnInit, OnDestroy {
     // console.log('stop search / unsub');
   }
 
-
   setTimerToTrue() {
-    this.timer = true
+    this.timer = true;
     setTimeout(() => {
       this.timer = false;
-    }, 60000);  // 60 sek
+    }, 60000); // 60 sek
   }
-
 
   async getAllDM() {
     if (!this.timer) {
       this.directMessage = [];
       const collectionRef = this.directMessageService.getCollectionRef();
 
-      const q = query(collectionRef, where("userIDs", "array-contains", this.currentUserID));
+      const q = query(
+        collectionRef,
+        where('userIDs', 'array-contains', this.currentUserID)
+      );
 
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
         const dmID = doc.id;
         this.getDmMessage(dmID);
-      })
+      });
     }
   }
-
 
   async getDmMessage(dmID: string) {
     const messageRef = this.directMessageService.getMessageRefForId(dmID);
@@ -133,11 +140,10 @@ export class SearchService implements OnInit, OnDestroy {
         file: data['file'] || '',
         id: data['id'] || '',
         isFirstMessageOfDay: data['isFirstMessageOfDay'] || '',
-      }
+      };
       this.directMessage.push(message);
-    })
+    });
   }
-
 
   async getAllChannel() {
     if (!this.timer) {
@@ -151,8 +157,8 @@ export class SearchService implements OnInit, OnDestroy {
             channelName: channel.channelName,
             createdBy: channel.createdBy,
             description: channel.description,
-            messages: []
-          }
+            messages: [],
+          };
           this.channelListMsg.push(channelList);
           const arrayIndex = this.channelListMsg.length - 1;
           await this.getChannelMessage(arrayIndex, id);
@@ -160,7 +166,6 @@ export class SearchService implements OnInit, OnDestroy {
       }
     }
   }
-
 
   async getChannelMessage(arrayIndex: number, id: string) {
     const messageRef = collection(this.firestore, `channels/${id}/messages`);
@@ -178,14 +183,16 @@ export class SearchService implements OnInit, OnDestroy {
         profileImage: data['profileImg'],
         text: data['text'],
         time: data['time'],
-      }
+      };
 
-      if (this.channelListMsg[arrayIndex] && this.channelListMsg[arrayIndex].messages) {
+      if (
+        this.channelListMsg[arrayIndex] &&
+        this.channelListMsg[arrayIndex].messages
+      ) {
         this.channelListMsg[arrayIndex].messages.push(message);
       }
     });
   }
-
 
   async getAllThreads() {
     if (!this.timer) {
@@ -197,8 +204,8 @@ export class SearchService implements OnInit, OnDestroy {
             channelName: thread.channelName,
             replyToMessage: thread.replyToMessage,
             threadID: thread.threadID,
-            messages: []
-          }
+            messages: [],
+          };
           this.threadListMsg.push(threadList);
           const arrayIndex = this.threadListMsg.length - 1;
           await this.getThreadMessage(arrayIndex, id);
@@ -206,7 +213,6 @@ export class SearchService implements OnInit, OnDestroy {
       }
     }
   }
-
 
   async getThreadMessage(arrayIndex: number, id: string) {
     const messageRef = collection(this.firestore, `threads/${id}/messages`);
@@ -224,17 +230,18 @@ export class SearchService implements OnInit, OnDestroy {
         profileImage: data['profileImg'],
         text: data['text'],
         time: data['time'],
-      }
+      };
 
-      if (this.threadListMsg[arrayIndex] && this.threadListMsg[arrayIndex].messages) {
+      if (
+        this.threadListMsg[arrayIndex] &&
+        this.threadListMsg[arrayIndex].messages
+      ) {
         this.threadListMsg[arrayIndex].messages.push(message);
       }
     });
   }
 
-
   async search(searchInputValue: string) {
-
     this.resultUser = [];
     this.resultChannel = [];
     this.resultThread = [];
@@ -254,13 +261,11 @@ export class SearchService implements OnInit, OnDestroy {
     this.searchThread(searchWord);
   }
 
-
   async searchDM(searchWord: string) {
-    const tempResult: any = []
+    const tempResult: any = [];
     let ids: any = [];
 
     this.directMessage.forEach((message) => {
-
       const text = message.text || '';
 
       if (text.toLowerCase().includes(searchWord)) {
@@ -274,17 +279,14 @@ export class SearchService implements OnInit, OnDestroy {
     this.updateDMsWithCurrentUserInfo();
   }
 
-
   updateDMsWithCurrentUserInfo() {
-    this.resultDM.forEach(dm => {
+    this.resultDM.forEach((dm) => {
       if (this.currentUserID === dm.profileId) {
         dm.profileImg = dm.authorImg || '';
         dm.profileName = dm.authorName || '';
       }
     });
   }
-
-
 
   async searchUser(searchWord: string) {
     this.userList.forEach((user) => {
@@ -294,7 +296,6 @@ export class SearchService implements OnInit, OnDestroy {
       }
     });
   }
-
 
   async searchChannel(searchWord: string) {
     const tempResult: any = [];
@@ -310,7 +311,7 @@ export class SearchService implements OnInit, OnDestroy {
             tempResult.push({
               channelID: channel.channelID,
               channelName: channel.channelName,
-              message: message
+              message: message,
             });
             ids.push(message.id);
           }
@@ -320,10 +321,8 @@ export class SearchService implements OnInit, OnDestroy {
     this.resultChannel = tempResult;
   }
 
-
-
   async searchThread(searchWord: string) {
-    const tempResult: any = []
+    const tempResult: any = [];
     let ids: any = [];
 
     for (const thread of this.threadListMsg) {
@@ -338,7 +337,7 @@ export class SearchService implements OnInit, OnDestroy {
               threadId: thread.channelID,
               channelName: thread.channelName,
               message: message,
-              replyToMessage: replyTo
+              replyToMessage: replyTo,
             });
             ids.push(message.id);
           }

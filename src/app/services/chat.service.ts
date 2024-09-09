@@ -29,7 +29,6 @@ export class ChatService {
   /**
    * Determines if a message is the first of the day for the dividing line between days in the Chat.
    * If the date is different or if no previous date is set, it marks the message as the first message. `previousDate` is updated to the date of the current message for the next comparison.
-   *
    * @param {} currentMessage - The message object to be checked and updated.
    */
   setFirstMessageOfDay(currentMessage: any) {
@@ -47,7 +46,6 @@ export class ChatService {
   /**
    * Formats the date into the german date format "weekday, tt.mm.yyyy".
    * Compares the date to the current date, and returns today or tomorrow if that matches.
-   *
    * @param {string} date - The date in format 'YYYY-MM-DD'
    * @returns {string} The formatted date string.
    */
@@ -94,13 +92,17 @@ export class ChatService {
     }
   }
 
-  /** formats the time to show only hours and minutes in geman 24h format */
+  /**
+   * formats the time to show only hours and minutes in geman 24h format
+   */
   formatTime(time: string): string {
     const [hours, minutes] = time.split(':');
     return `${hours}:${minutes}`;
   }
 
-  /** returns the true condition for the variable "isMyMessage" by comparing the authorId of the message with the UserId. Further used to change the styling of user and own messages. */
+  /**
+   * returns the true condition for the variable "isMyMessage" by comparing the authorId of the message with the UserId. Further used to change the styling of user and own messages.
+   */
   setMyMessage(message: ChannelMessage | DmMessage): boolean {
     return message.authorId === this.userService.userID;
   }
@@ -108,7 +110,6 @@ export class ChatService {
   /**
    * Sets the isChannel variable to true when a channel is clicked and to false when a direct message profile is clicked.
    * This functionality allows the thread element to be shown or hidden accordingly.
-   *
    * @param {boolean} status
    * @memberof ChatService
    */
@@ -116,10 +117,18 @@ export class ChatService {
     this.isChannel = status;
   }
 
+  /**
+   * Sets the value of the `clickedBack` property.
+   * @param {boolean} status - The new value to set for the `clickedBack` property.
+   */
   setClickedBack(status: boolean) {
     this.clickedBack = status;
   }
 
+  /**
+   * Determines if the current screen width is considered mobile.
+   * @returns `true` if the screen width is 960 pixels or less, otherwise `false`.
+   */
   mobileScreen() {
     return window.innerWidth <= 960;
   }
@@ -140,14 +149,26 @@ export class ChatService {
     }
   }
 
+  /**
+   * Checks if a channel isselected on a mobile device (window width 960px or less).
+   * @returns {boolean} `true` if the screen width is 960 pixels or less and a channel is selected; otherwise, `false`.
+   */
   channelSelectedOnMobile() {
     return window.innerWidth <= 960 && this.isChannel;
   }
 
+  /**
+   * Checks if the workspace menu is selected (if channel is NOT selected) on a mobile device (window width 960px or less).
+   * @returns {boolean} `true` if the screen width is 960 pixels or less and the workspace menu is selected; otherwise, `false`.
+   */
   workspaceMenuSelectedOnMobile() {
     return window.innerWidth <= 960 && !this.isChannel;
   }
 
+  /**
+   * Updates the header logo with the specified value.
+   * @param value - workspace or DaBubble Logo
+   */
   showHeaderLogo(value: string) {
     this.headerLogoSubject.next(value);
   }

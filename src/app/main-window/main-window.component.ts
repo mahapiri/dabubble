@@ -31,16 +31,15 @@ import { NewMessageComponent } from '../new-message/new-message.component';
     PrivacyPolicyComponent,
     DirectMessageComponent,
     ClickOutsideDirective,
-    NewMessageComponent
+    NewMessageComponent,
   ],
   templateUrl: './main-window.component.html',
   styleUrl: './main-window.component.scss',
 })
 export class MainWindowComponent implements OnInit {
-
-  userService: UserService = inject(UserService)
-  channelMessagesService: ChannelMessageService = inject(ChannelMessageService)
-  sharedService: SharedService = inject(SharedService)
+  userService: UserService = inject(UserService);
+  channelMessagesService: ChannelMessageService = inject(ChannelMessageService);
+  sharedService: SharedService = inject(SharedService);
   selectProfileSubscription: Subscription = new Subscription();
   isNewMessageSubscription: Subscription = new Subscription();
 
@@ -71,28 +70,45 @@ export class MainWindowComponent implements OnInit {
       }
     );
 
-    this.selectProfileSubscription = this.sharedService.selectProfileChange$.subscribe(selectProfile => {
-      this.selectProfile = selectProfile;
-    });
+    this.selectProfileSubscription =
+      this.sharedService.selectProfileChange$.subscribe((selectProfile) => {
+        this.selectProfile = selectProfile;
+      });
 
-    this.isNewMessageSubscription = this.sharedService.isNewMessage$.subscribe(isNewMessage => {
-      this.isNewMessage = isNewMessage;
-    });
+    this.isNewMessageSubscription = this.sharedService.isNewMessage$.subscribe(
+      (isNewMessage) => {
+        this.isNewMessage = isNewMessage;
+      }
+    );
   }
 
+  /**
+   * Handles the channel click event. Updates the `clickedChannel` state based on the provided event value.
+   * @param {boolean} event - The value indicating if the channel was clicked or not.
+   */
   handleChannelClick(event: boolean) {
     this.clickedChannel = event;
   }
 
+  /**
+   * Handles the thread click event. Updates the `clickedThread` state based on the provided event value.
+   * @param {boolean} event - The value indicating if the thread was clicked or not.
+   */
   handleThreadClick(event: boolean) {
     this.clickedThread = event;
   }
 
+  /**
+   * Handles the profile click event by resetting the state of other elements `clickedChannel` and `clickedThread`to false.
+   */
   handleProfileClick() {
     this.clickedChannel = false;
     this.clickedThread = false;
   }
 
+  /**
+   * Clean up subscriptions and resources when the component is destroyed.
+   */
   ngOnDestroy() {
     this.userService.authStateSubscription?.unsubscribe();
     this.selectedChannel?.unsubscribe();

@@ -117,10 +117,18 @@ export class ChannelMessageComponent {
     this.closeEdit();
   }
 
+  /**
+   * Checks if a given URL is an image URL from Firebase Storage.
+   * @param {string} url - The URL
+   * @returns {boolean} Returns `true` if the URL starts with 'https://firebasestorage.googleapis.com/', otherwise `false`.
+   */
   isImageUrl(url: string): boolean {
     return url.startsWith('https://firebasestorage.googleapis.com/');
   }
 
+  /**
+   * Clean up subscriptions when the component is destroyed.
+   */
   ngOnDestroy() {
     this.answerCountSubscription.unsubscribe();
     this.lastAnswerSubscription.unsubscribe();

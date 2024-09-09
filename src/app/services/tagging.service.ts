@@ -7,9 +7,9 @@ import { doc, Firestore, onSnapshot } from '@angular/fire/firestore';
 import { UserService } from './user.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class TaggingService implements OnInit, OnDestroy {
+export class TaggingService implements OnDestroy {
   private firestore: Firestore = inject(Firestore);
   private channelService: ChannelService = inject(ChannelService);
   private userService: UserService = inject(UserService);
@@ -25,24 +25,22 @@ export class TaggingService implements OnInit, OnDestroy {
   currentChannelMember: ChannelMember[] = [];
   userList$ = this.userService.userList$;
 
-
   /**
-  * subscribes the selected channel
-  */
+   * subscribes the selected channel
+   */
   constructor() {
-    this.channelSubscription = this.channelService.selectedChannel$.subscribe((channel) => {
-      this.currentChannelMember = [];
-      this.currentChannelID = channel?.channelID || '';
-      let member = channel?.channelMember;
-      member?.forEach((member) => {
-        this.setActualProfileState(member);
-        this.currentChannelMember.push(member);
-      })
-    })
+    this.channelSubscription = this.channelService.selectedChannel$.subscribe(
+      (channel) => {
+        this.currentChannelMember = [];
+        this.currentChannelID = channel?.channelID || '';
+        let member = channel?.channelMember;
+        member?.forEach((member) => {
+          this.setActualProfileState(member);
+          this.currentChannelMember.push(member);
+        });
+      }
+    );
   }
-
-  ngOnInit() { }
-
 
   setActualProfileState(member: ChannelMember) {
     this.userList$.subscribe((user) => {
@@ -50,19 +48,17 @@ export class TaggingService implements OnInit, OnDestroy {
         if (member.userId == profile.userId) {
           member.state = profile.state;
         }
-      })
-    })
+      });
+    });
   }
 
-
   /**
-  * unsubscribes the channel subscription to get the selected channel
-  */
+   * unsubscribes the channel subscription to get the selected channel
+   */
   ngOnDestroy(): void {
     this.channelSubscription.unsubscribe();
     console.log('unsub');
   }
-
 
   setSelectedChannel(channel: any) {
     const id = channel.id;
@@ -71,26 +67,23 @@ export class TaggingService implements OnInit, OnDestroy {
     });
   }
 
-
   /**
-  * get the selected member
-  */
+   * get the selected member
+   */
   selectMemberChannel(member: ChannelMember) {
     this.memberSelectedChannel.next(member);
   }
 
-
   /**
-  * get the selected member
-  */
+   * get the selected member
+   */
   selectMemberThread(member: ChannelMember) {
     this.memberSelectedThread.next(member);
   }
 
-
   /**
-  * get the selected member
-  */
+   * get the selected member
+   */
   selectMemberNewMessage(member: ChannelMember) {
     this.memberSelectedNewMessage.next(member);
   }

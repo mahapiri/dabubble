@@ -11,7 +11,13 @@ import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 @Component({
   selector: 'app-create-channel',
   standalone: true,
-  imports: [MatIconModule, CommonModule, FormsModule, MatRadioModule, ClickOutsideDirective],
+  imports: [
+    MatIconModule,
+    CommonModule,
+    FormsModule,
+    MatRadioModule,
+    ClickOutsideDirective,
+  ],
   templateUrl: './create-channel.component.html',
   styleUrl: './create-channel.component.scss',
 })
@@ -22,7 +28,7 @@ export class CreateChannelComponent {
   addUserChannelVisible: boolean = false;
   someUsersChecked: boolean = false;
   allUsersChecked: boolean = false;
-  searchMember: string = "";
+  searchMember: string = '';
   userlistOpen: boolean = false;
   showUser: User[] = [];
   selectedUsersForChannel: User[] = [];
@@ -40,16 +46,16 @@ export class CreateChannelComponent {
    */
   nextPage() {
     this.addUserChannelVisible = !this.addUserChannelVisible;
-    this.selectedUsersForChannel = []
+    this.selectedUsersForChannel = [];
     this.userService.getUserList();
   }
 
-/**
- * detects the radio button and sets the someUsersChecked variable accordingly
- */
+  /**
+   * detects the radio button and sets the someUsersChecked variable accordingly
+   */
   onRadioChange(event: any): void {
     this.someUsersChecked = event.target.checked;
-    this.allUsersChecked = !this.someUsersChecked;   
+    this.allUsersChecked = !this.someUsersChecked;
   }
 
   /**
@@ -58,11 +64,14 @@ export class CreateChannelComponent {
   showMember() {
     this.userlistOpen = true;
     this.showUser = this.userService.userArray;
-    if (this.searchMember == "" && this.someUsersChecked) {
+    if (this.searchMember == '' && this.someUsersChecked) {
       this.showUser = this.userService.userArray;
-    }
-    else {
-      this.showUser = this.userService.userArray.filter(user => { return user.username.toLowerCase().includes(this.searchMember.toLowerCase()) })
+    } else {
+      this.showUser = this.userService.userArray.filter((user) => {
+        return user.username
+          .toLowerCase()
+          .includes(this.searchMember.toLowerCase());
+      });
     }
   }
 
@@ -75,17 +84,18 @@ export class CreateChannelComponent {
     this.addSelectedUserToChannel(user);
   }
 
-
-/**
- * adds or removes the selected user to the selectedUsersForChannel array, 
- * @param user the clicked User in the list
- */
+  /**
+   * adds or removes the selected user to the selectedUsersForChannel array,
+   * @param user the clicked User in the list
+   */
   addSelectedUserToChannel(user: User) {
     if (this.selectedUsersForChannel.includes(user)) {
-      this.selectedUsersForChannel.splice(this.selectedUsersForChannel.indexOf(user), 1)
-    }
-    else {
-      this.selectedUsersForChannel.push(user)
+      this.selectedUsersForChannel.splice(
+        this.selectedUsersForChannel.indexOf(user),
+        1
+      );
+    } else {
+      this.selectedUsersForChannel.push(user);
     }
   }
 
@@ -94,10 +104,9 @@ export class CreateChannelComponent {
    */
   createChannel() {
     if (this.someUsersChecked) {
-      this.usersToAdd = this.selectedUsersForChannel
-    }
-    else {
-      this.usersToAdd = this.userService.userArray
+      this.usersToAdd = this.selectedUsersForChannel;
+    } else {
+      this.usersToAdd = this.userService.userArray;
     }
     this.channelService.addChannel(
       this.channelName,

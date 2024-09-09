@@ -140,11 +140,18 @@ export class ChannelComponent implements OnInit {
     }
   }
 
+  /**
+   * Handles the click event for a thread. Sets the state based on the passed event and emits the updated value.
+   * @param {boolean} event - The value of the click event state.
+   */
   handleThreadClick(event: boolean) {
     this.clickedThread = event;
     this.clickedThreadChange.emit(this.clickedThread);
   }
 
+  /**
+   * Clean up subscriptions when the component is destroyed.
+   */
   ngOnDestroy() {
     if (this.channelMessageService.messageListUnsubscribe) {
       this.channelMessageService.messageListUnsubscribe();

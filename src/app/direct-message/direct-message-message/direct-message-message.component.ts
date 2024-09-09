@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  inject,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
@@ -32,25 +38,24 @@ import { setDoc } from '@angular/fire/firestore';
     FormsModule,
   ],
   templateUrl: './direct-message-message.component.html',
-  styleUrl: './direct-message-message.component.scss'
+  styleUrl: './direct-message-message.component.scss',
 })
 export class DirectMessageMessageComponent implements OnInit {
   public chatService: ChatService = inject(ChatService);
   public reactionService: ReactionService = inject(ReactionService);
-  public directMessageService: DirectMessageService = inject(DirectMessageService);
+  public directMessageService: DirectMessageService =
+    inject(DirectMessageService);
   private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
   @Input() message!: DmMessage;
   isMyMessage: boolean = false;
-
 
   edit: boolean = false;
   isEmoji: boolean = false;
   notOpen: boolean = true;
   messageText: string = '';
 
-
-  constructor() { }
+  constructor() {}
 
   /**
    * open edit layout
@@ -60,7 +65,6 @@ export class DirectMessageMessageComponent implements OnInit {
     this.edit = true;
   }
 
-
   /**
    * close edit layout
    */
@@ -68,24 +72,25 @@ export class DirectMessageMessageComponent implements OnInit {
     this.edit = false;
   }
 
-
   /**
    * save/delete new edited message
    */
   async saveMessage() {
     const messageId = this.message.id;
-    const messageRef = doc(this.directMessageService.getMessagesRef(), messageId)
+    const messageRef = doc(
+      this.directMessageService.getMessagesRef(),
+      messageId
+    );
 
     if (this.messageText.trim().length === 0) {
       await deleteDoc(messageRef);
     } else {
-        await setDoc(messageRef, { text: this.messageText }, { merge: true });
+      await setDoc(messageRef, { text: this.messageText }, { merge: true });
     }
 
     this.edit = false;
     this.cdr.detectChanges();
   }
-
 
   /**
    * open the Emoji Container
@@ -95,9 +100,7 @@ export class DirectMessageMessageComponent implements OnInit {
     if (this.notOpen) {
       this.isEmoji = !this.isEmoji;
     }
-
   }
-
 
   /**
    * open the Emoji Container
@@ -105,26 +108,23 @@ export class DirectMessageMessageComponent implements OnInit {
   closeEmojiSet() {
     this.isEmoji = false;
     this.notOpen = false;
-    setTimeout(() => this.notOpen = true, 1000);
+    setTimeout(() => (this.notOpen = true), 1000);
   }
 
-
   /**
-  * handles emoji selection from the EmojiPickerComponent
-  */
+   * handles emoji selection from the EmojiPickerComponent
+   */
   onEmojiSelected(emoji: string) {
     this.messageText += emoji;
     this.closeEmojiSet();
   }
-
 
   /**
    * checks all available messages to get the right container style for your message or from another profile
    */
   ngOnInit() {
     this.isMyMessage = this.chatService.setMyMessage(this.message);
-  }  
-
+  }
 
   /**
    * close the Smiley Emoticons for More Reactions

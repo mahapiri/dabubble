@@ -51,11 +51,14 @@ export class ReactionContainerComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Clean up subscriptions and resources when the component is destroyed.
+   */
   ngOnDestroy(): void {
     this.reactionSubscription.unsubscribe();
   }
 
-  private async loadUserNames(): Promise<void> {
+  /*   private async loadUserNames(): Promise<void> {
     if (this.reactions) {
       for (let reaction of this.reactions) {
         for (let userId of reaction.authorIDs) {
@@ -70,8 +73,45 @@ export class ReactionContainerComponent implements OnInit, OnDestroy {
         }
       }
     }
+  } */
+
+  /**
+   * Loads usernames for all user IDs found in reactions.
+   * Iterates through the list of reactions and their users IDs. Calls a helper function to handle the retrieval and storage of usernames.
+   * @returns {Promise<void>} A promise that resolves when all usernames have been loaded and processed.
+   */
+  private async loadUserNames(): Promise<void> {
+    if (this.reactions) {
+      for (let reaction of this.reactions) {
+        for (let userId of reaction.authorIDs) {
+          await this.fetchAndStoreUsername(userId);
+        }
+      }
+    }
   }
 
+  /**
+   * Retrieves the username for a each user ID and stores it in the `userNames` object.
+   * If an error occurs while fetching the username, 'Unbekannt' (unknown) is assigned instead.
+   * @param {string} userId - The user ID for which to fetch and store the username.
+   * @returns {Promise<void>} A promise that resolves when the username has been fetched and stored.
+   */
+  private async fetchAndStoreUsername(userId: string): Promise<void> {
+    if (!this.userNames[userId]) {
+      try {
+        const userName = await this.reactionService.getUsername(userId);
+        this.userNames[userId] = userName;
+      } catch (error) {
+        this.userNames[userId] = 'Unbekannt';
+      }
+    }
+  }
+
+  /**
+   * Gets and returns the username for a given user ID.
+   * @param {string} userId - The ID of the user.
+   * @returns {string} The username, 'Du' if it matches the current user ID, or 'Unbekannt' if the username is not found.
+   */
   getUserName(userId: string): string {
     const username = this.userNames[userId];
     if (userId === this.userService.userID) {
@@ -81,10 +121,20 @@ export class ReactionContainerComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Checks if the given user ID matches the current user's ID from the `userService`.
+   * @param {string} userId - The ID of the user to be checked.
+   * @returns {boolean} `true` if the `userId` matches the current user's ID, otherwise `false`.
+   */
   isCurrentUser(userId: string): boolean {
     return userId === this.userService.userID;
   }
 
+  /**
+   * Processes and returns a sorted array of author IDs. Filters out the current user's ID. If present, moves the current user to the end of the array.
+   * @param {string[]} authorIDs - An array of author IDs.
+   * @returns {string[]} A sorted array of author IDs with the current user's ID moved to the end if present.
+   */
   getSortedAuthors(authorIDs: string[]): string[] {
     const otherAuthors = authorIDs.filter(
       (id) => id !== this.userService.userID

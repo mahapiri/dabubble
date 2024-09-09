@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
@@ -33,9 +40,9 @@ import { DmMessage } from '../../models/direct-message.class';
   styleUrl: './direct-message.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class DirectMessageComponent implements OnInit {
-  public directMessageService: DirectMessageService = inject(DirectMessageService);
+  public directMessageService: DirectMessageService =
+    inject(DirectMessageService);
   messages$: Observable<DmMessage[]>;
 
   @ViewChild('messageContainer') private messageContainer!: ElementRef;
@@ -47,17 +54,9 @@ export class DirectMessageComponent implements OnInit {
     this.messages$ = this.directMessageService.messages$;
   }
 
-  /**
-   * scroll to bottom after loading
-   */
-  ngAfterViewInit() {
-
-  }
-
   ngOnInit(): void {
     this.scrollToBottom();
   }
-
 
   /**
    * scroll to latest message
@@ -69,13 +68,10 @@ export class DirectMessageComponent implements OnInit {
     }, 1000);
   }
 
-
   /**
-  * Triggered when a new message is created to the bottom
-  */
+   * Triggered when a new message is created to the bottom
+   */
   onMessageCreated() {
     this.scrollToBottom();
   }
 }
-
-

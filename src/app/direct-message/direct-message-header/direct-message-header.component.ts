@@ -10,50 +10,47 @@ import { SharedService } from '../../services/shared.service';
 @Component({
   selector: 'app-direct-message-header',
   standalone: true,
-  imports: [
-    MatCardHeader,
-    CommonModule
-  ],
+  imports: [MatCardHeader, CommonModule],
   templateUrl: './direct-message-header.component.html',
-  styleUrl: './direct-message-header.component.scss'
+  styleUrl: './direct-message-header.component.scss',
 })
 export class DirectMessageHeaderComponent implements OnInit, OnDestroy {
   public userService: UserService = inject(UserService);
   private userSubscription: Subscription = new Subscription();
   private currentUserSubscription: Subscription = new Subscription();
-  public directMessageService: DirectMessageService = inject(DirectMessageService);
+  public directMessageService: DirectMessageService =
+    inject(DirectMessageService);
   private sharedService: SharedService = inject(SharedService);
   profile: Partial<User> = {};
   currentuser: User[] = [];
 
-
   /**
    * subscribes the clicke profile for the direct message UI
-   *
    * @memberof DirectMessageHeaderComponent
    */
   ngOnInit() {
-    this.userSubscription = this.directMessageService.clickedProfile$.subscribe((profile) => {
-      this.profile = {
-        username: profile?.username,
-        userId: profile?.userId,
-        profileImage: profile?.profileImage,
-        state: profile?.state
-      };
-    });
-
-    this.currentUserSubscription = this.userService.currentUser$.subscribe((user) => {
-      if (user) {
-        this.currentuser.push(user);
+    this.userSubscription = this.directMessageService.clickedProfile$.subscribe(
+      (profile) => {
+        this.profile = {
+          username: profile?.username,
+          userId: profile?.userId,
+          profileImage: profile?.profileImage,
+          state: profile?.state,
+        };
       }
+    );
 
-    })
+    this.currentUserSubscription = this.userService.currentUser$.subscribe(
+      (user) => {
+        if (user) {
+          this.currentuser.push(user);
+        }
+      }
+    );
   }
-
 
   /**
    * unsubscribes the profile service while it is not anymore in use
-   *
    * @memberof DirectMessageHeaderComponent
    */
   ngOnDestroy(): void {
@@ -63,7 +60,7 @@ export class DirectMessageHeaderComponent implements OnInit, OnDestroy {
 
   /**
    * opens the profile popup
-   * @param event 
+   * @param event
    */
   openProfile(event: Event) {
     event.stopPropagation();

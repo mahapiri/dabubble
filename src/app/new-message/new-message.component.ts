@@ -21,12 +21,9 @@ import { NewMessageInputComponent } from './new-message-input/new-message-input.
     MatListModule,
     CommonModule,
     NewMessageHeaderComponent,
-    NewMessageInputComponent
+    NewMessageInputComponent,
   ],
   templateUrl: './new-message.component.html',
-  styleUrl: './new-message.component.scss'
+  styleUrl: './new-message.component.scss',
 })
-export class NewMessageComponent {
-
-
-}
+export class NewMessageComponent {}

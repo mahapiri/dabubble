@@ -49,8 +49,12 @@ export class ChannelService {
     }
   }
 
+  /**
+   * Updates the value of the edit channel popup state.
+   * @param value - `true`: popup should be shown | `false`: popup should be hidden.
+   */
   setIsEditChannelPopup(value: boolean) {
-    this._isEditChannelPopup.next(value); // Setze den Wert über BehaviorSubject
+    this._isEditChannelPopup.next(value);
   }
 
   /**
@@ -87,6 +91,11 @@ export class ChannelService {
     this.userService.updateUserChannels(user, this.channelID);
   }
 
+  /**
+   * Retrieves a channel document by its ID from Firestore.
+   * @param {string} channelID - The ID of the channel.
+   * @returns {Promise<Channel | undefined>} A promise that returns a new `Channel` instance with its data if the document exists, or `undefined` if it does not.
+   */
   async getChannelById(channelID: string) {
     const channelRef = doc(this.firestore, 'channels', channelID);
     const channelDoc = await getDoc(channelRef);
@@ -97,11 +106,23 @@ export class ChannelService {
     }
   }
 
+  /**
+   * Updates a channel document by adding the ID data to the Firestore.
+   * @param channelID - The new ID to set for the channel document.
+   */
   async updateChannelWithID(channelID: string) {
     const channelRef = doc(this.firestore, 'channels', channelID);
     await updateDoc(channelRef, { channelID: channelID });
   }
 
+  /**
+   * Creates a new `Channel` object with the specified properties.
+   * @param {string} name - The name of the channel.
+   * @param {string} description - The description of the channel.
+   * @param {User[]} user - An array of `User` objects: the members of the channel.
+   * @param {string} [channelID] - An optional ID for the channel. If not provided, an empty string is used.
+   * @returns {Channel} A new `Channel` object initialized with the provided properties.
+   */
   setChannelObject(
     name: string,
     description: string,
@@ -117,12 +138,21 @@ export class ChannelService {
     });
   }
 
+  /**
+   * Adds the channel ID to the `userChannels` field of the user document in Firestore (member of the channel). Uses Firestore's `arrayUnion` function,
+   * which ensures that the channel ID is added only if it is not already present in the array.
+   * @param userdocId - The ID of the user document to be updated.
+   * @param channelId - The ID of the channel to add to the user's list of channels.
+   */
   async addChannelToContact(userdocId: string, channelId: string) {
     await updateDoc(doc(this.firestore, 'users', userdocId), {
       userChannels: arrayUnion(channelId),
     });
   }
 
+  /**
+   * Retrieves the username of the currently logged-in user and assigns it to the `createdBy' field in the channel object.
+   */
   async getCreatedByUser() {
     let userRef = (
       await getDoc(doc(this.firestore, 'users', this.userService.userID))
@@ -153,18 +183,25 @@ export class ChannelService {
     });
   }
 
+  /**
+   * Retrieves a reference to the 'channels' collection in Firestore.
+   * @returns {CollectionReference} A Firestore `CollectionReference` for the 'channels' collection.
+   */
   getChannelRef() {
     return collection(this.firestore, 'channels');
   }
 
-  mobileScreen() {
-    return window.innerWidth <= 960;
-  }
-
+  /**
+   * Determines if the add member slider should be displayed: if editChannelPopup is open AND AddMembers dialog was clicked/is open.
+   * @returns `true` if both conditions are met and the add member slider should be displayed, otherwise `false`.
+   */
   isAddMemberSlider() {
     return this.isEditChannelPopup$ && this.clickedAddMembers;
   }
 
+  /**
+   * Closes the popup based on the current state of UI flags.
+   */
   closePopup() {
     if (this.isAddMemberSlider()) {
       this.clickedEditChannel = true;
