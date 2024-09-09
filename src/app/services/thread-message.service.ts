@@ -36,8 +36,6 @@ export class ThreadMessageService {
   threads: Thread[] = [];
   threadMessages: ThreadMessage[] = [];
 
-  //previousDate: string | null = null;
-
   unsubUser!: Subscription;
   selectedThread: Subscription;
 
@@ -154,15 +152,14 @@ export class ThreadMessageService {
 
   /**
    * Updates the answer count and emits the new value through a subject.
-   * @param {number} count - The new answer count to be emitted.
+   * @param {number} count - The new answer count.
    */
   updateAnswerCount(count: number) {
     this.answerCountSubject.next(count);
   }
 
   /**
-   * Adds a new message to the current thread by subscribing to the current user and adding it to the Firestore.
-   * Its ID is stored in the object.
+   * Adds a new message to the current thread by subscribing to the current user and adding it to the Firestore. Its ID is stored in the object.
    * @param {string} text - Content of the message.
    * @returns {Promise<void>} - A promise that resolves when the message has been added and its ID has been updated.
    */
@@ -188,8 +185,6 @@ export class ThreadMessageService {
   /**
    * Subscribes to changes in the messages collection of the currently selected thread.
    * Fetches the latest list of messages and updates the threadMessagesSubjects BehaviorSubject.
-   * Orders the messages by the "date" and "time" they are written in ascending order first to be able to call the isFirstMessageOfDay Function to determine which message is the first one of the day.
-   * Then reverses the Order, so older messages are shown higher up in the chat and the latest messages are shown at the bottom.
    * @returns - the unsubscribe function for the onSnapshot listener.
    */
   getThreadMessageList(): Promise<void> {
@@ -205,8 +200,6 @@ export class ThreadMessageService {
     return new Promise((resolve) => {
       const unsubscribe = onSnapshot(q, (list) => {
         this.threadMessages = [];
-        //this.previousDate = null;
-
         list.forEach((message) => {
           const currentMessage = this.setMessageObject(
             message.id,
@@ -215,10 +208,7 @@ export class ThreadMessageService {
           this.chatService.setFirstMessageOfDay(currentMessage);
           this.threadMessages.push(currentMessage);
         });
-
-        //this.threadMessages.reverse();
         this.threadMessagesSubjects.next(this.threadMessages);
-
         resolve();
       });
       return unsubscribe;
@@ -227,7 +217,7 @@ export class ThreadMessageService {
 
   /**
    * Updates a thread message in the Firestore database.
-   * @param {ThreadMessage} threadMessage - The `ThreadMessage` object containing the data to update.   */
+   * @param {ThreadMessage} threadMessage - The `ThreadMessage` object containing the data to update. */
   async updateMessage(threadMessage: ThreadMessage) {
     if (threadMessage.id) {
       let docRef = this.getSingleThreadMessageRef(threadMessage.id);
@@ -260,8 +250,6 @@ export class ThreadMessageService {
 
   /**
    * Creates a new `ThreadMessage` object using the provided text and user information.
-   * This method generates the current date and time, then constructs a `ThreadMessage`
-   * instance with the given text and the user's details, such as username, user ID, and profile image.
    * @param {string} text - The content of the message
    * @param {User} user - The user object with the info about the message author
    * @returns {ThreadMessage} - A new 'ThreadMessage' object with the provided text, user information, and the current date and time.
@@ -315,9 +303,7 @@ export class ThreadMessageService {
     );
   }
 
-  /**
-   * Cleans up subscriptions when the component is destroyed.
-   */
+  /** Cleans up subscriptions when the component is destroyed. */
   ngOnDestroy(): void {
     this.selectedThread.unsubscribe();
     this.unsubUser.unsubscribe();
