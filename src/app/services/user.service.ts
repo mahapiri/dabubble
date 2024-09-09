@@ -33,12 +33,12 @@ export class UserService {
   public authStateSubscription: Subscription | undefined;
   private unsubscribeSnapshot: (() => void) | undefined;
 
-  constructor(private auth: Auth) { }
+  constructor(private auth: Auth) {}
 
   /**
- * gets the userId from the current, logged-in, user and sets the state ro onlinee, or offline.
- * sets the current-user-Observable to the current user
- */
+   * gets the userId from the current, logged-in, user and sets the state ro onlinee, or offline.
+   * sets the current-user-Observable to the current user
+   */
   async getUserID() {
     this.authStateSubscription = new Subscription();
     const authStateChangeHandler = onAuthStateChanged(this.auth, (user) => {
@@ -58,8 +58,8 @@ export class UserService {
   }
 
   /**
- * get an observable of all the user-Objects, that are saved in the database
- */
+   * get an observable of all the user-Objects, that are saved in the database
+   */
   getUserList() {
     onSnapshot(collection(this.firestore, 'users'), (querySnapshot) => {
       this.userArray = [];
@@ -72,8 +72,8 @@ export class UserService {
   }
 
   /**
- * gives the current User Object to the current-user-observable
- */
+   * gives the current User Object to the current-user-observable
+   */
   getCurrentUser() {
     this.unsubscribeSnapshot = onSnapshot(
       this.getUserRef(),
@@ -90,9 +90,9 @@ export class UserService {
   }
 
   /**
- * sets the state of the user in the document to online or offline
- * @param state the state to set ("Online", or "Offline")
- */
+   * sets the state of the user in the document to online or offline
+   * @param state the state to set ("Online", or "Offline")
+   */
   async setUserState(state: string) {
     if (this.userID) {
       await updateDoc(this.getUserRef(), { state: state });
@@ -100,9 +100,9 @@ export class UserService {
   }
 
   /**
- * gets the firestore reference of the current user
- * @returns firestore reference
- */
+   * gets the firestore reference of the current user
+   * @returns firestore reference
+   */
   getUserRef() {
     return doc(this.firestore, 'users', this.userID);
   }
@@ -119,14 +119,19 @@ export class UserService {
   }
 
   /**
- * unsubscribes from the current-user-snapshot
- */
+   * unsubscribes from the current-user-snapshot
+   */
   unsubscribe() {
     if (this.unsubscribeSnapshot) {
       this.unsubscribeSnapshot();
     }
   }
 
+  /**
+   * Retrieves a user document by its ID from the `users` collection from Firestore.
+   * @param {string} userID - The ID of the user to retrieve.
+   * @returns {Promise<User | undefined>} A promise that resolves to a `User` object if the document exists, or `undefined` if it does not.
+   */
   async getUserById(userID: string) {
     const userRef = doc(this.firestore, 'users', userID);
     const userDoc = await getDoc(userRef);

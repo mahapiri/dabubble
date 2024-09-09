@@ -55,11 +55,23 @@ export class ThreadMessageService {
     );
   }
 
+  /**
+   * Retrieves and subscribes to the count of answers for a thread.
+   */
   getAnswerCount() {
     const msgRef = this.getThreadMessagesRef();
     this.subscribeToAnswerCount(msgRef, this.updateAnswerCount.bind(this));
   }
 
+  /**
+   * Retrieves the answer count for a specific channel message and returns it as an observable.
+   * 1. Finds the thread associated with the given message ID by calling `findThreadByMessageId` from `threadService`.
+   * 2. If an existing thread is found, it retrieves the thread ID from the thread snapshot.
+   * 3. It then creates a reference to the `messages` subcollection of the thread in Firestore.
+   * 4. Subscribes to updates on the answer count in this collection and emits the count through the observable.
+   * @param {string} chMsgId - The ID of the channel message for which to retrieve the answer count.
+   * @returns {Observable<number>} An `Observable` that emits the answer count as a number when updates are available.
+   */
   getAnswerCountForChannelMessage(chMsgId: string): Observable<number> {
     return new Observable<number>((answerCountSubject) => {
       this.threadService
@@ -81,6 +93,11 @@ export class ThreadMessageService {
     });
   }
 
+  /**
+   * Retrieves the last answer for a specific channel message and returns it as an observable.
+   * @param {string} chMsgId - The ID of the channel message for which to retrieve the last answer.
+   * @returns {Observable<string>} An `Observable` that emits the last answer as a string when updates are available.
+   */
   getLastAnswer(chMsgId: string): Observable<string> {
     return new Observable<string>((lastAnswerSubject) => {
       this.threadService
@@ -99,6 +116,12 @@ export class ThreadMessageService {
     });
   }
 
+  /**
+   * Subscribes to updates on the last answer in a collection and emits the latest answer time.
+   * @param {CollectionReference} msgRef - A Firestore `CollectionReference` pointing to the messages collection.
+   * @param {Subject<string>} lastAnswerSubject - A subject that will receive the latest answer time as a string.
+   * @returns {Function} A function that can be called to unsubscribe from the real-time updates.
+   */
   subscribeToLastAnswer(msgRef: CollectionReference, lastAnswerSubject: any) {
     const q = query(msgRef, orderBy('date', 'desc'), orderBy('time', 'desc'));
     const unsubscribe = onSnapshot(q, async (snapshot) => {
@@ -111,6 +134,12 @@ export class ThreadMessageService {
     return unsubscribe;
   }
 
+  /**
+   * Subscribes to updates on the answer count in a collection and invokes a callback with the latest count.
+   * @param {CollectionReference} msgRef - A Firestore `CollectionReference` pointing to the collection for which the answer count is tracked.
+   * @param {(count: number) void} callback - A function to be called with the updated answer count each time it changes.
+   * @returns {Function} A function that can be called to unsubscribe from the real-time updates.
+   */
   subscribeToAnswerCount(
     msgRef: CollectionReference,
     callback: (count: number) => void
@@ -123,6 +152,10 @@ export class ThreadMessageService {
     return unsubscribe;
   }
 
+  /**
+   * Updates the answer count and emits the new value through a subject.
+   * @param {number} count - The new answer count to be emitted.
+   */
   updateAnswerCount(count: number) {
     this.answerCountSubject.next(count);
   }
@@ -193,6 +226,9 @@ export class ThreadMessageService {
     });
   }
 
+  /**
+   * Updates a thread message in the Firestore database.
+   * @param {ThreadMessage} threadMessage - The `ThreadMessage` object containing the data to update.   */
   async updateMessage(threadMessage: ThreadMessage) {
     if (threadMessage.id) {
       let docRef = this.getSingleThreadMessageRef(threadMessage.id);
@@ -254,6 +290,10 @@ export class ThreadMessageService {
     });
   }
 
+  /**
+   * Retrieves a reference to the collection of messages for the current thread.
+   * @returns {CollectionReference} A Firestore `CollectionReference` pointing to the `messages` subcollection of the current thread.
+   */
   getThreadMessagesRef(): CollectionReference {
     return collection(
       this.firestore,
@@ -261,6 +301,11 @@ export class ThreadMessageService {
     );
   }
 
+  /**
+   * Retrieves a reference to a specific message document within the current thread's messages collection.
+   * @param {string} docId - The ID of the message document to reference.
+   * @returns {DocumentReference} A Firestore `DocumentReference` pointing to the specified message document within the current thread's messages collection.
+   */
   getSingleThreadMessageRef(docId: string): DocumentReference {
     return doc(
       collection(
@@ -271,6 +316,9 @@ export class ThreadMessageService {
     );
   }
 
+  /**
+   * Cleans up subscriptions when the component is destroyed.
+   */
   ngOnDestroy(): void {
     this.selectedThread.unsubscribe();
     this.unsubUser.unsubscribe();

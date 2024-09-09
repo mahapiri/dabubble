@@ -74,7 +74,6 @@ export class HeaderComponent implements OnInit {
     this.isSmallScreen = window.innerWidth <= 1190;
   }
 
-
   async openResults() {
     try {
       this.searchService.startSubscription();

@@ -153,6 +153,9 @@ export class ThreadComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Closes the current thread and updates the view.
+   */
   closeThread() {
     this.clickedCloseThread.emit(false);
     this.chatService.showChannelOnMobile();
