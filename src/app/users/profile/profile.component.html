@@ -23,7 +23,7 @@
             </div>
             <a [href]="'mailto:' + user?.email">{{ user?.email }}</a>
         </div>
-        <button class="btn-default btn-primary" (click)="openDM()">
+        <button class="btn-default btn-primary" (click)="openDM($event)">
             <mat-icon>mode_comment</mat-icon>
             Nachricht
         </button>

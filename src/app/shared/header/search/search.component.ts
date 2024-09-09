@@ -51,7 +51,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   @Output() searchInputValueAction: EventEmitter<void> =
     new EventEmitter<void>();
 
-  constructor() {}
+  constructor() { }
 
   async ngOnInit() {
     this.currentUserSubscription = this.userService.currentUser$.subscribe(
@@ -68,6 +68,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   openChannel(event: Event, channel: Channel) {
     event?.stopPropagation();
     this.sharedService.isResults = false;
+    console.log(channel)
     this.channelService.setSelectedChannel(channel);
     this.sharedService.setSelectProfile(false);
     this.chatService.setIsChannel(true);
@@ -82,6 +83,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     let channelMsg = thread['replyToMessage'];
     this.mainWindow.selectProfile = false;
     this.mainWindow.clickedThread = true;
+    // this.channelService.setSelectedChannel(channelMsg);
     this.channelMessageService.setSelectedMessage(channelMsg);
     this.threadService.handleThread();
     this.resetSearchInputValue();
@@ -94,7 +96,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     let profile = await this.setProfile(dm);
     this.setProfilestate(dm);
     this.sharedService.setSelectProfile(true);
-    this.directMessageService.openDmFromUser(profile);
+    await this.directMessageService.openDmFromUser(profile);
     this.chatService.setIsChannel(false);
     this.sharedService.setSelectedUserIndex(profile.userId);
     this.resetSearchInputValue();

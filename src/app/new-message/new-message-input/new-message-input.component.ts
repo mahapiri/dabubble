@@ -185,12 +185,12 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
    * @param profile
    */
   async createUserMsg(profile: User) {
-    // this.selectedUserIndex = i;
     this.sharedService.setSelectProfile(true);
     await this.directMessageService.openDmFromUser(profile);
     this.chatService.setIsChannel(false);
     this.sharedService.setIsNewMessage(false);
     this.sharedService.setClickedNewMessage(false);
+    this.sharedService.setSelectedUserIndex(profile.userId);
     this.cdr.detectChanges();
     this.sendMessage();
   }
@@ -208,6 +208,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
     this.sendMessage();
     this.channelService.loadChannels();
     this.cdr.detectChanges();
+
   }
 
   /**
@@ -224,6 +225,8 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
       this.messageText = '';
     }
     this.cdr.detectChanges();
+    // this.chatService.handleWindowChangeOnMobile();
+    // this.chatService.showWorkspaceMenu();
   }
 
   /**
