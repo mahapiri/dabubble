@@ -26,6 +26,7 @@ import { DirectMessageService } from '../../services/direct-message.service';
 import { ChatService } from '../../services/chat.service';
 import { SharedService } from '../../services/shared.service';
 import { SearchComponent } from '../header/search/search.component';
+import { SearchService } from '../../services/search.service';
 
 @Component({
   selector: 'app-workspace-menu',
@@ -83,7 +84,8 @@ export class WorkspaceMenuComponent implements OnInit {
     public userService: UserService,
     private directMessageService: DirectMessageService,
     public chatService: ChatService,
-    public sharedService: SharedService
+    public sharedService: SharedService,
+    private searchService: SearchService
   ) {}
 
   async ngOnInit() {
@@ -205,7 +207,28 @@ export class WorkspaceMenuComponent implements OnInit {
 
   editChannel(channel: string) {}
 
-  openResults() {}
+  async openResults() {
+    try {
+      this.searchService.startSubscription();
+      this.sharedService.isResults = this.searchInputValue.trim().length > 0;
 
-  closeResults() {}
+      await Promise.all([
+        this.searchService.getAllDM(),
+        this.searchService.getAllChannel(),
+        this.searchService.getAllThreads(),
+      ]);
+
+      await this.searchService.search(this.searchInputValue);
+
+      this.searchService.setTimerToTrue();
+    } catch (error) {
+      console.error('Fehler beim Aufrufen von Openresults', error);
+    }
+  }
+
+  closeResults() {
+    this.searchService.stopSubscription();
+    this.sharedService.isResults = false;
+    this.searchInputValue = '';
+  }
 }

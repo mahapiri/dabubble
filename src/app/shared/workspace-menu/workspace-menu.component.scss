@@ -435,6 +435,23 @@ input[type="text"] {
   border-color: var(--purple-2);
 }
 
+.active {
+  border-radius: 42px 42px 0px 0px !important;
+  border-color: unset;
+  border-top-color: var(--purple-2);
+  border-right-color: var(--purple-2);
+  border-bottom-color: var(--white);
+  border-left-color: var(--purple-2);
+
+  &:focus-visible {
+    border-color: unset;
+    border-top-color: var(--purple-2);
+    border-right-color: var(--purple-2);
+    border-bottom-color: var(--white);
+    border-left-color: var(--purple-2);
+  }
+}
+
 /* Smartphones - - - - - - - - - */
 
 @media only screen and (max-width: 960px) {
