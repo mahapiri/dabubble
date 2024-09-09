@@ -224,7 +224,6 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
       this.messageText = '';
     }
     this.cdr.detectChanges();
-    // this.chatService.handleWindowChangeOnMobile();
   }
 
   /**
