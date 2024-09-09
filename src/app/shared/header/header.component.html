@@ -4,6 +4,7 @@
     src="../../../assets/img/logo-with-font.png"
     alt="Logo Dabubble"
     class="logo"
+    (click)="navigateToMainWindow()"
   />
   <div *ngIf="headerLogo === 'channelLogo'" class="workspace-content">
     <div class="arrow-back" (click)="backToWorkspacemenu()">
