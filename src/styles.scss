@@ -177,7 +177,7 @@ a {
   justify-content: center;
   align-items: center;
   border-color: transparent;
-  border-radius: 25px;
+  border-radius: 50px;
   padding: 12px 25px 12px 25px;
   gap: 10px;
   color: var(--white);
@@ -393,5 +393,16 @@ a {
 @media only screen and (max-width: 960px) {
   .n-h3 {
     font-size: 20px !important;
+  }
+}
+
+
+@media only screen and (max-width: 960px) {
+  .btn-default {
+    padding: 8px;
+  }
+  
+  .gap-32 {
+    gap: 16px;
   }
 }

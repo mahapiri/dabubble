@@ -114,3 +114,22 @@ img {
 .flex-column {
   flex-direction: column;
 }
+
+/* Smartphones - - - - - - - - - */
+
+@media only screen and (max-width: 960px) {
+  .edit-msg-bubble {
+    padding: 8px;
+    width: unset;
+    height: unset;
+    text-wrap: wrap;
+    top: unset;
+    left: 0%;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .edit-msg-bubble {
+    padding: unset;
+  }
+}

@@ -228,5 +228,6 @@ export class HeaderComponent implements OnInit {
     this.chatService.setIsChannel(true);
     this.sharedService.setSelectProfile(false);
     this.sharedService.resetSelectedUserIndex();
+    this.chatService.handleWindowChangeOnMobile();
   }
 }
