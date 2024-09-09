@@ -41,7 +41,7 @@ import { ClickOutsideDirective } from '../../directive/click-outside.directive';
     CreateChannelComponent,
     FormsModule,
     SearchComponent,
-    ClickOutsideDirective
+    ClickOutsideDirective,
   ],
   templateUrl: './workspace-menu.component.html',
   styleUrl: './workspace-menu.component.scss',
@@ -100,7 +100,7 @@ export class WorkspaceMenuComponent implements OnInit {
     this.sharedService.selectedUserIndex$.subscribe((i) => {
       this.selectedUserIndex = i;
       this.cdr.detectChanges();
-    })
+    });
 
     /*  window.addEventListener('resize', () => {
       if (window.innerWidth > 960) {
@@ -114,7 +114,6 @@ export class WorkspaceMenuComponent implements OnInit {
       }
     }); */
   }
-
 
   /**
    * Upon page load, selects the first channel from the user's channel list and sets it as the currently active channel, shown in the main-window.
@@ -146,7 +145,7 @@ export class WorkspaceMenuComponent implements OnInit {
     this.sharedService.resetSelectedUserIndex();
 
     this.chatService.handleWindowChangeOnMobile();
-
+    this.chatService.showWorkspaceMenu();
     this.sharedService.setIsNewMessage(false);
     this.sharedService.setClickedNewMessage(false);
   }
@@ -173,9 +172,11 @@ export class WorkspaceMenuComponent implements OnInit {
     this.sharedService.setIsNewMessage(!currentIsNewMessage);
 
     this.chatService.setIsChannel(false);
-    this.clickedNewMessageChange.emit(this.sharedService.getClickedNewMessage());
+    this.clickedNewMessageChange.emit(
+      this.sharedService.getClickedNewMessage()
+    );
     this.sharedService.resetSelectedUserIndex();
-    this.chatService.showCreateChannelOnMobile();
+    this.chatService.hideComponentOnMobile('#workspaceMenu');
     this.chatService.showHeaderLogo('channelLogo');
 
     this.cdr.detectChanges();
@@ -205,6 +206,7 @@ export class WorkspaceMenuComponent implements OnInit {
     this.sharedService.setSelectedUserIndex(profile.userId);
 
     this.chatService.handleWindowChangeOnMobile();
+    this.chatService.showWorkspaceMenu();
   }
 
   editChannel(channel: string) {}

@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
@@ -16,19 +23,17 @@ import { ChannelMessageService } from '../../../services/channel-message.service
 import { ThreadService } from '../../../services/thread.service';
 import { MainWindowComponent } from '../../../main-window/main-window.component';
 import { User } from '../../../../models/user.class';
-import { DirectMessage, DmMessage } from '../../../../models/direct-message.class';
+import {
+  DirectMessage,
+  DmMessage,
+} from '../../../../models/direct-message.class';
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [
-    MatIconModule,
-    CommonModule,
-    FormsModule,
-    MatDividerModule,
-  ],
+  imports: [MatIconModule, CommonModule, FormsModule, MatDividerModule],
   templateUrl: './search.component.html',
-  styleUrl: './search.component.scss'
+  styleUrl: './search.component.scss',
 })
 export class SearchComponent implements OnInit, OnDestroy {
   searchService: SearchService = inject(SearchService);
@@ -43,21 +48,22 @@ export class SearchComponent implements OnInit, OnDestroy {
   currentUserSubscription: Subscription = new Subscription();
   currentUser: any = '';
 
-  @Output() searchInputValueAction: EventEmitter<void> = new EventEmitter<void>();
+  @Output() searchInputValueAction: EventEmitter<void> =
+    new EventEmitter<void>();
 
-
-  constructor() { }
+  constructor() {}
 
   async ngOnInit() {
-    this.currentUserSubscription = this.userService.currentUser$.subscribe((user) => {
-      this.currentUser = user;
-    });
+    this.currentUserSubscription = this.userService.currentUser$.subscribe(
+      (user) => {
+        this.currentUser = user;
+      }
+    );
   }
 
   ngOnDestroy(): void {
     this.currentUserSubscription.unsubscribe();
   }
-
 
   openChannel(event: Event, channel: Channel) {
     event?.stopPropagation();
@@ -72,7 +78,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.chatService.handleWindowChangeOnMobile();
   }
 
-
   openThread(thread: any) {
     let channelMsg = thread['replyToMessage'];
     this.mainWindow.selectProfile = false;
@@ -82,7 +87,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.resetSearchInputValue();
     this.sharedService.resetSelectedUserIndex();
   }
-
 
   async openDM(event: Event, dm: any) {
     event?.stopPropagation();
@@ -96,38 +100,36 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.resetSearchInputValue();
     this.sharedService.setClickedNewMessage(false);
     this.chatService.handleWindowChangeOnMobile();
+    this.chatService.showWorkspaceMenu();
     this.sharedService.setIsNewMessage(false);
   }
 
   resetSearchInputValue() {
     this.searchInputValueAction.emit();
   }
-  
-  
+
   async setProfilestate(dm: DmMessage) {
     let state = '';
-    this.searchService.userList.forEach(user => {
-      if(user.userId == dm.profileId) {
+    this.searchService.userList.forEach((user) => {
+      if (user.userId == dm.profileId) {
         state = user.state;
       }
     });
     return state;
   }
 
-
   async setProfile(dm: any) {
     const isCurrentUser = this.currentUser?.userId === dm['profileId'];
-  
+
     return {
       username: isCurrentUser ? dm['authorName'] : dm['profileName'],
       userId: isCurrentUser ? dm['authorId'] : dm['profileId'],
       email: '',
       state: await this.setProfilestate(dm),
       userChannels: [],
-      profileImage: isCurrentUser ? dm['authorImg'] : dm['profileImg']
+      profileImage: isCurrentUser ? dm['authorImg'] : dm['profileImg'],
     };
   }
-  
 
   openProfile(event: Event, userID: string) {
     event?.stopPropagation();

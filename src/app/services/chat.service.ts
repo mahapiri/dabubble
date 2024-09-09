@@ -140,17 +140,21 @@ export class ChatService {
    */
   handleWindowChangeOnMobile() {
     if (this.channelSelectedOnMobile()) {
-      this.showHeaderLogo('channelLogo');
-      this.showChannel();
+      this.updateView('workspaceMenu', 'channel', 'channelLogo');
     } else if (this.directMessageSelectedOnMobile()) {
-      this.showHeaderLogo('channelLogo');
-      this.showDirectMessage();
-    } else if (this.workspaceMenuSelectedOnMobile()) {
-      this.showHeaderLogo('daBubble');
-      this.showWorkspaceMenu();
+      this.updateView('workspaceMenu', 'directMessage', 'channelLogo');
     } else {
       this.showHeaderLogo('daBubble');
     }
+  }
+
+  /**
+   * Consolidates view switching logic. Shows a component and updates the header logo.
+   */
+  updateView(componentId1: string, componentId2: string, logo: string) {
+    this.showHeaderLogo(logo);
+    this.hideComponentOnMobile(`#${componentId1}`);
+    this.showComponentOnMobile(`#${componentId2}`);
   }
 
   /**
@@ -158,20 +162,20 @@ export class ChatService {
    * @returns {boolean} `true` if the screen width is 960 pixels or less and a channel is selected; otherwise, `false`.
    */
   channelSelectedOnMobile() {
-    return window.innerWidth <= 960 && this.isChannel;
+    return this.mobileScreen() && this.isChannel;
   }
 
   directMessageSelectedOnMobile() {
     this.setIsDirectMessage();
-    return window.innerWidth <= 960 && this.isDirectMessage;
+    return this.mobileScreen() && this.isDirectMessage;
   }
 
   /**
-   * Checks if the workspace menu is selected (if channel is NOT selected) on a mobile device (window width 960px or less).
+   * Checks if the workspace menu is selected (if channel and directMessage are NOT selected) on a mobile device (window width 960px or less).
    * @returns {boolean} `true` if the screen width is 960 pixels or less and the workspace menu is selected; otherwise, `false`.
    */
   workspaceMenuSelectedOnMobile() {
-    return window.innerWidth <= 960 && !this.isChannel && !this.isDirectMessage;
+    return this.mobileScreen() && !this.isChannel && !this.isDirectMessage;
   }
 
   /**
@@ -182,32 +186,27 @@ export class ChatService {
     this.headerLogoSubject.next(value);
   }
 
-  showChannel() {
+  hideComponentOnMobile(componentId: string) {
     if (window.innerWidth <= 960) {
-      const workspaceMenu = document.querySelector('#workspaceMenu');
-      const channel = document.querySelector('#channel');
-
-      if (workspaceMenu && channel) {
-        this.renderer.setStyle(workspaceMenu, 'display', 'none');
-        this.renderer.setStyle(channel, 'display', 'flex');
-      }
+      const component = document.querySelector(componentId);
+      this.renderer.setStyle(component, 'display', 'none');
     }
   }
 
-  showDirectMessage() {
+  showComponentOnMobile(componentId: string) {
     if (window.innerWidth <= 960) {
-      const workspaceMenu = document.querySelector('#workspaceMenu');
-      const directMessage = document.querySelector('#directMessage');
-
-      if (workspaceMenu && directMessage) {
-        this.renderer.setStyle(workspaceMenu, 'display', 'none');
-        this.renderer.setStyle(directMessage, 'display', 'flex');
-      }
+      const component = document.querySelector(componentId);
+      this.renderer.setStyle(component, 'display', 'flex');
     }
   }
 
   showWorkspaceMenu() {
-    if (window.innerWidth > 960 || this.clickedBack) {
+    if (
+      (this.workspaceMenuSelectedOnMobile() && window.innerWidth > 960) ||
+      (this.workspaceMenuSelectedOnMobile() && this.clickedBack)
+    ) {
+      this.showHeaderLogo('daBubble');
+
       const workspaceMenu = document.querySelector('#workspaceMenu');
       const channelCard = document.querySelector('#channel');
       const newMessage = document.querySelector('#newMessage');
@@ -230,33 +229,9 @@ export class ChatService {
     }
   }
 
-  showThreadOnMobile() {
-    if (window.innerWidth <= 960) {
-      const channel = document.querySelector('#channel');
-
-      this.renderer.setStyle(channel, 'display', 'none');
-    }
-  }
-
-  showChannelOnMobile() {
-    if (window.innerWidth <= 960) {
-      const channel = document.querySelector('#channel');
-
-      this.renderer.setStyle(channel, 'display', 'flex');
-    }
-  }
-
-  showCreateChannelOnMobile() {
-    if (window.innerWidth <= 960) {
-      const workspaceMenu = document.querySelector('#workspaceMenu');
-
-      this.renderer.setStyle(workspaceMenu, 'display', 'none');
-    }
-  }
-
   setIsDirectMessage() {
     this.sharedService.selectProfileChange$.subscribe((status) => {
       this.isDirectMessage = status;
-    })
+    });
   }
 }

@@ -111,6 +111,8 @@ export class HeaderComponent implements OnInit {
     this.sharedService.setSelectProfile(false);
     this.chatService.setClickedBack(true);
     this.chatService.handleWindowChangeOnMobile();
+    this.chatService.showWorkspaceMenu();
+    this.chatService.setClickedBack(false);
   }
 
   openPopup(event: Event) {
