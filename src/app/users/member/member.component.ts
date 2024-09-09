@@ -47,6 +47,7 @@ export class MemberComponent {
         this.changeDetectorRef.detectChanges(); // Manuell aktualisieren
       }
     );
+    console.log('editChannelPopup State', this.isEditChannelPopup);
   }
 
   getChannelMember() {
@@ -72,6 +73,7 @@ export class MemberComponent {
   switchToAdd(event: Event) {
     event.stopPropagation();
     this.closeWindow();
+    console.log('editChannelPopup State', this.isEditChannelPopup);
     this.channelService.clickedAddMembers = true;
     this.channelService.animationState = 'opening';
   }
