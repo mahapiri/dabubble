@@ -12,6 +12,7 @@ export class ChatService {
   previousDate: string | null = null;
   message!: ChannelMessage | DmMessage;
   isChannel: boolean = false;
+  isDirectMessage: boolean = false;
   clickedBack: boolean = false;
   private renderer: Renderer2;
 
@@ -141,6 +142,9 @@ export class ChatService {
     if (this.channelSelectedOnMobile()) {
       this.showHeaderLogo('channelLogo');
       this.showChannel();
+    } else if (this.directMessageSelectedOnMobile()) {
+      this.showHeaderLogo('channelLogo');
+      this.showDirectMessage();
     } else if (this.workspaceMenuSelectedOnMobile()) {
       this.showHeaderLogo('daBubble');
       this.showWorkspaceMenu();
@@ -157,12 +161,17 @@ export class ChatService {
     return window.innerWidth <= 960 && this.isChannel;
   }
 
+  directMessageSelectedOnMobile() {
+    this.setIsDirectMessage();
+    return window.innerWidth <= 960 && this.isDirectMessage;
+  }
+
   /**
    * Checks if the workspace menu is selected (if channel is NOT selected) on a mobile device (window width 960px or less).
    * @returns {boolean} `true` if the screen width is 960 pixels or less and the workspace menu is selected; otherwise, `false`.
    */
   workspaceMenuSelectedOnMobile() {
-    return window.innerWidth <= 960 && !this.isChannel;
+    return window.innerWidth <= 960 && !this.isChannel && !this.isDirectMessage;
   }
 
   /**
@@ -185,15 +194,33 @@ export class ChatService {
     }
   }
 
+  showDirectMessage() {
+    if (window.innerWidth <= 960) {
+      const workspaceMenu = document.querySelector('#workspaceMenu');
+      const directMessage = document.querySelector('#directMessage');
+
+      if (workspaceMenu && directMessage) {
+        this.renderer.setStyle(workspaceMenu, 'display', 'none');
+        this.renderer.setStyle(directMessage, 'display', 'flex');
+      }
+    }
+  }
+
   showWorkspaceMenu() {
     if (window.innerWidth > 960 || this.clickedBack) {
       const workspaceMenu = document.querySelector('#workspaceMenu');
       const channelCard = document.querySelector('#channel');
       const newMessage = document.querySelector('#newMessage');
+      const directMessage = document.querySelector('#directMessage');
 
       if (workspaceMenu && channelCard) {
         this.renderer.setStyle(workspaceMenu, 'display', 'flex');
         this.renderer.setStyle(channelCard, 'display', 'none');
+      }
+
+      if (workspaceMenu && directMessage) {
+        this.renderer.setStyle(workspaceMenu, 'display', 'flex');
+        this.renderer.setStyle(directMessage, 'display', 'none');
       }
 
       if (workspaceMenu && newMessage) {
@@ -225,5 +252,11 @@ export class ChatService {
 
       this.renderer.setStyle(workspaceMenu, 'display', 'none');
     }
+  }
+
+  setIsDirectMessage() {
+    this.sharedService.selectProfileChange$.subscribe((status) => {
+      this.isDirectMessage = status;
+    })
   }
 }

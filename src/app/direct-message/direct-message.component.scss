@@ -131,7 +131,7 @@ mat-list {
 
 @media only screen and (max-width: 960px) {
   mat-card {
-    display: flex;
+    display: none;
     height: calc(100vh - 80px);
     width: 100vw;
     border-radius: 0px;

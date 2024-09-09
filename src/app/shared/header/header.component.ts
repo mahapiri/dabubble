@@ -108,6 +108,7 @@ export class HeaderComponent implements OnInit {
 
   backToWorkspacemenu() {
     this.chatService.setIsChannel(false);
+    this.sharedService.setSelectProfile(false);
     this.chatService.setClickedBack(true);
     this.chatService.handleWindowChangeOnMobile();
   }

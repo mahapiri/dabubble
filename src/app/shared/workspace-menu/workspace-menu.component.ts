@@ -191,14 +191,16 @@ export class WorkspaceMenuComponent implements OnInit {
     this.openDm = !this.openDm;
   }
 
-  clickedProfile(i: number, profile: User) {
+  async clickedProfile(i: number, profile: User) {
     this.sharedService.setSelectedUserIndex(i);
     this.sharedService.setSelectProfile(true);
-    this.directMessageService.openDmFromUser(profile);
+    await this.directMessageService.openDmFromUser(profile);
     this.chatService.setIsChannel(false);
     this.sharedService.setIsNewMessage(false);
     this.sharedService.setClickedNewMessage(false);
     this.sharedService.setSelectedUserIndex(profile.userId);
+
+    this.chatService.handleWindowChangeOnMobile();
   }
 
   editChannel(channel: string) {}
