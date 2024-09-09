@@ -10,13 +10,9 @@ import { ChatService } from '../../services/chat.service';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [
-    MatIconModule,
-    CommonModule,
-    ClickOutsideDirective
-  ],
+  imports: [MatIconModule, CommonModule, ClickOutsideDirective],
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.scss'
+  styleUrl: './profile.component.scss',
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   private sharedService: SharedService = inject(SharedService);
@@ -26,25 +22,23 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   user: any = null;
 
-
   ngOnInit() {
-    this.profileSubscription = this.sharedService.profile$.subscribe((profile) => {
-      if (profile) {
-        this.user = profile;
+    this.profileSubscription = this.sharedService.profile$.subscribe(
+      (profile) => {
+        if (profile) {
+          this.user = profile;
+        }
       }
-    });
+    );
   }
-
 
   ngOnDestroy(): void {
     this.profileSubscription.unsubscribe();
   }
 
-
   close() {
     this.sharedService.isProfile = false;
   }
-
 
   async openDM(event: Event) {
     event.preventDefault();
@@ -56,6 +50,5 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.sharedService.setClickedNewMessage(false);
     this.sharedService.setSelectedUserIndex(this.user.userId);
     this.chatService.handleWindowChangeOnMobile();
-    this.chatService.showWorkspaceMenu();
   }
 }

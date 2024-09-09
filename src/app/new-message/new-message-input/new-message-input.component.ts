@@ -208,7 +208,6 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
     this.sendMessage();
     this.channelService.loadChannels();
     this.cdr.detectChanges();
-
   }
 
   /**
@@ -226,7 +225,6 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
     }
     this.cdr.detectChanges();
     // this.chatService.handleWindowChangeOnMobile();
-    // this.chatService.showWorkspaceMenu();
   }
 
   /**
