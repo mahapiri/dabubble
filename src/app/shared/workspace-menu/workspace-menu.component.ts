@@ -27,6 +27,7 @@ import { ChatService } from '../../services/chat.service';
 import { SharedService } from '../../services/shared.service';
 import { SearchComponent } from '../header/search/search.component';
 import { SearchService } from '../../services/search.service';
+import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 
 @Component({
   selector: 'app-workspace-menu',
@@ -40,6 +41,7 @@ import { SearchService } from '../../services/search.service';
     CreateChannelComponent,
     FormsModule,
     SearchComponent,
+    ClickOutsideDirective
   ],
   templateUrl: './workspace-menu.component.html',
   styleUrl: './workspace-menu.component.scss',

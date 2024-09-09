@@ -66,6 +66,10 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.sharedService.setSelectProfile(false);
     this.chatService.setIsChannel(true);
     this.resetSearchInputValue();
+    this.sharedService.resetSelectedUserIndex();
+    this.sharedService.setIsNewMessage(false);
+    this.sharedService.setClickedNewMessage(false);
+    this.chatService.handleWindowChangeOnMobile();
   }
 
 
@@ -76,6 +80,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.channelMessageService.setSelectedMessage(channelMsg);
     this.threadService.handleThread();
     this.resetSearchInputValue();
+    this.sharedService.resetSelectedUserIndex();
   }
 
 
@@ -89,6 +94,9 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.chatService.setIsChannel(false);
     this.sharedService.setSelectedUserIndex(profile.userId);
     this.resetSearchInputValue();
+    this.sharedService.setClickedNewMessage(false);
+    this.chatService.handleWindowChangeOnMobile();
+    this.sharedService.setIsNewMessage(false);
   }
 
   resetSearchInputValue() {
