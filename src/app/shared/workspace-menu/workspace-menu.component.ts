@@ -102,18 +102,6 @@ export class WorkspaceMenuComponent implements OnInit {
       this.selectedUserIndex = i;
       this.cdr.detectChanges();
     });
-
-    /*  window.addEventListener('resize', () => {
-      if (window.innerWidth > 960) {
-        const workspaceMenu = document.querySelector('section');
-        const channelCard = document.querySelector('mat-card');
-
-        if (workspaceMenu && channelCard) {
-          this.renderer.setStyle(workspaceMenu, 'display', 'flex');
-          this.renderer.setStyle(channelCard, 'display', 'none');
-        }
-      }
-    }); */
   }
 
   /**

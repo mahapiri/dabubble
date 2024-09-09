@@ -126,8 +126,7 @@ export class ChatService {
   }
 
   /**
-   * Updates the header logo (DaBubble or DevSpace) depending on window width and if channel is selected.
-   * This handles the mobile view adjustment.
+   * Handles the mobile view adjustments. Updates the components shown and the header logo (DaBubble or DevSpace) depending on window width.
    */
   handleWindowChangeOnMobile() {
     if (this.channelSelectedOnMobile()) {
@@ -140,7 +139,7 @@ export class ChatService {
   }
 
   /**
-   * Consolidates view switching logic. Shows a component and updates the header logo.
+   * Consolidates view switching logic. Shows/hides components and updates the header logo.
    */
   updateView(componentId1: string, componentId2: string, logo: string) {
     this.showHeaderLogo(logo);
@@ -161,7 +160,7 @@ export class ChatService {
   }
 
   /**
-   * Handles the desktop layout view.
+   * Handles the desktop layout view, showing the correct logo and workspace Menu.
    */
   showDesktopLayout() {
     this.showWorkspaceMenu();
@@ -176,6 +175,10 @@ export class ChatService {
     return this.mobileScreen() && this.isChannel;
   }
 
+  /**
+   * Checks if a direct message is selected on mobile device. Calls `setIsDirectMessage()` to ensure the `isDirectMessage` variable is correctly set.
+   * @returns {boolean} `true` if the screen width is 960 pixels or less and a direct message profile is selected; otherwise, `false`.
+   */
   directMessageSelectedOnMobile() {
     this.setIsDirectMessage();
     return this.mobileScreen() && this.isDirectMessage;
@@ -197,6 +200,10 @@ export class ChatService {
     this.headerLogoSubject.next(value);
   }
 
+  /**
+   * Hides a component on mobile screens by setting its display style to 'none'.
+   * @param {string} componentId - The ID of the component.
+   */
   hideComponentOnMobile(componentId: string) {
     if (window.innerWidth <= 960) {
       const component = document.querySelector(`#${componentId}`);
@@ -204,6 +211,10 @@ export class ChatService {
     }
   }
 
+  /**
+   * Shows a component on mobile screens by setting its display style to 'flex'.
+   * @param {string} componentId - The ID of the component.
+   */
   showComponentOnMobile(componentId: string) {
     if (window.innerWidth <= 960) {
       const component = document.querySelector(`#${componentId}`);
@@ -211,6 +222,9 @@ export class ChatService {
     }
   }
 
+  /**
+   * Displays the workspace menu if the screen width is greater than 960 pixels (desktop view).
+   */
   showWorkspaceMenu() {
     if (window.innerWidth > 960) {
       const workspaceMenu = document.querySelector('#workspaceMenu');
@@ -218,6 +232,9 @@ export class ChatService {
     }
   }
 
+  /**
+   * Subscribes to the `selectProfileChange$` observable from the `SharedService`. Updates the `isDirectMessage` status.
+   */
   setIsDirectMessage() {
     this.sharedService.selectProfileChange$.subscribe((status) => {
       this.isDirectMessage = status;
