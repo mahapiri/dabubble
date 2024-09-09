@@ -57,3 +57,20 @@ mat-card-header {
     top: 38px;
     left: 34px;
 }
+
+
+@media only screen and (max-width: 960px) {
+    mat-card-header {
+      height: 60px;
+  
+      .direct-message-info {
+        height: 60px;
+        padding: 0px 6px;
+      }
+  
+      .channel-btn {
+        gap: 5px;
+        padding: 0px 6px 0px 6px;
+      }
+    }
+  }

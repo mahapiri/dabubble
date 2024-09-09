@@ -3,6 +3,7 @@
 :host {
   display: flex;
   width: 100%;
+  min-width: 0px;
 }
 
 mat-card {
@@ -125,4 +126,14 @@ mat-list {
   color: var(--black);
   overflow-y: unset;
   // height: 100%;
+}
+
+
+@media only screen and (max-width: 960px) {
+  mat-card {
+    display: flex;
+    height: calc(100vh - 80px);
+    width: 100vw;
+    border-radius: 0px;
+  }
 }
