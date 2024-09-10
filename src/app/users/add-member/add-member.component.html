@@ -1,7 +1,15 @@
-<div appClickOutside (clickOutside)="closeWindow()" class="popup-container add-member-container"
-  [class.edit-channel-active]="this.isEditChannelPopup">
+<div
+  appClickOutside
+  (clickOutside)="closeWindow()"
+  class="popup-container add-member-container"
+  [class.edit-channel-active]="this.isEditChannelPopup"
+>
   <div class="center-handle">
-    <div *ngIf="chatService.mobileScreen()" class="handle" (click)="closeWindow()"></div>
+    <div
+      *ngIf="chatService.mobileScreen()"
+      class="handle"
+      (click)="closeWindow()"
+    ></div>
   </div>
   <div class="member-content">
     <div class="title-name-container">
@@ -23,18 +31,29 @@
           </div>
         </button>
 
-
         }
       </div>
     </div>
-    <input  [(ngModel)]="searchMember" (ngModelChange)="showMember()" (click)="showMember()" type="text"
-      placeholder="Name eingeben" />
+    <input
+      [(ngModel)]="searchMember"
+      (ngModelChange)="showMember($event)"
+      (click)="showMember($event)"
+      type="text"
+      placeholder="Name eingeben"
+    />
     <div class="profile-list">
       @for (member of showUser; track $index) {
-      <div class="profile-container" [ngClass]="member.chosenToChannel ? 'selected' : ''"
-        (click)="selectMember($event, member)">
+      <div
+        class="profile-container"
+        [ngClass]="member.chosenToChannel ? 'selected' : ''"
+        (click)="selectMember($event, member)"
+      >
         <div class="profile-content">
-          <img src="{{ member.profileImage }}" alt="Character" class="profile-icon" />
+          <img
+            src="{{ member.profileImage }}"
+            alt="Character"
+            class="profile-icon"
+          />
           <div class="status-icon" ngClass="{{ member.state }}"></div>
         </div>
         <p class="n-p">{{ member.username }}</p>
@@ -42,7 +61,10 @@
       }
     </div>
     <div class="btn-container">
-      <button (click)="addUserToActiveChannel()" class="btn-default btn-primary">
+      <button
+        (click)="addUserToActiveChannel()"
+        class="btn-default btn-primary"
+      >
         Hinzufügen
       </button>
     </div>

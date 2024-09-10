@@ -46,7 +46,6 @@ export class AddMemberComponent {
     );
   }
 
-
   /**
    * gets all the members in the current channel
    */
@@ -84,7 +83,9 @@ export class AddMemberComponent {
   /**
    * shows the member which can be added to the channel and
    */
-  showMember() {
+  showMember(event: Event) {
+    event.stopPropagation();
+
     this.userlistOpen = true;
     this.usersNotInChannel = this.getNotIncludedMembers(
       this.userService.userArray

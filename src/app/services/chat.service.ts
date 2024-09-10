@@ -190,7 +190,6 @@ export class ChatService {
     return this.mobileScreen() && this.isThread;
   }
 
-
   newMessageSelectedOnMobile() {
     this.setIsNewMessage();
     return this.mobileScreen() && this.isNewMessage;
@@ -283,12 +282,12 @@ export class ChatService {
   setIsThread() {
     this.sharedService.clickedThread$.subscribe((status) => {
       this.isThread = status;
-    })
+    });
   }
 
   setIsNewMessage() {
     this.sharedService.isNewMessage$.subscribe((status) => {
       this.isNewMessage = status;
-    })
+    });
   }
 }

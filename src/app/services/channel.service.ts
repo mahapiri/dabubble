@@ -80,10 +80,13 @@ export class ChannelService {
    */
   async addChannel(name: string, description: string, user: User[]) {
     await this.getCreatedByUser();
-    const newChannel: Channel = this.setChannelObject(name, description, user);  
-    console.log("newChannel", newChannel.getChannelJson());
-      
-    const channelRef = await addDoc(this.getChannelRef(), newChannel.getChannelJson());
+    const newChannel: Channel = this.setChannelObject(name, description, user);
+    console.log('newChannel', newChannel.getChannelJson());
+
+    const channelRef = await addDoc(
+      this.getChannelRef(),
+      newChannel.getChannelJson()
+    );
     this.channelID = channelRef.id;
     await this.updateChannelWithID(channelRef.id);
     this.userService.updateUserChannels(user, this.channelID);
@@ -156,7 +159,7 @@ export class ChannelService {
       await getDoc(doc(this.firestore, 'users', this.userService.userID))
     ).data();
     if (userRef) {
-      this.createdBy = userRef['username'];      
+      this.createdBy = userRef['username'];
     }
   }
 
@@ -204,11 +207,13 @@ export class ChannelService {
     if (this.isAddMemberSlider()) {
       this.clickedEditChannel = true;
       this.clickedAddMembers = false;
+      this.animationState = 'none';
     } else {
       this.clickedAddMembers = false;
       this.clickedEditChannel = false;
       this.clickedMembers = false;
       this.setIsEditChannelPopup(false);
+      this.animationState = 'none';
     }
   }
 }

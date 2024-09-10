@@ -91,6 +91,7 @@ export class ChannelComponent implements OnInit {
 
   ngOnInit(): void {
     this.scrollToBottom();
+    console.log('clickedAddmember', this.channelService.clickedAddMembers);
   }
 
   /**
@@ -139,6 +140,7 @@ export class ChannelComponent implements OnInit {
       this.channelService.closePopup();
       this.channelService.clickedAddMembers = true;
     }
+    console.log('clickedAddmember', this.channelService.clickedAddMembers);
   }
 
   /**
