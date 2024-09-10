@@ -98,7 +98,12 @@ a {
 /* Smartphones - - - - - - - - - */
 
 @media only screen and (max-width: 960px) {
+  section {
+    padding: 100px 16px;
+  }
+
   .profile-container {
     max-width: 450px;
+    padding: 40px 24px;
   }
 }
