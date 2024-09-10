@@ -50,6 +50,7 @@
               [(ngModel)]="channelMessage.text"
               type="text"
               rows="3"
+              (keydown)="onKeyDown($event)"
             ></textarea>
             <div *ngIf="edit" class="edit-options-wrapper">
               <button

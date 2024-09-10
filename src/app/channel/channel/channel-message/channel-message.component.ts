@@ -18,6 +18,7 @@ import { ReactionContainerComponent } from '../../../chat/reaction-container/rea
 import { ReactionService } from '../../../services/reaction.service';
 import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { EmojiPickerComponent } from '../../../chat/emoji-picker/emoji-picker.component';
+import { ClickOutsideDirective } from '../../../directive/click-outside.directive';
 
 @Component({
   selector: 'app-channel-message',
@@ -32,6 +33,7 @@ import { EmojiPickerComponent } from '../../../chat/emoji-picker/emoji-picker.co
     FormsModule,
     ReactionBarComponent,
     ReactionContainerComponent,
+    ClickOutsideDirective,
     EmojiComponent,
     EmojiPickerComponent,
   ],
@@ -118,9 +120,22 @@ export class ChannelMessageComponent {
    * Exits edit mode.
    */
   saveMessage() {
-    this.channelMessageService.updateMessage(this.channelMessage);
-    this.threadService.updateReplyToMesageInThreadObject(this.channelMessage);
-    this.closeEdit();
+    if (this.channelMessage.text.trim()) {
+      this.channelMessageService.updateMessage(this.channelMessage);
+      this.threadService.updateReplyToMesageInThreadObject(this.channelMessage);
+      this.closeEdit();
+    }
+  }
+
+  /**
+   * sends the message if the message is valid and the Enter key is pressed
+   * when Shift+Enter is pressed, a line break is inserted instead
+   */
+  onKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.saveMessage();
+    }
   }
 
   /**
@@ -170,7 +185,7 @@ export class ChannelMessageComponent {
    * handles emoji selection from the EmojiPickerComponent
    */
   onEmojiSelected(emoji: string) {
-    this.messageText += emoji;
+    this.channelMessage.text += emoji;
     this.closeEmojiSet();
   }
 }
