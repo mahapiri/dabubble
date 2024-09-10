@@ -89,7 +89,7 @@ export class WorkspaceMenuComponent implements OnInit {
     public chatService: ChatService,
     public sharedService: SharedService,
     private searchService: SearchService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.userService.getUserList();
@@ -170,9 +170,9 @@ export class WorkspaceMenuComponent implements OnInit {
       this.sharedService.getClickedNewMessage()
     );
     this.sharedService.resetSelectedUserIndex();
-    this.chatService.hideComponentOnMobile('workspaceMenu');
-    this.chatService.showHeaderLogo('channelLogo');
-
+    setTimeout(() => {
+      this.chatService.handleWindowChangeOnMobile();
+    }, 0);
     this.cdr.detectChanges();
   }
 
@@ -200,7 +200,7 @@ export class WorkspaceMenuComponent implements OnInit {
     this.chatService.handleWindowChangeOnMobile();
   }
 
-  editChannel(channel: string) {}
+  editChannel(channel: string) { }
 
   async openResults() {
     try {

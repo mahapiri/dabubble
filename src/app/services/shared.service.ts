@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { doc, Firestore, getDoc } from '@angular/fire/firestore';
 import { User } from '../../models/user.class';
 import { BehaviorSubject } from 'rxjs';
+import { user } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +11,7 @@ import { BehaviorSubject } from 'rxjs';
 export class SharedService {
   private firestore: Firestore = inject(Firestore);
   isProfile: boolean = false;
+  isMyProfile: boolean = false;
 
   private profileSubject = new BehaviorSubject<any>(null);
   profile$ = this.profileSubject.asObservable();
@@ -33,6 +35,7 @@ export class SharedService {
   selectedUserIndex$ = this.selectedUserIndexSubject.asObservable();
 
   isProfileID: string = '';
+  isMyProfileID: string = '';
   isResults: boolean = false;
 
   constructor() {}
@@ -41,6 +44,12 @@ export class SharedService {
     this.isProfile = true;
     this.isProfileID = userID;
     this.getProfile(userID);
+  }
+
+  openMyProfile(userID: string) {
+    this.isMyProfile = true;
+    this.isMyProfileID = userID;
+    this.getProfile(userID)
   }
 
   async getProfile(userID: string) {

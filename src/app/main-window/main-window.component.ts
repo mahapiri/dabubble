@@ -16,6 +16,7 @@ import { Subscription } from 'rxjs';
 import { SharedService } from '../services/shared.service';
 import { ClickOutsideDirective } from '../directive/click-outside.directive';
 import { NewMessageComponent } from '../new-message/new-message.component';
+import { MyProfileComponent } from '../users/my-profile/my-profile.component';
 
 @Component({
   selector: 'app-main-window',
@@ -32,6 +33,7 @@ import { NewMessageComponent } from '../new-message/new-message.component';
     DirectMessageComponent,
     ClickOutsideDirective,
     NewMessageComponent,
+    MyProfileComponent
   ],
   templateUrl: './main-window.component.html',
   styleUrl: './main-window.component.scss',

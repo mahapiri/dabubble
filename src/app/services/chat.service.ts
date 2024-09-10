@@ -14,6 +14,7 @@ export class ChatService {
   isChannel: boolean = false;
   isDirectMessage: boolean = false;
   isThread: boolean = false;
+  isNewMessage: boolean = false;
   private renderer: Renderer2;
 
   private headerLogoSubject = new BehaviorSubject<string>('daBubble');
@@ -136,6 +137,8 @@ export class ChatService {
       this.updateView('workspaceMenu', 'directMessage', 'channelLogo');
     } else if (this.threadSelectedOnMobile()) {
       this.updateView('workspaceMenu', 'thread', 'channelLogo');
+    } else if (this.newMessageSelectedOnMobile()) {
+      this.updateView('workspaceMenu', 'newMessage', 'channelLogo');
     } else {
       this.showHeaderLogo('daBubble');
     }
@@ -185,6 +188,12 @@ export class ChatService {
   threadSelectedOnMobile() {
     this.setIsThread();
     return this.mobileScreen() && this.isThread;
+  }
+
+
+  newMessageSelectedOnMobile() {
+    this.setIsNewMessage();
+    return this.mobileScreen() && this.isNewMessage;
   }
 
   /**
@@ -274,6 +283,12 @@ export class ChatService {
   setIsThread() {
     this.sharedService.clickedThread$.subscribe((status) => {
       this.isThread = status;
+    })
+  }
+
+  setIsNewMessage() {
+    this.sharedService.isNewMessage$.subscribe((status) => {
+      this.isNewMessage = status;
     })
   }
 }

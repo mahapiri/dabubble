@@ -131,6 +131,7 @@ export class HeaderComponent implements OnInit {
     this.chatService.setIsChannel(false);
     this.sharedService.setSelectProfile(false);
     this.sharedService.setClickedThread(false);
+    this.sharedService.setIsNewMessage(false);
     this.chatService.handleWindowChangeOnMobile();
     this.chatService.showWorkspaceMenu();
     this.sharedService.setIsNewMessage(false);

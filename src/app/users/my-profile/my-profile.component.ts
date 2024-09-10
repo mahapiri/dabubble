@@ -8,6 +8,7 @@ import { doc, Firestore, updateDoc } from '@angular/fire/firestore';
 import { ChannelService } from '../../services/channel.service';
 import { Channel } from '../../../models/channel.class';
 import { ClickOutsideDirective } from '../../directive/click-outside.directive';
+import { SharedService } from '../../services/shared.service';
 
 @Component({
   selector: 'app-my-profile',
@@ -22,6 +23,7 @@ export class MyProfileComponent implements OnInit {
   firestore: Firestore = inject(Firestore);
   userService: UserService = inject(UserService);
   channelService: ChannelService = inject(ChannelService);
+  sharedService: SharedService = inject(SharedService);
   currentUser: User | null = null;
   editing: boolean = false;
   userName: string = '';
@@ -43,6 +45,7 @@ export class MyProfileComponent implements OnInit {
 
   closeProfile() {
     this.clickedProfileChange.emit(false);
+    this.sharedService.isMyProfile = false;
   }
 
 
