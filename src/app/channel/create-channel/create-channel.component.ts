@@ -33,9 +33,17 @@ export class CreateChannelComponent {
   showUser: User[] = [];
   selectedUsersForChannel: User[] = [];
   usersToAdd: User[] = [];
-
+  currentUser!: User;
   channelName: string = '';
   channelDescription: string = '';
+
+  constructor() {
+    this.userService.currentUser$.subscribe((user) => {
+      if (user) {
+        this.currentUser = user;
+      }
+    });
+  }
 
   close() {
     this.clickedChannel.emit(false);
@@ -63,16 +71,20 @@ export class CreateChannelComponent {
    */
   showMember() {
     this.userlistOpen = true;
-    this.showUser = this.userService.userArray;
+    this.showUser = this.removeCurrentUserFromArray();
     if (this.searchMember == '' && this.someUsersChecked) {
-      this.showUser = this.userService.userArray;
+      this.showUser = this.removeCurrentUserFromArray();
     } else {
-      this.showUser = this.userService.userArray.filter((user) => {
+      this.showUser = this.removeCurrentUserFromArray().filter((user) => {
         return user.username
           .toLowerCase()
           .includes(this.searchMember.toLowerCase());
       });
     }
+  }
+
+  removeCurrentUserFromArray() {
+    return this.userService.userArray.filter(user => user.userId !== this.currentUser.userId);
   }
 
   /**
@@ -104,10 +116,16 @@ export class CreateChannelComponent {
    */
   createChannel() {
     if (this.someUsersChecked) {
+      this.addSelectedUserToChannel(this.currentUser);
       this.usersToAdd = this.selectedUsersForChannel;
     } else {
       this.usersToAdd = this.userService.userArray;
     }
+    console.log("channelName", this.channelName);
+    console.log("channelDescription", this.channelDescription);
+    console.log("usersToAdd", this.usersToAdd);
+
+    
     this.channelService.addChannel(
       this.channelName,
       this.channelDescription,
@@ -115,4 +133,5 @@ export class CreateChannelComponent {
     );
     this.close();
   }
+
 }

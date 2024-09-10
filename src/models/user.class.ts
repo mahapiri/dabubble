@@ -26,7 +26,7 @@ export class User {
       state: this.state,
       userChannels: this.userChannels,
       profileImage: this.profileImage,
-      chosenToChannel: this.chosenToChannel,
+     // chosenToChannel: this.chosenToChannel,
     };
   }
 
