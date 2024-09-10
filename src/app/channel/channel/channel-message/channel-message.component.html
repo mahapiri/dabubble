@@ -7,7 +7,11 @@
       </div>
     </div>
 
-    <div class="message" [ngClass]="{ 'bg-color': edit }" (mouseleave)="closeReactionMoreBtn()">
+    <div
+      class="message"
+      [ngClass]="{ 'bg-color': edit }"
+      (mouseleave)="closeReactionMoreBtn()"
+    >
       <div *ngIf="!edit" id="reactionBar" class="reaction-bar">
         <app-reaction-bar
           [isMyMessage]="isMyMessage"
@@ -48,8 +52,22 @@
               rows="3"
             ></textarea>
             <div *ngIf="edit" class="edit-options-wrapper">
-              <button class="mini-fab-btn" mat-mini-fab>
+              <button
+                class="mini-fab-btn"
+                mat-mini-fab
+                (click)="openEmojiSet($event)"
+              >
                 <mat-icon>sentiment_satisfied</mat-icon>
+                <div
+                  *ngIf="isEmoji"
+                  class="emoji-container"
+                  appClickOutside
+                  (clickOutside)="closeEmojiSet()"
+                >
+                  <app-emoji-picker
+                    (emojiSelected)="onEmojiSelected($event)"
+                  ></app-emoji-picker>
+                </div>
               </button>
               <div class="d-flex gap-32 btn-container">
                 <button (click)="closeEdit()" class="btn-default btn-secondary">

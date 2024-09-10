@@ -16,6 +16,8 @@ import { ChangeDetectorRef } from '@angular/core';
 import { ReactionBarComponent } from '../../../chat/reaction-bar/reaction-bar.component';
 import { ReactionContainerComponent } from '../../../chat/reaction-container/reaction-container.component';
 import { ReactionService } from '../../../services/reaction.service';
+import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import { EmojiPickerComponent } from '../../../chat/emoji-picker/emoji-picker.component';
 
 @Component({
   selector: 'app-channel-message',
@@ -30,6 +32,8 @@ import { ReactionService } from '../../../services/reaction.service';
     FormsModule,
     ReactionBarComponent,
     ReactionContainerComponent,
+    EmojiComponent,
+    EmojiPickerComponent,
   ],
   templateUrl: './channel-message.component.html',
   styleUrl: './channel-message.component.scss',
@@ -47,7 +51,10 @@ export class ChannelMessageComponent {
   private lastAnswerSubscription!: Subscription;
 
   isMyMessage: boolean = false;
+  messageText: string = '';
+  isEmoji: boolean = false;
   edit: boolean = false;
+  notOpen: boolean = true;
 
   constructor(
     public chatService: ChatService,
@@ -138,5 +145,32 @@ export class ChannelMessageComponent {
    */
   closeReactionMoreBtn() {
     this.reactionService.moreBtn = false;
+  }
+
+  /**
+   * open the Emoji Container
+   */
+  openEmojiSet(event: Event) {
+    event.stopPropagation();
+    if (this.notOpen) {
+      this.isEmoji = !this.isEmoji;
+    }
+  }
+
+  /**
+   * open the Emoji Container
+   */
+  closeEmojiSet() {
+    this.isEmoji = false;
+    this.notOpen = false;
+    setTimeout(() => (this.notOpen = true), 1000);
+  }
+
+  /**
+   * handles emoji selection from the EmojiPickerComponent
+   */
+  onEmojiSelected(emoji: string) {
+    this.messageText += emoji;
+    this.closeEmojiSet();
   }
 }
