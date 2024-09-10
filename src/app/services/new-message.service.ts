@@ -57,11 +57,21 @@ export class NewMessageService implements OnDestroy {
     this.userServiceSubscription.add(userListSubscription);
   }
 
+
+  /**
+   * Unsubscribes from the user service when the component is destroyed.
+   */
   ngOnDestroy(): void {
     this.userServiceSubscription.unsubscribe();
     console.log('unsub new msg service');
   }
 
+
+  /**
+   * Sets the search keyword and updates the result lists (users and channels) based on the search term.
+   * @param searchword The keyword to search for users and channels.
+   * @returns 
+   */
   setSearchword(searchword: string) {
     this.searchwordSubject.next(searchword);
 
@@ -84,6 +94,11 @@ export class NewMessageService implements OnDestroy {
     this.searchChannel(searchValue);
   }
 
+
+  /**
+   * Searches the list of users based on the search keyword and updates the result list.
+   * @param searchword The search keyword for users.
+   */
   searchUser(searchword: string) {
     this.userList.forEach((user) => {
       const profile = user.username || '';
@@ -97,6 +112,11 @@ export class NewMessageService implements OnDestroy {
     });
   }
 
+
+  /**
+   * Searches the list of channels based on the search keyword and updates the result list.
+   * @param searchword - The search keyword for channels.
+   */
   searchChannel(searchword: string) {
     this.channelList.forEach((channel: any) => {
       const channelName = channel.name || '';
@@ -107,6 +127,12 @@ export class NewMessageService implements OnDestroy {
     });
   }
 
+
+  /**
+   * Retrieves the name of the channel based on the channel ID.
+   * @param id - The channel ID.
+   * @returns 
+   */
   async proofChannelName(id: string) {
     const channelRef = doc(this.firestore, 'channels', id);
     const channelDoc = await getDoc(channelRef);
@@ -119,11 +145,21 @@ export class NewMessageService implements OnDestroy {
     }
   }
 
+
+  /**
+   * Selects a channel and updates the current message ID for that channel.
+   * @param channel - The channel object to be selected.
+   */
   selectChannel(channel: any) {
     this.messageIdSubject.next(channel.id);
     this.isChannel = true;
   }
 
+
+  /**
+   * Selects a user and updates the current message ID for that user.
+   * @param user - The user object to be selected.
+   */
   selectUser(user: User) {
     this.messageIdSubject.next(user.userId);
     this.isChannel = false;

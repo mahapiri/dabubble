@@ -214,6 +214,9 @@ export class AuthService {
   }
 
 
+  /**
+   * Deletes all direct messages associated with the specified user ID.
+   */
   async deleteDirectMessages(userId: string) {
     const directMessagesRef = collection(this.firestore, 'direct-messages');
     const q = query(directMessagesRef, where('userIDs', 'array-contains', userId));
@@ -226,6 +229,9 @@ export class AuthService {
   }
 
 
+  /**
+   * Deletes a specific direct message document and its associated messages.
+   */
   async deleteDirectMessage(directMessageId: string) {
     const messagesRef = collection(this.firestore, `direct-messages/${directMessageId}/messages`);
     const messagesSnapshot = await getDocs(messagesRef);

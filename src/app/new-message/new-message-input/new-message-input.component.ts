@@ -69,6 +69,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
     this.newMessageService.isChannel = false;
   }
 
+
   ngOnInit(): void {
     this.searchWordSubscription = this.newMessageService.searchword$.subscribe(
       (word) => {
@@ -89,6 +90,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
     this.messageText = ''; // testing
   }
 
+
   /**
    * add member to message field
    */
@@ -99,12 +101,17 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  /**
+   * This method unsubscribes from active subscriptions to prevent memory leaks.
+   */
   ngOnDestroy(): void {
     this.searchWordSubscription.unsubscribe();
     this.messageIdSubscription.unsubscribe();
     this.taggingSubscription.unsubscribe();
     this.messageText = '';
   }
+
 
   /**
    * sends the message if the message is valid and the Enter key is pressed
@@ -117,10 +124,15 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  /**
+   * Handles file selection for uploading.
+   */
   async chooseFile(event: Event) {
     this.uploadService.onFileSelected(event, "newMessage");
     this.uploadService.uploadPath = this.uploadPath;
   }
+
 
   /**
    * open the Emoji Container
@@ -132,6 +144,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
     }
   }
 
+
   /**
    * close the Emoji Container
    */
@@ -141,6 +154,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
     setTimeout(() => (this.notOpen = true), 1000);
   }
 
+
   /**
    * handles emoji selection from the EmojiPickerComponent
    */
@@ -148,6 +162,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
     this.messageText += emoji;
     this.closeEmojiSet();
   }
+
 
   /**
    * checks the valid of a message to start the newDmMessage function
@@ -180,6 +195,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
     setTimeout(() => this.messageIdSubscription.unsubscribe(), 100);
   }
 
+
   /**
    * Creates a direct message with the specified user profile.
    * @param profile
@@ -197,6 +213,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
       this.chatService.handleWindowChangeOnMobile();
     }, 0);
   }
+
 
   /**
    * Initiates a message creation for the specified channel.
@@ -217,6 +234,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
     }, 0);
   }
 
+
   /**
    * Sends a message based on the current chat context.
    */
@@ -233,6 +251,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
     this.cdr.detectChanges();
   }
 
+
   /**
    * calls the upload method if a file was chosen and saves the dawnload URL of the file to the messageText
    */
@@ -243,6 +262,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
     }
   }
 
+
   /**
    * open tagging popup
    */
@@ -251,6 +271,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
     this.isTag = !this.isTag;
   }
 
+  
   /**
    * close tagging popup
    */

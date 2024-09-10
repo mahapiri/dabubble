@@ -285,6 +285,10 @@ export class ChatService {
     });
   }
 
+  /**
+   * Subscribes to the `isNewMessage$` observable from `sharedService`
+   * and updates the `isNewMessage` property with the latest status.
+   */
   setIsNewMessage() {
     this.sharedService.isNewMessage$.subscribe((status) => {
       this.isNewMessage = status;
