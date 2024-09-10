@@ -1,7 +1,7 @@
 <mat-card id="directMessage" appearance="outlined">
   <app-direct-message-header></app-direct-message-header>
 
-  <mat-card-content #messageContainer>
+  <mat-card-content #messageContainer [ngClass]="uploadService.dmFileChosen ? 'img-input-margin' : ''">
     <app-direct-message-info></app-direct-message-info>
     <mat-list>
       <app-direct-message-message *ngFor="let message of messages$ | async"

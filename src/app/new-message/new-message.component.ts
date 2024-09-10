@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { NewMessageHeaderComponent } from './new-message-header/new-message-header.component';
 import { NewMessageInputComponent } from './new-message-input/new-message-input.component';
+import { UploadService } from '../services/upload.service';
 
 @Component({
   selector: 'app-new-message',
@@ -26,4 +27,7 @@ import { NewMessageInputComponent } from './new-message-input/new-message-input.
   templateUrl: './new-message.component.html',
   styleUrl: './new-message.component.scss',
 })
-export class NewMessageComponent {}
+export class NewMessageComponent {
+  uploadService: UploadService = inject(UploadService);
+
+}

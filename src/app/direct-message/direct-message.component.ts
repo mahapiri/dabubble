@@ -20,6 +20,7 @@ import { DirectMessageNewMessageInputComponent } from './direct-message-new-mess
 import { DirectMessageMessageComponent } from './direct-message-message/direct-message-message.component';
 import { Observable } from 'rxjs';
 import { DmMessage } from '../../models/direct-message.class';
+import { UploadService } from '../services/upload.service';
 @Component({
   selector: 'app-direct-message',
   standalone: true,
@@ -44,6 +45,8 @@ export class DirectMessageComponent implements OnInit {
   public directMessageService: DirectMessageService =
     inject(DirectMessageService);
   messages$: Observable<DmMessage[]>;
+  uploadService: UploadService = inject(UploadService);
+
 
   @ViewChild('messageContainer') private messageContainer!: ElementRef;
 

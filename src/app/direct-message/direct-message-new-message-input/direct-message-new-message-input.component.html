@@ -1,5 +1,5 @@
-<div class="new-message-container">
-  @if (this.uploadService.currentImg$ | async) {
+<div class="new-message-container" [ngClass]="uploadService.dmFileChosen ? 'img-input-height' : ''">
+  @if (this.uploadService.dmFileChosen) {
   <img [src]="this.uploadService.currentImg$ | async" alt="">
   <mat-icon (click)="this.uploadService.removeImg()" class="close-icon pos-relative">close</mat-icon>
   }@else {
