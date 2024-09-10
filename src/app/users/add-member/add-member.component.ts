@@ -140,6 +140,12 @@ export class AddMemberComponent {
     this.closeWindow();
   }
 
+  /**
+   * Extracts and returns the user object with the user infos to be added to the channel.
+   *
+   * @param {User} user - The user object with the user information.
+   * @returns {Object} - An object containing the user's infos (username, userId, email, state, userChannels, and profileImage).
+   */
   addUserCredentialsToChannel(user: User) {
     return {
       username: user.username,
@@ -168,6 +174,9 @@ export class AddMemberComponent {
     }
   }
 
+  /**
+   * cunsubscribes for clean up on component destroy
+   */
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
