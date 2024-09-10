@@ -170,16 +170,9 @@ export class WorkspaceMenuComponent implements OnInit {
       this.sharedService.getClickedNewMessage()
     );
     this.sharedService.resetSelectedUserIndex();
-
     setTimeout(() => {
       this.chatService.handleWindowChangeOnMobile();
-
     }, 0);
-
-
-    // this.chatService.hideComponentOnMobile('workspaceMenu');
-    // this.chatService.showHeaderLogo('channelLogo');
-
     this.cdr.detectChanges();
   }
 
