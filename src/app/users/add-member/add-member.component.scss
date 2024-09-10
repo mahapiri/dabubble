@@ -69,6 +69,11 @@ input[type="text"] {
   }
 }
 
+.profile-list {
+  max-height: 30vh;
+  overflow: scroll;
+}
+
 .profile-content {
   display: flex;
   position: relative;

@@ -31,23 +31,25 @@
       type="text"
       placeholder="Name eingeben"
     />
-    @for (member of showUser; track $index) {
-    <div
-      class="profile-container"
-      [ngClass]="member.chosenToChannel ? 'selected' : ''"
-      (click)="selectMember(member)"
-    >
-      <div class="profile-content">
-        <img
-          src="{{ member.profileImage }}"
-          alt="Character"
-          class="profile-icon"
-        />
-        <div class="status-icon" ngClass="{{ member.state }}"></div>
+    <div class="profile-list">
+      @for (member of showUser; track $index) {
+      <div
+        class="profile-container"
+        [ngClass]="member.chosenToChannel ? 'selected' : ''"
+        (click)="selectMember(member)"
+      >
+        <div class="profile-content">
+          <img
+            src="{{ member.profileImage }}"
+            alt="Character"
+            class="profile-icon"
+          />
+          <div class="status-icon" ngClass="{{ member.state }}"></div>
+        </div>
+        <p class="n-p">{{ member.username }}</p>
       </div>
-      <p class="n-p">{{ member.username }}</p>
+      }
     </div>
-    }
     <div class="btn-container">
       <button
         (click)="addUserToActiveChannel()"
