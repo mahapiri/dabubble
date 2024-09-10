@@ -122,8 +122,8 @@ input[type="text"] {
 .user-name {
   font-family: "Nunito";
   font-weight: 700;
-  font-size: 32px;
-  line-height: 43.65px;
+  font-size: 30px;
+  line-height: 32px;
   color: var(--black);
 }
 
@@ -370,6 +370,12 @@ a {
 }
 
 /* Smartphones - - - - - - - - - */
+
+@media only screen and (max-width: 1024px) {
+  .user-name {
+    font-size: 24px;
+  }
+}
 
 @media only screen and (max-width: 960px) {
   .searchfield-container,
