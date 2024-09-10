@@ -37,7 +37,7 @@
       />
     </div>
     <div class="btn-container">
-      <button (click)="nextPage()" class="btn-default btn-primary">
+      <button [disabled]="!channelName" [ngClass]="{ 'button-disabled': !channelName }" (click)="nextPage()" class="btn-default btn-primary">
         Erstellen
       </button>
     </div>

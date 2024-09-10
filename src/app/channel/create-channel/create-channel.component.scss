@@ -71,6 +71,10 @@ input[type="text"] {
   justify-content: flex-end;
 }
 
+.button-disabled{
+  background-color: var(--gray);
+}
+
 .bold {
   font-weight: 700 !important;
 }
