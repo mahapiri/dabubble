@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { UserService } from '../../services/user.service';
 import { User } from '../../../models/user.class';
@@ -19,7 +19,6 @@ import { ChatService } from '../../services/chat.service';
   styleUrl: './add-member.component.scss',
 })
 export class AddMemberComponent {
-  //@Output() clickedAddMembers = new EventEmitter<boolean>();
   @Input() channel!: Channel;
 
   firestore: Firestore = inject(Firestore);
