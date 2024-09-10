@@ -26,6 +26,7 @@ export class CreateChannelComponent {
   channelService: ChannelService = inject(ChannelService);
   userService: UserService = inject(UserService);
   addUserChannelVisible: boolean = false;
+  selectedOption: string = 'allUsers';
   someUsersChecked: boolean = false;
   allUsersChecked: boolean = false;
   searchMember: string = '';
@@ -61,9 +62,16 @@ export class CreateChannelComponent {
   /**
    * detects the radio button and sets the someUsersChecked variable accordingly
    */
-  onRadioChange(event: any): void {
-    this.someUsersChecked = event.target.checked;
-    this.allUsersChecked = !this.someUsersChecked;
+  onRadioChange(): void {
+    console.log("some", this.someUsersChecked, "all", this.allUsersChecked);
+    
+    if (this.selectedOption === 'allUsers') {
+      this.allUsersChecked = true 
+      this.someUsersChecked = false
+    } else if (this.selectedOption === 'someUsers') {
+      this.allUsersChecked = false 
+      this.someUsersChecked = true
+    }
   }
 
   /**
