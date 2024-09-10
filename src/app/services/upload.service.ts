@@ -1,28 +1,38 @@
 import { inject, Injectable } from '@angular/core';
-import { getDownloadURL, getStorage, ref, Storage, uploadBytes } from '@angular/fire/storage';
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  Storage,
+  uploadBytes,
+} from '@angular/fire/storage';
 import { AuthService } from './auth.service';
 import { BehaviorSubject } from 'rxjs';
 import { UserService } from './user.service';
 
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UploadService {
-  storage: Storage = inject(Storage)
+  storage: Storage = inject(Storage);
   authService: AuthService = inject(AuthService);
   userService: UserService = inject(UserService);
 
 
   acceptedFileTypes: string = '.jpg, .jpeg, .png, .pdf';
-  file: any = "Datei hochladen";
-  uploadPath: string = ''
-  userSpecificPath: string = "";
+  file: any = 'Datei hochladen';
+  uploadPath: string = '';
+  userSpecificPath: string = '';
   storageRef = ref(this.storage, this.userSpecificPath);
-  downloadURL: string = ""
-  fileChosen: boolean = false;
+  downloadURL: string = '';
+  channelFileChosen: boolean = false;
+  threadFileChosen: boolean = false;
+  dmFileChosen: boolean = false;
+  newMessageFileChosen: boolean = false
 
-  public currentImg = new BehaviorSubject<string | ArrayBuffer | null>("");
+
+  public currentImg = new BehaviorSubject<string | ArrayBuffer | null>('');
   currentImg$ = this.currentImg.asObservable();
 
 
@@ -31,26 +41,33 @@ export class UploadService {
   /**
    * opens the file input when called
    */
-  triggerFileInput(): void {
-    const fileInput = document.getElementById('file-upload') as HTMLInputElement;
+  triggerFileInput(fileInputId: string): void {
+    const fileInput = document.getElementById(
+      fileInputId
+    ) as HTMLInputElement;
     if (fileInput) {
       fileInput.click();
     }
   }
 
+
   /**
    * saves the selected file in the file variable and sets the observable for the current image
-   * @param event 
+   * @param event
    */
-  onFileSelected(event: Event): void {
+  onFileSelected(event: Event, fileSource: string): void {
+    this.noFileChosen();
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.file = input.files[0];
-      if (this.file.type.startsWith('image/') || this.file.type.startsWith('application/')) {
+      if (
+        this.file.type.startsWith('image/') ||
+        this.file.type.startsWith('application/')
+      ) {
         const reader = new FileReader();
+        this.setPathForUpload(fileSource);
         reader.onload = () => {
           this.currentImg.next(reader.result);
-          this.setPathForUpload();
         };
         reader.readAsDataURL(this.file);
       } else {
@@ -59,22 +76,41 @@ export class UploadService {
     }
   }
 
+
   /**
    * sets the upload path for the file
    */
-  setPathForUpload(){
-    this.fileChosen = true;
-    this.userSpecificPath = `${this.uploadPath}/${this.userService.userID}/${this.file.name}`
+  setPathForUpload(fileSource: string) {
+    if (fileSource === 'channel') {
+      this.channelFileChosen = true;
+    } else if (fileSource === 'thread') {
+      this.threadFileChosen = true;
+    } else if (fileSource === 'directMessage') {
+      this.dmFileChosen = true;
+    } else if (fileSource === 'newMessage') {
+      this.newMessageFileChosen = true;
+    }
+    this.userSpecificPath = `${this.uploadPath}/${this.userService.userID}/${this.file.name}`;
     this.storageRef = ref(this.storage, this.userSpecificPath);
   }
+
 
   /**
    * removes the file from the observable
    */
   removeImg() {
-    this.fileChosen = false;
-    this.currentImg.next("");
+    this.noFileChosen();
+    this.currentImg.next('');
   }
+
+
+  noFileChosen() {
+    this.channelFileChosen = false;
+    this.threadFileChosen = false;
+    this.dmFileChosen = false;
+    this.newMessageFileChosen = false;
+  }
+
 
   /**
    * uploads the file and sets the download URL
@@ -82,8 +118,8 @@ export class UploadService {
   async uploadPicture() {
     await uploadBytes(this.storageRef, this.file).then(async (snapshot) => {
       this.downloadURL = await getDownloadURL(this.storageRef);
-      this.currentImg.next("");
-      this.fileChosen = false;
-    })
+      this.currentImg.next('');
+      this.noFileChosen();
+    });
   }
 }

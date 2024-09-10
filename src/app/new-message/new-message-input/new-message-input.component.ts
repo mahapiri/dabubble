@@ -118,7 +118,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
   }
 
   async chooseFile(event: Event) {
-    this.uploadService.onFileSelected(event);
+    this.uploadService.onFileSelected(event, "newMessage");
     this.uploadService.uploadPath = this.uploadPath;
   }
 
@@ -237,7 +237,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
    * calls the upload method if a file was chosen and saves the dawnload URL of the file to the messageText
    */
   async checkPictureUpload() {
-    if (this.uploadService.fileChosen) {
+    if (this.uploadService.newMessageFileChosen) {
       await this.uploadService.uploadPicture();
       this.messageText = this.uploadService.downloadURL;
     }
