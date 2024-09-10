@@ -59,18 +59,32 @@ export class ThreadMessageComponent {
     this.isMyMessage = this.chatService.setMyMessage(this.threadMessage);
   }
 
+  /**
+   * Checks if a given URL is a valid Firebase Storage image URL.
+   * @param {string} url - The URL.
+   * @returns {boolean} - Returns `true` if the URL is a Firebase Storage image URL, otherwise `false`.
+   */
   isImageUrl(url: string): boolean {
     return url.startsWith('https://firebasestorage.googleapis.com/');
   }
 
+  /**
+   * Enables edit mode by setting the `edit` property to `true`.
+   */
   openEdit() {
     this.edit = true;
   }
 
+  /**
+   * Disables edit mode by setting the `edit` property to `false`.
+   */
   closeEdit() {
     this.edit = false;
   }
 
+  /**
+   * Saves the current thread message if it contains text, updates the message and closes the edit mode.
+   */
   saveMessage() {
     if (this.threadMessage.text.trim()) {
       this.threadMessageService.updateMessage(this.threadMessage);
@@ -89,10 +103,17 @@ export class ThreadMessageComponent {
     }
   }
 
+  /**
+   * Opens or activates the reaction button by setting the `isReactionBtn` property to `true`.
+   */
   openReactionBtn() {
     this.isReactionBtn = true;
   }
 
+  /**
+   * Closes or deactivates the "more" reaction button by setting the `moreBtn` property in the reactionService to `false`.
+   * Also disables the main reaction button by setting the `isReactionBtn` property to `false`.
+   */
   closeReactionMoreBtn() {
     this.reactionService.moreBtn = false;
     this.isReactionBtn = false;

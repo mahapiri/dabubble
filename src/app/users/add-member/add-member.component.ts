@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { UserService } from '../../services/user.service';
 import { User } from '../../../models/user.class';
@@ -11,7 +11,6 @@ import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 import { Subscription } from 'rxjs';
 import { ChatService } from '../../services/chat.service';
 
-
 @Component({
   selector: 'app-add-member',
   standalone: true,
@@ -20,9 +19,7 @@ import { ChatService } from '../../services/chat.service';
   styleUrl: './add-member.component.scss',
 })
 export class AddMemberComponent {
-  //@Output() clickedAddMembers = new EventEmitter<boolean>();
   @Input() channel!: Channel;
-
 
   firestore: Firestore = inject(Firestore);
   userService: UserService = inject(UserService);
@@ -37,7 +34,6 @@ export class AddMemberComponent {
   isEditChannelPopup: boolean = false;
   subscription: Subscription = new Subscription();
 
-
   ngOnInit() {
     this.getChannelMember();
     this.userService.userArray.forEach(
@@ -50,11 +46,9 @@ export class AddMemberComponent {
     );
   }
 
-
   dontClose(event: Event) {
     event.stopPropagation();
   }
-
 
   /**
    * gets all the members in the current channel
@@ -65,7 +59,6 @@ export class AddMemberComponent {
     });
   }
 
-
   /**
    * highlights the selected user
    * @param user the user which is clicked on in the list
@@ -74,7 +67,6 @@ export class AddMemberComponent {
     user.chosenToChannel = !user.chosenToChannel;
     this.addSelectedUserToChannel(user);
   }
-
 
   /**
    * adds the marked users into the selectedUsersForChannel-array if they´re not already in it
@@ -90,7 +82,6 @@ export class AddMemberComponent {
       this.selectedUsersForChannel.push(user);
     }
   }
-
 
   /**
    * shows the member which can be added to the channel and
@@ -112,7 +103,6 @@ export class AddMemberComponent {
     }
   }
 
-
   /**
    * gets an array of users which are not already in the channel
    * @param allUsers array of all the users in DABubble
@@ -132,7 +122,6 @@ export class AddMemberComponent {
     );
     return selectedUsers;
   }
-
 
   /**
    * adds the marked users to the channel document in the firestore database and adds the channelId to the newly added user
@@ -154,7 +143,12 @@ export class AddMemberComponent {
     this.closeWindow();
   }
 
-
+  /**
+   * Extracts and returns the user object with the user infos to be added to the channel.
+   *
+   * @param {User} user - The user object with the user information.
+   * @returns {Object} - An object containing the user's infos (username, userId, email, state, userChannels, and profileImage).
+   */
   addUserCredentialsToChannel(user: User) {
     return {
       username: user.username,
@@ -165,7 +159,6 @@ export class AddMemberComponent {
       profileImage: user.profileImage,
     };
   }
-
 
   /**
    * closes the add-User window
@@ -184,7 +177,9 @@ export class AddMemberComponent {
     }
   }
 
-
+  /**
+   * cunsubscribes for clean up on component destroy
+   */
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
