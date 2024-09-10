@@ -137,8 +137,6 @@ export class WorkspaceMenuComponent implements OnInit {
     this.channelService.setSelectedChannel(channel);
     this.sharedService.setSelectProfile(false);
     this.chatService.setIsChannel(true);
-
-    // this.selectedUserIndex = null;
     this.sharedService.resetSelectedUserIndex();
 
     this.chatService.handleWindowChangeOnMobile();

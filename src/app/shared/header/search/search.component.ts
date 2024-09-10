@@ -68,7 +68,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   openChannel(event: Event, channel: Channel) {
     event?.stopPropagation();
     this.sharedService.isResults = false;
-    console.log(channel)
     this.channelService.setSelectedChannel(channel);
     this.sharedService.setSelectProfile(false);
     this.chatService.setIsChannel(true);
@@ -79,11 +78,12 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.chatService.handleWindowChangeOnMobile();
   }
 
-  openThread(thread: any) {
+  async openThread(thread: any) {
     let channelMsg = thread['replyToMessage'];
     this.mainWindow.selectProfile = false;
     this.mainWindow.clickedThread = true;
-    // this.channelService.setSelectedChannel(channelMsg);
+    let channel = await this.searchService.getChannel(channelMsg.id);
+    this.channelService.setSelectedChannel(channel);
     this.channelMessageService.setSelectedMessage(channelMsg);
     this.threadService.handleThread();
     this.resetSearchInputValue();
