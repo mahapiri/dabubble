@@ -17,7 +17,7 @@
       </div>
       <div class="selected-members-container">
         @for (member of selectedUsersForChannel; track $index){
-        <button (click)="dontClose($event)" (click)="selectMember(member)" class="selected-members">
+        <button (click)="selectMember($event, member)" class="selected-members">
           <div>
             {{ member.username }}
           </div>
@@ -27,12 +27,12 @@
         }
       </div>
     </div>
-    <input [(ngModel)]="searchMember" (ngModelChange)="showMember()" (click)="showMember()" type="text"
+    <input  [(ngModel)]="searchMember" (ngModelChange)="showMember()" (click)="showMember()" type="text"
       placeholder="Name eingeben" />
     <div class="profile-list">
       @for (member of showUser; track $index) {
       <div class="profile-container" [ngClass]="member.chosenToChannel ? 'selected' : ''"
-        (click)="selectMember(member)">
+        (click)="selectMember($event, member)">
         <div class="profile-content">
           <img src="{{ member.profileImage }}" alt="Character" class="profile-icon" />
           <div class="status-icon" ngClass="{{ member.state }}"></div>

@@ -125,7 +125,7 @@ export class CreateChannelComponent {
     console.log("channelDescription", this.channelDescription);
     console.log("usersToAdd", this.usersToAdd);
 
-    
+
     this.channelService.addChannel(
       this.channelName,
       this.channelDescription,

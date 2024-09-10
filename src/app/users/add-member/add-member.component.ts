@@ -46,9 +46,6 @@ export class AddMemberComponent {
     );
   }
 
-  dontClose(event: Event) {
-    event.stopPropagation();
-  }
 
   /**
    * gets all the members in the current channel
@@ -63,7 +60,8 @@ export class AddMemberComponent {
    * highlights the selected user
    * @param user the user which is clicked on in the list
    */
-  selectMember(user: User) {
+  selectMember(event: Event, user: User) {
+    event.stopPropagation();
     user.chosenToChannel = !user.chosenToChannel;
     this.addSelectedUserToChannel(user);
   }
