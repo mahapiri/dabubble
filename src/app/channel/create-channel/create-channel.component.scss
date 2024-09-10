@@ -20,6 +20,13 @@ section {
   border-radius: 30px;
 }
 
+.height-auto{
+  height: auto;
+}
+.max-height {
+  max-height: 800px !important;
+}
+
 .title-content {
   display: flex;
   align-items: center;
@@ -71,8 +78,12 @@ input[type="text"] {
   justify-content: flex-end;
 }
 
-.button-disabled{
+.button-disabled {
   background-color: var(--gray);
+}
+
+.profile-section{
+  max-height: 300px;
 }
 
 .bold {
@@ -94,6 +105,7 @@ input[type="text"] {
   box-shadow: unset !important;
   color: var(--black) !important;
 }
+
 .profile-content {
   display: flex;
   position: relative;
@@ -129,5 +141,12 @@ input[type="text"] {
     height: 100vh;
     max-height: none;
     border-radius: 0;
+  }
+  .max-height {
+    max-height: none !important;
+  }
+
+  .profile-section{
+    max-height: none !important;
   }
 }
