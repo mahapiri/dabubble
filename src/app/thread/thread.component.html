@@ -19,7 +19,10 @@
     </div>
   </mat-card-header>
 
-  <mat-card-content #messageContainer>
+  <mat-card-content
+    #messageContainer
+    [ngClass]="uploadService.fileChosen ? 'img-input-margin' : ''"
+  >
     <mat-list class="main-chat">
       <div class="initial-message-container">
         <mat-list-item>
@@ -74,7 +77,11 @@
   </mat-card-content>
 
   <mat-card-footer>
-    <div class="new-message-container" (messageCreated)="onMessageCreated()">
+    <div
+      class="new-message-container"
+      (messageCreated)="onMessageCreated()"
+      [ngClass]="uploadService.fileChosen ? 'img-input-height' : ''"
+    >
       @if (this.uploadService.currentImg$ | async) {
       <img [src]="this.uploadService.currentImg$ | async" alt="" />
       <mat-icon

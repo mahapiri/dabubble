@@ -71,7 +71,7 @@
           </div>
           <div *ngIf="!edit" class="text-bubble">
             @if (this.isImageUrl(threadMessage.text)) {
-            <img class="channel-upload" [src]="threadMessage.text" alt="" />
+            <img class="thread-upload" [src]="threadMessage.text" alt="" />
             }@else {
             {{ threadMessage.text }}
             }

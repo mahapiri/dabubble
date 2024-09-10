@@ -72,8 +72,12 @@ mat-card-footer {
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 40px;
+  gap: 36px;
   cursor: pointer;
+
+  img {
+    height: 120px;
+  }
 
   &:hover {
     border: 1px solid var(--purple-2);
@@ -371,6 +375,12 @@ mat-card-footer {
   cursor: unset;
 }
 
+.pos-relative {
+  position: relative;
+  left: -40px;
+  top: -10px;
+}
+
 /* Smartphones - - - - - - - - - */
 
 @media only screen and (max-width: 1440px) {
@@ -387,6 +397,7 @@ mat-card-footer {
     width: 100vw;
     border-radius: 0px;
     margin-left: 0;
+    border: none;
   }
 
   mat-card-header {

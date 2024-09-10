@@ -190,10 +190,20 @@
   position: relative;
 }
 
+.thread-upload {
+  max-height: 230px;
+  max-width: 400px;
+}
+
 /* Smartphones - - - - - - - - - */
 
 @media only screen and (max-width: 960px) {
   .message {
     padding: 0 16px 0 16px;
+  }
+
+  .thread-upload {
+    max-height: 230px;
+    max-width: 230px;
   }
 }
