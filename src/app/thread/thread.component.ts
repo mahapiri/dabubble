@@ -139,7 +139,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
    * @param event
    */
   async chooseFile(event: Event) {
-    this.uploadService.onFileSelected(event);
+    this.uploadService.onFileSelected(event, 'thread');
     this.uploadService.uploadPath = this.uploadPath;
   }
 
@@ -147,7 +147,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
    * calls the upload method if a file was chosen and saves the dawnload URL of the file to the threadMessageText
    */
   async checkPictureUpload() {
-    if (this.uploadService.fileChosen) {
+    if (this.uploadService.threadFileChosen) {
       await this.uploadService.uploadPicture();
       this.threadMessageText = this.uploadService.downloadURL;
     }

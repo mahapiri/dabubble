@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { doc, Firestore, getDoc } from '@angular/fire/firestore';
 import { User } from '../../models/user.class';
 import { BehaviorSubject } from 'rxjs';
+import { user } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -10,12 +11,16 @@ import { BehaviorSubject } from 'rxjs';
 export class SharedService {
   private firestore: Firestore = inject(Firestore);
   isProfile: boolean = false;
+  isMyProfile: boolean = false;
 
   private profileSubject = new BehaviorSubject<any>(null);
   profile$ = this.profileSubject.asObservable();
 
   private selectProfileSubject = new BehaviorSubject<boolean>(false);
   selectProfileChange$ = this.selectProfileSubject.asObservable();
+
+  private clickedThreadSubject = new BehaviorSubject<boolean>(false);
+  clickedThread$ = this.clickedThreadSubject.asObservable();
 
   private clickedAnswerSubject = new BehaviorSubject<boolean>(false);
   clickedAnswer$ = this.clickedAnswerSubject.asObservable();
@@ -30,6 +35,7 @@ export class SharedService {
   selectedUserIndex$ = this.selectedUserIndexSubject.asObservable();
 
   isProfileID: string = '';
+  isMyProfileID: string = '';
   isResults: boolean = false;
 
   constructor() {}
@@ -38,6 +44,12 @@ export class SharedService {
     this.isProfile = true;
     this.isProfileID = userID;
     this.getProfile(userID);
+  }
+
+  openMyProfile(userID: string) {
+    this.isMyProfile = true;
+    this.isMyProfileID = userID;
+    this.getProfile(userID)
   }
 
   async getProfile(userID: string) {
@@ -72,6 +84,10 @@ export class SharedService {
 
   setClickedNewMessage(value: boolean) {
     this.clickedNewMessageSubject.next(value);
+  }
+
+  async setClickedThread(value: boolean) {
+    this.clickedThreadSubject.next(value);
   }
 
   toggleClickedNewMessage() {

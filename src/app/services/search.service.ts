@@ -346,4 +346,22 @@ export class SearchService implements OnInit, OnDestroy {
       this.resultThread = tempResult;
     }
   }
+
+
+  async getChannel(messageId: string): Promise<any> {
+    const channelRef = collection(this.firestore, 'channels');
+    const channelsSnapshot = await getDocs(channelRef);
+
+    for (const channelDoc of channelsSnapshot.docs) {
+      const messageRef = collection(channelDoc.ref, 'messages');
+      const q = query(messageRef, where('id', '==', messageId));
+      const messagesSnapshot = await getDocs(q);
+
+      if(!messagesSnapshot.empty) {
+        let channel = channelDoc.data()
+        return channel;
+      }
+    }
+    return null;
+  }
 }

@@ -101,7 +101,7 @@ export class ChannelNewMessageInputComponent implements OnInit {
    * @param event
    */
   async chooseFile(event: Event) {
-    this.uploadService.onFileSelected(event);
+    this.uploadService.onFileSelected(event, "channel");
     this.uploadService.uploadPath = this.uploadPath;
   }
 
@@ -109,7 +109,7 @@ export class ChannelNewMessageInputComponent implements OnInit {
    * calls the upload method if a file was chosen and saves the download URL of the file to the messageText
    */
   async checkPictureUpload() {
-    if (this.uploadService.fileChosen) {
+    if (this.uploadService.channelFileChosen) {
       await this.uploadService.uploadPicture();
       this.messageText = this.uploadService.downloadURL;
     }

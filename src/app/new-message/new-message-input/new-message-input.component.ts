@@ -113,12 +113,12 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
   onKeyDown(event: KeyboardEvent) {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
-      console.log('create new message');
+      this.createMessage(event);
     }
   }
 
   async chooseFile(event: Event) {
-    this.uploadService.onFileSelected(event);
+    this.uploadService.onFileSelected(event, "newMessage");
     this.uploadService.uploadPath = this.uploadPath;
   }
 
@@ -170,7 +170,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
             }
           } else if (!this.newMessageService.isChannel && id) {
             const profile = await this.userService.getUserById(id);
-
+            console.log(id);
             if (profile) {
               this.createUserMsg(profile);
             }
@@ -193,6 +193,9 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
     this.sharedService.setSelectedUserIndex(profile.userId);
     this.cdr.detectChanges();
     this.sendMessage();
+    setTimeout(() => {
+      this.chatService.handleWindowChangeOnMobile();
+    }, 0);
   }
 
   /**
@@ -200,14 +203,18 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
    * @param channel
    */
   createChannelMsg(channel: Channel) {
-    this.sharedService.setClickedNewMessage(false);
-    this.channelService.selectedChannel.next(channel);
-    this.sharedService.setSelectProfile(false);
-    this.chatService.setIsChannel(true);
     this.sharedService.setIsNewMessage(false);
     this.sendMessage();
     this.channelService.loadChannels();
     this.cdr.detectChanges();
+    this.channelService.setSelectedChannel(channel);
+    this.sharedService.setSelectProfile(false);
+    this.chatService.setIsChannel(true);
+    this.sharedService.setIsNewMessage(false);
+    this.sharedService.setClickedNewMessage(false);
+    setTimeout(() => {
+      this.chatService.handleWindowChangeOnMobile();
+    }, 0);
   }
 
   /**
@@ -230,7 +237,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
    * calls the upload method if a file was chosen and saves the dawnload URL of the file to the messageText
    */
   async checkPictureUpload() {
-    if (this.uploadService.fileChosen) {
+    if (this.uploadService.newMessageFileChosen) {
       await this.uploadService.uploadPicture();
       this.messageText = this.uploadService.downloadURL;
     }

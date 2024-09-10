@@ -47,6 +47,10 @@ export class AddMemberComponent {
     );
   }
 
+  dontClose(event: Event) {
+    event.stopPropagation();
+  }
+
   /**
    * gets all the members in the current channel
    */

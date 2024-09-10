@@ -88,3 +88,10 @@
     top: 38px;
     left: 34px;
 }
+
+
+@media only screen and (max-width: 960px) {
+    .tag-person-container {
+        padding: 16px;
+    }
+}

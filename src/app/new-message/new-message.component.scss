@@ -50,6 +50,7 @@ mat-list-item {
 
 @media only screen and (max-width: 960px) {
   mat-card {
+    // display: none;
     height: calc(100vh - 80px);
     width: 100vw;
     border-radius: 0;

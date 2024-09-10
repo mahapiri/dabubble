@@ -89,7 +89,7 @@ export class WorkspaceMenuComponent implements OnInit {
     public chatService: ChatService,
     public sharedService: SharedService,
     private searchService: SearchService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.userService.getUserList();
@@ -137,8 +137,6 @@ export class WorkspaceMenuComponent implements OnInit {
     this.channelService.setSelectedChannel(channel);
     this.sharedService.setSelectProfile(false);
     this.chatService.setIsChannel(true);
-
-    // this.selectedUserIndex = null;
     this.sharedService.resetSelectedUserIndex();
 
     this.chatService.handleWindowChangeOnMobile();
@@ -172,9 +170,9 @@ export class WorkspaceMenuComponent implements OnInit {
       this.sharedService.getClickedNewMessage()
     );
     this.sharedService.resetSelectedUserIndex();
-    this.chatService.hideComponentOnMobile('workspaceMenu');
-    this.chatService.showHeaderLogo('channelLogo');
-
+    setTimeout(() => {
+      this.chatService.handleWindowChangeOnMobile();
+    }, 0);
     this.cdr.detectChanges();
   }
 
@@ -193,18 +191,16 @@ export class WorkspaceMenuComponent implements OnInit {
   }
 
   async clickedProfile(i: number, profile: User) {
-    this.sharedService.setSelectedUserIndex(i);
+    this.sharedService.setSelectedUserIndex(profile.userId);
     this.sharedService.setSelectProfile(true);
     await this.directMessageService.openDmFromUser(profile);
     this.chatService.setIsChannel(false);
     this.sharedService.setIsNewMessage(false);
     this.sharedService.setClickedNewMessage(false);
-    this.sharedService.setSelectedUserIndex(profile.userId);
-
     this.chatService.handleWindowChangeOnMobile();
   }
 
-  editChannel(channel: string) {}
+  editChannel(channel: string) { }
 
   async openResults() {
     try {

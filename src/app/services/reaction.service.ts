@@ -247,7 +247,7 @@ export class ReactionService {
         const userData = userDoc.data();
         return userData['username'] || 'Unknown';
       } else {
-        return 'Gast (Profil gelöscht)';
+        return 'alter Gast';
       }
     } catch (error) {
       return 'Unknown';

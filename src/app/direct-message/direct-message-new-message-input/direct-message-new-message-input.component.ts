@@ -143,7 +143,7 @@ export class DirectMessageNewMessageInputComponent
    * @returns {Promise<void>} A promise that resolves once the file selection and path setting are complete.
    */
   async chooseFile(event: Event) {
-    this.uploadService.onFileSelected(event);
+    this.uploadService.onFileSelected(event, "directMessage");
     this.uploadService.uploadPath = this.uploadPath;
   }
 
@@ -151,7 +151,7 @@ export class DirectMessageNewMessageInputComponent
    * calls the upload method if a file was chosen and saves the dawnload URL of the file to the messageText
    */
   async checkPictureUpload() {
-    if (this.uploadService.fileChosen) {
+    if (this.uploadService.dmFileChosen) {
       await this.uploadService.uploadPicture();
       this.messageText = this.uploadService.downloadURL;
     }

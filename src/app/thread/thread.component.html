@@ -21,7 +21,7 @@
 
   <mat-card-content
     #messageContainer
-    [ngClass]="uploadService.fileChosen ? 'img-input-margin' : ''"
+    [ngClass]="uploadService.threadFileChosen ? 'img-input-margin' : ''"
   >
     <mat-list class="main-chat">
       <div class="initial-message-container">
@@ -80,9 +80,9 @@
     <div
       class="new-message-container"
       (messageCreated)="onMessageCreated()"
-      [ngClass]="uploadService.fileChosen ? 'img-input-height' : ''"
+      [ngClass]="uploadService.threadFileChosen ? 'img-input-height' : ''"
     >
-      @if (this.uploadService.currentImg$ | async) {
+      @if (this.uploadService.threadFileChosen) {
       <img [src]="this.uploadService.currentImg$ | async" alt="" />
       <mat-icon
         (click)="this.uploadService.removeImg()"
@@ -102,13 +102,13 @@
       <div class="message-controls">
         <div class="add-elements">
           <button
-            (click)="this.uploadService.triggerFileInput()"
+            (click)="this.uploadService.triggerFileInput('thread-file-upload')"
             class="mini-fab-button"
             mat-mini-fab
             class="add-doc mini-fab-btn"
           >
             <input
-              id="file-upload"
+              id="thread-file-upload"
               type="file"
               (change)="chooseFile($event)"
               [accept]="uploadService.acceptedFileTypes"
