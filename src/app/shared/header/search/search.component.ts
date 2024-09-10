@@ -15,16 +15,13 @@ import { UserService } from '../../../services/user.service';
 import { ChatService } from '../../../services/chat.service';
 import { DirectMessageService } from '../../../services/direct-message.service';
 import { Subscription } from 'rxjs';
-import { user } from '@angular/fire/auth';
 import { SharedService } from '../../../services/shared.service';
 import { ChannelService } from '../../../services/channel.service';
 import { Channel } from '../../../../models/channel.class';
 import { ChannelMessageService } from '../../../services/channel-message.service';
 import { ThreadService } from '../../../services/thread.service';
 import { MainWindowComponent } from '../../../main-window/main-window.component';
-import { User } from '../../../../models/user.class';
 import {
-  DirectMessage,
   DmMessage,
 } from '../../../../models/direct-message.class';
 
@@ -51,6 +48,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   @Output() searchInputValueAction: EventEmitter<void> =
     new EventEmitter<void>();
 
+  isThread: boolean = false;
+
   constructor() { }
 
   async ngOnInit() {
@@ -59,6 +58,10 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.currentUser = user;
       }
     );
+
+    this.sharedService.clickedThread$.subscribe((status) => {
+      this.isThread = status;
+    })
   }
 
   ngOnDestroy(): void {
@@ -80,14 +83,17 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   async openThread(thread: any) {
     let channelMsg = thread['replyToMessage'];
+    await this.sharedService.setClickedThread(true);
     this.mainWindow.selectProfile = false;
-    this.mainWindow.clickedThread = true;
     let channel = await this.searchService.getChannel(channelMsg.id);
     this.channelService.setSelectedChannel(channel);
     this.channelMessageService.setSelectedMessage(channelMsg);
-    this.threadService.handleThread();
+    await this.threadService.handleThread();
     this.resetSearchInputValue();
     this.sharedService.resetSelectedUserIndex();
+    setTimeout(() => {
+      this.chatService.handleWindowChangeOnMobile();
+    }, 100);
   }
 
   async openDM(event: Event, dm: any) {

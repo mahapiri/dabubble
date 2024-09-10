@@ -13,6 +13,7 @@ export class ChatService {
   message!: ChannelMessage | DmMessage;
   isChannel: boolean = false;
   isDirectMessage: boolean = false;
+  isThread: boolean = false;
   private renderer: Renderer2;
 
   private headerLogoSubject = new BehaviorSubject<string>('daBubble');
@@ -133,6 +134,8 @@ export class ChatService {
       this.updateView('workspaceMenu', 'channel', 'channelLogo');
     } else if (this.directMessageSelectedOnMobile()) {
       this.updateView('workspaceMenu', 'directMessage', 'channelLogo');
+    } else if (this.threadSelectedOnMobile()) {
+      this.updateView('workspaceMenu', 'thread', 'channelLogo');
     } else {
       this.showHeaderLogo('daBubble');
     }
@@ -173,6 +176,15 @@ export class ChatService {
    */
   channelSelectedOnMobile() {
     return this.mobileScreen() && this.isChannel;
+  }
+
+  /**
+   * Checks if a thread message is selected on mobile device. Calls `setIsThread()` to ensure the `isDirectMessage` variable is correctly set.
+   * @returns {boolean} `true` if the screen width is 960 pixels or less and a direct message profile is selected; otherwise, `false`.
+   */
+  threadSelectedOnMobile() {
+    this.setIsThread();
+    return this.mobileScreen() && this.isThread;
   }
 
   /**
@@ -254,5 +266,14 @@ export class ChatService {
     this.sharedService.selectProfileChange$.subscribe((status) => {
       this.isDirectMessage = status;
     });
+  }
+
+  /**
+   * Subscribes to the `clickedThread$` observable from the `SharedService`. Updates the `isThread` status.
+   */
+  setIsThread() {
+    this.sharedService.clickedThread$.subscribe((status) => {
+      this.isThread = status;
+    })
   }
 }

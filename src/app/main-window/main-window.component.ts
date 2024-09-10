@@ -42,6 +42,7 @@ export class MainWindowComponent implements OnInit {
   sharedService: SharedService = inject(SharedService);
   selectProfileSubscription: Subscription = new Subscription();
   isNewMessageSubscription: Subscription = new Subscription();
+  clickedThreadSubscription: Subscription = new Subscription();
 
   channel: Channel = new Channel({
     channelID: '',
@@ -80,6 +81,11 @@ export class MainWindowComponent implements OnInit {
         this.isNewMessage = isNewMessage;
       }
     );
+
+    this.clickedThreadSubscription = 
+      this.sharedService.clickedThread$.subscribe((selectThread) => {
+        this.clickedThread = selectThread;
+      })
   }
 
   /**
@@ -95,7 +101,7 @@ export class MainWindowComponent implements OnInit {
    * @param {boolean} event - The value indicating if the thread was clicked or not.
    */
   handleThreadClick(event: boolean) {
-    this.clickedThread = event;
+    this.sharedService.setClickedThread(event);
   }
 
   /**
@@ -103,7 +109,7 @@ export class MainWindowComponent implements OnInit {
    */
   handleProfileClick() {
     this.clickedChannel = false;
-    this.clickedThread = false;
+    this.sharedService.setClickedThread(false);
   }
 
   /**
@@ -117,5 +123,6 @@ export class MainWindowComponent implements OnInit {
     }
     this.selectProfileSubscription?.unsubscribe();
     this.isNewMessageSubscription?.unsubscribe();
+    this.clickedThreadSubscription.unsubscribe();
   }
 }

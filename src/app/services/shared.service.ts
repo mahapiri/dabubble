@@ -17,6 +17,9 @@ export class SharedService {
   private selectProfileSubject = new BehaviorSubject<boolean>(false);
   selectProfileChange$ = this.selectProfileSubject.asObservable();
 
+  private clickedThreadSubject = new BehaviorSubject<boolean>(false);
+  clickedThread$ = this.clickedThreadSubject.asObservable();
+
   private clickedAnswerSubject = new BehaviorSubject<boolean>(false);
   clickedAnswer$ = this.clickedAnswerSubject.asObservable();
 
@@ -72,6 +75,10 @@ export class SharedService {
 
   setClickedNewMessage(value: boolean) {
     this.clickedNewMessageSubject.next(value);
+  }
+
+  async setClickedThread(value: boolean) {
+    this.clickedThreadSubject.next(value);
   }
 
   toggleClickedNewMessage() {

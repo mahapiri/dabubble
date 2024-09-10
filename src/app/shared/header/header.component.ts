@@ -15,7 +15,6 @@ import { SearchComponent } from '../header/search/search.component';
 import { SharedService } from '../../services/shared.service';
 import { Subscription } from 'rxjs';
 import { ChannelService } from '../../services/channel.service';
-import { MainWindowComponent } from '../../main-window/main-window.component';
 
 @Component({
   selector: 'app-header',
@@ -37,7 +36,6 @@ export class HeaderComponent implements OnInit {
   authService: AuthService = inject(AuthService);
   userService: UserService = inject(UserService);
   chatService: ChatService = inject(ChatService);
-  mainWindow: MainWindowComponent = inject(MainWindowComponent);
   sharedService: SharedService = inject(SharedService);
   channelService: ChannelService = inject(ChannelService);
   directMessageService: DirectMessageService = inject(DirectMessageService);
@@ -132,7 +130,7 @@ export class HeaderComponent implements OnInit {
   backToWorkspacemenu() {
     this.chatService.setIsChannel(false);
     this.sharedService.setSelectProfile(false);
-    this.mainWindow.clickedThread = false;
+    this.sharedService.setClickedThread(false);
     this.chatService.handleWindowChangeOnMobile();
     this.chatService.showWorkspaceMenu();
     this.sharedService.setIsNewMessage(false);
@@ -217,7 +215,7 @@ export class HeaderComponent implements OnInit {
    */
   navigateToMainWindow() {
     this.router.navigate(['/main-window']);
-    this.mainWindow.clickedThread = false;
+    this.sharedService.setClickedThread(false);
     this.chatService.setIsChannel(true);
     this.sharedService.setSelectProfile(false);
     this.sharedService.resetSelectedUserIndex();
