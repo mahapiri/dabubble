@@ -53,7 +53,6 @@ export class ChannelMessageComponent {
   private lastAnswerSubscription!: Subscription;
 
   isMyMessage: boolean = false;
-  messageText: string = '';
   isEmoji: boolean = false;
   edit: boolean = false;
   notOpen: boolean = true;

@@ -48,10 +48,25 @@
               [(ngModel)]="threadMessage.text"
               type="text"
               rows="3"
+              (keydown)="onKeyDown($event)"
             ></textarea>
             <div *ngIf="edit" class="edit-options-wrapper">
-              <button class="mini-fab-btn" mat-mini-fab>
+              <button
+                class="mini-fab-btn"
+                mat-mini-fab
+                (click)="openEmojiSet($event)"
+              >
                 <mat-icon>sentiment_satisfied</mat-icon>
+                <div
+                  *ngIf="isEmoji"
+                  class="emoji-container"
+                  appClickOutside
+                  (clickOutside)="closeEmojiSet()"
+                >
+                  <app-emoji-picker
+                    (emojiSelected)="onEmojiSelected($event)"
+                  ></app-emoji-picker>
+                </div>
               </button>
               <div class="d-flex gap-16">
                 <button
