@@ -88,7 +88,6 @@ export class ThreadService {
   handleExistingThread(existingThread: QuerySnapshot) {
     this.threadID = this.getThreadIdFromSnapshot(existingThread);
     if (this.threadID) {
-      console.log('Thread existiert bereits:', this.threadID);
       this.subscription.add(this.subSelectedThread(this.threadID!));
     }
   }
@@ -130,7 +129,6 @@ export class ThreadService {
 
     this.threadID = threadsRef.id;
     this.addThreadIdToThread(threadsRef);
-    console.log('New Thread created:', newThread);
     this.subscription.add(this.subSelectedThread(this.threadID!));
   }
 
@@ -196,10 +194,7 @@ export class ThreadService {
       let threadRef = this.getSingleThreadRef(this.threadID);
       await updateDoc(threadRef, {
         replyToMessage: message.getMessageJson(),
-      }).catch((err) => {
-        console.log(err);
-      });
-      console.log('Thread updated:', this.threads);
+      }).catch((err) => {});
     }
   }
 

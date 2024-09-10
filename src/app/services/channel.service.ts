@@ -81,7 +81,6 @@ export class ChannelService {
   async addChannel(name: string, description: string, user: User[]) {
     await this.getCreatedByUser();
     const newChannel: Channel = this.setChannelObject(name, description, user);
-    console.log('newChannel', newChannel.getChannelJson());
 
     const channelRef = await addDoc(
       this.getChannelRef(),

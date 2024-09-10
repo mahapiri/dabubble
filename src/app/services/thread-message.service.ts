@@ -221,9 +221,9 @@ export class ThreadMessageService {
   async updateMessage(threadMessage: ThreadMessage) {
     if (threadMessage.id) {
       let docRef = this.getSingleThreadMessageRef(threadMessage.id);
-      await updateDoc(docRef, threadMessage.getMessageJson()).catch((err) => {
-        console.log(err);
-      });
+      await updateDoc(docRef, threadMessage.getMessageJson()).catch(
+        (err) => {}
+      );
     }
   }
 

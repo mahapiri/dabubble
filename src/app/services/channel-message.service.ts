@@ -98,9 +98,7 @@ export class ChannelMessageService {
   async updateMessage(message: ChannelMessage) {
     if (message.id) {
       let docRef = this.getSingleMessageRef(message.id);
-      await updateDoc(docRef, message.getMessageJson()).catch((err) => {
-        console.log(err);
-      });
+      await updateDoc(docRef, message.getMessageJson()).catch((err) => {});
     }
   }
 
