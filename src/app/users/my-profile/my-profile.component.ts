@@ -31,7 +31,10 @@ export class MyProfileComponent implements OnInit {
 
   constructor() { }
 
-  
+  /**
+   * Initializes the component and subscribes to the current user.
+   * Sets the user's name and email fields for editing.
+   */
   async ngOnInit() {
     this.userService.currentUser$.subscribe((user) => {
       this.currentUser = user;
@@ -43,12 +46,20 @@ export class MyProfileComponent implements OnInit {
   }
 
 
+  /**
+   * Closes the profile view and resets the state of the profile.
+   */
   closeProfile() {
     this.clickedProfileChange.emit(false);
     this.sharedService.isMyProfile = false;
   }
 
 
+  /**
+   * toggles the editing state for the user's profile information.
+   * Also updates the user data in the Firestore.
+   * @param event - The event triggered by the edit button.
+   */
   edit(event: Event) {
     event.stopPropagation();
     this.editing = !this.editing;
@@ -56,6 +67,10 @@ export class MyProfileComponent implements OnInit {
   }
 
 
+  /**
+   * Updates the user's name and email in the Firestore.
+   * Also updates the username in each channel the user is a member of.
+   */
   async updataUserDatabase() {
     if (this.currentUser) {
       await updateDoc(doc(this.firestore, 'users', this.currentUser.userId), {
@@ -74,6 +89,10 @@ export class MyProfileComponent implements OnInit {
   }
 
 
+  /**
+   * Updates the username for the current user in the given channel.
+   * @param channel - The channel object where the username needs to be updated.
+   */
   async changeUsernameInChannel(channel: Channel) {
     if (channel.channelID) {
       let channelWithChangedName = this.changeNameInChannel(channel);
@@ -85,6 +104,11 @@ export class MyProfileComponent implements OnInit {
   }
 
 
+  /**
+   * Updates the username in the `channelMember` array of a channel.
+   * @param channel - The channel object to update.
+   * @returns 
+   */
   changeNameInChannel(channel: Channel): Channel {
     channel.channelMember.forEach((channelmember) => {
       if (channelmember.userId == this.currentUser?.userId) {
@@ -95,6 +119,11 @@ export class MyProfileComponent implements OnInit {
   }
 
 
+  /**
+   * Returns the status text for the user's online status.
+   * @param status - The user's status (e.g., 'online', 'offline', 'absent').
+   * @returns 
+   */
   getStatusText(status: string | undefined): string {
     switch (status) {
       case 'online':
@@ -109,6 +138,10 @@ export class MyProfileComponent implements OnInit {
   }
 
 
+  /**
+   * Cancels the editing mode without saving changes.
+   * @param event - The event triggered by the cancel button.
+   */
   cancel(event: Event) {
     event.stopPropagation();
     this.editing = false;
