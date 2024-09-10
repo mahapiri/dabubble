@@ -1,4 +1,4 @@
-import { inject, Injectable, OnDestroy, OnInit } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { UserService } from './user.service';
 import { User } from '../../models/user.class';
 import { Subscription } from 'rxjs';
@@ -19,7 +19,7 @@ import { ThreadService } from './thread.service';
 @Injectable({
   providedIn: 'root',
 })
-export class SearchService implements OnInit, OnDestroy {
+export class SearchService {
   private firestore: Firestore = inject(Firestore);
   private userService: UserService = inject(UserService);
   private directMessageService: DirectMessageService =
@@ -47,29 +47,21 @@ export class SearchService implements OnInit, OnDestroy {
 
   constructor() {}
 
-  ngOnInit() {}
-
-  ngOnDestroy(): void {}
-
+  /**
+   * Starts subscriptions to listen for user, channel, and thread updates.
+   */
   async startSubscription() {
-    // console.log('start search / sub')
     this.userListSubscription = this.userService.userList$.subscribe((user) => {
       this.userList = user;
-      // console.log('sub:', user)
     });
     this.currentUserChannelsSubscription =
       this.userService.userChannels$.subscribe((channels) => {
         this.channelList = channels;
-        // console.log('sub:', channels)
       });
-    // this.dmSubscription = this.dmService.messages$.subscribe((message) =>  {
-    //   console.log(message);
-    // });
     this.currentUserSubscription = this.userService.currentUser$.subscribe(
       (user) => {
         if (user) {
           this.currentUserID = user?.userId || '';
-          // console.log('sub:', user)
         }
       }
     );
@@ -77,28 +69,37 @@ export class SearchService implements OnInit, OnDestroy {
       (thread) => {
         if (thread) {
           this.threads = thread;
-          // console.log('sub:', thread)
         }
       }
     );
   }
 
+
+  /**
+   * Stops all active subscriptions when the service is no longer needed.
+   */
   stopSubscription() {
     this.userListSubscription.unsubscribe();
     this.currentUserChannelsSubscription.unsubscribe();
     this.currentUserSubscription.unsubscribe();
-    // this.dmSubscription.unsubscribe();
     this.threadSubscription.unsubscribe();
-    // console.log('stop search / unsub');
   }
 
+
+  /**
+   * Sets a timer to prevent duplicate data fetching within a certain period.
+   */
   setTimerToTrue() {
     this.timer = true;
     setTimeout(() => {
       this.timer = false;
-    }, 60000); // 60 sek
+    }, 60000);
   }
 
+
+  /**
+   * Retrieves all direct messages for the current user.
+   */
   async getAllDM() {
     if (!this.timer) {
       this.directMessage = [];
@@ -117,6 +118,11 @@ export class SearchService implements OnInit, OnDestroy {
     }
   }
 
+
+  /**
+   * Fetches the messages for a given direct message ID.
+   * @param dmID - The ID of the direct message.
+   */
   async getDmMessage(dmID: string) {
     const messageRef = this.directMessageService.getMessageRefForId(dmID);
     const message = await getDocs(messageRef);
@@ -145,6 +151,10 @@ export class SearchService implements OnInit, OnDestroy {
     });
   }
 
+
+  /**
+   * Fetches all channel messages for the current user.
+   */
   async getAllChannel() {
     if (!this.timer) {
       this.channelListMsg = [];
@@ -167,6 +177,12 @@ export class SearchService implements OnInit, OnDestroy {
     }
   }
 
+
+  /**
+   * Fetches messages for a given channel ID.
+   * @param arrayIndex - The index of the channel in the channel list.
+   * @param id - The ID of the channel.
+   */
   async getChannelMessage(arrayIndex: number, id: string) {
     const messageRef = collection(this.firestore, `channels/${id}/messages`);
     const messages = await getDocs(messageRef);
@@ -194,6 +210,10 @@ export class SearchService implements OnInit, OnDestroy {
     });
   }
 
+
+  /**
+   * Fetches all threads for the current user.
+   */
   async getAllThreads() {
     if (!this.timer) {
       this.threadListMsg = [];
@@ -214,6 +234,12 @@ export class SearchService implements OnInit, OnDestroy {
     }
   }
 
+
+  /**
+   * Fetches messages for a given thread ID.
+   * @param arrayIndex - The index of the thread in the thread list.
+   * @param id - The ID of the thread.
+   */
   async getThreadMessage(arrayIndex: number, id: string) {
     const messageRef = collection(this.firestore, `threads/${id}/messages`);
     const messages = await getDocs(messageRef);
@@ -241,6 +267,12 @@ export class SearchService implements OnInit, OnDestroy {
     });
   }
 
+
+  /**
+   * Performs a search across direct messages, users, channels, and threads.
+   * @param searchInputValue - The value to search for.
+   * @returns 
+   */
   async search(searchInputValue: string) {
     this.resultUser = [];
     this.resultChannel = [];
@@ -261,6 +293,11 @@ export class SearchService implements OnInit, OnDestroy {
     this.searchThread(searchWord);
   }
 
+
+  /**
+   * Searches direct messages for the specified search term.
+   * @param searchWord - The search term to look for in direct messages.
+   */
   async searchDM(searchWord: string) {
     const tempResult: any = [];
     let ids: any = [];
@@ -279,6 +316,10 @@ export class SearchService implements OnInit, OnDestroy {
     this.updateDMsWithCurrentUserInfo();
   }
 
+
+  /**
+   * Updates direct messages with the current user's information.
+   */
   updateDMsWithCurrentUserInfo() {
     this.resultDM.forEach((dm) => {
       if (this.currentUserID === dm.profileId) {
@@ -288,6 +329,11 @@ export class SearchService implements OnInit, OnDestroy {
     });
   }
 
+
+  /**
+   * Searches the list of users based on the search term.
+   * @param searchWord - The search term to look for in user profiles.
+   */
   async searchUser(searchWord: string) {
     this.userList.forEach((user) => {
       const profile = user.username || '';
@@ -297,6 +343,11 @@ export class SearchService implements OnInit, OnDestroy {
     });
   }
 
+
+  /**
+   * Searches channels and their messages for the specified search term.
+   * @param searchWord - The search term to look for in channels and messages.
+   */
   async searchChannel(searchWord: string) {
     const tempResult: any = [];
     let ids: any = [];
@@ -321,6 +372,11 @@ export class SearchService implements OnInit, OnDestroy {
     this.resultChannel = tempResult;
   }
 
+
+  /**
+   * Searches threads and their messages for the specified search term.
+   * @param searchWord - The search term to look for in threads and messages.
+   */
   async searchThread(searchWord: string) {
     const tempResult: any = [];
     let ids: any = [];
@@ -348,6 +404,10 @@ export class SearchService implements OnInit, OnDestroy {
   }
 
 
+  /**
+   * Retrieves the channel that contains a specific message ID.
+   * @param messageId - The ID of the message to search for.
+   */
   async getChannel(messageId: string): Promise<any> {
     const channelRef = collection(this.firestore, 'channels');
     const channelsSnapshot = await getDocs(channelRef);
