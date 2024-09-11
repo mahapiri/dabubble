@@ -254,7 +254,7 @@ a {
 }
 
 .edit-channel-active.shaded-background {
-  z-index: 2 !important;
+  z-index: 3 !important;
 }
 
 .mat-drawer-inner-container {
@@ -393,7 +393,6 @@ a {
   border: 1px solid #00000000;
 }
 
-
 /* Smartphones - - - - - - - - - */
 
 @media only screen and (max-width: 960px) {
@@ -402,12 +401,11 @@ a {
   }
 }
 
-
 @media only screen and (max-width: 960px) {
   .btn-default {
     padding: 8px;
   }
-  
+
   .gap-32 {
     gap: 16px;
   }

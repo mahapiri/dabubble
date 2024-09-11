@@ -2,30 +2,25 @@
   border-radius: 30px 0px 30px 30px;
 }
 
-
 .member-content {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-
 .title-name-container {
   display: flex;
   flex-direction: column;
 }
-
 
 .title-content {
   display: flex;
   justify-content: space-between;
 }
 
-
 .channel-name {
   display: flex;
   gap: 15px;
-
 
   p {
     font-family: "Nunito";
@@ -37,17 +32,15 @@
   }
 }
 
-
 .selected-members-container {
   display: flex;
   gap: 4px;
   margin-top: 10px;
 
-
   .selected-members {
     background-color: var(--purple-2);
     border-radius: 20px;
-    border: 1px solid black;
+    border: none;
     z-index: 10;
     color: white;
     padding-block: 4px;
@@ -60,13 +53,11 @@
   }
 }
 
-
 .tag-icon {
   width: 24px;
   height: 24px;
   color: var(--purple-2);
 }
-
 
 input[type="text"] {
   width: 434px;
@@ -80,12 +71,10 @@ input[type="text"] {
   line-height: 24.55px;
 }
 
-
 .btn-container {
   display: flex;
   justify-content: flex-end;
 }
-
 
 .profile-container {
   display: flex;
@@ -94,7 +83,6 @@ input[type="text"] {
   padding: 4px 20px;
   gap: 15px;
 
-
   &:hover {
     background-color: var(--bg-color);
     border-radius: 35px;
@@ -102,17 +90,14 @@ input[type="text"] {
   }
 }
 
-
 .profile-list {
   max-height: 30vh;
   overflow: scroll;
 }
 
-
 .profile-content {
   display: flex;
   position: relative;
-
 
   img {
     height: 50px;
@@ -120,11 +105,9 @@ input[type="text"] {
   }
 }
 
-
 .profile-icon {
   border-radius: 30px;
 }
-
 
 .status-icon {
   width: 14px;
@@ -136,29 +119,24 @@ input[type="text"] {
   left: 34px;
 }
 
-
 .selected {
   background-color: var(--bg-color);
   border-radius: 35px;
   color: var(--black);
 }
 
-
 .edit-channel-active.add-member-container {
   border-radius: 30px 30px 0px 0px;
 }
-
 
 @media only screen and (max-width: 960px) {
   .popup-container {
     padding: 20px;
   }
 
-
   .channel-name {
     display: none;
   }
-
 
   input[type="text"] {
     width: 100%;
