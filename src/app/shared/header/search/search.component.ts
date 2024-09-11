@@ -43,6 +43,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   directMessageService: DirectMessageService = inject(DirectMessageService);
   sharedService: SharedService = inject(SharedService);
   currentUserSubscription: Subscription = new Subscription();
+  clickedThreadSubscription: Subscription = new Subscription();
   currentUser: any = '';
 
   @Output() searchInputValueAction: EventEmitter<void> =
@@ -52,6 +53,11 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   constructor() { }
 
+
+  /**
+   * Initializes the component by subscribing to the current user and thread status.
+   * Fetches the current user data and listens for thread click events.
+   */
   async ngOnInit() {
     this.currentUserSubscription = this.userService.currentUser$.subscribe(
       (user) => {
@@ -59,15 +65,27 @@ export class SearchComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.sharedService.clickedThread$.subscribe((status) => {
+    this.clickedThreadSubscription = this.sharedService.clickedThread$.subscribe((status) => {
       this.isThread = status;
     })
   }
 
+
+  /**
+   * Unsubscribes from the currentUser and clickedThread subscriptions when the component is destroyed.
+   */
   ngOnDestroy(): void {
     this.currentUserSubscription.unsubscribe();
+    this.clickedThreadSubscription.unsubscribe();
   }
 
+
+  /**
+   * Opens the selected channel and resets relevant states.
+   * Handles the layout for mobile screens.
+   * @param event - The event triggered by clicking on a channel.
+   * @param channel - The channel to open.
+   */
   openChannel(event: Event, channel: Channel) {
     event?.stopPropagation();
     this.sharedService.isResults = false;
@@ -81,6 +99,12 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.chatService.handleWindowChangeOnMobile();
   }
 
+
+  /**
+   * Opens the selected thread and adjusts the UI accordingly.
+   * Handles mobile window layout adjustments.
+   * @param thread - The thread to be opened.
+   */
   async openThread(thread: any) {
     let channelMsg = thread['replyToMessage'];
     await this.sharedService.setClickedThread(true);
@@ -96,6 +120,13 @@ export class SearchComponent implements OnInit, OnDestroy {
     }, 100);
   }
 
+
+  /**
+   * Opens a direct message (DM) with the selected profile and resets relevant states.
+   * Adjusts the layout for mobile screens.
+   * @param event - The event triggered by clicking on a DM.
+   * @param dm - The direct message object to be opened.
+   */
   async openDM(event: Event, dm: any) {
     event?.stopPropagation();
     this.sharedService.isResults = false;
@@ -111,10 +142,20 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.sharedService.setIsNewMessage(false);
   }
 
+
+  /**
+   * Emits an event to reset the search input value to its initial state.
+   */
   resetSearchInputValue() {
     this.searchInputValueAction.emit();
   }
 
+
+  /**
+   * Sets the online/offline state of the profile associated with the DM.
+   * @param dm - The direct message object containing profile information.
+   * @returns 
+   */
   async setProfilestate(dm: DmMessage) {
     let state = '';
     this.searchService.userList.forEach((user) => {
@@ -125,6 +166,12 @@ export class SearchComponent implements OnInit, OnDestroy {
     return state;
   }
 
+
+  /**
+   * Sets the profile for the selected direct message by determining whether the current user is the author or the recipient.
+   * @param dm - The direct message object containing profile information.
+   * @returns 
+   */
   async setProfile(dm: any) {
     const isCurrentUser = this.currentUser?.userId === dm['profileId'];
 
@@ -138,6 +185,13 @@ export class SearchComponent implements OnInit, OnDestroy {
     };
   }
 
+
+  /**
+   * Opens the profile of the selected user based on their user ID.
+   * Resets the search input and displays the selected profile.
+   * @param event - The event triggered by clicking on a user profile.
+   * @param userID - The ID of the user whose profile is being opened.
+   */
   openProfile(event: Event, userID: string) {
     event?.stopPropagation();
     this.sharedService.isResults = false;

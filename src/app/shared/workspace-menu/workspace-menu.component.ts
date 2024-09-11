@@ -91,6 +91,10 @@ export class WorkspaceMenuComponent implements OnInit {
     private searchService: SearchService
   ) { }
 
+
+  /**
+   * Initializes the component, loads the user list, and sets the first channel.
+   */
   async ngOnInit() {
     this.userService.getUserList();
     setTimeout(async () => {
@@ -144,20 +148,36 @@ export class WorkspaceMenuComponent implements OnInit {
     this.sharedService.setClickedNewMessage(false);
   }
 
+
+  /**
+   * Toggles the drawer's open or closed state.
+   */
   toggle() {
     this.drawer.toggle();
     this.open = !this.open;
     this.hover = true;
   }
 
+
+  /**
+   *  Handles hover state set to true.
+   */
   hoverTrue() {
     this.hover = true;
   }
 
+
+  /**
+   * Handles hover state set to false.
+   */
   hoverFalse() {
     this.hover = false;
   }
 
+
+  /**
+   * Toggles the new message form and updates the relevant states.
+   */
   newMessage() {
     this.sharedService.toggleClickedNewMessage();
     this.sharedService.setSelectProfile(false);
@@ -176,20 +196,39 @@ export class WorkspaceMenuComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
+
+  /**
+   * Toggles the state of the channel creation form.
+   * @param event - The event triggered by clicking to create a channel.
+   */
   createChannel(event: Event) {
     event.stopPropagation();
     this.clickedChannel = !this.clickedChannel;
     this.clickedChannelChange.emit(this.clickedChannel);
   }
 
+
+  /**
+   * Toggles the visibility of the channels section.
+   */
   openChannelsMenu() {
     this.openChannel = !this.openChannel;
   }
 
+
+  /**
+   * Toggles the visibility of the direct messages section.
+   */
   openDirectMessages() {
     this.openDm = !this.openDm;
   }
 
+
+  /**
+   * Opens the selected user's profile and initiates a direct message.
+   * @param i  - The index of the selected user.
+   * @param profile - The profile object of the selected user.
+   */
   async clickedProfile(i: number, profile: User) {
     this.sharedService.setSelectedUserIndex(profile.userId);
     this.sharedService.setSelectProfile(true);
@@ -200,8 +239,16 @@ export class WorkspaceMenuComponent implements OnInit {
     this.chatService.handleWindowChangeOnMobile();
   }
 
+  /**
+   * 
+   * @param channel 
+   */
   editChannel(channel: string) { }
 
+
+  /**
+   * Opens search results by subscribing to the necessary services and fetching search data.
+   */
   async openResults() {
     try {
       this.searchService.startSubscription();
@@ -221,6 +268,10 @@ export class WorkspaceMenuComponent implements OnInit {
     }
   }
 
+
+  /**
+   * Closes the search results and resets the input field.
+   */
   closeResults() {
     this.searchService.stopSubscription();
     this.sharedService.isResults = false;

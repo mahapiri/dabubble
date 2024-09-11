@@ -22,6 +22,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   user: any = null;
 
+
+  /**
+   * Subscribes to the shared profile data on initialization and sets the `user` property.
+   */
   ngOnInit() {
     this.profileSubscription = this.sharedService.profile$.subscribe(
       (profile) => {
@@ -32,14 +36,27 @@ export class ProfileComponent implements OnInit, OnDestroy {
     );
   }
 
+  /**
+   * Unsubscribes from the profile subscription to prevent memory leaks.
+   */
   ngOnDestroy(): void {
     this.profileSubscription.unsubscribe();
   }
 
+
+  /**
+   * Closes the profile view by setting the `isProfile` flag to `false`.
+   */
   close() {
     this.sharedService.isProfile = false;
   }
 
+
+  /**
+   * Opens a direct message with the current user when the event is triggered.
+   * Also closes the profile view and updates various states.
+   * @param event  - The event triggered when opening a direct message.
+   */
   async openDM(event: Event) {
     event.preventDefault();
     this.close();

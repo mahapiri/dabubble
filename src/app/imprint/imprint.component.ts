@@ -12,8 +12,10 @@ import { Router } from '@angular/router';
 export class ImprintComponent {
   constructor(private router: Router) { }
 
-
-  back() { 
+  /**
+   * Navigates the user back to the sign-up page.
+   */
+  back() {
     this.router.navigate(['/sign-up']);
   }
 }

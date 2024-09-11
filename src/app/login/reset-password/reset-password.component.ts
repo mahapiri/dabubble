@@ -97,7 +97,9 @@ export class ResetPasswordComponent {
       });
   }
 
-
+  /**
+   * Checks if the new password and confirmation password fields match.
+   */
   checkMatchingPassword(){
     if (this.userForm.value.newPassword === this.userForm.value.newPasswordConfirm) {
       this.passwordsNotMatching = false
@@ -107,6 +109,9 @@ export class ResetPasswordComponent {
     }
   }
 
+  /**
+   * Toggles the visibility of the password field.
+   */
   showPassword() {
     this.passwordVisible = !this.passwordVisible;
   }

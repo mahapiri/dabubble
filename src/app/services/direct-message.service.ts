@@ -283,6 +283,9 @@ export class DirectMessageService implements OnDestroy {
     });
   }
 
+  /**
+   * Checks if the provided URL is an image hosted on Firebase Storage.
+   */
   isImage(url: string): boolean {
     return url.startsWith('https://firebasestorage.googleapis.com/');
   }

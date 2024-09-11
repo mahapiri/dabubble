@@ -12,6 +12,9 @@ import { Router } from '@angular/router';
 export class PrivacyPolicyComponent {
   constructor(private router: Router) { }
 
+  /**
+   * Navigates the user back to the sign-up page.
+   */
   back() {
     this.router.navigate(['/sign-up']);
   }

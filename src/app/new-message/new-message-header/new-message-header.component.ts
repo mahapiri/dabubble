@@ -39,7 +39,11 @@ export class NewMessageHeaderComponent implements OnInit {
   users: User[] = [];
   currentUserId: string = '';
 
-
+  
+  /**
+   * Initializes the component, loading channels and users from the NewMessageService.
+   * Sets the current user's ID.
+   */
   ngOnInit(): void {
     this.channels = this.newMessageService.channelList;
     this.users = this.newMessageService.userList;
@@ -47,6 +51,12 @@ export class NewMessageHeaderComponent implements OnInit {
   }
 
 
+  /**
+   * Opens search results based on the search word.
+   * 
+   * This method checks if the search word starts with "@" for users or "#" for channels,
+   * and updates the search word accordingly. It also activates the search input if the word is non-empty.
+   */
   openResults() {
     this.inputActive = this.searchword.trim().length > 0;
     this.usersearch = this.searchword.startsWith('@');
@@ -63,12 +73,18 @@ export class NewMessageHeaderComponent implements OnInit {
     this.newMessageService.setSearchword(searchwordToSet);
   }
 
+
+  /**
+   * Closes the search results and deactivates the input field.
+   */
   closeResults() {
     this.inputActive = false;
   }
 
 
-
+  /**
+   * Selects a channel from the search results.
+   */
   selectChannel(event: Event, channel: any) {
     event.stopPropagation();
     event.preventDefault();
@@ -79,6 +95,9 @@ export class NewMessageHeaderComponent implements OnInit {
   }
 
 
+  /**
+   * Selects a user from the search results.
+   */
   selectUser(event: Event, user: User) {
     event.stopPropagation();
     event.preventDefault();

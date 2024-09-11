@@ -1,66 +1,70 @@
 <section>
     <div class="profile-container" appClickOutside (clickOutside)="closeProfile()">
-        <div class="profile-title">
-            <h3 class="n-h3">{{ editing ? 'Dein Profil bearbeiten' : 'Profil' }}</h3>
-            <div class="icon-container">
-                <mat-icon class="close-icon" (click)="closeProfile()">close</mat-icon>
+        <form [formGroup]="profilForm" (ngSubmit)="save()">
+            <div class="profile-title">
+                <h3 class="n-h3">{{ editing ? 'Dein Profil bearbeiten' : 'Profil' }}</h3>
+                <div class="icon-container">
+                    <mat-icon class="close-icon" (click)="closeProfile()">close</mat-icon>
+                </div>
             </div>
-        </div>
-        <img class="profile-img" src="{{ currentUser?.profileImage }}" alt="Profile Image">
-        <div class="profile-info">
-            <div class="name-title">
-                <div class="inputfield">
-                    @if (editing) {
-                    <div class="editing-title-container">
-                        <mat-icon>account_circle</mat-icon>
-                        <h3 class="n-h3 editing-title">Vollständiger Name</h3>
+            <img class="profile-img" src="{{ currentUser?.profileImage }}" alt="Profile Image">
+            <div class="profile-info">
+                <div class="name-title">
+                    <div class="inputfield">
+                        @if (editing) {
+                        <div class="editing-title-container">
+                            <mat-icon>account_circle</mat-icon>
+                            <h3 class="n-h3 editing-title">Vollständiger Name</h3>
+                        </div>
+                        }
+                        @else {
+                        <h2 class="n-h2">{{ userName }}</h2>
+                        }
                     </div>
+                    <p (click)="edit($event)" class="n-p" *ngIf="!editing">Bearbeiten</p>
+                </div>
+                <ng-container *ngIf="editing; else stateText">
+                    <input class="padding-left editing-inputfield" formControlName="userName" type="text"
+                        placeholder="{{ userName }}">
+                    <span class="errormessage" *ngIf="invalidName">{{ nameErrorMessage }}</span>
+                </ng-container>
+
+                <ng-template #stateText>
+                    <div class="status-container">
+                        <div class="status-icon" ngClass="{{ currentUser?.state }}"></div>
+                        <p class="n-p" [ngClass]="{
+                            'online-text': currentUser?.state === 'online',
+                            'offline-text': currentUser?.state === 'offline',
+                            'absent-text': currentUser?.state === 'absent'
+                        }">
+                            {{ getStatusText(currentUser?.state) }}
+                        </p>
+                    </div>
+                </ng-template>
+            </div>
+            <div class="mail-container">
+                <div class="mail-info" [ngClass]="{'editing-mail': editing }">
+                    <mat-icon>mail</mat-icon>
+                    @if (editing) {
+                    <h3 class="n-h3 editing-title">E-Mail-Adresse</h3>
                     }
                     @else {
-                    <h2 class="n-h2">{{ userName }}</h2>
+                    <h4 class="n-h4">E-Mail-Adresse</h4>
                     }
                 </div>
-                <p (click)="edit($event)" class="n-p" *ngIf="!editing">Bearbeiten</p>
-            </div>
-            <ng-container *ngIf="editing; else stateText">
-                <input class="padding-left editing-inputfield" [(ngModel)]="userName" type="text"
-                    placeholder="{{ userName }}">
-            </ng-container>
-
-            <ng-template #stateText>
-                <div class="status-container">
-                    <div class="status-icon" ngClass="{{ currentUser?.state }}"></div>
-                    <p class="n-p" [ngClass]="{
-                        'online-text': currentUser?.state === 'online',
-                        'offline-text': currentUser?.state === 'offline',
-                        'absent-text': currentUser?.state === 'absent'
-                      }">
-                        {{ getStatusText(currentUser?.state) }}
-                    </p>
-                </div>
-            </ng-template>
-        </div>
-        <div class="mail-container">
-            <div class="mail-info" [ngClass]="{'editing-mail': editing }">
-                <mat-icon>mail</mat-icon>
                 @if (editing) {
-                <h3 class="n-h3 editing-title">E-Mail-Adresse</h3>
+                <input class="padding-left editing-inputfield" formControlName="userMail" type="text"
+                    placeholder="{{ userMail }}">
+                <span class="errormessage" *ngIf="invalidMail">{{ mailerrorMessage }}</span>
                 }
                 @else {
-                <h4 class="n-h4">E-Mail-Adresse</h4>
+                <a href="" class="n-a">{{ userMail }}</a>
                 }
             </div>
-            @if (editing) {
-            <input class="padding-left editing-inputfield" [(ngModel)]="userMail" type="text"
-                placeholder="{{ userMail }}">
-            }
-            @else {
-            <a href="" class="n-a">{{ currentUser?.email }}</a>
-            }
-        </div>
-        <div *ngIf="editing" class="editing-btns">
-            <button class="btn-default btn-secondary" (click)="cancel($event)">Abbrechen</button>
-            <button class="btn-default btn-primary" (click)="edit($event)">Speichern</button>
-        </div>
+            <div *ngIf="editing" class="editing-btns">
+                <button class="btn-default btn-secondary" (click)="cancel($event)">Abbrechen</button>
+                <button class="btn-default btn-primary" type="submit">Speichern</button>
+            </div>
+        </form>
     </div>
 </section>

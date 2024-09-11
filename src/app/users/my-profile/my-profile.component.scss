@@ -150,6 +150,16 @@ a {
   gap: 32px;
 }
 
+form {
+  display: contents;
+}
+
+.errormessage {
+  color: var(--rosa);
+  margin-block: -12px;
+  padding-left: 20px;
+}
+
 /* Smartphones - - - - - - - - - */
 
 @media only screen and (max-width: 960px) {

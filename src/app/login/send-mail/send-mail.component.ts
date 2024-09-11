@@ -29,8 +29,9 @@ export class SendMailComponent {
     email: ["", [Validators.required]],
   })
 
-
-
+  /**
+   * Submits the password reset request.
+   */
   onSubmit() {
     this.authService.usermail = this.userForm.value.email || '';
     sendPasswordResetEmail(this.auth, this.authService.usermail)
@@ -42,9 +43,4 @@ export class SendMailComponent {
         const errorMessage = error.message;
       });
   }
-
-
-
-
-
 }
