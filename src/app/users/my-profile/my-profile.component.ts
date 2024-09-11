@@ -3,17 +3,18 @@ import { MatIconModule } from '@angular/material/icon';
 import { User } from '../../../models/user.class';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { doc, Firestore, updateDoc } from '@angular/fire/firestore';
 import { ChannelService } from '../../services/channel.service';
 import { Channel } from '../../../models/channel.class';
 import { ClickOutsideDirective } from '../../directive/click-outside.directive';
 import { SharedService } from '../../services/shared.service';
+import { emailDomainValidator } from './validators';
 
 @Component({
   selector: 'app-my-profile',
   standalone: true,
-  imports: [MatIconModule, CommonModule, FormsModule, ClickOutsideDirective],
+  imports: [MatIconModule, CommonModule, FormsModule, ClickOutsideDirective, ReactiveFormsModule],
   templateUrl: './my-profile.component.html',
   styleUrl: './my-profile.component.scss'
 })
@@ -28,6 +29,16 @@ export class MyProfileComponent implements OnInit {
   editing: boolean = false;
   userName: string = '';
   userMail: string = '';
+
+  formbuilder: FormBuilder = inject(FormBuilder);
+  invalidName: boolean = false;
+  invalidMail: boolean = false;
+  nameErrorMessage = "Bitte geben Sie einen Namen ein";
+  mailerrorMessage = "Bitte geben Sie eine gültige Mailadresse ein";
+  profilForm = this.formbuilder.group({
+    userName: ["", [Validators.required, Validators.minLength(2)]],
+    userMail: ["", [Validators.required, Validators.email, emailDomainValidator()]]
+  })
 
   constructor() { }
 
@@ -62,10 +73,34 @@ export class MyProfileComponent implements OnInit {
    */
   edit(event: Event) {
     event.stopPropagation();
-    this.editing = !this.editing;
-    this.updataUserDatabase();
+    this.editing = true;
+
+    this.profilForm.patchValue({
+      userName: this.currentUser?.username,
+      userMail: this.currentUser?.email
+    });
   }
 
+  save() {
+    this.invalidName = false;
+    this.invalidMail = false;
+    this.proofValidation();
+  }
+
+  proofValidation() {
+    if(this.profilForm.valid) {
+      this.userName = this.profilForm.value.userName || '';
+      this.userMail = this.profilForm.value.userMail || '';
+      this.editing = false;
+      this.updataUserDatabase();
+    } else {
+      if(this.profilForm.get('userName')?.invalid) {
+        this.invalidName = true;
+      }
+      if(this.profilForm.get('userMail')?.invalid)
+        this.invalidMail = true;
+    }
+  }
 
   /**
    * Updates the user's name and email in the Firestore.
