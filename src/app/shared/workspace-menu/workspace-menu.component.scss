@@ -1,6 +1,11 @@
 section {
   height: calc(100vh - 125.5px);
   display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: stretch;
+  align-content: center;
 }
 
 .sidenav {
@@ -10,10 +15,14 @@ section {
   border-radius: 30px;
   padding: 32px 30px;
   margin-right: 16px;
-  display: flex;
-  flex-direction: column;
   color: var(--black);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidenav > * {
+  flex: 1 1 auto;
 }
 
 .workspace-content {
@@ -23,7 +32,7 @@ section {
   border-radius: 30px;
   margin-bottom: 24px;
   color: var(--black);
-  flex-shrink: 1;
+
 }
 
 .mat-drawer:not(.mat-drawer-opened) {
@@ -175,17 +184,15 @@ mat-content-hide-toggle {
 .channel-undersection {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
   overflow-y: auto;
 }
 
 .channel-container {
   overflow-y: auto;
   flex: 1;
-}
-
-.max-height {
-  max-height: 128px;
 }
 
 .subtitle-header {
@@ -232,14 +239,12 @@ mat-content-hide-toggle {
 }
 
 .profile-section {
-  max-height: calc(
-    100vh - 540px
-  ); //100vh minus header, paddings, workspace contents
-
   display: flex;
   flex-direction: column;
   gap: 12px;
-  flex: 1 1 auto;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
   overflow-y: auto;
 }
 
@@ -315,8 +320,8 @@ mat-content-hide-toggle {
 }
 
 .open {
-  top: 57.8%; //556px
-  left: -125px;
+  top: 57.8%;
+  left: -133px;
 
   h4 {
     width: 237px !important;
@@ -324,12 +329,8 @@ mat-content-hide-toggle {
 }
 
 .close {
-  top: 60%; //571px
-  left: -140px;
-
-  // h4 {
-  // width: 265px !important;
-  // }
+  top: 60%;
+  left: -148px;
 }
 
 .navigation-bar-content {
@@ -361,7 +362,34 @@ mat-content-hide-toggle {
 }
 
 .height-100 {
+  height: calc(100% - 84px);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.channel-dm-master-section {
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+
+.channel-master-section {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+}
+
+.dm-master-section {
+  min-height: 50%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
 }
 
 .searchfield-container {

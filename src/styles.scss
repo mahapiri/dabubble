@@ -257,6 +257,11 @@ a {
   z-index: 2 !important;
 }
 
+.mat-drawer-inner-container {
+  height: 100%;
+  flex: 1 1 auto;
+}
+
 @keyframes slideIn {
   from {
     transform: translateY(100%);
@@ -387,6 +392,7 @@ a {
   background-color: #00000000;
   border: 1px solid #00000000;
 }
+
 
 /* Smartphones - - - - - - - - - */
 

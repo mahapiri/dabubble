@@ -47,117 +47,119 @@
     </div>
 
     <div class="mobile-padding height-100">
-      <div class="d-flex-col">
-        <div class="mb-12">
-          <div class="channels-content">
-            <div class="channels-section">
-              <div class="channels-header" (click)="openChannelsMenu()">
-                <div class="channels-header">
-                  <mat-icon>{{
-                    openChannel ? "arrow_right" : "arrow_drop_down"
-                  }}</mat-icon>
-                </div>
-                <div class="channels-title">
-                  <mat-icon>workspaces</mat-icon>
-                  <h4 class="n-h4 bold">Channels</h4>
-                </div>
-              </div>
-              <div class="add-div" (click)="createChannel($event)">
-                <mat-icon class="add-icon" [class.bold-add]="clickedChannel"
-                  >add</mat-icon
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="channel-undersection" [class.d-none]="openChannel">
-          <div class="channel-container max-height">
-            <div
-              *ngFor="let channel of userChannels$ | async"
-              (click)="selectChannel(channel)"
-              class="channels-content"
-            >
+      <div class="channel-dm-master-section">
+        <div class="d-flex-col channel-master-section" [ngStyle] ="!openDm ? { 'max-height': '50%' } : { 'max-height': 'calc(100% - 32px)' }">
+          <div class="mb-12">
+            <div class="channels-content">
               <div class="channels-section">
-                <div class="channels-header subtitle-header">
-                  <div
-                    class="channels-title subtitle-title"
-                    (click)="editChannel('entwicklerteam')"
-                  >
-                    <mat-icon class="channel-icon">tag</mat-icon>
-                    <p class="n-p">{{ channel.channelName }}</p>
+                <div class="channels-header" (click)="openChannelsMenu()">
+                  <div class="channels-header">
+                    <mat-icon>{{
+                      openChannel ? "arrow_right" : "arrow_drop_down"
+                    }}</mat-icon>
+                  </div>
+                  <div class="channels-title">
+                    <mat-icon>workspaces</mat-icon>
+                    <h4 class="n-h4 bold">Channels</h4>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <div class="channels-content mt-12 mb-24">
-              <div class="channels-section">
-                <div class="channels-header subtitle-header">
-                  <div
-                    class="channels-title subtitle-title add-channel"
-                    (click)="createChannel($event)"
+                <div class="add-div" (click)="createChannel($event)">
+                  <mat-icon class="add-icon" [class.bold-add]="clickedChannel"
+                    >add</mat-icon
                   >
-                    <mat-icon>add_circle</mat-icon>
-                    <p class="n-p">Channel hinzufügen</p>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="d-flex-col">
-        <div class="mb-12">
-          <div class="channels-content">
-            <div class="channels-section">
-              <div class="channels-header" (click)="openDirectMessages()">
-                @if(!openDm) {
-                <mat-icon>arrow_drop_down</mat-icon>
-                } @else {
-                <mat-icon>arrow_right</mat-icon>
-                }
-
-                <div class="channels-title">
-                  <mat-icon>account_circle</mat-icon>
-                  <h4 class="n-h4 bold">Direktnachrichten</h4>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="channel-undersection" [class.d-none]="openDm">
-          <div class="profile-section">
-            <div
-              class="channels-content"
-              *ngFor="let profile of userList$ | async; let i = index"
-            >
-              <div class="channels-section">
-                <div class="channels-header subtitle-header">
-                  <div
-                    class="channels-title subtitle-title profile-border"
-                    (click)="clickedProfile(i, profile)"
-                    [class.bold-user]="selectedUserIndex === profile.userId"
-                  >
-                    <div class="profile-content">
-                      <img
-                        src="{{ profile.profileImage }}"
-                        alt="Character"
-                        class="profile-icon"
-                      />
-                      <div
-                        class="status-icon"
-                        ngClass="{{ profile.state }}"
-                      ></div>
+          <div class="channel-undersection" [class.d-none]="openChannel">
+            <div class="channel-container">
+              <div
+                *ngFor="let channel of userChannels$ | async"
+                (click)="selectChannel(channel)"
+                class="channels-content"
+              >
+                <div class="channels-section">
+                  <div class="channels-header subtitle-header">
+                    <div
+                      class="channels-title subtitle-title"
+                      (click)="editChannel('entwicklerteam')"
+                    >
+                      <mat-icon class="channel-icon">tag</mat-icon>
+                      <p class="n-p">{{ channel.channelName }}</p>
                     </div>
-                    <div style="display: flex; gap: 8px">
-                      <p class="n-p">{{ profile.username }}</p>
-                      <p
-                        class="n-p"
-                        *ngIf="profile?.userId === userService.userID"
-                      >
-                        (Du)
-                      </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="channels-content mt-12 mb-24">
+                <div class="channels-section">
+                  <div class="channels-header subtitle-header">
+                    <div
+                      class="channels-title subtitle-title add-channel"
+                      (click)="createChannel($event)"
+                    >
+                      <mat-icon>add_circle</mat-icon>
+                      <p class="n-p">Channel hinzufügen</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex-col dm-master-section">
+          <div class="mb-12">
+            <div class="channels-content">
+              <div class="channels-section">
+                <div class="channels-header" (click)="openDirectMessages()">
+                  @if(!openDm) {
+                  <mat-icon>arrow_drop_down</mat-icon>
+                  } @else {
+                  <mat-icon>arrow_right</mat-icon>
+                  }
+
+                  <div class="channels-title">
+                    <mat-icon>account_circle</mat-icon>
+                    <h4 class="n-h4 bold">Direktnachrichten</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="channel-undersection" [class.d-none]="openDm">
+            <div class="profile-section">
+              <div
+                class="channels-content"
+                *ngFor="let profile of userList$ | async; let i = index"
+              >
+                <div class="channels-section">
+                  <div class="channels-header subtitle-header">
+                    <div
+                      class="channels-title subtitle-title profile-border"
+                      (click)="clickedProfile(i, profile)"
+                      [class.bold-user]="selectedUserIndex === profile.userId"
+                    >
+                      <div class="profile-content">
+                        <img
+                          src="{{ profile.profileImage }}"
+                          alt="Character"
+                          class="profile-icon"
+                        />
+                        <div
+                          class="status-icon"
+                          ngClass="{{ profile.state }}"
+                        ></div>
+                      </div>
+                      <div style="display: flex; gap: 8px">
+                        <p class="n-p">{{ profile.username }}</p>
+                        <p
+                          class="n-p"
+                          *ngIf="profile?.userId === userService.userID"
+                        >
+                          (Du)
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
