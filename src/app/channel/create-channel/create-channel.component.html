@@ -38,8 +38,7 @@
     </div>
     <div class="btn-container">
       <button
-        [disabled]="!channelName"
-        [ngClass]="{ 'button-disabled': !channelName }"
+        [ngClass]="{ 'btn-primary-disabled': !channelName }"
         (click)="nextPage()"
         class="btn-default btn-primary"
       >

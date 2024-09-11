@@ -193,8 +193,9 @@ a {
   background-color: var(--purple-1);
 }
 
-.btn-primary-disable {
+.btn-primary-disabled {
   background-color: var(--gray);
+  cursor: default;
 }
 
 .btn-secondary {
@@ -207,6 +208,7 @@ a {
   background-color: var(--white);
   border: 1px solid var(--gray);
   color: var(--gray);
+  cursor: default;
 }
 
 .icon-container {

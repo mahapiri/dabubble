@@ -20,7 +20,7 @@ section {
   border-radius: 30px;
 }
 
-.height-auto{
+.height-auto {
   height: auto;
 }
 .max-height {
@@ -78,11 +78,7 @@ input[type="text"] {
   justify-content: flex-end;
 }
 
-.button-disabled {
-  background-color: var(--gray);
-}
-
-.profile-section{
+.profile-section {
   max-height: 300px;
 }
 
@@ -146,7 +142,7 @@ input[type="text"] {
     max-height: none !important;
   }
 
-  .profile-section{
+  .profile-section {
     max-height: none !important;
   }
 }

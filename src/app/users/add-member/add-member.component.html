@@ -62,6 +62,9 @@
     </div>
     <div class="btn-container">
       <button
+        [ngClass]="{
+          'btn-primary-disabled': selectedUsersForChannel.length === 0
+        }"
         (click)="addUserToActiveChannel()"
         class="btn-default btn-primary"
       >
