@@ -72,7 +72,10 @@
           ></app-add-member>
           <div
             *ngIf="channelService.clickedAddMembers"
-            [class.edit-channel-active]="this.isEditChannelPopup"
+            [class.edit-channel-active]="
+              this.isEditChannelPopup &&
+              channelService.animationState === 'opening'
+            "
             class="shaded-background"
           ></div>
         </div>

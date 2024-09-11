@@ -134,7 +134,6 @@ export class ChannelComponent implements OnInit {
    */
   openAddMembers(event: Event) {
     event.stopPropagation();
-
     if (!this.isEditChannelPopup) {
       this.channelService.closePopup();
       this.channelService.clickedAddMembers = true;

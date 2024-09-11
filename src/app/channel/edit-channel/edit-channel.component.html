@@ -1,4 +1,4 @@
-<section appClickOutside (clickOutside)="closeChannel()">
+<section appClickOutside (clickOutside)="closeChannel($event!)">
   <div class="popup-container channel-container">
     <div class="header">
       <div class="title-content">
@@ -7,7 +7,9 @@
           <h3 class="n-h3">{{ activeChannel.channelName }}</h3>
         </div>
         <div class="icon-container">
-          <mat-icon class="close-icon" (click)="closeChannel()">close</mat-icon>
+          <mat-icon class="close-icon" (click)="closeChannel($event)"
+            >close</mat-icon
+          >
         </div>
       </div>
       <div class="mobile-shadow"></div>

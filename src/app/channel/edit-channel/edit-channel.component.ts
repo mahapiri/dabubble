@@ -127,10 +127,21 @@ export class EditChannelComponent {
   /**
    * closes the channel-window
    */
-  closeChannel() {
+  closeChannel(event: Event) {
+    this.dontCloseSliderOnClick(event);
     this.channelService.closePopup();
     if (!this.chatService.mobileScreen()) {
       this.channelService.setIsEditChannelPopup(false);
+    }
+  }
+
+  /** prevents the clickOutside Directive from closing the App Member Slider on Mobile when clicking onto the Popup itself */
+  dontCloseSliderOnClick(event: Event) {
+    if (
+      this.channelService.isAddMemberSlider() &&
+      this.chatService.mobileScreen()
+    ) {
+      event.stopPropagation();
     }
   }
 
