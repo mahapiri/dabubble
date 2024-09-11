@@ -67,8 +67,8 @@ export class MyProfileComponent implements OnInit {
 
 
   /**
-   * toggles the editing state for the user's profile information.
-   * Also updates the user data in the Firestore.
+   * Toggles the editing state for the user's profile information.
+   * Fills the form fields with the current user's data.
    * @param event - The event triggered by the edit button.
    */
   edit(event: Event) {
@@ -81,12 +81,20 @@ export class MyProfileComponent implements OnInit {
     });
   }
 
+
+  /**
+   * Saves the user's profile after validating the input.
+   */
   save() {
     this.invalidName = false;
     this.invalidMail = false;
     this.proofValidation();
   }
 
+
+  /**
+   * Validates the form fields and updates the user's information in Firestore if valid.
+   */
   proofValidation() {
     if(this.profilForm.valid) {
       this.userName = this.profilForm.value.userName || '';
@@ -101,6 +109,7 @@ export class MyProfileComponent implements OnInit {
         this.invalidMail = true;
     }
   }
+
 
   /**
    * Updates the user's name and email in the Firestore.

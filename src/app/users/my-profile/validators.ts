@@ -1,5 +1,13 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
+
+/**
+ * Validator function to check if an email has a valid domain format.
+ * Ensures that the domain part of the email address has at least two characters before 
+ * and after the dot (e.g., `example.com`), and that it contains an '@' separating the local 
+ * and domain parts.
+ * @returns A validator function that checks the email's domain validity.
+ */
 export function emailDomainValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const email: string = control.value || '';
