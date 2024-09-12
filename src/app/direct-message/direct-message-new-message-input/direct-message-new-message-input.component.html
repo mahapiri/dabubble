@@ -1,27 +1,61 @@
-<div class="new-message-container" [ngClass]="uploadService.dmFileChosen ? 'img-input-height' : ''">
+<div
+  class="new-message-container"
+  [ngClass]="uploadService.dmFileChosen ? 'img-input-height' : ''"
+>
   @if (this.uploadService.dmFileChosen) {
-  <img [src]="this.uploadService.currentImg$ | async" alt="">
-  <mat-icon (click)="this.uploadService.removeImg()" class="close-icon pos-relative">close</mat-icon>
+  <img [src]="this.uploadService.currentImg$ | async" alt="" />
+  <mat-icon
+    (click)="this.uploadService.removeImg()"
+    class="close-icon pos-relative"
+    >close</mat-icon
+  >
   }@else {
-  <textarea [(ngModel)]="messageText" matInput type="text" placeholder="Nachricht an {{ profile.username }}" rows="3"
-    (keydown)="onKeyDown($event)"></textarea>
+  <textarea
+    [(ngModel)]="messageText"
+    matInput
+    type="text"
+    placeholder="Nachricht an {{ profile.username }}"
+    rows="3"
+    (keydown)="onKeyDown($event)"
+  ></textarea>
   }
   <div class="message-controls">
     <div class="add-elements">
-      <button (click)="this.uploadService.triggerFileInput('direct-message-file-upload')" class="mini-fab-button" mat-mini-fab
-        class="add-doc mini-fab-btn">
-        <input id="direct-message-file-upload" type="file" (change)="chooseFile($event)" [accept]="uploadService.acceptedFileTypes"
-          hidden />
+      <button
+        (click)="
+          this.uploadService.triggerFileInput('direct-message-file-upload')
+        "
+        class="mini-fab-button"
+        mat-mini-fab
+        class="add-doc mini-fab-btn"
+      >
+        <input
+          id="direct-message-file-upload"
+          type="file"
+          (change)="chooseFile($event)"
+          [accept]="uploadService.acceptedFileTypes"
+          hidden
+        />
         <mat-icon>add</mat-icon>
       </button>
       <div class="vertical-divider"></div>
-      <button mat-mini-fab class="emojis mini-fab-btn" (click)="openEmojiSet($event)">
+      <button
+        mat-mini-fab
+        class="emojis mini-fab-btn"
+        (click)="openEmojiSet($event)"
+      >
         <mat-icon>sentiment_satisfied</mat-icon>
-        <div *ngIf="isEmoji" class="emoji-container" appClickOutside (clickOutside)="closeEmojiSet()">
-          <app-emoji-picker (emojiSelected)="onEmojiSelected($event)"></app-emoji-picker>
+        <div
+          *ngIf="isEmoji"
+          class="emoji-container"
+          appClickOutside
+          (clickOutside)="closeEmojiSet()"
+        >
+          <app-emoji-picker
+            (emojiSelected)="onEmojiSelected($event)"
+          ></app-emoji-picker>
         </div>
       </button>
-
 
       <!-- <div>
         <button mat-mini-fab class="tag-person mini-fab-btn" (click)="openPopup($event)">
@@ -30,12 +64,15 @@
         <app-tagging *ngIf="isTag" (closePopup)="closePopup()">
         </app-tagging>
       </div> -->
-
-
-
-
     </div>
-    <button class="send-btn" [ngClass]="{'send-btn-valid': messageText.trim().length > 0}" (click)="createMessage()">
+    <button
+      class="send-btn"
+      [ngClass]="{
+        'send-btn-valid':
+          messageText.trim().length > 0 || this.uploadService.dmFileChosen
+      }"
+      (click)="createMessage()"
+    >
       <mat-icon>send</mat-icon>
     </button>
   </div>
