@@ -2,125 +2,114 @@
 @import "./../../channel/channel/channel.component.scss";
 
 .new-message-container {
-    height: 145px;
+  height: 145px;
+  width: 100%;
+  padding: 20px;
+  border: 1px solid var(--lines);
+  border-radius: 20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 40px;
+  user-select: none;
+
+  &:hover {
+    border: 1px solid var(--purple-2);
+  }
+
+  img {
+    height: 120px;
+  }
+
+  input,
+  select,
+  textarea {
+    font-family: "Nunito";
     width: 100%;
-    padding: 20px;
-    border: 1px solid var(--lines);
-    border-radius: 20px;
+    border: none;
+    font-size: 18px;
+    line-height: 24.55px;
+    font-weight: 400;
+    outline: none;
+    resize: none;
+    overflow: visible;
+    scrollbar-width: none;
+  }
+
+  .message-controls {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    width: calc(100% - 16px);
     display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: 40px;
-    cursor: pointer;
-    user-select: none;
+    justify-content: space-between;
+    align-items: center;
 
-    &:hover {
-        border: 1px solid var(--purple-2);
+    .add-elements {
+      display: flex;
+      gap: 5px;
     }
 
-    img {
-        height: 120px;
+    .vertical-divider {
+      width: 1px;
+      background-color: var(--lines);
+    }
+
+    .send-btn {
+      font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 40;
+      color: var(--gray);
+      background-color: var(--white);
+      box-shadow: none;
+      border: none;
+      cursor: default;
+    }
+
+    .send-btn-valid {
+      color: var(--purple-3);
+      cursor: pointer;
+
+      &:hover {
+        scale: 1.1;
+        color: var(--purple-2);
+        background-color: var(--white);
+        --mat-fab-small-state-layer-color: var(--white);
       }
-
-    input,
-    select,
-    textarea {
-        font-family: "Nunito";
-        width: 100%;
-        border: none;
-        font-size: 18px;
-        line-height: 24.55px;
-        font-weight: 400;
-        outline: none;
-        resize: none;
-        overflow: visible;
-        scrollbar-width: none;
     }
-
-    .message-controls {
-        position: absolute;
-        bottom: 8px;
-        left: 8px;
-        width: calc(100% - 16px);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        .add-elements {
-            display: flex;
-            gap: 5px;
-        }
-
-        .vertical-divider {
-            width: 1px;
-            background-color: var(--lines);
-        }
-
-        .send-btn {
-            font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 40;
-            color: var(--gray);
-            background-color: var(--white);
-            box-shadow: none;
-            border: none;
-            cursor: not-allowed;
-        }
-
-        .send-btn-valid {
-            color: var(--purple-3);
-            cursor: pointer;
-
-            &:hover {
-                color: var(--purple-2);
-                background-color: var(--white);
-                --mat-fab-small-state-layer-color: var(--white);
-            }
-        }
-    }
+  }
 }
-
 
 .mat-mdc-mini-fab.mat-accent {
+  --mat-fab-small-state-layer-color: white !important;
+  &:hover {
     --mat-fab-small-state-layer-color: white !important;
-    &:hover {
-        --mat-fab-small-state-layer-color: white !important;
-    }
-
+  }
 }
 
-
-
-
-
-
-
-
-
-
 .tag-person {
-    position: relative;
+  position: relative;
 }
 
 .tag-person-container {
-    position: absolute;
-    bottom: 100%;
-    border-radius: 30px 30px 30px 0px !important;
-    font-family: "Nunito";
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 24.55px;
-    padding: 20px;
+  position: absolute;
+  bottom: 100%;
+  border-radius: 30px 30px 30px 0px !important;
+  font-family: "Nunito";
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24.55px;
+  padding: 20px;
 
-    input {
-        width: 234px;
-        display: flex;
-        padding: 10px 16px;
-        border: 1px solid var(--lines);
-        border-radius: 40px;
-    }
+  input {
+    width: 234px;
+    display: flex;
+    padding: 10px 16px;
+    border: 1px solid var(--lines);
+    border-radius: 40px;
+  }
 
-    .title-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+  .title-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
