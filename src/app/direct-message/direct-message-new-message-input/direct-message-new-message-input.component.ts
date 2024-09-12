@@ -90,8 +90,8 @@ export class DirectMessageNewMessageInputComponent
    */
   async createMessage() {
     await this.checkPictureUpload();
-    if (!this.messageText.trim()) {
-      console.warn('The message field is empty. Please type a message!');
+    if (!this.messageText.trim()&& !this.uploadService.dmFileChosen) {
+      console.warn('The message field is empty. Please type a message or upload a file!');
     } else {
       await this.directMessageService.newDmMessage(this.messageText);
       this.messageCreated.emit();
