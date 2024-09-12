@@ -51,10 +51,9 @@ export class ChannelNewMessageInputComponent implements OnInit {
   messageText: string = '';
   isEmoji: boolean = false;
   notOpen: boolean = true;
-  imgName: string = '';
   isTag: boolean = false;
 
-  constructor(private channelMessageService: ChannelMessageService) { }
+  constructor(private channelMessageService: ChannelMessageService) {}
 
   /**
    * subscribes selected member
@@ -101,7 +100,7 @@ export class ChannelNewMessageInputComponent implements OnInit {
    * @param event
    */
   async chooseFile(event: Event) {
-    this.uploadService.onFileSelected(event, "channel");
+    this.uploadService.onFileSelected(event, 'channel');
     this.uploadService.uploadPath = this.uploadPath;
   }
 

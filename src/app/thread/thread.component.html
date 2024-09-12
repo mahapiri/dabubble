@@ -150,7 +150,11 @@
         </div>
         <button
           class="send-btn"
-          [ngClass]="{ 'send-btn-valid': threadMessageText.trim().length > 0 }"
+          [ngClass]="{
+            'send-btn-valid':
+              threadMessageText.trim().length > 0 ||
+              this.uploadService.threadFileChosen
+          }"
           (click)="sendMessage()"
         >
           <mat-icon>send</mat-icon>

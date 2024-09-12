@@ -68,7 +68,10 @@
     </div>
     <button
       class="send-btn"
-      [ngClass]="{ 'send-btn-valid': messageText.trim().length > 0 }"
+      [ngClass]="{
+        'send-btn-valid':
+          messageText.trim().length > 0 || this.uploadService.channelFileChosen
+      }"
       (click)="sendMessage()"
     >
       <mat-icon>send</mat-icon>

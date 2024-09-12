@@ -123,7 +123,7 @@ mat-card-footer {
       background-color: var(--white);
       box-shadow: none;
       border: none;
-      cursor: not-allowed;
+      cursor: default;
     }
 
     .send-btn-valid {
@@ -131,6 +131,7 @@ mat-card-footer {
       cursor: pointer;
 
       &:hover {
+        scale: 1.1;
         color: var(--purple-2);
         background-color: var(--white);
         --mat-fab-small-state-layer-color: var(--white);
