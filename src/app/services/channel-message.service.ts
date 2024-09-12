@@ -36,7 +36,6 @@ export class ChannelMessageService {
   public messageListUnsubscribe: Unsubscribe | undefined;
   private userSubscription!: Subscription;
 
-
   /**
    * Subscribes to the `selectedChannel$` observable to react to changes in the selected channel.
    * Then, updates the ChannelID and listens for changes (read) in the message list.
@@ -74,22 +73,23 @@ export class ChannelMessageService {
    * @returns {Promise<void>} - A promise that resolves when the message has been added and its ID has been updated.
    */
   async addMessage(text: string): Promise<void> {
-     this.userSubscription = this.userService.currentUser$.subscribe(async (currentUser) => {
-      if (currentUser) {
-        const newMessage: ChannelMessage = this.setMessageWithUser(
-          text,
-          currentUser
-        );
-        const messageRef = await addDoc(
-          this.getMessagesRef(),
-          newMessage.getMessageJson()
-        );
+    this.userSubscription = this.userService.currentUser$.subscribe(
+      async (currentUser) => {
+        if (currentUser) {
+          const newMessage: ChannelMessage = this.setMessageWithUser(
+            text,
+            currentUser
+          );
+          const messageRef = await addDoc(
+            this.getMessagesRef(),
+            newMessage.getMessageJson()
+          );
 
-        newMessage.id = messageRef.id;
-
-        await updateDoc(messageRef, { id: newMessage.id });
+          newMessage.id = messageRef.id;
+          await updateDoc(messageRef, { id: newMessage.id });
+        }
       }
-    });
+    );
     this.userSubscription.unsubscribe();
   }
 

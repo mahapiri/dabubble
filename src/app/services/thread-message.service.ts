@@ -36,7 +36,7 @@ export class ThreadMessageService {
   threads: Thread[] = [];
   threadMessages: ThreadMessage[] = [];
 
-  unsubUser!: Subscription;
+  private userSubscription!: Subscription;
   selectedThread: Subscription;
 
   constructor(
@@ -164,7 +164,7 @@ export class ThreadMessageService {
    * @returns {Promise<void>} - A promise that resolves when the message has been added and its ID has been updated.
    */
   async addThreadMessage(text: string): Promise<void> {
-    this.unsubUser = this.userService.currentUser$.subscribe(
+    this.userSubscription = this.userService.currentUser$.subscribe(
       async (currentUser) => {
         if (currentUser) {
           const newMessage: ThreadMessage = this.setMessageWithUser(
@@ -180,6 +180,7 @@ export class ThreadMessageService {
         }
       }
     );
+    this.userSubscription.unsubscribe();
   }
 
   /**
@@ -306,6 +307,5 @@ export class ThreadMessageService {
   /** Cleans up subscriptions when the component is destroyed. */
   ngOnDestroy(): void {
     this.selectedThread.unsubscribe();
-    this.unsubUser.unsubscribe();
   }
 }
