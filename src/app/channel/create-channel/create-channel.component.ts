@@ -63,7 +63,7 @@ export class CreateChannelComponent {
    * detects the radio button and sets the someUsersChecked variable accordingly
    */
   onRadioChange(): void {
-    console.log("some", this.someUsersChecked, "all", this.allUsersChecked);
+    // console.log("some", this.someUsersChecked, "all", this.allUsersChecked);
     
     if (this.selectedOption === 'allUsers') {
       this.allUsersChecked = true 
@@ -129,9 +129,9 @@ export class CreateChannelComponent {
     } else {
       this.usersToAdd = this.userService.userArray;
     }
-    console.log("channelName", this.channelName);
-    console.log("channelDescription", this.channelDescription);
-    console.log("usersToAdd", this.usersToAdd);
+    // console.log("channelName", this.channelName);
+    // console.log("channelDescription", this.channelDescription);
+    // console.log("usersToAdd", this.usersToAdd);
 
 
     this.channelService.addChannel(

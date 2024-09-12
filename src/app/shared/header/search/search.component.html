@@ -89,7 +89,13 @@
                                         alt="{{ thread.replyToMessage.authorName }} Profile Image">
                                     <div>&commat;{{ thread.replyToMessage.authorName }}</div>
                                 </div>
-                                <div>{{ thread.replyToMessage.text }}</div>
+                                <ng-container
+                                    *ngIf="directMessageService.isImage(thread.replyToMessage.text); else threadtextContent">
+                                    <img [src]="thread.replyToMessage.text" alt="Image" class="message-image" />
+                                </ng-container>
+                                <ng-template #threadtextContent>
+                                    <div>{{ thread.replyToMessage.text }}</div>
+                                </ng-template>
                             </div>
                             <mat-icon>comment</mat-icon>
                         </div>

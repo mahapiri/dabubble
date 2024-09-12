@@ -92,7 +92,6 @@ export class AuthService {
   unsubFromMessageList() {
     if (this.channelMessageService.messageListUnsubscribe) {
       this.channelMessageService.messageListUnsubscribe()
-      console.log("successfully unsubscribed");
     }
   }
 

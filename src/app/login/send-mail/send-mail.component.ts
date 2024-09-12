@@ -36,7 +36,7 @@ export class SendMailComponent {
     this.authService.usermail = this.userForm.value.email || '';
     sendPasswordResetEmail(this.auth, this.authService.usermail)
       .then(() => {
-        console.log("Email-send to ", this.authService.currentUser)
+        // console.log("Email-send to ", this.authService.currentUser)
       })
       .catch((error) => {
         const errorCode = error.code;

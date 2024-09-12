@@ -63,7 +63,7 @@ export class NewMessageService implements OnDestroy {
    */
   ngOnDestroy(): void {
     this.userServiceSubscription.unsubscribe();
-    console.log('unsub new msg service');
+    // console.log('unsub new msg service');
   }
 
 

@@ -5,7 +5,7 @@
   @if (this.uploadService.channelFileChosen) {
   <img [src]="this.uploadService.currentImg$ | async" alt="" />
   <mat-icon
-    (click)="this.uploadService.removeImg()"
+    (click)="this.uploadService.removeImg('file-upload')"
     class="close-icon pos-relative"
     >close</mat-icon
   >

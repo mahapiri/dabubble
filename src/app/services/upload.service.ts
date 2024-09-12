@@ -73,6 +73,7 @@ export class UploadService {
       } else {
         console.error('Die ausgewählte Datei ist kein Bild.');
       }
+      input.value = '';
     }
   }
 
@@ -98,9 +99,15 @@ export class UploadService {
   /**
    * removes the file from the observable
    */
-  removeImg() {
+  removeImg(id: any) {
     this.noFileChosen();
     this.currentImg.next('');
+    this.file = null;
+
+    const fileInput = document.getElementById(id) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
   }
 
 
@@ -109,6 +116,7 @@ export class UploadService {
     this.threadFileChosen = false;
     this.dmFileChosen = false;
     this.newMessageFileChosen = false;
+    this.file = null;
   }
 
 

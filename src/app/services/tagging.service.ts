@@ -57,7 +57,7 @@ export class TaggingService implements OnDestroy {
    */
   ngOnDestroy(): void {
     this.channelSubscription.unsubscribe();
-    console.log('unsub');
+    // console.log('unsub');
   }
 
   setSelectedChannel(channel: any) {

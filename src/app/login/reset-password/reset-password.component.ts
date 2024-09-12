@@ -88,12 +88,12 @@ export class ResetPasswordComponent {
           this.router.navigate(['/main-window']);
         })
           .catch((error) => {
-            console.log('Link expired. Please try again');
+            console.error('Link expired. Please try again');
           });
       }
     })
       .catch((error) => {
-        console.log('Link expired or action Code not correct. Please try again');
+        console.error('Link expired or action Code not correct. Please try again');
       });
   }
 

@@ -97,6 +97,7 @@ export class DirectMessageNewMessageInputComponent
       this.messageCreated.emit();
     }
     this.messageText = '';
+    this.uploadService.removeImg('direct-message-file-upload');
   }
 
   /**

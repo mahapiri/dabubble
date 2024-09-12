@@ -185,13 +185,14 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
             }
           } else if (!this.newMessageService.isChannel && id) {
             const profile = await this.userService.getUserById(id);
-            console.log(id);
+            // console.log(id);
             if (profile) {
               this.createUserMsg(profile);
             }
           }
         });
     }
+    this.uploadService.removeImg('new-message-file-upload');
     setTimeout(() => this.messageIdSubscription.unsubscribe(), 100);
   }
 

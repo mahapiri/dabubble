@@ -1,7 +1,7 @@
 <div class="new-message-container" [ngClass]="uploadService.newMessageFileChosen ? 'img-input-height' : ''">
     @if (this.uploadService.newMessageFileChosen) {
     <img [src]="this.uploadService.currentImg$ | async" alt="">
-    <mat-icon (click)="this.uploadService.removeImg()" class="close-icon pos-relative">close</mat-icon>
+    <mat-icon (click)="this.uploadService.removeImg('new-message-file-upload')" class="close-icon pos-relative">close</mat-icon>
     }@else {
     <textarea [(ngModel)]="messageText" matInput type="text" placeholder="Starte eine neue Nachricht" rows="3"
         (keydown)="onKeyDown($event)"></textarea>
@@ -29,7 +29,7 @@
                 </app-tagging>
             </div>
         </div>
-        <button class="send-btn" [ngClass]="{'send-btn-valid': messageText.trim().length > 0}"
+        <button class="send-btn" [ngClass]="{'send-btn-valid': messageText.trim().length > 0 || uploadService.newMessageFileChosen}"
             (click)="createMessage($event)">
             <mat-icon>send</mat-icon>
         </button>

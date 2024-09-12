@@ -50,7 +50,11 @@
                 </div>
               </div>
               <div class="text-bubble">
-                {{ selectedThread.replyToMessage?.text }}
+                @if (this.isImageUrl(selectedThread.replyToMessage?.text)) {
+                  <img class="channel-upload" [src]="selectedThread.replyToMessage?.text" alt="" />
+                }@else {
+                  {{ selectedThread.replyToMessage?.text }}
+                }
               </div>
               <div class="reaction-wrapper"></div>
             </div>
@@ -85,7 +89,7 @@
       @if (this.uploadService.threadFileChosen) {
       <img [src]="this.uploadService.currentImg$ | async" alt="" />
       <mat-icon
-        (click)="this.uploadService.removeImg()"
+        (click)="this.uploadService.removeImg('thread-file-upload')"
         class="close-icon pos-relative"
         >close</mat-icon
       >

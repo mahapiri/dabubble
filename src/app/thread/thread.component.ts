@@ -169,6 +169,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
       this.threadMessageText = '';
     }
     this.messageCreated.emit();
+    this.uploadService.removeImg('thread-file-upload');
   }
 
   /**
@@ -222,5 +223,14 @@ export class ThreadComponent implements OnInit, OnDestroy {
   onEmojiSelected(emoji: string) {
     this.threadMessageText += emoji;
     this.closeEmojiSet();
+  }
+
+  /**
+ * Checks if a given URL is a valid Firebase Storage image URL.
+ * @param {string} url - The URL.
+ * @returns {boolean} - Returns `true` if the URL is a Firebase Storage image URL, otherwise `false`.
+ */
+  isImageUrl(url: any): boolean {
+    return url.startsWith('https://firebasestorage.googleapis.com/');
   }
 }

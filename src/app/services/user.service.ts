@@ -44,11 +44,11 @@ export class UserService {
     const authStateChangeHandler = onAuthStateChanged(this.auth, (user) => {
       if (user) {
         this.userID = user.uid;
-        console.log('User', this.userID, 'is logged in');
+        // console.log('User', this.userID, 'is logged in');
         this.getCurrentUser();
         this.setUserState('online');
       } else {
-        console.log('User is logged out');
+        // console.log('User is logged out');
         this.setUserState('offline');
         this.userID = '';
         this.currentUser.next(null);

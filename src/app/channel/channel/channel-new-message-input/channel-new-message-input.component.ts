@@ -93,6 +93,7 @@ export class ChannelNewMessageInputComponent implements OnInit {
       this.messageText = '';
     }
     this.messageCreated.emit();
+    this.uploadService.removeImg('file-upload');
   }
 
   /**

@@ -56,12 +56,12 @@ export class ReactionService {
   async setReaction(reaction: string, message: DmMessage) {
     const messageID = message.id;
     const userID = this.userService.userID;
-    console.log(messageID);
+    // console.log(messageID);
 
     if (this.activeReactions[messageID] === reaction) {
       await this.removeReaction(reaction, messageID, userID);
       delete this.activeReactions[messageID];
-      console.log('removeReaction');
+      // console.log('removeReaction');
       return;
     }
 
@@ -76,7 +76,7 @@ export class ReactionService {
 
       this.activeReactions[messageID] = reaction;
       const docRef = this.getReactionRef();
-      console.log(message.authorId);
+      // console.log(message.authorId);
       const newReaction: Reaction = this.setReactionObject(
         userID,
         reaction,

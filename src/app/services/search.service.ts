@@ -93,7 +93,7 @@ export class SearchService {
     this.timer = true;
     setTimeout(() => {
       this.timer = false;
-    }, 60000);
+    }, 10000);
   }
 
 

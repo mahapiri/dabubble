@@ -304,6 +304,11 @@ mat-card-footer {
   top: -10px;
 }
 
+.channel-upload {
+  max-height: 230px;
+  max-width: 400px;
+}
+
 /* Smartphones - - - - - - - - - */
 
 @media only screen and (max-width: 1440px) {
@@ -362,4 +367,10 @@ mat-card-footer {
     gap: 10px;
     padding: 16px 16px 16px 16px;
   }
+
+  .channel-upload {
+    max-height: 230px;
+    max-width: 230px;
+  }
+
 }
