@@ -93,7 +93,7 @@ export class SearchService {
     this.timer = true;
     setTimeout(() => {
       this.timer = false;
-    }, 10000);
+    }, 0);
   }
 
 
@@ -111,10 +111,9 @@ export class SearchService {
       );
 
       const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        const dmID = doc.id;
-        this.getDmMessage(dmID);
-      });
+
+      const dmPromises = querySnapshot.docs.map((doc) => this.getDmMessage(doc.id));
+      await Promise.all(dmPromises);
     }
   }
 
@@ -158,7 +157,8 @@ export class SearchService {
   async getAllChannel() {
     if (!this.timer) {
       this.channelListMsg = [];
-      for (const channel of this.channelList) {
+  
+      const channelPromises = this.channelList.map(async (channel) => {
         const id = channel.channelID;
         if (id) {
           const channelList: any = {
@@ -173,9 +173,12 @@ export class SearchService {
           const arrayIndex = this.channelListMsg.length - 1;
           await this.getChannelMessage(arrayIndex, id);
         }
-      }
+      });
+  
+      await Promise.all(channelPromises);
     }
   }
+  
 
 
   /**
