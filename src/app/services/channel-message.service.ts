@@ -15,7 +15,7 @@ import { User } from '../../models/user.class';
 import { ChatService } from './chat.service';
 import { ChannelService } from './channel.service';
 import { ChannelMessage } from '../../models/channel.class';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { query } from '@angular/fire/firestore';
 
 @Injectable({
@@ -34,6 +34,8 @@ export class ChannelMessageService {
 
   channelMessages: ChannelMessage[] = [];
   public messageListUnsubscribe: Unsubscribe | undefined;
+  private userSubscription!: Subscription;
+
 
   /**
    * Subscribes to the `selectedChannel$` observable to react to changes in the selected channel.
@@ -72,7 +74,7 @@ export class ChannelMessageService {
    * @returns {Promise<void>} - A promise that resolves when the message has been added and its ID has been updated.
    */
   async addMessage(text: string): Promise<void> {
-    this.userService.currentUser$.subscribe(async (currentUser) => {
+     this.userSubscription = this.userService.currentUser$.subscribe(async (currentUser) => {
       if (currentUser) {
         const newMessage: ChannelMessage = this.setMessageWithUser(
           text,
@@ -88,6 +90,7 @@ export class ChannelMessageService {
         await updateDoc(messageRef, { id: newMessage.id });
       }
     });
+    this.userSubscription.unsubscribe();
   }
 
   /**
