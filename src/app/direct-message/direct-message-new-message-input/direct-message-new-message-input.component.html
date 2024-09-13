@@ -17,6 +17,7 @@
     placeholder="Nachricht an {{ profile.username }}"
     rows="3"
     (keydown)="onKeyDown($event)"
+    (ngModelChange)="openTagging()"
   ></textarea>
   }
   <div class="message-controls">
@@ -56,6 +57,17 @@
           ></app-emoji-picker>
         </div>
       </button>
+      <div>
+        <button mat-mini-fab class="tag-person mini-fab-btn" (click)="openPopup($event)">
+          <mat-icon>alternate_email</mat-icon>
+        </button>
+        <app-tagging 
+          *ngIf="isTag" 
+          (closePopup)="closePopup()"
+          [dmTag]="true"
+        >
+        </app-tagging>
+      </div>
     </div>
     <button
       class="send-btn"

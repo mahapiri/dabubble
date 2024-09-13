@@ -9,21 +9,46 @@
     placeholder="Name eingeben">
 
   <div class="profile-container">
-    <div *ngIf="filteredMembers.length === 0">
-      <p class="n-p">Keine User gefunden</p>
-    </div>
-
-    <div *ngFor="let member of filteredMembers; let i = index" (click)="selectMemberToChannel(member)">
-      <div class="profile-content">
-        <div class="profile">
-          <img [src]="member.profileImage" alt="Character" class="profile-icon">
-          <div class="status-icon online" [ngClass]="member.state"></div>
-        </div>
-        <p class="n-p">
-          {{ member.username }}
-          <span *ngIf="member.username === currentUser">(Du)</span>
-        </p>
+    <ng-container *ngIf="dmTag; else textContent">
+      <div *ngIf="userlist.length === 0">
+        <p class="n-p">Keine User gefunden im Userlist</p>
       </div>
-    </div>
+    </ng-container>
+    <ng-template #textContent>
+      <div *ngIf="filteredMembers.length === 0">
+        <p class="n-p">Keine User gefunden</p>
+      </div>
+    </ng-template>
+
+    
+    <ng-container *ngIf="dmTag; else textList">
+      <div *ngFor="let member of userlist; let i = index" (click)="selectMemberToChannel(member)">
+        <div class="profile-content">
+          <div class="profile">
+            <img [src]="member.profileImage" alt="Character" class="profile-icon">
+            <div class="status-icon online" [ngClass]="member.state"></div>
+          </div>
+          <p class="n-p">
+            {{ member.username }}
+            <span *ngIf="member.username === currentUser">(Du)</span>
+          </p>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #textList>
+      <div *ngFor="let member of filteredMembers; let i = index" (click)="selectMemberToChannel(member)">
+        <div class="profile-content">
+          <div class="profile">
+            <img [src]="member.profileImage" alt="Character" class="profile-icon">
+            <div class="status-icon online" [ngClass]="member.state"></div>
+          </div>
+          <p class="n-p">
+            {{ member.username }}
+            <span *ngIf="member.username === currentUser">(Du)</span>
+          </p>
+        </div>
+      </div>
+    </ng-template>
   </div>
 </div>

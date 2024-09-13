@@ -23,6 +23,7 @@ import { DmMessage } from '../../../models/direct-message.class';
 import { TaggingComponent } from '../../chat/tagging/tagging.component';
 import { DirectMessageHeaderComponent } from '../direct-message-header/direct-message-header.component';
 import { Subscription } from 'rxjs';
+import { TaggingService } from '../../services/tagging.service';
 
 @Component({
   selector: 'app-direct-message-new-message-input',
@@ -44,12 +45,14 @@ import { Subscription } from 'rxjs';
   styleUrl: './direct-message-new-message-input.component.scss',
 })
 export class DirectMessageNewMessageInputComponent
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   private directMessageService: DirectMessageService =
     inject(DirectMessageService);
+  private taggingService: TaggingService =
+    inject(TaggingService);
   public uploadService: UploadService = inject(UploadService);
   private userSubscription: Subscription = new Subscription();
+  private taggingSubscription: Subscription = new Subscription();
   uploadPath: string = 'direct-message';
 
   profile: Partial<User> = {};
@@ -61,6 +64,9 @@ export class DirectMessageNewMessageInputComponent
   @Input() message!: DmMessage;
 
   members: string[] = [];
+
+  isTag: boolean = false;
+  findTag: boolean = false;
 
   /**
    * subscribes the current clicked profile
@@ -76,13 +82,43 @@ export class DirectMessageNewMessageInputComponent
         };
       }
     );
+
+    this.taggingSubscription =
+      this.taggingService.memberSelectedChannel$.subscribe((member) => {
+        if (member && member.username) {
+          this.addMemberToMessage(member.username);
+        }
+      });
+
+    this.messageText = '';
   }
+
+
+  /**
+ * add member to message field
+ */
+  addMemberToMessage(username: string) {
+    let mention = '';
+    if(this.findTag) {
+      mention = `${username} `;
+      this.messageText += `${mention}`;
+    } else if(!this.messageText.includes(mention) && !this.findTag) {
+      mention = `@${username} `;
+      this.messageText += ` ${mention}`;
+    }
+
+    if (!this.messageText.includes(mention)) {
+
+    }
+  }
+
 
   /**
    * unsubscribes user subscription if DOM destroy
    */
   ngOnDestroy(): void {
     this.userSubscription.unsubscribe();
+    this.taggingSubscription.unsubscribe();
   }
 
   /**
@@ -90,7 +126,7 @@ export class DirectMessageNewMessageInputComponent
    */
   async createMessage() {
     await this.checkPictureUpload();
-    if (!this.messageText.trim()&& !this.uploadService.dmFileChosen) {
+    if (!this.messageText.trim() && !this.uploadService.dmFileChosen) {
       console.warn('The message field is empty. Please type a message or upload a file!');
     } else {
       await this.directMessageService.newDmMessage(this.messageText);
@@ -156,5 +192,39 @@ export class DirectMessageNewMessageInputComponent
       await this.uploadService.uploadPicture();
       this.messageText = this.uploadService.downloadURL;
     }
+  }
+
+  /**
+   * opens tagging
+   */
+  openTagging() {
+    const lastChar = this.messageText.slice(-1); 
+  
+    if (!this.findTag) {
+      if (lastChar === '@') {
+        this.findTag = true;
+        this.isTag = true;
+      }
+      if (lastChar === '#') {
+        this.findTag = true;
+        this.isTag = true;
+      }
+    } else if (this.findTag) {
+      if (!this.messageText.includes('@') && !this.messageText.includes('#')) {
+        this.isTag = false;
+        this.findTag = false;
+      }
+    }
+  }
+  
+
+  openPopup(event: Event) {
+    event.stopPropagation();
+    this.isTag = true;
+  }
+
+  closePopup() {
+    this.isTag = false;
+    this.findTag = false;
   }
 }

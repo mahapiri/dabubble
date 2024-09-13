@@ -33,9 +33,11 @@ export class TaggingComponent implements OnInit, OnDestroy {
 
   searchText: string = '';
   filteredMembers: ChannelMember[] = [];
+  userlist: User[] = [];
   currentUser: any;
   @Input() isFromThread: boolean = false;
   @Input() isNewMessage: boolean = false;
+  @Input() dmTag: boolean = false;
 
   /**
    * subscribes the current user
@@ -51,6 +53,7 @@ export class TaggingComponent implements OnInit, OnDestroy {
    */
   ngOnInit() {
     this.filteredMembers = this.taggingService.currentChannelMember;
+    this.userlist = this.taggingService.currentUserlist;
   }
 
   /**
@@ -85,6 +88,8 @@ export class TaggingComponent implements OnInit, OnDestroy {
       this.taggingService.selectMemberChannel(member);
     } else if (this.isNewMessage) {
       this.taggingService.selectMemberNewMessage(member);
+    } else if (this.dmTag) {
+      this.taggingService.selectMemberDirectMessage(member);
     }
     this.closeWindow();
   }

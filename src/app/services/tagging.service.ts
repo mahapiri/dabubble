@@ -14,15 +14,19 @@ export class TaggingService implements OnDestroy {
   private channelService: ChannelService = inject(ChannelService);
   private userService: UserService = inject(UserService);
   private channelSubscription: Subscription = new Subscription();
+  private userSubscription: Subscription = new Subscription();
   public memberSelectedChannel = new BehaviorSubject<any>(null);
   memberSelectedChannel$ = this.memberSelectedChannel.asObservable();
   public memberSelectedThread = new BehaviorSubject<any>(null);
   memberSelectedThread$ = this.memberSelectedThread.asObservable();
   public memberSelectedNewMessage = new BehaviorSubject<any>(null);
   memberSelectedNewMessage$ = this.memberSelectedNewMessage.asObservable();
+  public memberSelectedDirectMessage = new BehaviorSubject<any>(null);
+  memberSelectedDirectMessage$ = this.memberSelectedDirectMessage.asObservable();
 
   currentChannelID: string = '';
   currentChannelMember: ChannelMember[] = [];
+  currentUserlist: User[] = [];
   userList$ = this.userService.userList$;
 
   /**
@@ -40,6 +44,13 @@ export class TaggingService implements OnDestroy {
         });
       }
     );
+
+    this.userSubscription = this.userList$.subscribe(user => {
+      this.currentUserlist = [];
+      user.forEach((profile) => {
+        this.currentUserlist.push(profile);
+      })
+    }) 
   }
 
   setActualProfileState(member: ChannelMember) {
@@ -57,6 +68,7 @@ export class TaggingService implements OnDestroy {
    */
   ngOnDestroy(): void {
     this.channelSubscription.unsubscribe();
+    this.userSubscription.unsubscribe();
     // console.log('unsub');
   }
 
@@ -86,5 +98,12 @@ export class TaggingService implements OnDestroy {
    */
   selectMemberNewMessage(member: ChannelMember) {
     this.memberSelectedNewMessage.next(member);
+  }
+
+  /**
+   * get the selected member
+   */
+  selectMemberDirectMessage(member: ChannelMember) {
+    this.memberSelectedDirectMessage.next(member);
   }
 }
