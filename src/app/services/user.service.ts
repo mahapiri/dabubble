@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth, deleteUser, onAuthStateChanged, user } from '@angular/fire/auth';
+import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import {
   arrayUnion,
   collection,
@@ -12,7 +12,6 @@ import {
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { User } from '../../models/user.class';
 import { Channel } from '../../models/channel.class';
-import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',

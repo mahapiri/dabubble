@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { ChannelService } from '../../services/channel.service';
@@ -64,13 +64,13 @@ export class CreateChannelComponent {
    */
   onRadioChange(): void {
     // console.log("some", this.someUsersChecked, "all", this.allUsersChecked);
-    
+
     if (this.selectedOption === 'allUsers') {
-      this.allUsersChecked = true 
-      this.someUsersChecked = false
+      this.allUsersChecked = true;
+      this.someUsersChecked = false;
     } else if (this.selectedOption === 'someUsers') {
-      this.allUsersChecked = false 
-      this.someUsersChecked = true
+      this.allUsersChecked = false;
+      this.someUsersChecked = true;
     }
   }
 
@@ -92,7 +92,9 @@ export class CreateChannelComponent {
   }
 
   removeCurrentUserFromArray() {
-    return this.userService.userArray.filter(user => user.userId !== this.currentUser.userId);
+    return this.userService.userArray.filter(
+      (user) => user.userId !== this.currentUser.userId
+    );
   }
 
   /**
@@ -129,10 +131,6 @@ export class CreateChannelComponent {
     } else {
       this.usersToAdd = this.userService.userArray;
     }
-    // console.log("channelName", this.channelName);
-    // console.log("channelDescription", this.channelDescription);
-    // console.log("usersToAdd", this.usersToAdd);
-
 
     this.channelService.addChannel(
       this.channelName,
@@ -141,5 +139,4 @@ export class CreateChannelComponent {
     );
     this.close();
   }
-
 }
