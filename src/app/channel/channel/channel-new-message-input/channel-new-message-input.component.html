@@ -62,9 +62,17 @@
           class="tag-person mini-fab-btn"
           (click)="openPopup($event)"
         >
-          <mat-icon>alternate_email</mat-icon>
+          <mat-icon *ngIf="!isHash">alternate_email</mat-icon>
+          <mat-icon *ngIf="isHash">tag</mat-icon>
         </button>
-        <app-tagging *ngIf="isTag" (closePopup)="closePopup()" [isFromChannel]="true"> </app-tagging>
+        <app-tagging 
+          *ngIf="isTag" 
+          (closePopup)="closePopup()" 
+          [isFromChannel]="true" 
+          [isAt]="isAt"
+          [isHash]="isHash"
+        >
+        </app-tagging>
       </div>
     </div>
     <button

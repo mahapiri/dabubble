@@ -31,6 +31,8 @@ import { TaggingService } from '../services/tagging.service';
 import { ClickOutsideDirective } from '../directive/click-outside.directive';
 import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { EmojiPickerComponent } from '../chat/emoji-picker/emoji-picker.component';
+import { User } from '../../models/user.class';
+import { Channel } from '../../models/channel.class';
 
 @Component({
   selector: 'app-thread',
@@ -71,6 +73,8 @@ export class ThreadComponent implements OnInit, OnDestroy {
   notOpen: boolean = true;
   isTag: boolean = false;
   findTag: boolean = false;
+  isAt: boolean = false;
+  isHash: boolean = false;
 
   selectedThread$: Observable<Thread | null>;
   threadMessages$: Observable<ThreadMessage[]>;
@@ -96,6 +100,11 @@ export class ThreadComponent implements OnInit, OnDestroy {
         if (member && member.username) {
           this.addMemberToMessage(member.username);
         }
+        this.taggingService.channelSelectedThread$.subscribe((channel) => {
+          if (channel && channel.channelName) {
+            this.addChannelToMessage(channel);
+          }
+        })
       });
 
     this.scrollToBottom();
@@ -128,16 +137,42 @@ export class ThreadComponent implements OnInit, OnDestroy {
   /**
    * add member to message field
    */
-  addMemberToMessage(username: string) {
-    let mention = '';
+  addMemberToMessage(member: User) {
+    let mention = member.username;
+    let id = member.userId;
+    if (this.threadMessageText.includes(`@${mention}`)) {
+      return
+    }
+
     if (this.findTag) {
-      mention = `${username} `;
+      mention = `${mention} `;
       this.threadMessageText += `${mention}`;
-    } else if (!this.threadMessageText.includes(mention) && !this.findTag) {
-      mention = `@${username} `;
+    } else {
+      mention = `@${mention} `;
       this.threadMessageText += ` ${mention}`;
     }
   }
+
+
+  /**
+* add channel to message field
+*/
+  addChannelToMessage(channel: Channel) {
+    let mention = channel.channelName;
+
+    if (this.threadMessageText.includes(`#${mention}`)) {
+      return
+    }
+
+    if (this.findTag) {
+      mention = `${mention} `;
+      this.threadMessageText += `${mention}`;
+    } else {
+      mention = `#${mention} `;
+      this.threadMessageText += ` ${mention}`;
+    }
+  }
+
 
 
   /**
@@ -194,7 +229,8 @@ export class ThreadComponent implements OnInit, OnDestroy {
    */
   openPopup(event: Event) {
     event?.stopPropagation();
-    this.isTag = !this.isTag;
+    this.isTag = true
+    this.isAt = true;
   }
 
   /**
@@ -203,6 +239,8 @@ export class ThreadComponent implements OnInit, OnDestroy {
   closePopup() {
     this.isTag = false;
     this.findTag = false;
+    this.isAt = false;
+    this.isHash = false;
   }
 
   /**
@@ -251,15 +289,19 @@ export class ThreadComponent implements OnInit, OnDestroy {
       if (lastChar === '@') {
         this.findTag = true;
         this.isTag = true;
+        this.isAt = true;
       }
       if (lastChar === '#') {
         this.findTag = true;
         this.isTag = true;
+        this.isHash = true
       }
     } else if (this.findTag) {
       if (!this.threadMessageText.includes('@') && !this.threadMessageText.includes('#')) {
         this.isTag = false;
         this.findTag = false;
+        this.isAt = false;
+        this.isHash = false;
       }
     }
   }

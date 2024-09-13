@@ -28,6 +28,15 @@ export class TaggingService implements OnDestroy {
   public channelSelectedDirectMessage = new BehaviorSubject<any>(null);
   channelSelectedDirectMessage$ = this.channelSelectedDirectMessage.asObservable();
 
+  public channelSelectedThread = new BehaviorSubject<any>(null);
+  channelSelectedThread$ = this.channelSelectedThread.asObservable();
+
+  public channelSelectedNewMessage = new BehaviorSubject<any>(null);
+  channelSelectedNewMessage$ = this.channelSelectedNewMessage.asObservable();
+
+  public channelSelectedChannel = new BehaviorSubject<any>(null);
+  channelSelectedChannel$ = this.channelSelectedChannel.asObservable();
+
   currentChannelID: string = '';
   currentChannelMember: ChannelMember[] = [];
   currentUserlist: User[] = [];
@@ -50,11 +59,12 @@ export class TaggingService implements OnDestroy {
       }
     );
 
-    this.channelAllSubscription = this.userService.userChannels$.subscribe((channels) =>
+    this.channelAllSubscription = this.userService.userChannels$.subscribe((channels) => {
+      this.currentChannellist = []
       channels.forEach((channel) => {
         this.currentChannellist.push(channel);
       })
-
+    }
     )
 
     this.userSubscription = this.userList$.subscribe(user => {
@@ -121,10 +131,33 @@ export class TaggingService implements OnDestroy {
   }
 
 
-    /**
+
+
+  /**
    * get the selected channel
    */
   selectChannelDirectMessage(channel: Channel) {
     this.channelSelectedDirectMessage.next(channel);
+  }
+
+  /**
+   * get the selected channel
+   */
+  selectChannelThread(channel: Channel) {
+    this.channelSelectedThread.next(channel);
+  }
+
+  /**
+   * get the selected channel
+   */
+  selectChannelNewMessage(channel: Channel) {
+    this.channelSelectedNewMessage.next(channel);
+  }
+
+  /**
+   * get the selected channel
+   */
+  selectChannelChannel(channel: Channel) {
+    this.channelSelectedChannel.next(channel);
   }
 }
