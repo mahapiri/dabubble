@@ -36,11 +36,13 @@
 
     <div class="workspace-content">
       <div class="workspace-title">
-        <img src="../assets/img/workspace-logo.png" alt="Workspace Logo" />
+        <img src="assets/img/workspace-logo.png" alt="Workspace Logo" />
         <h4 class="n-h4 bold">Devspace</h4>
       </div>
       <div class="workspace-img" (click)="newMessage()">
-        <mat-icon class="message-icon" [class.bold-message]="this.sharedService.clickedNewMessage$ | async"
+        <mat-icon
+          class="message-icon"
+          [class.bold-message]="this.sharedService.clickedNewMessage$ | async"
           >edit_square</mat-icon
         >
       </div>
@@ -48,7 +50,14 @@
 
     <div class="mobile-padding height-100">
       <div class="channel-dm-master-section">
-        <div class="d-flex-col channel-master-section" [ngStyle] ="!openDm ? { 'max-height': '50%' } : { 'max-height': 'calc(100% - 32px)' }">
+        <div
+          class="d-flex-col channel-master-section"
+          [ngStyle]="
+            !openDm
+              ? { 'max-height': '50%' }
+              : { 'max-height': 'calc(100% - 32px)' }
+          "
+        >
           <div class="mb-12">
             <div class="channels-content">
               <div class="channels-section">

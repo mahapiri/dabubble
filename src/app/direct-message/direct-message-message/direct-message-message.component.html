@@ -8,14 +8,19 @@
         </div>
       </div>
     </div>
-    <div *ngIf="message.isFirstMessageOfDay === false" class="divider-container-none">
-    </div>
+    <div
+      *ngIf="message.isFirstMessageOfDay === false"
+      class="divider-container-none"
+    ></div>
 
     <div class="message" [ngClass]="{ 'bg-color': edit }">
       <div *ngIf="!edit" class="message" (mouseleave)="closeReactionMoreBtn()">
         <div id="reactionBar" class="reaction-bar">
-          <app-reaction-bar [isMyMessage]="isMyMessage" [message]="message"
-            (editSelected)="openEdit()"></app-reaction-bar>
+          <app-reaction-bar
+            [isMyMessage]="isMyMessage"
+            [message]="message"
+            (editSelected)="openEdit()"
+          ></app-reaction-bar>
         </div>
         <div class="message-wrapper">
           <img class="user-img" src="{{ message.authorImg }}" />
@@ -28,30 +33,48 @@
               </div>
             </div>
             <div class="text-bubble">
-              <ng-container *ngIf="directMessageService.isImage(message.text); else textContent">
+              <ng-container
+                *ngIf="
+                  directMessageService.isImage(message.text);
+                  else textContent
+                "
+              >
                 <img [src]="message.text" alt="Image" class="message-image" />
               </ng-container>
               <ng-template #textContent>{{ message.text }}</ng-template>
             </div>
-            <app-reaction-container [message]="message"></app-reaction-container>
+            <app-reaction-container
+              [message]="message"
+            ></app-reaction-container>
           </div>
         </div>
       </div>
 
       <div *ngIf="edit" class="message-wrapper">
-        <img class="user-img" src="./../../../{{ message.authorImg }}" />
+        <img class="user-img" src="{{ message.authorImg }}" />
         <div class="edit-textbox">
-          <textarea 
-            type="text" 
-            rows="3" 
+          <textarea
+            type="text"
+            rows="3"
             matInput
             [(ngModel)]="messageText"
-            ></textarea>
+          ></textarea>
           <div class="edit-options-wrapper">
-            <button mat-mini-fab class="emojis mini-fab-btn" (click)="openEmojiSet($event)">
+            <button
+              mat-mini-fab
+              class="emojis mini-fab-btn"
+              (click)="openEmojiSet($event)"
+            >
               <mat-icon>sentiment_satisfied</mat-icon>
-              <div *ngIf="isEmoji" class="emoji-container" appClickOutside (clickOutside)="closeEmojiSet()">
-                <app-emoji-picker (emojiSelected)="onEmojiSelected($event)"></app-emoji-picker>
+              <div
+                *ngIf="isEmoji"
+                class="emoji-container"
+                appClickOutside
+                (clickOutside)="closeEmojiSet()"
+              >
+                <app-emoji-picker
+                  (emojiSelected)="onEmojiSelected($event)"
+                ></app-emoji-picker>
               </div>
             </button>
             <div class="d-flex gap-32 btn-container">
@@ -59,7 +82,7 @@
                 Abbrechen
               </button>
               <button (click)="saveMessage()" class="btn-default btn-primary">
-                {{ messageText.trim().length === 0 ? 'Löschen' : 'Speichern' }}
+                {{ messageText.trim().length === 0 ? "Löschen" : "Speichern" }}
               </button>
             </div>
           </div>

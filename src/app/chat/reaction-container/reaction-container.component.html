@@ -5,9 +5,7 @@
         <button class="reaction-btn">
           <div class="reaction-info-menu">
             <img
-              [src]="
-                './../../../assets/reaction/' + reaction.reactionType + '.svg'
-              "
+              [src]="'assets/reaction/' + reaction.reactionType + '.svg'"
               [alt]="reaction.reactionType"
             />
             <div class="user-container">
@@ -42,9 +40,7 @@
             </ng-template>
           </div>
           <img
-            [src]="
-              './../../../assets/reaction/' + reaction.reactionType + '.svg'
-            "
+            [src]="'assets/reaction/' + reaction.reactionType + '.svg'"
             [alt]="reaction.reactionType"
           />
           <span class="reaction-count">{{ reaction.count }}</span>

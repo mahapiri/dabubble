@@ -11,7 +11,7 @@
     [ngClass]="{ 'active-reaction': getReaction(message.id, 'check') }"
     (click)="setReaction('check', message!)"
   >
-    <img src="./../../../assets/reaction/check.svg" alt="Check" />
+    <img src="assets/reaction/check.svg" alt="Check" />
   </button>
   <button
     class="mini-fab-btn"
@@ -19,7 +19,7 @@
     [ngClass]="{ 'active-reaction': getReaction(message.id, 'clap') }"
     (click)="setReaction('clap', message!)"
   >
-    <img src="./../../../assets/reaction/clap.svg" alt="Clap" />
+    <img src="assets/reaction/clap.svg" alt="Clap" />
   </button>
   <ng-container *ngIf="reactionService.moreBtn || isFromThread">
     <button
@@ -28,7 +28,7 @@
       [ngClass]="{ 'active-reaction': getReaction(message.id, 'nerd') }"
       (click)="setReaction('nerd', message!)"
     >
-      <img src="./../../../assets/reaction/nerd.svg" alt="Nerd" />
+      <img src="assets/reaction/nerd.svg" alt="Nerd" />
     </button>
     <button
       class="mini-fab-btn"
@@ -36,7 +36,7 @@
       [ngClass]="{ 'active-reaction': getReaction(message.id, 'rocket') }"
       (click)="setReaction('rocket', message!)"
     >
-      <img src="./../../../assets/reaction/rocket.svg" alt="Rocket" />
+      <img src="assets/reaction/rocket.svg" alt="Rocket" />
     </button>
   </ng-container>
 
@@ -49,7 +49,11 @@
     <mat-icon>add_reaction</mat-icon>
   </button>
   <button
-    *ngIf="isChannelMessage && (!isFromReactionContainer || !isFromReactionContainer) && !isFromThread"
+    *ngIf="
+      isChannelMessage &&
+      (!isFromReactionContainer || !isFromReactionContainer) &&
+      !isFromThread
+    "
     (click)="openThread()"
     class="mini-fab-btn"
     mat-mini-fab

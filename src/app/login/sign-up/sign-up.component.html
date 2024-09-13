@@ -1,44 +1,68 @@
 <header class="hide-on-mobile">
-  <img src="../../../assets/img/logo-with-font.png" alt="Logo Dabubble" class="logo">
+  <img src="assets/img/logo-with-font.png" alt="Logo Dabubble" class="logo" />
 </header>
 <div class="wrapper">
-  <img class="mobile-logo" src="../../../assets/img/logo-with-font.png" alt="">
+  <img class="mobile-logo" src="assets/img/logo-with-font.png" alt="" />
   <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
     <mat-card appearance="outlined" class="login-card">
-      <button class="arrow-back-button" routerLink="/log-in"><mat-icon class="icon">arrow_back</mat-icon></button>
+      <button class="arrow-back-button" routerLink="/log-in">
+        <mat-icon class="icon">arrow_back</mat-icon>
+      </button>
       <h1>Konto erstellen</h1>
-      <p>Mit deinem Namen und deiner E-Mail-Adresse hast du dein neues DABubble-Konto</p>
+      <p>
+        Mit deinem Namen und deiner E-Mail-Adresse hast du dein neues
+        DABubble-Konto
+      </p>
       <div class="name-input">
-        <img class="name-icon" src="../../../assets/img/person_filled.png" alt="">
-        <input type="text" placeholder="Name und Nachname" formControlName="userName">
+        <img class="name-icon" src="assets/img/person_filled.png" alt="" />
+        <input
+          type="text"
+          placeholder="Name und Nachname"
+          formControlName="userName"
+        />
       </div>
-      <span class="errormessage" *ngIf="invalidName">{{nameErrorMessage}}</span>
+      <span class="errormessage" *ngIf="invalidName">{{
+        nameErrorMessage
+      }}</span>
       <div class="mail-input">
-        <img class="mail-icon" src="../../../assets/img/mail.png" alt="">
-        <input type="text" placeholder="beispielname@email.com" formControlName="userEmail">
+        <img class="mail-icon" src="assets/img/mail.png" alt="" />
+        <input
+          type="text"
+          placeholder="beispielname@email.com"
+          formControlName="userEmail"
+        />
       </div>
-      <span class="errormessage" *ngIf="invalidMail">{{mailerrorMessage}}</span>
+      <span class="errormessage" *ngIf="invalidMail">{{
+        mailerrorMessage
+      }}</span>
       <div class="show-button-container">
-        <img class="password-icon" src="../../../assets/img/lock.png" alt="">
-        <input [type]="passwordVisible ? 'text' : 'password'" formControlName="userPassword" placeholder="Passwort">
+        <img class="password-icon" src="assets/img/lock.png" alt="" />
+        <input
+          [type]="passwordVisible ? 'text' : 'password'"
+          formControlName="userPassword"
+          placeholder="Passwort"
+        />
         <button type="button" (click)="showPassword()" mat-icon-button>
           <mat-icon>
-            @if ( passwordVisible ) {visibility}
-            @else {visibility_off}
+            @if ( passwordVisible ) {visibility} @else {visibility_off}
           </mat-icon>
         </button>
       </div>
-      <span class="errormessage" *ngIf="invalidPassword">{{passwordErrorMessage}}</span>
+      <span class="errormessage" *ngIf="invalidPassword">{{
+        passwordErrorMessage
+      }}</span>
 
-      <div><input formControlName="termsAccepted" type="checkbox">Ich stimme der <a routerLink="/privacy">Datenschutzerklärung</a> zu
+      <div>
+        <input formControlName="termsAccepted" type="checkbox" />Ich stimme der
+        <a routerLink="/privacy">Datenschutzerklärung</a> zu
       </div>
-      <span class="errormessage" *ngIf="invalidTerms">{{termsErrorMessage}}</span>
+      <span class="errormessage" *ngIf="invalidTerms">{{
+        termsErrorMessage
+      }}</span>
 
       <div class="next-button-container">
         <button type="submit" class="next-button">Weiter</button>
       </div>
-
-
     </mat-card>
   </form>
 </div>
