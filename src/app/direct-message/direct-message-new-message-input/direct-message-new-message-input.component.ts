@@ -24,6 +24,7 @@ import { TaggingComponent } from '../../chat/tagging/tagging.component';
 import { DirectMessageHeaderComponent } from '../direct-message-header/direct-message-header.component';
 import { Subscription } from 'rxjs';
 import { TaggingService } from '../../services/tagging.service';
+import { Channel } from '../../../models/channel.class';
 
 @Component({
   selector: 'app-direct-message-new-message-input',
@@ -67,6 +68,8 @@ export class DirectMessageNewMessageInputComponent
 
   isTag: boolean = false;
   findTag: boolean = false;
+  isAt: boolean = false;
+  isHash: boolean = false;
 
   /**
    * subscribes the current clicked profile
@@ -84,10 +87,15 @@ export class DirectMessageNewMessageInputComponent
     );
 
     this.taggingSubscription =
-      this.taggingService.memberSelectedChannel$.subscribe((member) => {
+      this.taggingService.memberSelectedDirectMessage$.subscribe((member) => {
         if (member && member.username) {
-          this.addMemberToMessage(member.username);
+          this.addMemberToMessage(member);
         }
+        this.taggingService.channelSelectedDirectMessage$.subscribe((channel) => {
+          if (channel && channel.channelName) {
+            this.addChannelToMessage(channel);
+          }
+        })
       });
 
     this.messageText = '';
@@ -97,17 +105,42 @@ export class DirectMessageNewMessageInputComponent
   /**
  * add member to message field
  */
-  addMemberToMessage(username: string) {
-    let mention = '';
-    if(this.findTag) {
-      mention = `${username} `;
+  addMemberToMessage(member: User) {
+    let mention = member.username;
+    let id = member.userId;
+    if (this.messageText.includes(`@${mention}`)) {
+      return
+    }
+
+    if (this.findTag) {
+      mention = `${mention} `;
       this.messageText += `${mention}`;
-    } else if(!this.messageText.includes(mention) && !this.findTag) {
-      mention = `@${username} `;
+    } else {
+      mention = `@${mention} `;
       this.messageText += ` ${mention}`;
     }
   }
 
+
+  /**
+  * add channel to message field
+  */
+  addChannelToMessage(channel: Channel) {
+    let mention = channel.channelName;
+
+    if (this.messageText.includes(`#${mention}`)) {
+      return
+    }
+
+    if (this.findTag) {
+      mention = `${mention} `;
+      this.messageText += `${mention}`;
+    } else {
+      mention = `#${mention} `;
+      this.messageText += ` ${mention}`;
+    }
+  }
+  
 
   /**
    * unsubscribes user subscription if DOM destroy
@@ -116,6 +149,7 @@ export class DirectMessageNewMessageInputComponent
     this.userSubscription.unsubscribe();
     this.taggingSubscription.unsubscribe();
   }
+
 
   /**
    * checks the valid of a message to start the newDmMessage function
@@ -132,6 +166,7 @@ export class DirectMessageNewMessageInputComponent
     this.uploadService.removeImg('direct-message-file-upload');
   }
 
+
   /**
    * open the Emoji Container
    */
@@ -142,6 +177,7 @@ export class DirectMessageNewMessageInputComponent
     }
   }
 
+
   /**
    * open the Emoji Container
    */
@@ -151,6 +187,7 @@ export class DirectMessageNewMessageInputComponent
     setTimeout(() => (this.notOpen = true), 1000);
   }
 
+
   /**
    * handles emoji selection from the EmojiPickerComponent
    */
@@ -158,6 +195,7 @@ export class DirectMessageNewMessageInputComponent
     this.messageText += emoji;
     this.closeEmojiSet();
   }
+
 
   /**
    * sends the message if the message is valid and the Enter key is pressed
@@ -170,6 +208,7 @@ export class DirectMessageNewMessageInputComponent
     }
   }
 
+
   /**
    * Handles file selection. When a file is chosen by the user, it passes the file selection event to the `uploadService` and sets the upload path.
    * @param {Event} event - The file selection event.
@@ -179,6 +218,7 @@ export class DirectMessageNewMessageInputComponent
     this.uploadService.onFileSelected(event, "directMessage");
     this.uploadService.uploadPath = this.uploadPath;
   }
+
 
   /**
    * calls the upload method if a file was chosen and saves the dawnload URL of the file to the messageText
@@ -190,37 +230,53 @@ export class DirectMessageNewMessageInputComponent
     }
   }
 
+
   /**
    * opens tagging
    */
   openTagging() {
-    const lastChar = this.messageText.slice(-1); 
-  
+    const lastChar = this.messageText.slice(-1);
+
     if (!this.findTag) {
       if (lastChar === '@') {
         this.findTag = true;
         this.isTag = true;
+        this.isAt = true;
       }
       if (lastChar === '#') {
         this.findTag = true;
         this.isTag = true;
+        this.isHash = true
       }
     } else if (this.findTag) {
       if (!this.messageText.includes('@') && !this.messageText.includes('#')) {
         this.isTag = false;
         this.findTag = false;
+        this.isAt = false;
+        this.isHash = false;
       }
     }
   }
-  
 
+
+  /**
+   * open the popup
+   * @param event 
+   */
   openPopup(event: Event) {
     event.stopPropagation();
     this.isTag = true;
+    this.isAt = true;
   }
 
+
+  /**
+   * close the popup
+   */
   closePopup() {
     this.isTag = false;
     this.findTag = false;
+    this.isAt = false;
+    this.isHash = false;
   }
 }

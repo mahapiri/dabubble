@@ -1,54 +1,88 @@
-<div class="popup-container tag-person-container" appClickOutside (clickOutside)="closeWindow()">
-  <div class="title-content">
-    <h4 class="n-h4">Leute erwähnen</h4>
-    <div class="icon-container">
-      <mat-icon class="close-icon" (click)="closeWindow()">close</mat-icon>
+<ng-container *ngIf="isAt">
+  <div class="popup-container tag-person-container" appClickOutside (clickOutside)="closeWindow()">
+    <div class="title-content">
+      <h4 class="n-h4">Leute erwähnen</h4>
+      <div class="icon-container">
+        <mat-icon class="close-icon" (click)="closeWindow()">close</mat-icon>
+      </div>
+    </div>
+    <input *ngIf="dmTag" [(ngModel)]="searchText" (ngModelChange)="searchUser()" (click)="searchUser()" type="text"
+      placeholder="Name eingeben">
+    <input *ngIf="!dmTag" [(ngModel)]="searchText" (ngModelChange)="searchMember()" (click)="searchMember()" type="text"
+      placeholder="Name eingeben">
+
+    <div class="profile-container">
+      <ng-container *ngIf="dmTag; else textContent">
+        <div *ngIf="userlist.length === 0">
+          <p class="n-p">Keine User gefunden</p>
+        </div>
+      </ng-container>
+      <ng-template #textContent>
+        <div *ngIf="filteredMembers.length === 0">
+          <p class="n-p">Keine User gefunden</p>
+        </div>
+      </ng-template>
+
+
+      <ng-container *ngIf="dmTag; else textList">
+        <div *ngFor="let member of userlist; let i = index" (click)="selectMemberToChannel(member)">
+          <div class="profile-content">
+            <div class="profile">
+              <img [src]="member.profileImage" alt="Character" class="profile-icon">
+              <div class="status-icon online" [ngClass]="member.state"></div>
+            </div>
+            <p class="n-p">
+              {{ member.username }}
+              <span *ngIf="member.username === currentUser">(Du)</span>
+            </p>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-template #textList>
+        <div *ngFor="let member of filteredMembers; let i = index" (click)="selectMemberToChannel(member)">
+          <div class="profile-content">
+            <div class="profile">
+              <img [src]="member.profileImage" alt="Character" class="profile-icon">
+              <div class="status-icon online" [ngClass]="member.state"></div>
+            </div>
+            <p class="n-p">
+              {{ member.username }}
+              <span *ngIf="member.username === currentUser">(Du)</span>
+            </p>
+          </div>
+        </div>
+      </ng-template>
     </div>
   </div>
-  <input [(ngModel)]="searchText" (ngModelChange)="searchMember()" (click)="searchMember()" type="text"
-    placeholder="Name eingeben">
+</ng-container>
 
-  <div class="profile-container">
-    <ng-container *ngIf="dmTag; else textContent">
-      <div *ngIf="userlist.length === 0">
-        <p class="n-p">Keine User gefunden im Userlist</p>
+<ng-container *ngIf="isHash">
+  <div class="popup-container tag-person-container" appClickOutside (clickOutside)="closeWindow()">
+    <div class="title-content">
+      <h4 class="n-h4">Channel erwähnen</h4>
+      <div class="icon-container">
+        <mat-icon class="close-icon" (click)="closeWindow()">close</mat-icon>
       </div>
-    </ng-container>
-    <ng-template #textContent>
-      <div *ngIf="filteredMembers.length === 0">
-        <p class="n-p">Keine User gefunden</p>
-      </div>
-    </ng-template>
+    </div>
+    <input [(ngModel)]="searchText" (ngModelChange)="searchChannel()" (click)="searchChannel()" type="text"
+      placeholder="Channel eingeben">
 
-    
-    <ng-container *ngIf="dmTag; else textList">
-      <div *ngFor="let member of userlist; let i = index" (click)="selectMemberToChannel(member)">
-        <div class="profile-content">
-          <div class="profile">
-            <img [src]="member.profileImage" alt="Character" class="profile-icon">
-            <div class="status-icon online" [ngClass]="member.state"></div>
+    <div class="profile-container">
+      <ng-container *ngIf="channellist.length === 0">
+        <p class="n-p">Keine Channels gefunden</p>
+      </ng-container>
+
+      <div *ngFor="let channel of channellist" (click)="selectChannel(channel)">
+        <div class="result-section">
+          <div class="result-header">
+            <div class="result-title">
+              <mat-icon class="result-icon">tag</mat-icon>
+              <p class="n-p">{{ channel.channelName }}</p>
+            </div>
           </div>
-          <p class="n-p">
-            {{ member.username }}
-            <span *ngIf="member.username === currentUser">(Du)</span>
-          </p>
         </div>
       </div>
-    </ng-container>
-
-    <ng-template #textList>
-      <div *ngFor="let member of filteredMembers; let i = index" (click)="selectMemberToChannel(member)">
-        <div class="profile-content">
-          <div class="profile">
-            <img [src]="member.profileImage" alt="Character" class="profile-icon">
-            <div class="status-icon online" [ngClass]="member.state"></div>
-          </div>
-          <p class="n-p">
-            {{ member.username }}
-            <span *ngIf="member.username === currentUser">(Du)</span>
-          </p>
-        </div>
-      </div>
-    </ng-template>
+    </div>
   </div>
-</div>
+</ng-container>

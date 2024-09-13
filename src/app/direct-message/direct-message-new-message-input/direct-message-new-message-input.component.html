@@ -59,12 +59,15 @@
       </button>
       <div>
         <button mat-mini-fab class="tag-person mini-fab-btn" (click)="openPopup($event)">
-          <mat-icon>alternate_email</mat-icon>
+          <mat-icon *ngIf="!isHash">alternate_email</mat-icon>
+          <mat-icon *ngIf="isHash">tag</mat-icon>
         </button>
         <app-tagging 
           *ngIf="isTag" 
           (closePopup)="closePopup()"
           [dmTag]="true"
+          [isAt]="isAt"
+          [isHash]="isHash"
         >
         </app-tagging>
       </div>

@@ -15,6 +15,7 @@ export class TaggingService implements OnDestroy {
   private userService: UserService = inject(UserService);
   private channelSubscription: Subscription = new Subscription();
   private userSubscription: Subscription = new Subscription();
+  private channelAllSubscription: Subscription = new Subscription();
   public memberSelectedChannel = new BehaviorSubject<any>(null);
   memberSelectedChannel$ = this.memberSelectedChannel.asObservable();
   public memberSelectedThread = new BehaviorSubject<any>(null);
@@ -24,9 +25,13 @@ export class TaggingService implements OnDestroy {
   public memberSelectedDirectMessage = new BehaviorSubject<any>(null);
   memberSelectedDirectMessage$ = this.memberSelectedDirectMessage.asObservable();
 
+  public channelSelectedDirectMessage = new BehaviorSubject<any>(null);
+  channelSelectedDirectMessage$ = this.channelSelectedDirectMessage.asObservable();
+
   currentChannelID: string = '';
   currentChannelMember: ChannelMember[] = [];
   currentUserlist: User[] = [];
+  currentChannellist: Channel[] = [];
   userList$ = this.userService.userList$;
 
   /**
@@ -45,12 +50,19 @@ export class TaggingService implements OnDestroy {
       }
     );
 
+    this.channelAllSubscription = this.userService.userChannels$.subscribe((channels) =>
+      channels.forEach((channel) => {
+        this.currentChannellist.push(channel);
+      })
+
+    )
+
     this.userSubscription = this.userList$.subscribe(user => {
       this.currentUserlist = [];
       user.forEach((profile) => {
         this.currentUserlist.push(profile);
       })
-    }) 
+    })
   }
 
   setActualProfileState(member: ChannelMember) {
@@ -69,6 +81,7 @@ export class TaggingService implements OnDestroy {
   ngOnDestroy(): void {
     this.channelSubscription.unsubscribe();
     this.userSubscription.unsubscribe();
+    this.channelAllSubscription.unsubscribe();
     // console.log('unsub');
   }
 
@@ -105,5 +118,13 @@ export class TaggingService implements OnDestroy {
    */
   selectMemberDirectMessage(member: ChannelMember) {
     this.memberSelectedDirectMessage.next(member);
+  }
+
+
+    /**
+   * get the selected channel
+   */
+  selectChannelDirectMessage(channel: Channel) {
+    this.channelSelectedDirectMessage.next(channel);
   }
 }
