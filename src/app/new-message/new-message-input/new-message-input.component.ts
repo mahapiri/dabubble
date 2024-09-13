@@ -104,10 +104,6 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
       mention = `@${username} `;
       this.messageText += ` ${mention}`;
     }
-
-    if (!this.messageText.includes(mention)) {
-
-    }
   }
 
 

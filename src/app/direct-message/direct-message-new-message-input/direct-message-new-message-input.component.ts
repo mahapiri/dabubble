@@ -106,10 +106,6 @@ export class DirectMessageNewMessageInputComponent
       mention = `@${username} `;
       this.messageText += ` ${mention}`;
     }
-
-    if (!this.messageText.includes(mention)) {
-
-    }
   }
 
 
