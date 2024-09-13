@@ -3,7 +3,13 @@
     {
       "target": "dabubble",
       "source": ".",
-      "frameworksBackend": {}
+      "frameworksBackend": {},
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
     }
   ]
 }
