@@ -42,6 +42,7 @@ import { User } from '../../../../models/user.class';
 export class ChannelNewMessageInputComponent implements OnInit {
   public taggingService: TaggingService = inject(TaggingService);
   private taggingSubscription: Subscription = new Subscription();
+  private channelSubscription: Subscription = new Subscription();
 
   @Input() channel!: Channel;
   @Output() messageCreated: EventEmitter<void> = new EventEmitter<void>();
@@ -63,17 +64,17 @@ export class ChannelNewMessageInputComponent implements OnInit {
    * subscribes selected member
    */
   ngOnInit() {
-    this.taggingSubscription =
-      this.taggingService.memberSelectedChannel$.subscribe((member) => {
-        if (member && member.username) {
-          this.addMemberToMessage(member.username);
-        }
-        this.taggingService.channelSelectedChannel$.subscribe((channel) => {
-          if (channel && channel.channelName) {
-            this.addChannelToMessage(channel);
-          }
-        })
-      });
+    this.taggingSubscription = this.taggingService.memberSelectedChannel$.subscribe((member) => {
+      if (member && member.username) {
+        this.addMemberToMessage(member);
+      }
+    });
+    
+    this.channelSubscription = this.taggingService.channelSelectedChannel$.subscribe((channel) => {
+      if (channel && channel.channelName) {
+        this.addChannelToMessage(channel);
+      }
+    });
     this.messageText = ''; // testing
   }
 
@@ -82,10 +83,6 @@ export class ChannelNewMessageInputComponent implements OnInit {
    */
   addMemberToMessage(member: User) {
     let mention = member.username;
-    let id = member.userId;
-    if (this.messageText.includes(`@${mention}`)) {
-      return
-    }
 
     if (this.findTag) {
       mention = `${mention} `;
@@ -103,10 +100,6 @@ export class ChannelNewMessageInputComponent implements OnInit {
   addChannelToMessage(channel: Channel) {
     let mention = channel.channelName;
 
-    if (this.messageText.includes(`#${mention}`)) {
-      return
-    }
-
     if (this.findTag) {
       mention = `${mention} `;
       this.messageText += `${mention}`;
@@ -122,6 +115,7 @@ export class ChannelNewMessageInputComponent implements OnInit {
    */
   ngOnDestroy(): void {
     this.taggingSubscription.unsubscribe();
+    this.channelSubscription.unsubscribe();
   }
 
   /** Sends the text in the input field to the Channel Collection in the Backend. Trims the message from whitespace, ensures input is not empty, clears the input field after send */
@@ -159,7 +153,8 @@ export class ChannelNewMessageInputComponent implements OnInit {
    */
   openPopup(event: Event) {
     event?.stopPropagation();
-    this.isTag = true;
+    this.isTag = !this.isTag;
+    this.isAt = true;
   }
 
   /**

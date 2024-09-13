@@ -144,11 +144,11 @@ export class TaggingComponent implements OnInit, OnDestroy {
     if (this.dmTag) {
       this.taggingService.selectChannelDirectMessage(channel);
     } else if (this.isFromThread) {
-
+      this.taggingService.selectChannelThread(channel);
     } else if (this.isNewMessage) {
-
+      this.taggingService.selectChannelNewMessage(channel);
     } else if(this.isFromChannel) {
-
+      this.taggingService.selectChannelChannel(channel);
     }
   
     this.closeWindow();

@@ -56,6 +56,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
   private messageIdSubscription: Subscription = new Subscription();
   private searchWordSubscription: Subscription = new Subscription();
   private taggingSubscription: Subscription = new Subscription();
+  private channelSubscription: Subscription = new Subscription();
   private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
   messageText: string = '';
@@ -83,17 +84,17 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.taggingSubscription =
-      this.taggingService.memberSelectedChannel$.subscribe((member) => {
-        if (member && member.username) {
-          this.addMemberToMessage(member.username);
-        }
-        this.taggingService.channelSelectedNewMessage$.subscribe((channel) => {
-          if (channel && channel.channelName) {
-            this.addChannelToMessage(channel);
-          }
-        })
-      });
+    this.taggingSubscription = this.taggingService.memberSelectedNewMessage$.subscribe((member) => {
+      if (member && member.username) {
+        this.addMemberToMessage(member);
+      }
+    });
+    
+    this.channelSubscription = this.taggingService.channelSelectedNewMessage$.subscribe((channel) => {
+      if (channel && channel.channelName) {
+        this.addChannelToMessage(channel);
+      }
+    });
 
     this.messageText = ''; // testing
   }
@@ -104,10 +105,6 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
    */
   addMemberToMessage(member: User) {
     let mention = member.username;
-    let id = member.userId;
-    if (this.messageText.includes(`@${mention}`)) {
-      return
-    }
 
     if (this.findTag) {
       mention = `${mention} `;
@@ -124,10 +121,6 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
 */
   addChannelToMessage(channel: Channel) {
     let mention = channel.channelName;
-
-    if (this.messageText.includes(`#${mention}`)) {
-      return
-    }
 
     if (this.findTag) {
       mention = `${mention} `;
@@ -148,6 +141,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
     this.searchWordSubscription.unsubscribe();
     this.messageIdSubscription.unsubscribe();
     this.taggingSubscription.unsubscribe();
+    this.channelSubscription.unsubscribe();
     this.messageText = '';
   }
 
@@ -308,7 +302,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
    */
   openPopup(event: Event) {
     event?.stopPropagation();
-    this.isTag = true;
+    this.isTag = !this.isTag;
     this.isAt = true;
   }
 

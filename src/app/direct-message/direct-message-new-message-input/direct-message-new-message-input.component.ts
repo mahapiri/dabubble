@@ -54,6 +54,7 @@ export class DirectMessageNewMessageInputComponent
   public uploadService: UploadService = inject(UploadService);
   private userSubscription: Subscription = new Subscription();
   private taggingSubscription: Subscription = new Subscription();
+  private channelSubscription: Subscription = new Subscription();
   uploadPath: string = 'direct-message';
 
   profile: Partial<User> = {};
@@ -86,18 +87,18 @@ export class DirectMessageNewMessageInputComponent
       }
     );
 
-    this.taggingSubscription =
-      this.taggingService.memberSelectedDirectMessage$.subscribe((member) => {
-        if (member && member.username) {
-          this.addMemberToMessage(member);
-        }
-        this.taggingService.channelSelectedDirectMessage$.subscribe((channel) => {
-          if (channel && channel.channelName) {
-            this.addChannelToMessage(channel);
-          }
-        })
-      });
-
+    this.taggingSubscription = this.taggingService.memberSelectedDirectMessage$.subscribe((member) => {
+      if (member && member.username) {
+        this.addMemberToMessage(member);
+      }
+    });
+    
+    this.channelSubscription = this.taggingService.channelSelectedDirectMessage$.subscribe((channel) => {
+      if (channel && channel.channelName) {
+        this.addChannelToMessage(channel);
+      }
+    });
+    
     this.messageText = '';
   }
 
@@ -107,10 +108,6 @@ export class DirectMessageNewMessageInputComponent
  */
   addMemberToMessage(member: User) {
     let mention = member.username;
-    let id = member.userId;
-    if (this.messageText.includes(`@${mention}`)) {
-      return
-    }
 
     if (this.findTag) {
       mention = `${mention} `;
@@ -128,10 +125,6 @@ export class DirectMessageNewMessageInputComponent
   addChannelToMessage(channel: Channel) {
     let mention = channel.channelName;
 
-    if (this.messageText.includes(`#${mention}`)) {
-      return
-    }
-
     if (this.findTag) {
       mention = `${mention} `;
       this.messageText += `${mention}`;
@@ -148,6 +141,7 @@ export class DirectMessageNewMessageInputComponent
   ngOnDestroy(): void {
     this.userSubscription.unsubscribe();
     this.taggingSubscription.unsubscribe();
+    this.channelSubscription.unsubscribe();
   }
 
 
@@ -265,7 +259,7 @@ export class DirectMessageNewMessageInputComponent
    */
   openPopup(event: Event) {
     event.stopPropagation();
-    this.isTag = true;
+    this.isTag = !this.isTag;
     this.isAt = true;
   }
 

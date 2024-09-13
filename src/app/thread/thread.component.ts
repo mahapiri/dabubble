@@ -66,6 +66,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
   uploadService: UploadService = inject(UploadService);
   public taggingService: TaggingService = inject(TaggingService);
   private taggingSubscription: Subscription = new Subscription();
+  private channelSubscription: Subscription = new Subscription();
   uploadPath: string = 'threads';
 
   threadMessageText: string = '';
@@ -95,17 +96,17 @@ export class ThreadComponent implements OnInit, OnDestroy {
       this.answerCount = count;
     });
 
-    this.taggingSubscription =
-      this.taggingService.memberSelectedThread$.subscribe((member) => {
-        if (member && member.username) {
-          this.addMemberToMessage(member.username);
-        }
-        this.taggingService.channelSelectedThread$.subscribe((channel) => {
-          if (channel && channel.channelName) {
-            this.addChannelToMessage(channel);
-          }
-        })
-      });
+    this.taggingSubscription = this.taggingService.memberSelectedThread$.subscribe((member) => {
+      if (member && member.username) {
+        this.addMemberToMessage(member);
+      }
+    });
+    
+    this.channelSubscription = this.taggingService.channelSelectedThread$.subscribe((channel) => {
+      if (channel && channel.channelName) {
+        this.addChannelToMessage(channel);
+      }
+    });
 
     this.scrollToBottom();
   }
@@ -132,6 +133,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     this.taggingSubscription.unsubscribe();
+    this.channelSubscription.unsubscribe();
   }
 
   /**
@@ -139,10 +141,6 @@ export class ThreadComponent implements OnInit, OnDestroy {
    */
   addMemberToMessage(member: User) {
     let mention = member.username;
-    let id = member.userId;
-    if (this.threadMessageText.includes(`@${mention}`)) {
-      return
-    }
 
     if (this.findTag) {
       mention = `${mention} `;
@@ -159,10 +157,6 @@ export class ThreadComponent implements OnInit, OnDestroy {
 */
   addChannelToMessage(channel: Channel) {
     let mention = channel.channelName;
-
-    if (this.threadMessageText.includes(`#${mention}`)) {
-      return
-    }
 
     if (this.findTag) {
       mention = `${mention} `;
@@ -229,7 +223,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
    */
   openPopup(event: Event) {
     event?.stopPropagation();
-    this.isTag = true
+    this.isTag = !this.isTag;
     this.isAt = true;
   }
 
