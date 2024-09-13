@@ -17,6 +17,7 @@
     placeholder="Nachricht an {{ channel.channelName }}"
     rows="3"
     (keydown)="onKeyDown($event)"
+    (ngModelChange)="openTagging()"
   ></textarea>
   }
 
@@ -63,7 +64,7 @@
         >
           <mat-icon>alternate_email</mat-icon>
         </button>
-        <app-tagging *ngIf="isTag" (closePopup)="closePopup()"> </app-tagging>
+        <app-tagging *ngIf="isTag" (closePopup)="closePopup()" [isFromChannel]="true"> </app-tagging>
       </div>
     </div>
     <button

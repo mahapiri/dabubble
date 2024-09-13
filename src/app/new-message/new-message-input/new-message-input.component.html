@@ -4,7 +4,7 @@
     <mat-icon (click)="this.uploadService.removeImg('new-message-file-upload')" class="close-icon pos-relative">close</mat-icon>
     }@else {
     <textarea [(ngModel)]="messageText" matInput type="text" placeholder="Starte eine neue Nachricht" rows="3"
-        (keydown)="onKeyDown($event)"></textarea>
+        (keydown)="onKeyDown($event)" (ngModelChange)="openTagging()"></textarea>
     }
     <div class="message-controls">
         <div class="add-elements">
@@ -21,7 +21,7 @@
                     <app-emoji-picker (emojiSelected)="onEmojiSelected($event)"></app-emoji-picker>
                 </div>
             </button>
-            <div *ngIf="this.newMessageService.isChannel && searchword.length !== 0">
+            <div>
                 <button mat-mini-fab class="tag-person mini-fab-btn" (click)="openPopup($event)">
                     <mat-icon>alternate_email</mat-icon>
                 </button>

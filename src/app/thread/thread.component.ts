@@ -70,6 +70,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
   isEmoji: boolean = false;
   notOpen: boolean = true;
   isTag: boolean = false;
+  findTag: boolean = false;
 
   selectedThread$: Observable<Thread | null>;
   threadMessages$: Observable<ThreadMessage[]>;
@@ -128,11 +129,16 @@ export class ThreadComponent implements OnInit, OnDestroy {
    * add member to message field
    */
   addMemberToMessage(username: string) {
-    const mention = `@${username} `;
-    if (!this.threadMessageText.includes(mention)) {
+    let mention = '';
+    if (this.findTag) {
+      mention = `${username} `;
+      this.threadMessageText += `${mention}`;
+    } else if (!this.threadMessageText.includes(mention) && !this.findTag) {
+      mention = `@${username} `;
       this.threadMessageText += ` ${mention}`;
     }
   }
+
 
   /**
    * calls the onFileSelected method and sets the uploadPath to "channel"
@@ -196,6 +202,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
    */
   closePopup() {
     this.isTag = false;
+    this.findTag = false;
   }
 
   /**
@@ -232,5 +239,28 @@ export class ThreadComponent implements OnInit, OnDestroy {
  */
   isImageUrl(url: any): boolean {
     return url.startsWith('https://firebasestorage.googleapis.com/');
+  }
+
+  /**
+  * opens tagging
+  */
+  openTagging() {
+    const lastChar = this.threadMessageText.slice(-1);
+
+    if (!this.findTag) {
+      if (lastChar === '@') {
+        this.findTag = true;
+        this.isTag = true;
+      }
+      if (lastChar === '#') {
+        this.findTag = true;
+        this.isTag = true;
+      }
+    } else if (this.findTag) {
+      if (!this.threadMessageText.includes('@') && !this.threadMessageText.includes('#')) {
+        this.isTag = false;
+        this.findTag = false;
+      }
+    }
   }
 }

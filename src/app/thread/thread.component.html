@@ -101,6 +101,7 @@
         placeholder="Antworten..."
         rows="3"
         (keydown)="onKeyDown($event)"
+        (ngModelChange)="openTagging()"
       ></textarea>
       }
       <div class="message-controls">
