@@ -17,6 +17,7 @@
     placeholder="Nachricht an {{ channel.channelName }}"
     rows="3"
     (keydown)="onKeyDown($event)"
+    (ngModelChange)="openTagging()"
   ></textarea>
   }
 
