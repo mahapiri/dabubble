@@ -64,6 +64,8 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
   notOpen: boolean = true;
   isTag: boolean = false;
   findTag: boolean = false;
+  isAt: boolean = false;
+  isHash: boolean = false;
   searchword: string = '';
 
   constructor() {
@@ -86,6 +88,11 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
         if (member && member.username) {
           this.addMemberToMessage(member.username);
         }
+        this.taggingService.channelSelectedNewMessage$.subscribe((channel) => {
+          if (channel && channel.channelName) {
+            this.addChannelToMessage(channel);
+          }
+        })
       });
 
     this.messageText = ''; // testing
@@ -95,16 +102,43 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
   /**
    * add member to message field
    */
-  addMemberToMessage(username: string) {
-    let mention = '';
+  addMemberToMessage(member: User) {
+    let mention = member.username;
+    let id = member.userId;
+    if (this.messageText.includes(`@${mention}`)) {
+      return
+    }
+
     if (this.findTag) {
-      mention = `${username} `;
+      mention = `${mention} `;
       this.messageText += `${mention}`;
-    } else if (!this.messageText.includes(mention) && !this.findTag) {
-      mention = `@${username} `;
+    } else {
+      mention = `@${mention} `;
       this.messageText += ` ${mention}`;
     }
   }
+
+
+  /**
+* add channel to message field
+*/
+  addChannelToMessage(channel: Channel) {
+    let mention = channel.channelName;
+
+    if (this.messageText.includes(`#${mention}`)) {
+      return
+    }
+
+    if (this.findTag) {
+      mention = `${mention} `;
+      this.messageText += `${mention}`;
+    } else {
+      mention = `#${mention} `;
+      this.messageText += ` ${mention}`;
+    }
+  }
+
+
 
 
   /**
@@ -274,7 +308,8 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
    */
   openPopup(event: Event) {
     event?.stopPropagation();
-    this.isTag = !this.isTag;
+    this.isTag = true;
+    this.isAt = true;
   }
 
 
@@ -284,6 +319,8 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
   closePopup() {
     this.isTag = false;
     this.findTag = false;
+    this.isAt = false;
+    this.isHash = false;
   }
 
 
@@ -297,15 +334,19 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
       if (lastChar === '@') {
         this.findTag = true;
         this.isTag = true;
+        this.isAt = true;
       }
       if (lastChar === '#') {
         this.findTag = true;
         this.isTag = true;
+        this.isHash = true
       }
     } else if (this.findTag) {
       if (!this.messageText.includes('@') && !this.messageText.includes('#')) {
         this.isTag = false;
         this.findTag = false;
+        this.isAt = false;
+        this.isHash = false;
       }
     }
   }
