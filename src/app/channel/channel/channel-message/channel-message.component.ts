@@ -19,6 +19,7 @@ import { ReactionService } from '../../../services/reaction.service';
 import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { EmojiPickerComponent } from '../../../chat/emoji-picker/emoji-picker.component';
 import { ClickOutsideDirective } from '../../../directive/click-outside.directive';
+import { UploadService } from '../../../services/upload.service';
 
 @Component({
   selector: 'app-channel-message',
@@ -63,7 +64,8 @@ export class ChannelMessageComponent {
     private threadService: ThreadService,
     public threadMessageService: ThreadMessageService,
     private cdRef: ChangeDetectorRef,
-    private reactionService: ReactionService
+    private reactionService: ReactionService,
+    public uploadService: UploadService
   ) {}
 
   /**

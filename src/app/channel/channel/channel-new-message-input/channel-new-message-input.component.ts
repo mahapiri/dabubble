@@ -57,24 +57,27 @@ export class ChannelNewMessageInputComponent implements OnInit {
   findTag: boolean = false;
   isAt: boolean = false;
   isHash: boolean = false;
+  fileUrl: string = '';
 
-  constructor(private channelMessageService: ChannelMessageService) { }
+  constructor(private channelMessageService: ChannelMessageService) {}
 
   /**
    * subscribes selected member
    */
   ngOnInit() {
-    this.taggingSubscription = this.taggingService.memberSelectedChannel$.subscribe((member) => {
-      if (member && member.username) {
-        this.addMemberToMessage(member);
-      }
-    });
-    
-    this.channelSubscription = this.taggingService.channelSelectedChannel$.subscribe((channel) => {
-      if (channel && channel.channelName) {
-        this.addChannelToMessage(channel);
-      }
-    });
+    this.taggingSubscription =
+      this.taggingService.memberSelectedChannel$.subscribe((member) => {
+        if (member && member.username) {
+          this.addMemberToMessage(member);
+        }
+      });
+
+    this.channelSubscription =
+      this.taggingService.channelSelectedChannel$.subscribe((channel) => {
+        if (channel && channel.channelName) {
+          this.addChannelToMessage(channel);
+        }
+      });
     this.messageText = ''; // testing
   }
 
@@ -93,10 +96,9 @@ export class ChannelNewMessageInputComponent implements OnInit {
     }
   }
 
-
   /**
-* add channel to message field
-*/
+   * add channel to message field
+   */
   addChannelToMessage(channel: Channel) {
     let mention = channel.channelName;
 
@@ -109,7 +111,6 @@ export class ChannelNewMessageInputComponent implements OnInit {
     }
   }
 
-
   /**
    * unsubscribes selected member
    */
@@ -118,11 +119,15 @@ export class ChannelNewMessageInputComponent implements OnInit {
     this.channelSubscription.unsubscribe();
   }
 
-  /** Sends the text in the input field to the Channel Collection in the Backend. Trims the message from whitespace, ensures input is not empty, clears the input field after send */
+  /** Sends the text and an uploaded image (if selected) in the input field to the Channel Collection in the Backend. Trims the message from whitespace, ensures input is not empty, clears the input field after send */
   async sendMessage() {
-    await this.checkPictureUpload();
-    if (this.messageText.trim()) {
-      await this.channelMessageService.addMessage(this.messageText);
+    this.fileUrl = await this.checkPictureUpload();
+
+    if (this.messageText.trim() || this.fileUrl) {
+      await this.channelMessageService.addMessage(
+        this.messageText,
+        this.fileUrl
+      );
       this.messageText = '';
     }
     this.messageCreated.emit();
@@ -139,13 +144,14 @@ export class ChannelNewMessageInputComponent implements OnInit {
   }
 
   /**
-   * calls the upload method if a file was chosen and saves the download URL of the file to the messageText
+   * calls the upload method if a file was chosen and returns the download file or an empty string
    */
   async checkPictureUpload() {
     if (this.uploadService.channelFileChosen) {
       await this.uploadService.uploadPicture();
-      this.messageText = this.uploadService.downloadURL;
+      return this.uploadService.downloadURL;
     }
+    return '';
   }
 
   /**
@@ -205,10 +211,9 @@ export class ChannelNewMessageInputComponent implements OnInit {
     this.closeEmojiSet();
   }
 
-
   /**
-* opens tagging
-*/
+   * opens tagging
+   */
   openTagging() {
     const lastChar = this.messageText.slice(-1);
 
@@ -221,7 +226,7 @@ export class ChannelNewMessageInputComponent implements OnInit {
       if (lastChar === '#') {
         this.findTag = true;
         this.isTag = true;
-        this.isHash = true
+        this.isHash = true;
       }
     } else if (this.findTag) {
       if (!this.messageText.includes('@') && !this.messageText.includes('#')) {

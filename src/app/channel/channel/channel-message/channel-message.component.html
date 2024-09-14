@@ -33,6 +33,17 @@
           </div>
 
           <div *ngIf="edit" class="edit-textbox">
+            <div
+              *ngIf="uploadService.channelFileChosen"
+              class="img-upload-container"
+            >
+              <img [src]="this.uploadService.currentImg$ | async" alt="" />
+              <mat-icon
+                (click)="this.uploadService.removeImg('file-upload')"
+                class="close-icon pos-relative"
+                >close</mat-icon
+              >
+            </div>
             <textarea
               [(ngModel)]="channelMessage.text"
               type="text"
@@ -68,11 +79,10 @@
             </div>
           </div>
           <div *ngIf="!edit" class="text-bubble">
-            @if (this.isImageUrl(channelMessage.text)) {
-            <img class="channel-upload" [src]="channelMessage.text" alt="" />
-            }@else {
+            <div *ngIf="isImageUrl(channelMessage.file)">
+              <img class="channel-upload" [src]="channelMessage.file" alt="" />
+            </div>
             {{ channelMessage.text }}
-            }
           </div>
 
           <div *ngIf="!edit && answerCount > 0" class="answer-wrapper">

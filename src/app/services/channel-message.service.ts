@@ -31,7 +31,6 @@ export class ChannelMessageService {
   selectedChannelMessage$ = this.selectedChannelMessage.asObservable();
 
   previousDate: string | null = null;
-
   channelMessages: ChannelMessage[] = [];
   public messageListUnsubscribe: Unsubscribe | undefined;
   private userSubscription!: Subscription;
@@ -45,17 +44,7 @@ export class ChannelMessageService {
     private userService: UserService,
     private chatService: ChatService,
     private channelService: ChannelService
-  ) {
-    /*    this.selectedChannel = this.channelService.selectedChannel$.subscribe(
-      (channel) => {
-        if (channel) {
-          
-          this.channelService.setChannelId(channel);
-          this.subMessageList();
-        }
-      }
-    ); */
-  }
+  ) {}
 
   /**
    * Sets the selected message, when clicked to answer.
@@ -71,12 +60,13 @@ export class ChannelMessageService {
    * @param {string} text - Content of the message.
    * @returns {Promise<void>} - A promise that resolves when the message has been added and its ID has been updated.
    */
-  async addMessage(text: string): Promise<void> {
+  async addMessage(text: string, fileUrl: string): Promise<void> {
     this.userSubscription = this.userService.currentUser$.subscribe(
       async (currentUser) => {
         if (currentUser) {
           const newMessage: ChannelMessage = this.setMessageWithUser(
             text,
+            fileUrl,
             currentUser
           );
           const messageRef = await addDoc(
@@ -151,7 +141,7 @@ export class ChannelMessageService {
       authorId: data['authorId'],
       profileImg: data['profileImg'],
       reaction: [],
-      file: '',
+      file: data['file'],
       isFirstMessageOfDay: false,
     });
   }
@@ -164,7 +154,11 @@ export class ChannelMessageService {
    * @param {User} user - The user object with the info about the message author
    * @returns {ChannelMessage} - A new `ChannelMessage` object with the provided text, user information, and the current date and time.
    */
-  setMessageWithUser(text: string, user: User): ChannelMessage {
+  setMessageWithUser(
+    text: string,
+    fileUrl: string,
+    user: User
+  ): ChannelMessage {
     const now = new Date();
 
     const timeOptions: Intl.DateTimeFormatOptions = {
@@ -182,7 +176,7 @@ export class ChannelMessageService {
       authorId: user.userId,
       profileImg: user.profileImage,
       reaction: [],
-      file: '',
+      file: fileUrl,
       isFirstMessageOfDay: false,
     });
   }
