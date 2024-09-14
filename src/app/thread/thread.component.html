@@ -26,12 +26,6 @@
     <mat-list class="main-chat">
       <div class="initial-message-container">
         <mat-list-item>
-          <!-- <div id="reactionBar" class="reaction-bar">
-            <button class="mini-fab-btn" mat-mini-fab>
-              <mat-icon>add_reaction</mat-icon>
-            </button>
-          </div> -->
-
           <div class="message-wrapper no-hover">
             <img
               class="user-img"
@@ -50,11 +44,15 @@
                 </div>
               </div>
               <div class="text-bubble">
-                @if (this.isImageUrl(selectedThread.replyToMessage?.text)) {
-                  <img class="channel-upload" [src]="selectedThread.replyToMessage?.text" alt="" />
-                }@else {
-                  {{ selectedThread.replyToMessage?.text }}
-                }
+                <div *ngIf="isImageUrl(selectedThread.replyToMessage?.file)">
+                  <img
+                    class="thread-upload"
+                    [src]="selectedThread.replyToMessage?.file"
+                    alt="Img"
+                  />
+                </div>
+
+                {{ selectedThread.replyToMessage?.text }}
               </div>
               <div class="reaction-wrapper"></div>
             </div>
@@ -144,8 +142,8 @@
             class="tag-person mini-fab-btn"
             (click)="openPopup($event)"
           >
-          <mat-icon *ngIf="!isHash">alternate_email</mat-icon>
-          <mat-icon *ngIf="isHash">tag</mat-icon>
+            <mat-icon *ngIf="!isHash">alternate_email</mat-icon>
+            <mat-icon *ngIf="isHash">tag</mat-icon>
           </button>
           <app-tagging
             *ngIf="isTag"

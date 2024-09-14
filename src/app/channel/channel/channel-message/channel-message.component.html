@@ -79,7 +79,11 @@
           </div>
           <div *ngIf="!edit" class="text-bubble">
             <div *ngIf="isImageUrl(channelMessage.file)">
-              <img class="channel-upload" [src]="channelMessage.file" alt="" />
+              <img
+                class="channel-upload"
+                [src]="channelMessage.file"
+                alt="Img"
+              />
             </div>
             {{ channelMessage.text }}
           </div>

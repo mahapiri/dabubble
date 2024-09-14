@@ -85,11 +85,11 @@
             </div>
           </div>
           <div *ngIf="!edit" class="text-bubble">
-            @if (this.isImageUrl(threadMessage.text)) {
-            <img class="thread-upload" [src]="threadMessage.text" alt="" />
-            }@else {
+            <div *ngIf="isImageUrl(threadMessage.file)">
+              <img class="thread-upload" [src]="threadMessage.file" alt="Img" />
+            </div>
+
             {{ threadMessage.text }}
-            }
           </div>
           <app-reaction-container
             *ngIf="!edit"

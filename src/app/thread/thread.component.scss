@@ -304,9 +304,9 @@ mat-card-footer {
   top: -10px;
 }
 
-.channel-upload {
+.thread-upload {
   max-height: 230px;
-  max-width: 400px;
+  max-width: 230px;
 }
 
 /* Smartphones - - - - - - - - - */
@@ -367,10 +367,4 @@ mat-card-footer {
     gap: 10px;
     padding: 16px 16px 16px 16px;
   }
-
-  .channel-upload {
-    max-height: 230px;
-    max-width: 230px;
-  }
-
 }
