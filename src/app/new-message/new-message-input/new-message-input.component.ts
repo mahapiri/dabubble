@@ -203,7 +203,6 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
 
             if (channel) {
               this.createChannelMsg(channel, this.fileUrl);
-              console.log(this.fileUrl)
             }
           } else if (!this.newMessageService.isChannel && id) {
             const profile = await this.userService.getUserById(id);
