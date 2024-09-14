@@ -193,11 +193,9 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
    */
   async createMessage(event: Event) {
     event.stopPropagation();
-    await this.checkPictureUpload();
+    this.fileUrl = await this.checkPictureUpload();
 
-    if (!this.messageText.trim() && !this.uploadService.dmFileChosen) {
-      console.warn('The message field is empty. Please type a message!');
-    } else {
+    if (this.messageText.trim() || this.fileUrl) {
       this.messageIdSubscription = this.newMessageService.messageId$
         .pipe(take(1))
         .subscribe(async (id) => {
@@ -205,18 +203,17 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
             const channel = await this.channelService.getChannelById(id);
 
             if (channel) {
-              this.createChannelMsg(channel);
+              this.createChannelMsg(channel, this.fileUrl);
             }
           } else if (!this.newMessageService.isChannel && id) {
             const profile = await this.userService.getUserById(id);
-            // console.log(id);
             if (profile) {
-              this.createUserMsg(profile);
+              this.createUserMsg(profile, this.fileUrl);
             }
           }
         });
     }
-    this.uploadService.removeImg('new-message-file-upload');
+    //this.uploadService.removeImg('new-message-file-upload');
     setTimeout(() => this.messageIdSubscription.unsubscribe(), 100);
   }
 
@@ -224,7 +221,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
    * Creates a direct message with the specified user profile.
    * @param profile
    */
-  async createUserMsg(profile: User) {
+  async createUserMsg(profile: User, fileUrl: string) {
     this.sharedService.setSelectProfile(true);
     await this.directMessageService.openDmFromUser(profile);
     this.chatService.setIsChannel(false);
@@ -232,7 +229,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
     this.sharedService.setClickedNewMessage(false);
     this.sharedService.setSelectedUserIndex(profile.userId);
     this.cdr.detectChanges();
-    this.sendMessage();
+    this.sendMessage(fileUrl);
     setTimeout(() => {
       this.chatService.handleWindowChangeOnMobile();
     }, 0);
@@ -242,9 +239,9 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
    * Initiates a message creation for the specified channel.
    * @param channel
    */
-  createChannelMsg(channel: Channel) {
+  createChannelMsg(channel: Channel, fileUrl: string) {
     this.sharedService.setIsNewMessage(false);
-    this.sendMessage();
+    this.sendMessage(fileUrl);
     this.channelService.loadChannels();
     this.cdr.detectChanges();
     this.channelService.setSelectedChannel(channel);
@@ -260,9 +257,9 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
   /**
    * Sends a message based on the current chat context.
    */
-  async sendMessage() {
-    await this.checkPictureUpload();
-    if (this.messageText.trim()) {
+  async sendMessage(fileUrl: string) {
+    this.fileUrl = await this.checkPictureUpload();
+    if (this.messageText.trim() || this.fileUrl) {
       if (this.chatService.isChannel) {
         await this.channelMessageService.addMessage(
           this.messageText,
@@ -285,8 +282,9 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
   async checkPictureUpload() {
     if (this.uploadService.newMessageFileChosen) {
       await this.uploadService.uploadPicture();
-      this.messageText = this.uploadService.downloadURL;
+      return this.uploadService.downloadURL;
     }
+    return '';
   }
 
   /**
