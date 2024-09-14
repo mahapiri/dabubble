@@ -33,15 +33,10 @@
               </div>
             </div>
             <div class="text-bubble">
-              <ng-container
-                *ngIf="
-                  directMessageService.isImage(message.text);
-                  else textContent
-                "
-              >
-                <img [src]="message.text" alt="Image" class="message-image" />
+              <ng-container *ngIf="directMessageService.isImage(message.file)">
+                <img [src]="message.file" alt="Image" class="message-image" />
               </ng-container>
-              <ng-template #textContent>{{ message.text }}</ng-template>
+              <div #textContent>{{ message.text }}</div>
             </div>
             <app-reaction-container
               [message]="message"
@@ -53,6 +48,12 @@
       <div *ngIf="edit" class="message-wrapper">
         <img class="user-img" src="{{ message.authorImg }}" />
         <div class="edit-textbox">
+          <div
+            *ngIf="directMessageService.isImage(message.file)"
+            class="img-upload-container"
+          >
+            <img class="dm-upload" [src]="message.file" alt="Img" />
+          </div>
           <textarea
             type="text"
             rows="3"
