@@ -1,15 +1,18 @@
 <div
   class="new-message-container"
-  [ngClass]="uploadService.dmFileChosen ? 'img-input-height' : ''"
+  [ngClass]="{
+    'img-input-height': uploadService.dmFileChosen,
+    'img-upload': uploadService.dmFileChosen
+  }"
 >
-  @if (this.uploadService.dmFileChosen) {
-  <img [src]="this.uploadService.currentImg$ | async" alt="" />
-  <mat-icon
-    (click)="this.uploadService.removeImg('direct-message-file-upload')"
-    class="close-icon pos-relative"
-    >close</mat-icon
-  >
-  }@else {
+  <div *ngIf="uploadService.dmFileChosen" class="img-upload-container">
+    <img [src]="this.uploadService.currentImg$ | async" alt="" />
+    <mat-icon
+      (click)="this.uploadService.removeImg('direct-message-file-upload')"
+      class="close-icon pos-relative"
+      >close</mat-icon
+    >
+  </div>
   <textarea
     [(ngModel)]="messageText"
     matInput
@@ -19,7 +22,7 @@
     (keydown)="onKeyDown($event)"
     (ngModelChange)="openTagging()"
   ></textarea>
-  }
+
   <div class="message-controls">
     <div class="add-elements">
       <button
@@ -58,12 +61,16 @@
         </div>
       </button>
       <div>
-        <button mat-mini-fab class="tag-person mini-fab-btn" (click)="openPopup($event)">
+        <button
+          mat-mini-fab
+          class="tag-person mini-fab-btn"
+          (click)="openPopup($event)"
+        >
           <mat-icon *ngIf="!isHash">alternate_email</mat-icon>
           <mat-icon *ngIf="isHash">tag</mat-icon>
         </button>
-        <app-tagging 
-          *ngIf="isTag" 
+        <app-tagging
+          *ngIf="isTag"
           (closePopup)="closePopup()"
           [dmTag]="true"
           [isAt]="isAt"

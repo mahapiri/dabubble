@@ -302,7 +302,7 @@ export class DirectMessageService implements OnDestroy {
       time: data['time'],
       text: data['text'],
       reactionId: [],
-      file: '',
+      file: data['file'],
       id: data['id'],
       profileImg: data['profileImg'],
       isFirstMessageOfDay: false,
@@ -312,7 +312,7 @@ export class DirectMessageService implements OnDestroy {
   /**
    * Creates a new direct message with the provided text content.
    */
-  async newDmMessage(message: string) {
+  async newDmMessage(message: string, fileUrl: string) {
     const timeOptions = this.timeOption();
 
     const messageData = {
@@ -328,7 +328,7 @@ export class DirectMessageService implements OnDestroy {
       date: new Date().toISOString().split('T')[0],
       text: message,
       reactionId: [],
-      file: '',
+      file: fileUrl,
       id: '',
       isFirstMessageOfDay: false,
     };

@@ -269,7 +269,10 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
           this.fileUrl
         );
       } else {
-        await this.directMessageService.newDmMessage(this.messageText);
+        await this.directMessageService.newDmMessage(
+          this.messageText,
+          this.fileUrl
+        );
       }
       this.messageText = '';
     }

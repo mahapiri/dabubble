@@ -46,11 +46,11 @@ import { Channel } from '../../../models/channel.class';
   styleUrl: './direct-message-new-message-input.component.scss',
 })
 export class DirectMessageNewMessageInputComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   private directMessageService: DirectMessageService =
     inject(DirectMessageService);
-  private taggingService: TaggingService =
-    inject(TaggingService);
+  private taggingService: TaggingService = inject(TaggingService);
   public uploadService: UploadService = inject(UploadService);
   private userSubscription: Subscription = new Subscription();
   private taggingSubscription: Subscription = new Subscription();
@@ -59,18 +59,17 @@ export class DirectMessageNewMessageInputComponent
 
   profile: Partial<User> = {};
   @Output() messageCreated: EventEmitter<void> = new EventEmitter<void>();
+  @Input() message!: DmMessage;
 
   messageText: string = '';
   isEmoji: boolean = false;
   notOpen: boolean = true;
-  @Input() message!: DmMessage;
-
   members: string[] = [];
-
   isTag: boolean = false;
   findTag: boolean = false;
   isAt: boolean = false;
   isHash: boolean = false;
+  fileUrl: string = '';
 
   /**
    * subscribes the current clicked profile
@@ -87,25 +86,26 @@ export class DirectMessageNewMessageInputComponent
       }
     );
 
-    this.taggingSubscription = this.taggingService.memberSelectedDirectMessage$.subscribe((member) => {
-      if (member && member.username) {
-        this.addMemberToMessage(member);
-      }
-    });
-    
-    this.channelSubscription = this.taggingService.channelSelectedDirectMessage$.subscribe((channel) => {
-      if (channel && channel.channelName) {
-        this.addChannelToMessage(channel);
-      }
-    });
-    
+    this.taggingSubscription =
+      this.taggingService.memberSelectedDirectMessage$.subscribe((member) => {
+        if (member && member.username) {
+          this.addMemberToMessage(member);
+        }
+      });
+
+    this.channelSubscription =
+      this.taggingService.channelSelectedDirectMessage$.subscribe((channel) => {
+        if (channel && channel.channelName) {
+          this.addChannelToMessage(channel);
+        }
+      });
+
     this.messageText = '';
   }
 
-
   /**
- * add member to message field
- */
+   * add member to message field
+   */
   addMemberToMessage(member: User) {
     let mention = member.username;
 
@@ -118,10 +118,9 @@ export class DirectMessageNewMessageInputComponent
     }
   }
 
-
   /**
-  * add channel to message field
-  */
+   * add channel to message field
+   */
   addChannelToMessage(channel: Channel) {
     let mention = channel.channelName;
 
@@ -133,7 +132,6 @@ export class DirectMessageNewMessageInputComponent
       this.messageText += ` ${mention}`;
     }
   }
-  
 
   /**
    * unsubscribes user subscription if DOM destroy
@@ -144,22 +142,21 @@ export class DirectMessageNewMessageInputComponent
     this.channelSubscription.unsubscribe();
   }
 
-
   /**
    * checks the valid of a message to start the newDmMessage function
    */
   async createMessage() {
-    await this.checkPictureUpload();
-    if (!this.messageText.trim() && !this.uploadService.dmFileChosen) {
-      console.warn('The message field is empty. Please type a message or upload a file!');
-    } else {
-      await this.directMessageService.newDmMessage(this.messageText);
-      this.messageCreated.emit();
+    this.fileUrl = await this.checkPictureUpload();
+    if (this.messageText.trim() || this.fileUrl) {
+      await this.directMessageService.newDmMessage(
+        this.messageText,
+        this.fileUrl
+      );
+      this.messageText = '';
     }
-    this.messageText = '';
+    this.messageCreated.emit();
     this.uploadService.removeImg('direct-message-file-upload');
   }
-
 
   /**
    * open the Emoji Container
@@ -171,7 +168,6 @@ export class DirectMessageNewMessageInputComponent
     }
   }
 
-
   /**
    * open the Emoji Container
    */
@@ -181,7 +177,6 @@ export class DirectMessageNewMessageInputComponent
     setTimeout(() => (this.notOpen = true), 1000);
   }
 
-
   /**
    * handles emoji selection from the EmojiPickerComponent
    */
@@ -189,7 +184,6 @@ export class DirectMessageNewMessageInputComponent
     this.messageText += emoji;
     this.closeEmojiSet();
   }
-
 
   /**
    * sends the message if the message is valid and the Enter key is pressed
@@ -202,17 +196,15 @@ export class DirectMessageNewMessageInputComponent
     }
   }
 
-
   /**
    * Handles file selection. When a file is chosen by the user, it passes the file selection event to the `uploadService` and sets the upload path.
    * @param {Event} event - The file selection event.
    * @returns {Promise<void>} A promise that resolves once the file selection and path setting are complete.
    */
   async chooseFile(event: Event) {
-    this.uploadService.onFileSelected(event, "directMessage");
+    this.uploadService.onFileSelected(event, 'directMessage');
     this.uploadService.uploadPath = this.uploadPath;
   }
-
 
   /**
    * calls the upload method if a file was chosen and saves the dawnload URL of the file to the messageText
@@ -220,10 +212,10 @@ export class DirectMessageNewMessageInputComponent
   async checkPictureUpload() {
     if (this.uploadService.dmFileChosen) {
       await this.uploadService.uploadPicture();
-      this.messageText = this.uploadService.downloadURL;
+      return this.uploadService.downloadURL;
     }
+    return '';
   }
-
 
   /**
    * opens tagging
@@ -240,7 +232,7 @@ export class DirectMessageNewMessageInputComponent
       if (lastChar === '#') {
         this.findTag = true;
         this.isTag = true;
-        this.isHash = true
+        this.isHash = true;
       }
     } else if (this.findTag) {
       if (!this.messageText.includes('@') && !this.messageText.includes('#')) {
@@ -252,17 +244,15 @@ export class DirectMessageNewMessageInputComponent
     }
   }
 
-
   /**
    * open the popup
-   * @param event 
+   * @param event
    */
   openPopup(event: Event) {
     event.stopPropagation();
     this.isTag = !this.isTag;
     this.isAt = true;
   }
-
 
   /**
    * close the popup
