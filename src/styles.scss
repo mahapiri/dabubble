@@ -244,6 +244,16 @@ a {
   margin-bottom: calc(180px + var(--img-size)) !important;
 }
 
+.img-upload {
+  flex-direction: column;
+  gap: 8px !important;
+}
+
+.img-upload-container {
+  display: flex;
+  gap: 5px;
+}
+
 .shaded-background {
   position: fixed;
   z-index: 2;

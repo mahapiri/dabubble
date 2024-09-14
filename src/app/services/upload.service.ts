@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import {
   getDownloadURL,
-  getStorage,
   ref,
   Storage,
   uploadBytes,
@@ -10,7 +9,6 @@ import { AuthService } from './auth.service';
 import { BehaviorSubject } from 'rxjs';
 import { UserService } from './user.service';
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -18,7 +16,6 @@ export class UploadService {
   storage: Storage = inject(Storage);
   authService: AuthService = inject(AuthService);
   userService: UserService = inject(UserService);
-
 
   acceptedFileTypes: string = '.jpg, .jpeg, .png, .pdf';
   file: any = 'Datei hochladen';
@@ -29,27 +26,22 @@ export class UploadService {
   channelFileChosen: boolean = false;
   threadFileChosen: boolean = false;
   dmFileChosen: boolean = false;
-  newMessageFileChosen: boolean = false
-
+  newMessageFileChosen: boolean = false;
 
   public currentImg = new BehaviorSubject<string | ArrayBuffer | null>('');
   currentImg$ = this.currentImg.asObservable();
 
-
-  constructor() { }
+  constructor() {}
 
   /**
    * opens the file input when called
    */
   triggerFileInput(fileInputId: string): void {
-    const fileInput = document.getElementById(
-      fileInputId
-    ) as HTMLInputElement;
+    const fileInput = document.getElementById(fileInputId) as HTMLInputElement;
     if (fileInput) {
       fileInput.click();
     }
   }
-
 
   /**
    * saves the selected file in the file variable and sets the observable for the current image
@@ -77,7 +69,6 @@ export class UploadService {
     }
   }
 
-
   /**
    * sets the upload path for the file
    */
@@ -95,7 +86,6 @@ export class UploadService {
     this.storageRef = ref(this.storage, this.userSpecificPath);
   }
 
-
   /**
    * removes the file from the observable
    */
@@ -110,7 +100,6 @@ export class UploadService {
     }
   }
 
-
   noFileChosen() {
     this.channelFileChosen = false;
     this.threadFileChosen = false;
@@ -118,7 +107,6 @@ export class UploadService {
     this.newMessageFileChosen = false;
     this.file = null;
   }
-
 
   /**
    * uploads the file and sets the download URL
