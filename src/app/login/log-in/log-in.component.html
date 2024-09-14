@@ -6,7 +6,7 @@
 </div>
 <header class="hide-on-mobile">
   <img src="assets/img/logo-with-font.png" alt="Logo Dabubble" class="logo" />
-  <div class="header-link">
+  <div class="header-link create-link">
     <span>Neu bei DABubble?</span>
     <a routerLink="/sign-up">Konto erstellen</a>
   </div>
@@ -47,7 +47,7 @@
       <span class="errormessage" *ngIf="invalidPassword">{{
         passworderrorMessage
       }}</span>
-      <a routerLink="/send-mail">Passwort vergessen?</a>
+      <a class="forgot-password-link" routerLink="/send-mail">Passwort vergessen?</a>
       <div class="divider-wrapper">
         <div class="divider"></div>
         oder
@@ -75,6 +75,10 @@
       </div>
     </mat-card>
   </form>
+  <div class="imprint-buttons">
+    <a routerLink="/imprint">Impressum</a>
+    <a routerLink="/privacy">Datenschutz</a>
+  </div>
   <div class="header-link mobile-link">
     <span>Neu bei DABubble?</span>
     <button routerLink="/sign-up" class="create-button">Konto erstellen</button>

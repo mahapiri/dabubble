@@ -92,6 +92,29 @@
     flex-direction: column;
 }
 
+.forgot-password-link{
+    color: var(--purple-2);
+    margin-inline: 10px;
+    padding: 10px 15px 10px 15px;
+    margin-inline: auto;
+    &:hover {
+        font-weight: 500 !important;
+        color: var(--purple-1);
+        border-radius: 30px;
+        animation: show-background 0.1s ease-in;
+        background-color: var(--bg-color);
+    }
+}
+
+@keyframes show-background {
+    from{
+        background-color: transparent;
+    }
+    to{
+        background-color: var(--bg-color);
+    }
+}
+
 input {
     padding: 18px 32px 18px 32px;
     background-color: var(--bg-color);
