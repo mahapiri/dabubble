@@ -6,7 +6,7 @@
   }"
 >
   <div *ngIf="uploadService.channelFileChosen" class="img-upload-container">
-    <img [src]="this.uploadService.currentImg$ | async" alt="" />
+    <img [src]="this.uploadService.currentImg$ | async" alt="Img" />
     <mat-icon
       (click)="this.uploadService.removeImg('file-upload')"
       class="close-icon pos-relative"

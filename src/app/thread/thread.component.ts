@@ -76,6 +76,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
   findTag: boolean = false;
   isAt: boolean = false;
   isHash: boolean = false;
+  fileUrl: any = '';
 
   selectedThread$: Observable<Thread | null>;
   threadMessages$: Observable<ThreadMessage[]>;
@@ -96,17 +97,19 @@ export class ThreadComponent implements OnInit, OnDestroy {
       this.answerCount = count;
     });
 
-    this.taggingSubscription = this.taggingService.memberSelectedThread$.subscribe((member) => {
-      if (member && member.username) {
-        this.addMemberToMessage(member);
-      }
-    });
-    
-    this.channelSubscription = this.taggingService.channelSelectedThread$.subscribe((channel) => {
-      if (channel && channel.channelName) {
-        this.addChannelToMessage(channel);
-      }
-    });
+    this.taggingSubscription =
+      this.taggingService.memberSelectedThread$.subscribe((member) => {
+        if (member && member.username) {
+          this.addMemberToMessage(member);
+        }
+      });
+
+    this.channelSubscription =
+      this.taggingService.channelSelectedThread$.subscribe((channel) => {
+        if (channel && channel.channelName) {
+          this.addChannelToMessage(channel);
+        }
+      });
 
     this.scrollToBottom();
   }
@@ -151,10 +154,9 @@ export class ThreadComponent implements OnInit, OnDestroy {
     }
   }
 
-
   /**
-* add channel to message field
-*/
+   * add channel to message field
+   */
   addChannelToMessage(channel: Channel) {
     let mention = channel.channelName;
 
@@ -166,8 +168,6 @@ export class ThreadComponent implements OnInit, OnDestroy {
       this.threadMessageText += ` ${mention}`;
     }
   }
-
-
 
   /**
    * calls the onFileSelected method and sets the uploadPath to "channel"
@@ -198,9 +198,12 @@ export class ThreadComponent implements OnInit, OnDestroy {
 
   /** Sends the text in the input field to the Thread Collection in the Backend. Trims the message from whitespace, ensures input is not empty, clears the input field after send */
   async sendMessage() {
-    await this.checkPictureUpload();
-    if (this.threadMessageText.trim()) {
-      await this.threadMessageService.addThreadMessage(this.threadMessageText);
+    this.fileUrl = await this.checkPictureUpload();
+    if (this.threadMessageText.trim() || this.fileUrl) {
+      await this.threadMessageService.addThreadMessage(
+        this.threadMessageText,
+        this.fileUrl
+      );
       this.threadMessageText = '';
     }
     this.messageCreated.emit();
@@ -265,17 +268,17 @@ export class ThreadComponent implements OnInit, OnDestroy {
   }
 
   /**
- * Checks if a given URL is a valid Firebase Storage image URL.
- * @param {string} url - The URL.
- * @returns {boolean} - Returns `true` if the URL is a Firebase Storage image URL, otherwise `false`.
- */
+   * Checks if a given URL is a valid Firebase Storage image URL.
+   * @param {string} url - The URL.
+   * @returns {boolean} - Returns `true` if the URL is a Firebase Storage image URL, otherwise `false`.
+   */
   isImageUrl(url: any): boolean {
     return url.startsWith('https://firebasestorage.googleapis.com/');
   }
 
   /**
-  * opens tagging
-  */
+   * opens tagging
+   */
   openTagging() {
     const lastChar = this.threadMessageText.slice(-1);
 
@@ -288,10 +291,13 @@ export class ThreadComponent implements OnInit, OnDestroy {
       if (lastChar === '#') {
         this.findTag = true;
         this.isTag = true;
-        this.isHash = true
+        this.isHash = true;
       }
     } else if (this.findTag) {
-      if (!this.threadMessageText.includes('@') && !this.threadMessageText.includes('#')) {
+      if (
+        !this.threadMessageText.includes('@') &&
+        !this.threadMessageText.includes('#')
+      ) {
         this.isTag = false;
         this.findTag = false;
         this.isAt = false;

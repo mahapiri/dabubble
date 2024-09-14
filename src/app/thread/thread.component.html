@@ -82,16 +82,19 @@
     <div
       class="new-message-container"
       (messageCreated)="onMessageCreated()"
-      [ngClass]="uploadService.threadFileChosen ? 'img-input-height' : ''"
+      [ngClass]="{
+        'img-input-height': uploadService.threadFileChosen,
+        'img-upload': uploadService.threadFileChosen
+      }"
     >
-      @if (this.uploadService.threadFileChosen) {
-      <img [src]="this.uploadService.currentImg$ | async" alt="" />
-      <mat-icon
-        (click)="this.uploadService.removeImg('thread-file-upload')"
-        class="close-icon pos-relative"
-        >close</mat-icon
-      >
-      }@else {
+      <div *ngIf="uploadService.threadFileChosen" class="img-upload-container">
+        <img [src]="this.uploadService.currentImg$ | async" alt="Img" />
+        <mat-icon
+          (click)="this.uploadService.removeImg('thread-file-upload')"
+          class="close-icon pos-relative"
+          >close</mat-icon
+        >
+      </div>
       <textarea
         [(ngModel)]="threadMessageText"
         matInput
@@ -101,7 +104,7 @@
         (keydown)="onKeyDown($event)"
         (ngModelChange)="openTagging()"
       ></textarea>
-      }
+
       <div class="message-controls">
         <div class="add-elements">
           <button

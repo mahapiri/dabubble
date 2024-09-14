@@ -163,12 +163,13 @@ export class ThreadMessageService {
    * @param {string} text - Content of the message.
    * @returns {Promise<void>} - A promise that resolves when the message has been added and its ID has been updated.
    */
-  async addThreadMessage(text: string): Promise<void> {
+  async addThreadMessage(text: string, fileUrl: string): Promise<void> {
     this.userSubscription = this.userService.currentUser$.subscribe(
       async (currentUser) => {
         if (currentUser) {
           const newMessage: ThreadMessage = this.setMessageWithUser(
             text,
+            fileUrl,
             currentUser
           );
           const messageRef = await addDoc(
@@ -244,7 +245,7 @@ export class ThreadMessageService {
       authorId: data['authorId'],
       profileImg: data['profileImg'],
       reaction: [],
-      file: '',
+      file: data['file'],
       isFirstMessageOfDay: false,
     });
   }
@@ -255,7 +256,7 @@ export class ThreadMessageService {
    * @param {User} user - The user object with the info about the message author
    * @returns {ThreadMessage} - A new 'ThreadMessage' object with the provided text, user information, and the current date and time.
    */
-  setMessageWithUser(text: string, user: User): ThreadMessage {
+  setMessageWithUser(text: string, fileUrl: string, user: User): ThreadMessage {
     const now = new Date();
 
     const timeOptions: Intl.DateTimeFormatOptions = {
@@ -273,7 +274,7 @@ export class ThreadMessageService {
       authorId: user.userId,
       profileImg: user.profileImage,
       reaction: [],
-      file: '',
+      file: fileUrl,
       isFirstMessageOfDay: false,
     });
   }
