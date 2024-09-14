@@ -149,7 +149,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
   onKeyDown(event: KeyboardEvent) {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
-      this.createMessage(event);
+      this.createMessage();
     }
   }
 
@@ -191,8 +191,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
   /**
    * checks the valid of a message to start the newDmMessage function
    */
-  async createMessage(event: Event) {
-    event.stopPropagation();
+  async createMessage() {
     this.fileUrl = await this.checkPictureUpload();
 
     if (this.messageText.trim() || this.fileUrl) {
@@ -204,6 +203,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
 
             if (channel) {
               this.createChannelMsg(channel, this.fileUrl);
+              console.log(this.fileUrl)
             }
           } else if (!this.newMessageService.isChannel && id) {
             const profile = await this.userService.getUserById(id);
@@ -241,7 +241,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
    */
   createChannelMsg(channel: Channel, fileUrl: string) {
     this.sharedService.setIsNewMessage(false);
-    this.sendMessage(fileUrl);
+
     this.channelService.loadChannels();
     this.cdr.detectChanges();
     this.channelService.setSelectedChannel(channel);
@@ -249,6 +249,7 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
     this.chatService.setIsChannel(true);
     this.sharedService.setIsNewMessage(false);
     this.sharedService.setClickedNewMessage(false);
+    this.sendMessage(fileUrl);
     setTimeout(() => {
       this.chatService.handleWindowChangeOnMobile();
     }, 0);
@@ -258,7 +259,6 @@ export class NewMessageInputComponent implements OnInit, OnDestroy {
    * Sends a message based on the current chat context.
    */
   async sendMessage(fileUrl: string) {
-    this.fileUrl = await this.checkPictureUpload();
     if (this.messageText.trim() || this.fileUrl) {
       if (this.chatService.isChannel) {
         await this.channelMessageService.addMessage(
