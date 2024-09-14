@@ -44,14 +44,15 @@
                 </div>
               </div>
               <div class="text-bubble">
-                <div *ngIf="isImageUrl(selectedThread.replyToMessage?.file)">
+                <div
+                  *ngIf="this.isImageUrl(selectedThread.replyToMessage?.file)"
+                >
                   <img
                     class="thread-upload"
                     [src]="selectedThread.replyToMessage?.file"
                     alt="Img"
                   />
                 </div>
-
                 {{ selectedThread.replyToMessage?.text }}
               </div>
               <div class="reaction-wrapper"></div>

@@ -76,7 +76,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
   findTag: boolean = false;
   isAt: boolean = false;
   isHash: boolean = false;
-  fileUrl: any = '';
+  fileUrl: string = '';
 
   selectedThread$: Observable<Thread | null>;
   threadMessages$: Observable<ThreadMessage[]>;
@@ -184,8 +184,9 @@ export class ThreadComponent implements OnInit, OnDestroy {
   async checkPictureUpload() {
     if (this.uploadService.threadFileChosen) {
       await this.uploadService.uploadPicture();
-      this.threadMessageText = this.uploadService.downloadURL;
+      return this.uploadService.downloadURL;
     }
+    return '';
   }
 
   /**
@@ -199,6 +200,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
   /** Sends the text in the input field to the Thread Collection in the Backend. Trims the message from whitespace, ensures input is not empty, clears the input field after send */
   async sendMessage() {
     this.fileUrl = await this.checkPictureUpload();
+
     if (this.threadMessageText.trim() || this.fileUrl) {
       await this.threadMessageService.addThreadMessage(
         this.threadMessageText,
