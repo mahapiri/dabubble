@@ -53,6 +53,11 @@ input[type="checkbox"] {
     }
 }
 
+.btn-primary-disabled {
+    background-color: var(--gray) !important;
+    cursor: default !important;
+  }
+
 .arrow-back-button {
     background-color: white;
     border: none;

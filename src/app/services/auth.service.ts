@@ -46,7 +46,7 @@ export class AuthService {
   state: string = 'online';
   userId: string = '';
   loggedInAsGuest: boolean = false;
-  firstOpen: boolean = false;
+  firstOpen: boolean = true;
 
   constructor(private auth: Auth) {}
 
