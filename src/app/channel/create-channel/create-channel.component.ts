@@ -7,6 +7,7 @@ import { UserService } from '../../services/user.service';
 import { User } from '../../../models/user.class';
 import { MatRadioModule } from '@angular/material/radio';
 import { ClickOutsideDirective } from '../../directive/click-outside.directive';
+import { collection, doc, Firestore, getDoc, getDocs, query, where } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-create-channel',
@@ -25,18 +26,21 @@ export class CreateChannelComponent {
   @Output() clickedChannel = new EventEmitter<boolean>();
   channelService: ChannelService = inject(ChannelService);
   userService: UserService = inject(UserService);
+  firestore: Firestore = inject(Firestore);
   addUserChannelVisible: boolean = false;
   selectedOption: string = 'allUsers';
   someUsersChecked: boolean = false;
   allUsersChecked: boolean = false;
   searchMember: string = '';
   userlistOpen: boolean = false;
+  channelNameIsInUse: boolean = false;
   showUser: User[] = [];
   selectedUsersForChannel: User[] = [];
   usersToAdd: User[] = [];
   currentUser!: User;
   channelName: string = '';
   channelDescription: string = '';
+
 
   constructor() {
     this.userService.currentUser$.subscribe((user) => {
@@ -53,10 +57,16 @@ export class CreateChannelComponent {
   /**
    * leads from create channel window to add-member-window
    */
-  nextPage() {
-    this.addUserChannelVisible = !this.addUserChannelVisible;
-    this.selectedUsersForChannel = [];
-    this.userService.getUserList();
+  async nextPage() {
+    if (await this.checkForExistingChannel(this.channelName)) {
+      this.channelNameIsInUse = false;
+      this.addUserChannelVisible = !this.addUserChannelVisible;
+      this.selectedUsersForChannel = [];
+      this.userService.getUserList();
+    }
+    else {
+      this.channelNameIsInUse = true;
+    }
   }
 
   /**
@@ -131,12 +141,26 @@ export class CreateChannelComponent {
     } else {
       this.usersToAdd = this.userService.userArray;
     }
-
     this.channelService.addChannel(
       this.channelName,
       this.channelDescription,
       this.usersToAdd
     );
     this.close();
+  }
+
+  /**
+   * checks if the channelName is already in use
+   * @param channelName name of the channel about to be created
+   * @returns true if the channelName is free
+   */
+  async checkForExistingChannel(channelName: string) {
+    const q = query(collection(this.firestore, "channels"), where("channelName", "==", channelName));
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      return false;
+    } else {
+      return true;
+    }
   }
 }

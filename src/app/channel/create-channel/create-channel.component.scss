@@ -129,6 +129,12 @@ input[type="text"] {
   color: var(--black);
 }
 
+.errormessage {
+  color: var(--rosa);
+  margin-block: -10px;
+  padding-left: 30px;
+}
+
 /* Smartphones - - - - - - - - - */
 
 @media only screen and (max-width: 960px) {
