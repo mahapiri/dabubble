@@ -93,8 +93,12 @@ export class UserService {
    * @param state the state to set ("Online", or "Offline")
    */
   async setUserState(state: string) {
-    if (this.userID) {
+    if (this.userID) {     
       await updateDoc(this.getUserRef(), { state: state });
+    }
+    else{
+      console.log("couldnt set user state");
+      
     }
   }
 

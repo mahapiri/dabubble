@@ -76,10 +76,10 @@ export class AuthService {
   async setStartingChannels() {
     const user = this.setUser();
     const updates = [
-      updateDoc(doc(this.firestore, 'channels', 'HRyA2fYZpKKap6d1sJS0'), {
+     await updateDoc(doc(this.firestore, 'channels', 'HRyA2fYZpKKap6d1sJS0'), {
         channelMember: arrayUnion(user),
       }),
-      updateDoc(doc(this.firestore, 'channels', '3cxTzZ2xWpatlmxNOpbf'), {
+     await updateDoc(doc(this.firestore, 'channels', '3cxTzZ2xWpatlmxNOpbf'), {
         channelMember: arrayUnion(user),
       }),
     ];
@@ -137,11 +137,11 @@ export class AuthService {
    */
   async googleLogin() {
     await signInWithPopup(this.auth, this.provider)
-      .then((result) => {
+      .then(async (result) => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         if (credential) {
           this.userId = result.user.uid;
-          this.setGoogleUser(result.user);
+        await  this.setGoogleUser(result.user);
         }
       })
       .catch((error) => {
@@ -153,11 +153,11 @@ export class AuthService {
    * saves the userdata provided from the google account
    * @param user
    */
-  setGoogleUser(user: any) {
+  async setGoogleUser(user: any) {
     this.username = user.displayName;
     this.usermail = user.email;
     this.profileImage = user.photoURL ?? 'assets/img/character-empty.png';
-    this.lookForGoogleUserInDatabase(user.uid);
+    await this.lookForGoogleUserInDatabase(user.uid);
   }
 
   /**
