@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, HostListener, OnInit, inject } from '@angular/core';
 import { HeaderComponent } from '../shared/header/header.component';
 import { WorkspaceMenuComponent } from '../shared/workspace-menu/workspace-menu.component';
 import { ChannelComponent } from '../channel/channel/channel.component';
@@ -17,6 +17,7 @@ import { SharedService } from '../services/shared.service';
 import { ClickOutsideDirective } from '../directive/click-outside.directive';
 import { NewMessageComponent } from '../new-message/new-message.component';
 import { MyProfileComponent } from '../users/my-profile/my-profile.component';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-main-window',
@@ -40,6 +41,7 @@ import { MyProfileComponent } from '../users/my-profile/my-profile.component';
 })
 export class MainWindowComponent implements OnInit {
   userService: UserService = inject(UserService);
+  authService: AuthService = inject(AuthService);
   channelMessagesService: ChannelMessageService = inject(ChannelMessageService);
   sharedService: SharedService = inject(SharedService);
   selectProfileSubscription: Subscription = new Subscription();
@@ -126,5 +128,10 @@ export class MainWindowComponent implements OnInit {
     this.selectProfileSubscription?.unsubscribe();
     this.isNewMessageSubscription?.unsubscribe();
     this.clickedThreadSubscription.unsubscribe();
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  async handleBeforeUnload(event: Event) {
+    await this.userService.setUserState('offline');
   }
 }
