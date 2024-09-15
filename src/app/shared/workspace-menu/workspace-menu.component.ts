@@ -251,18 +251,8 @@ export class WorkspaceMenuComponent implements OnInit {
    */
   async openResults() {
     try {
-      this.searchService.startSubscription();
       this.sharedService.isResults = this.searchInputValue.trim().length > 0;
-
-      await Promise.all([
-        this.searchService.getAllDM(),
-        this.searchService.getAllChannel(),
-        this.searchService.getAllThreads(),
-      ]);
-
       await this.searchService.search(this.searchInputValue);
-
-      this.searchService.setTimerToTrue();
     } catch (error) {
       console.error('Fehler beim Aufrufen von Openresults', error);
     }
@@ -273,7 +263,6 @@ export class WorkspaceMenuComponent implements OnInit {
    * Closes the search results and resets the input field.
    */
   closeResults() {
-    this.searchService.stopSubscription();
     this.sharedService.isResults = false;
     this.searchInputValue = '';
   }

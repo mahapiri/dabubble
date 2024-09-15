@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from './user.service';
 import { User } from '../../models/user.class';
 import { Subscription } from 'rxjs';
@@ -6,9 +6,11 @@ import { Channel, ChannelMessage } from '../../models/channel.class';
 import { DirectMessageService } from './direct-message.service';
 import {
   collection,
+  collectionChanges,
   Firestore,
   getDoc,
   getDocs,
+  onSnapshot,
   query,
   where,
 } from '@angular/fire/firestore';
@@ -19,7 +21,7 @@ import { ThreadService } from './thread.service';
 @Injectable({
   providedIn: 'root',
 })
-export class SearchService {
+export class SearchService implements OnInit, OnDestroy {
   private firestore: Firestore = inject(Firestore);
   private userService: UserService = inject(UserService);
   private directMessageService: DirectMessageService =
@@ -43,9 +45,24 @@ export class SearchService {
   resultUser: User[] = [];
   resultChannel: any = [];
   resultThread: any = [];
-  timer: boolean = false;
 
-  constructor() {}
+  constructor() {
+    this.startSearch();
+  }
+
+  async startSearch() {
+    await this.startSubscription();
+  }
+
+
+  async ngOnInit() {
+    await this.startSubscription();
+  }
+
+  ngOnDestroy() {
+    this.stopSubscription();
+  }
+
 
   /**
    * Starts subscriptions to listen for user, channel, and thread updates.
@@ -53,15 +70,18 @@ export class SearchService {
   async startSubscription() {
     this.userListSubscription = this.userService.userList$.subscribe((user) => {
       this.userList = user;
+      // console.log(this.userList);
     });
     this.currentUserChannelsSubscription =
       this.userService.userChannels$.subscribe((channels) => {
         this.channelList = channels;
+        this.getAllChannel();
       });
     this.currentUserSubscription = this.userService.currentUser$.subscribe(
       (user) => {
         if (user) {
           this.currentUserID = user?.userId || '';
+          this.getAllDM();
         }
       }
     );
@@ -69,6 +89,8 @@ export class SearchService {
       (thread) => {
         if (thread) {
           this.threads = thread;
+          // console.log(this.threads);
+          this.getAllThreads();
         }
       }
     );
@@ -87,130 +109,141 @@ export class SearchService {
 
 
   /**
-   * Sets a timer to prevent duplicate data fetching within a certain period.
-   */
-  setTimerToTrue() {
-    this.timer = true;
-    setTimeout(() => {
-      this.timer = false;
-    }, 0);
-  }
-
-
-  /**
    * Retrieves all direct messages for the current user.
    */
   async getAllDM() {
-    if (!this.timer) {
-      this.directMessage = [];
-      const collectionRef = this.directMessageService.getCollectionRef();
+    this.directMessage = [];
 
-      const q = query(
-        collectionRef,
-        where('userIDs', 'array-contains', this.currentUserID)
-      );
+    const collectionRef = this.directMessageService.getCollectionRef();
 
-      const querySnapshot = await getDocs(q);
+    const q = query(
+      collectionRef,
+      where('userIDs', 'array-contains', this.currentUserID)
+    );
 
-      const dmPromises = querySnapshot.docs.map((doc) => this.getDmMessage(doc.id));
-      await Promise.all(dmPromises);
-    }
+    onSnapshot(q, (querySnapshot) => {
+      querySnapshot.forEach(async (doc) => {
+        await this.getDmMessage(doc.id);
+      });
+    });
   }
 
 
   /**
-   * Fetches the messages for a given direct message ID.
+   * Fetches the messages for a given direct message ID using onSnapshot for real-time updates.
    * @param dmID - The ID of the direct message.
    */
   async getDmMessage(dmID: string) {
     const messageRef = this.directMessageService.getMessageRefForId(dmID);
-    const message = await getDocs(messageRef);
 
-    message.forEach((doc) => {
-      const data = doc.data();
+    onSnapshot(messageRef, (snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        const data = change.doc.data();
 
-      const message: any = {
-        authorId: data['authorId'] || '',
-        authorName: data['authorName'] || '',
-        authorImg: data['authorImg'] || '',
-        authorstate: data['authorstate'] || '',
-        profileId: data['profileId'] || '',
-        profileName: data['profileName'] || '',
-        profileImg: data['profileImg'] || '',
-        profileState: data['profileState'] || '',
-        date: data['date'] || '',
-        time: data['time'] || '',
-        text: data['text'] || '',
-        reaction: data['reaction'] || '',
-        file: data['file'] || '',
-        id: data['id'] || '',
-        isFirstMessageOfDay: data['isFirstMessageOfDay'] || '',
-      };
-      this.directMessage.push(message);
-    });
-  }
+        const message: any = {
+          authorId: data['authorId'] || '',
+          authorName: data['authorName'] || '',
+          authorImg: data['authorImg'] || '',
+          authorstate: data['authorstate'] || '',
+          profileId: data['profileId'] || '',
+          profileName: data['profileName'] || '',
+          profileImg: data['profileImg'] || '',
+          profileState: data['profileState'] || '',
+          date: data['date'] || '',
+          time: data['time'] || '',
+          text: data['text'] || '',
+          reaction: data['reaction'] || '',
+          file: data['file'] || '',
+          id: data['id'] || '',
+          isFirstMessageOfDay: data['isFirstMessageOfDay'] || '',
+        };
 
-
-  /**
-   * Fetches all channel messages for the current user.
-   */
-  async getAllChannel() {
-    if (!this.timer) {
-      this.channelListMsg = [];
-  
-      const channelPromises = this.channelList.map(async (channel) => {
-        const id = channel.channelID;
-        if (id) {
-          const channelList: any = {
-            channelID: channel.channelID,
-            channelMember: channel.channelMember,
-            channelName: channel.channelName,
-            createdBy: channel.createdBy,
-            description: channel.description,
-            messages: [],
-          };
-          this.channelListMsg.push(channelList);
-          const arrayIndex = this.channelListMsg.length - 1;
-          await this.getChannelMessage(arrayIndex, id);
+        if (change.type === "added") {
+          const exists = this.directMessage.find(msg => msg.id === message.id);
+          if (!exists) {
+            this.directMessage.push(message);
+          }
+        } else if (change.type === "modified") {
+          const index = this.directMessage.findIndex(msg => msg.id === message.id);
+          if (index !== -1) {
+            this.directMessage[index] = message;
+          }
+        } else if (change.type === "removed") {
+          this.directMessage = this.directMessage.filter(msg => msg.id !== message.id);
         }
       });
-  
-      await Promise.all(channelPromises);
-    }
-  }
-  
-
-
-  /**
-   * Fetches messages for a given channel ID.
-   * @param arrayIndex - The index of the channel in the channel list.
-   * @param id - The ID of the channel.
-   */
-  async getChannelMessage(arrayIndex: number, id: string) {
-    const messageRef = collection(this.firestore, `channels/${id}/messages`);
-    const messages = await getDocs(messageRef);
-
-    messages.forEach((doc) => {
-      const data = doc.data();
-
-      const message: any = {
-        authorId: data['authorId'],
-        authorName: data['authorName'],
-        date: data['date'],
-        id: data['id'],
-        isFirstMessageOfDay: data['isFirstMessageOfDay'],
-        profileImage: data['profileImg'],
-        text: data['text'],
-        time: data['time'],
-      };
-
-      if (
-        this.channelListMsg[arrayIndex] &&
-        this.channelListMsg[arrayIndex].messages
-      ) {
-        this.channelListMsg[arrayIndex].messages.push(message);
-      }
     });
+  }
+
+
+  async getAllChannel() {
+    this.channelListMsg = [];
+
+    const collectionRef = collection(this.firestore, 'channels');
+
+    onSnapshot(collectionRef, (querySnapshot) => {
+      querySnapshot.forEach(async (channelData) => {
+        const channel = channelData.data();
+        const id = channelData.id;
+        const channelMembers = channel['channelMember'];
+        if (Array.isArray(channelMembers)) {
+          channelMembers.forEach((member) => {
+            if (member.userId === this.currentUserID) {
+              let channelExists = this.channelListMsg.find((ch: any) => ch.channelID === id);
+              if (!channelExists) {
+                this.channelListMsg.push({
+                  ...channel,
+                  channelID: id,
+                  messages: []
+                })
+                this.getChannelMessage(id);
+              }
+            }
+          });
+        }
+      });
+    });
+  }
+
+
+  async getChannelMessage(id: string) {
+    const messageRef = collection(this.firestore, `channels/${id}/messages`);
+
+    onSnapshot(messageRef, (snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        const data = change.doc.data();
+
+        const message: any = {
+          authorId: data['authorId'],
+          authorName: data['authorName'],
+          date: data['date'],
+          id: data['id'],
+          isFirstMessageOfDay: data['isFirstMessageOfDay'],
+          profileImage: data['profileImg'],
+          text: data['text'],
+          time: data['time'],
+        };
+
+        const channelIndex = this.channelListMsg.findIndex((ch: any) => ch.channelID === id);
+
+        if (channelIndex !== -1) {
+          if (change.type === "added") {
+            const exists = this.channelListMsg[channelIndex].messages.find((msg: any) => msg.id === message.id);
+            if (!exists) {
+              this.channelListMsg[channelIndex].messages.push(message);
+            }
+          } else if (change.type === "modified") {
+            const messageIndex = this.channelListMsg[channelIndex].messages.findIndex((msg: any) => msg.id === message.id);
+            if (messageIndex !== -1) {
+              this.channelListMsg[channelIndex].messages[messageIndex] = message;
+            }
+          } else if (change.type === "removed") {
+            this.channelListMsg[channelIndex].messages = this.channelListMsg[channelIndex].messages.filter((msg: any) => msg.id !== message.id);  // Nachricht entfernen
+          }
+        }
+      });
+    });
+
   }
 
 
@@ -218,23 +251,22 @@ export class SearchService {
    * Fetches all threads for the current user.
    */
   async getAllThreads() {
-    if (!this.timer) {
-      this.threadListMsg = [];
-      for (const thread of this.threads) {
-        const id = thread.threadID;
-        if (id) {
-          const threadList: any = {
-            channelName: thread.channelName,
-            replyToMessage: thread.replyToMessage,
-            threadID: thread.threadID,
-            messages: [],
-          };
-          this.threadListMsg.push(threadList);
-          const arrayIndex = this.threadListMsg.length - 1;
-          await this.getThreadMessage(arrayIndex, id);
-        }
+    this.threadListMsg = [];
+    for (const thread of this.threads) {
+      const id = thread.threadID;
+      if (id) {
+        const threadList: any = {
+          channelName: thread.channelName,
+          replyToMessage: thread.replyToMessage,
+          threadID: thread.threadID,
+          messages: [],
+        };
+        this.threadListMsg.push(threadList);
+        const arrayIndex = this.threadListMsg.length - 1;
+        await this.getThreadMessage(arrayIndex, id);
       }
     }
+
   }
 
 
@@ -280,9 +312,8 @@ export class SearchService {
     this.resultUser = [];
     this.resultChannel = [];
     this.resultThread = [];
-    if (!this.timer) {
-      this.resultDM = [];
-    }
+    this.resultDM = [];
+
 
     if (!searchInputValue || searchInputValue.trim() === '') {
       return;
@@ -358,16 +389,19 @@ export class SearchService {
     for (const channel of this.channelListMsg) {
       const messages = channel['messages'];
 
-      for (const message of messages) {
-        const text = message.text || '';
-        if (text.toLowerCase().includes(searchWord)) {
-          if (ids.indexOf(message.id) === -1) {
-            tempResult.push({
-              channelID: channel.channelID,
-              channelName: channel.channelName,
-              message: message,
-            });
-            ids.push(message.id);
+      if (messages && Array.isArray(messages)) {
+        for (const message of messages) {
+          const text = message.text || '';
+
+          if (text.toLowerCase().includes(searchWord)) {
+            if (ids.indexOf(message.id) === -1) {
+              tempResult.push({
+                channelID: channel.channelID,
+                channelName: channel.channelName,
+                message: message,
+              });
+              ids.push(message.id);
+            }
           }
         }
       }
@@ -420,7 +454,7 @@ export class SearchService {
       const q = query(messageRef, where('id', '==', messageId));
       const messagesSnapshot = await getDocs(q);
 
-      if(!messagesSnapshot.empty) {
+      if (!messagesSnapshot.empty) {
         let channel = channelDoc.data()
         return channel;
       }
