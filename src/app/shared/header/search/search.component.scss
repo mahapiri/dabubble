@@ -135,7 +135,7 @@ a {
 
 .profile-content {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     border-radius: 35px;
     padding: 4px 20px;
     gap: 15px;
@@ -446,6 +446,17 @@ a {
 
 .no-message-container {
     padding-left: 16px;
+}
+
+.image-available-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.thread-available-image {
+    gap: unset;
 }
 
 /* Smartphones - - - - - - - - - */

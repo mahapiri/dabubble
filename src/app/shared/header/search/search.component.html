@@ -45,8 +45,11 @@
                                         </div>
                                         <div class="text-bubble">
                                             <ng-container
-                                                *ngIf="directMessageService.isImage(channel.message.text); else textContent">
-                                                <img [src]="channel.message.text" alt="Image" class="message-image" />
+                                                *ngIf="directMessageService.isImage(channel.message.file); else textContent">
+                                                <div class="image-available-container">
+                                                    <mat-icon>image</mat-icon>
+                                                    {{ channel.message.text }}
+                                                </div>
                                             </ng-container>
                                             <ng-template #textContent>{{ channel.message.text }}</ng-template>
                                         </div>
@@ -90,8 +93,11 @@
                                     <div>&commat;{{ thread.replyToMessage.authorName }}</div>
                                 </div>
                                 <ng-container
-                                    *ngIf="directMessageService.isImage(thread.replyToMessage.text); else threadtextContent">
-                                    <img [src]="thread.replyToMessage.text" alt="Image" class="message-image" />
+                                    *ngIf="directMessageService.isImage(thread.replyToMessage.file) else threadtextContent">
+                                    <div class="image-available-container thread-available-image">
+                                        <mat-icon>image</mat-icon>
+                                        {{ thread.replyToMessage.text }}
+                                    </div>
                                 </ng-container>
                                 <ng-template #threadtextContent>
                                     <div>{{ thread.replyToMessage.text }}</div>
@@ -99,7 +105,6 @@
                             </div>
                             <mat-icon>comment</mat-icon>
                         </div>
-
 
                         <div>
                             <div class="profile-up">
@@ -125,9 +130,11 @@
                                             </div>
                                             <div class="text-bubble">
                                                 <ng-container
-                                                    *ngIf="directMessageService.isImage(thread.message.text); else textContent">
-                                                    <img [src]="thread.message.text" alt="Image"
-                                                        class="message-image" />
+                                                    *ngIf="directMessageService.isImage(thread.message.file); else textContent">
+                                                    <div class="image-available-container">
+                                                        <mat-icon>image</mat-icon>
+                                                        {{ thread.message.text }}
+                                                    </div>  
                                                 </ng-container>
                                                 <ng-template #textContent>{{ thread.message.text }}</ng-template>
                                             </div>
@@ -186,8 +193,11 @@
                                         </div>
                                     </div>
                                     <div class="text-bubble">
-                                        <ng-container *ngIf="directMessageService?.isImage(dm.text); else textContent">
-                                            <img [src]="dm.text" alt="Image" class="message-image" />
+                                        <ng-container *ngIf="directMessageService.isImage(dm.file); else textContent">
+                                            <div class="image-available-container">
+                                                <mat-icon>image</mat-icon>
+                                                {{ dm.text }}
+                                            </div>
                                         </ng-container>
                                         <ng-template #textContent>{{ dm.text }}</ng-template>
                                     </div>

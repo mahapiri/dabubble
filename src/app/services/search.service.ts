@@ -1,4 +1,4 @@
-import { inject, Injectable, OnDestroy, OnInit } from '@angular/core';
+import { inject, Injectable, OnDestroy } from '@angular/core';
 import { UserService } from './user.service';
 import { User } from '../../models/user.class';
 import { Subscription } from 'rxjs';
@@ -6,12 +6,12 @@ import { Channel, ChannelMessage } from '../../models/channel.class';
 import { DirectMessageService } from './direct-message.service';
 import {
   collection,
-  collectionChanges,
+  doc,
   Firestore,
-  getDoc,
   getDocs,
   onSnapshot,
   query,
+  updateDoc,
   where,
 } from '@angular/fire/firestore';
 import { DmMessage } from '../../models/direct-message.class';
@@ -21,16 +21,14 @@ import { ThreadService } from './thread.service';
 @Injectable({
   providedIn: 'root',
 })
-export class SearchService implements OnInit, OnDestroy {
+export class SearchService implements OnDestroy {
   private firestore: Firestore = inject(Firestore);
   private userService: UserService = inject(UserService);
   private directMessageService: DirectMessageService =
     inject(DirectMessageService);
-  private threadService: ThreadService = inject(ThreadService);
   private userListSubscription: Subscription = new Subscription();
   private currentUserChannelsSubscription: Subscription = new Subscription();
   private currentUserSubscription: Subscription = new Subscription();
-  private threadSubscription: Subscription = new Subscription();
 
   currentUserID: string = '';
   channelList: Channel[] = [];
@@ -46,18 +44,11 @@ export class SearchService implements OnInit, OnDestroy {
   resultChannel: any = [];
   resultThread: any = [];
 
+
   constructor() {
-    this.startSearch();
+    this.startSubscription();
   }
 
-  async startSearch() {
-    await this.startSubscription();
-  }
-
-
-  async ngOnInit() {
-    await this.startSubscription();
-  }
 
   ngOnDestroy() {
     this.stopSubscription();
@@ -70,7 +61,6 @@ export class SearchService implements OnInit, OnDestroy {
   async startSubscription() {
     this.userListSubscription = this.userService.userList$.subscribe((user) => {
       this.userList = user;
-      // console.log(this.userList);
     });
     this.currentUserChannelsSubscription =
       this.userService.userChannels$.subscribe((channels) => {
@@ -85,15 +75,6 @@ export class SearchService implements OnInit, OnDestroy {
         }
       }
     );
-    this.threadSubscription = this.threadService.threads$.subscribe(
-      (thread) => {
-        if (thread) {
-          this.threads = thread;
-          // console.log(this.threads);
-          this.getAllThreads();
-        }
-      }
-    );
   }
 
 
@@ -104,7 +85,6 @@ export class SearchService implements OnInit, OnDestroy {
     this.userListSubscription.unsubscribe();
     this.currentUserChannelsSubscription.unsubscribe();
     this.currentUserSubscription.unsubscribe();
-    this.threadSubscription.unsubscribe();
   }
 
 
@@ -176,6 +156,9 @@ export class SearchService implements OnInit, OnDestroy {
   }
 
 
+  /**
+   * fetches all channel message with onsnap function
+   */
   async getAllChannel() {
     this.channelListMsg = [];
 
@@ -202,10 +185,15 @@ export class SearchService implements OnInit, OnDestroy {
           });
         }
       });
+      this.getAllThreads();
     });
   }
 
 
+  /**
+   * get channel message 
+   * @param id 
+   */
   async getChannelMessage(id: string) {
     const messageRef = collection(this.firestore, `channels/${id}/messages`);
 
@@ -221,6 +209,7 @@ export class SearchService implements OnInit, OnDestroy {
           isFirstMessageOfDay: data['isFirstMessageOfDay'],
           profileImage: data['profileImg'],
           text: data['text'],
+          file: data['file'],
           time: data['time'],
         };
 
@@ -248,57 +237,89 @@ export class SearchService implements OnInit, OnDestroy {
 
 
   /**
-   * Fetches all threads for the current user.
+   * get all thread messages with onsnap"
    */
   async getAllThreads() {
     this.threadListMsg = [];
-    for (const thread of this.threads) {
-      const id = thread.threadID;
-      if (id) {
-        const threadList: any = {
-          channelName: thread.channelName,
-          replyToMessage: thread.replyToMessage,
-          threadID: thread.threadID,
-          messages: [],
-        };
-        this.threadListMsg.push(threadList);
-        const arrayIndex = this.threadListMsg.length - 1;
-        await this.getThreadMessage(arrayIndex, id);
-      }
-    }
 
+    const collectionRef = collection(this.firestore, 'threads');
+
+    onSnapshot(collectionRef, (querySnapshot) => {
+      querySnapshot.forEach(async (threadData) => {
+        const thread = threadData.data();
+        const threadID = threadData.id;
+        this.channelListMsg.forEach((channel: any) => {
+          const channelMember = channel['channelMember'];
+          const channelID = channel['channelID'];
+          if (Array.isArray(channelMember)) {
+            channelMember.forEach((member) => {
+              if (member.userId === this.currentUserID) {
+                let threadExistis = this.threadListMsg.find((th: any) => th.threadID === threadID);
+                if (!threadExistis) {
+                  this.threadListMsg.push({
+                    channelName: thread['channelName'],
+                    channelID: channelID,
+                    replyToMessage: thread['replyToMessage'],
+                    threadID: thread['threadID'],
+                    messages: [],
+                  })
+                  this.getThreadMessage(threadID);
+                }
+              }
+            })
+          }
+        })
+      })
+    })
   }
 
 
   /**
-   * Fetches messages for a given thread ID.
-   * @param arrayIndex - The index of the thread in the thread list.
-   * @param id - The ID of the thread.
+   * get the thread message
+   * @param threadID 
    */
-  async getThreadMessage(arrayIndex: number, id: string) {
-    const messageRef = collection(this.firestore, `threads/${id}/messages`);
-    const messages = await getDocs(messageRef);
+  async getThreadMessage(threadID: string) {
+    const messageRef = collection(this.firestore, `threads/${threadID}/messages`);
 
-    messages.forEach((doc) => {
-      const data = doc.data();
+    onSnapshot(messageRef, (snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        const data = change.doc.data();
+        const messageID = data['id'];
 
-      const message: any = {
-        authorId: data['authorId'],
-        authorName: data['authorName'],
-        date: data['date'],
-        id: data['id'],
-        isFirstMessageOfDay: data['isFirstMessageOfDay'],
-        profileImage: data['profileImg'],
-        text: data['text'],
-        time: data['time'],
-      };
+        const message: any = {
+          authorId: data['authorId'],
+          authorName: data['authorName'],
+          date: data['date'],
+          id: data['id'],
+          isFirstMessageOfDay: data['isFirstMessageOfDay'],
+          profileImage: data['profileImg'],
+          text: data['text'],
+          file: data['file'],
+          time: data['time'],
+        };
+        const threadIndex = this.threadListMsg.findIndex((th: any) => th.threadID === threadID);
 
-      if (
-        this.threadListMsg[arrayIndex] &&
-        this.threadListMsg[arrayIndex].messages
-      ) {
-        this.threadListMsg[arrayIndex].messages.push(message);
-      }
+        if (threadIndex !== -1) {
+          if (change.type === "added") {
+            const exists = this.threadListMsg[threadIndex].messages.find((msg: any) => msg.id === messageID);
+            if (!exists) {
+              this.threadListMsg[threadIndex].messages.push(message);
+            }
+          }
+
+          else if (change.type === "modified") {
+            const messageIndex = this.threadListMsg[threadIndex].messages.findIndex((msg: any) => msg.id === messageID);
+
+            if (messageIndex !== -1) {
+              this.threadListMsg[threadIndex].messages[messageIndex] = message;
+            }
+          }
+
+          else if (change.type === "removed") {
+            this.threadListMsg[threadIndex].messages = this.threadListMsg[threadIndex].messages.filter((msg: any) => msg.id !== messageID);
+          }
+        }
+      });
     });
   }
 
@@ -422,22 +443,24 @@ export class SearchService implements OnInit, OnDestroy {
       const messages = thread['messages'];
       const replyTo = thread['replyToMessage'];
 
-      for (const message of messages) {
-        const text = message.text || '';
-        if (text.toLowerCase().includes(searchWord)) {
-          if (ids.indexOf(message.id) === -1) {
-            tempResult.push({
-              threadId: thread.channelID,
-              channelName: thread.channelName,
-              message: message,
-              replyToMessage: replyTo,
-            });
-            ids.push(message.id);
+      if (messages && Array.isArray(messages)) {
+        for (const message of messages) {
+          const text = message.text || '';
+          if (text.toLowerCase().includes(searchWord)) {
+            if (ids.indexOf(message.id) === -1) {
+              tempResult.push({
+                threadId: thread.channelID,
+                channelName: thread.channelName,
+                message: message,
+                replyToMessage: replyTo,
+              });
+              ids.push(message.id);
+            }
           }
         }
       }
-      this.resultThread = tempResult;
     }
+    this.resultThread = tempResult;
   }
 
 
